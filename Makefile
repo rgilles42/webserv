@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/10/18 15:50:08 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/10/26 16:40:58 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,9 +20,15 @@ SRC_DIR		=	srcs
 CXX			=	clang++
 CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
-HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp
+HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
+				$(HEADER_DIR)/Ressource.hpp \
+				$(HEADER_DIR)/Header.hpp \
+				$(HEADER_DIR)/utils.hpp
 
-SRC_FILE	=	${SRC_DIR}/main.cpp
+SRC_FILE	=	${SRC_DIR}/main.cpp \
+				${SRC_DIR}/Ressource.cpp \
+				${SRC_DIR}/Header.cpp \
+				${SRC_DIR}/utils.cpp
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
 OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)
@@ -56,5 +62,10 @@ test: all
 	@echo "\e[34m[Starting test for $(NAME)..]\033[0m"
 	./$(NAME)
 	@echo "\e[34m[Test for $(NAME) done !]\033[0m"
+
+initService:
+	@echo "${_BLUE}[Shutdown local services..]${_END}"
+	@sudo service nginx stop
+	@echo "${_BLUE}[Shutdown local services done!]${_END}"
 
 .PHONY: all clean fclean re test

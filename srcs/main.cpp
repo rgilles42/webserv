@@ -6,114 +6,138 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/20 16:14:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/26 17:55:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/webserv.hpp"
 
-#if defined (_WIN32) || defined (_WIN64)
-	#include <winsock2.h>
-	typedef int socklen_t;
-#elif defined (__unix__)
-	#include <sys/types.h>
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	#include <arpa/inet.h>
-	#include <unistd.h>
-	#define INVALID_SOCKET -1
-	#define SOCKET_ERROR -1
-	#define closesocket(s) close(s)
-	typedef int SOCKET;
-	typedef struct sockaddr_in SOCKADDR_IN;
-	typedef struct sockaddr SOCKADDR;
-#endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
+ssize_t receive_basic(SOCKET s, std::string &result)
+{
+	ssize_t		size_read = 0;
+	ssize_t		total_size = 0;
+	char	buffer[BUFFER_SIZE + 1];
 
-#define PORT 80
+	while (size_read >= 0) {
+		memset(buffer, 0, BUFFER_SIZE + 1);
+		size_read =  read(s, buffer, BUFFER_SIZE + 1);
+		if(size_read < 0) {
+			continue;
+		}
+		printf("%ld\n", size_read);
+		if (size_read == 0) {
+			break;
+		}
+		total_size += size_read;
+		result.append(buffer);
+	}
+	printf("%s\n", result.c_str());
+	return total_size;
+}
 
 int main(void) {
-	int erreur = 0;
+	int error = 0;
 	#if defined (_WIN32) || defined (_WIN64)
 		WSADATA WSAData;
-		erreur = WSAStartup(MAKEWORD(2,2), &WSAData);
+		error = WSAStartup(MAKEWORD(2,2), &WSAData);
 	#endif
 
-	SOCKET sock;
-	SOCKADDR_IN sin;
-	SOCKET csock;
-	SOCKADDR_IN csin;
-	char buffer[32] = "";
-	socklen_t recsize = sizeof(csin);
+	if (error) {
+		perror("windows startup");
+		return EXIT_FAILURE;
+	}
+
+	SOCKET server_socket;
+	SOCKADDR_IN server_addr;
+	SOCKET client_socket;
+	SOCKADDR_IN client_addr;
+	socklen_t recsize = sizeof(client_addr);
+	std::string message;
 	int sock_err;
 
-	/* Si les sockets Windows fonctionnent */
-	if (!erreur) {
-		sock = socket(AF_INET, SOCK_STREAM, 0);
-
-		/* Si la socket est valide */
-		if (sock != INVALID_SOCKET) {
-			/* Configuration */
-			sin.sin_addr.s_addr    = htonl(INADDR_ANY);   /* Adresse IP automatique */
-			sin.sin_family         = AF_INET;             /* Protocole familial (IP) */
-			sin.sin_port           = htons(PORT);         /* Listage du port */
-
-			printf("La socket %d est maintenant ouverte en mode TCP/IP (%d:%d)\n", sock, ntohl(sin.sin_addr.s_addr), ntohs(sin.sin_port));
-
-			sock_err = bind(sock, (SOCKADDR*)&sin, sizeof(sin));
-
-			/* Si la socket fonctionne */
-			if (sock_err != SOCKET_ERROR) {
-				/* Démarrage du listage (mode server) */
-				sock_err = listen(sock, 5);
-				printf("Listage du port %d...\n", ntohs(sin.sin_port));
-
-				/* Si la socket fonctionne */
-				if (sock_err != SOCKET_ERROR) {
-					/* Attente pendant laquelle le client se connecte */
-					printf("Patientez pendant que le client se connecte sur le port %d...\n", ntohs(sin.sin_port));
-
-					csock = accept(sock, (SOCKADDR*)&csin, &recsize);
-					printf("Un client se connecte avec la socket %d de %s:%d\n", csock, inet_ntoa(csin.sin_addr), htons(csin.sin_port));
-
-					sock_err = recv(csock, buffer, 32, 0);
-
-					if (sock_err != SOCKET_ERROR) {
-						printf("Chaine reçu : %s\n", buffer);
-					} else {
-						printf("Erreur de récéption\n");
-					}
-
-					sock_err = send(csock, buffer, 32, 0);
-
-					if (sock_err != SOCKET_ERROR) {
-						printf("Chaine envoyée : %s\n", buffer);
-					} else {
-						printf("Erreur de transmission\n");
-					}
-
-					/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
-					shutdown(csock, 2);
-				} else {
-					perror("listen");
-				}
-			} else {
-				perror("bind");
-			}
-
-			/* Fermeture de la socket */
-			printf("Fermeture de la socket...\n");
-			closesocket(sock);
-			printf("Fermeture du serveur terminee\n");
-		}
-
-		#if defined (_WIN32) || defined (_WIN64)
-			WSACleanup();
-		#endif
+	if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		perror("socket create");
+		return EXIT_FAILURE;
 	}
+
+	/* Configuration */
+	server_addr.sin_addr.s_addr    = htonl(INADDR_ANY);   /* Adresse IP automatique */
+	server_addr.sin_family         = AF_INET;             /* Protocole familial (IP) */
+	server_addr.sin_port           = htons(PORT);         /* Listage du port */
+
+	if (bind(server_socket, (SOCKADDR*) &server_addr, sizeof(server_addr)) < 0) {
+		perror("socket bind");
+		return EXIT_FAILURE;
+	}
+
+	printf("La socket %d est maintenant ouverte en mode TCP/IP (%d:%d)\n", server_socket, ntohl(server_addr.sin_addr.s_addr), ntohs(server_addr.sin_port));
+
+
+	/* Démarrage du listage (mode server) */
+	if (listen(server_socket, MAX_CONNECTION) < 0) {
+		perror("socket listen");
+		return EXIT_FAILURE;
+	}
+
+	printf("Listage du port %d...\n", ntohs(server_addr.sin_port));
+
+	/* Attente pendant laquelle le client se connecte */
+	printf("Patientez pendant que le client se connecte sur le port %d...\n", ntohs(server_addr.sin_port));
+
+	client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &recsize);
+	printf("Un client se connecte avec la socket %d de %s:%d\n", client_socket, inet_ntoa(client_addr.sin_addr), htons(client_addr.sin_port));
+
+	if(!(fcntl(client_socket, F_GETFL) & O_NONBLOCK)) {
+		if(fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL) | O_NONBLOCK) < 0) {
+
+		}
+	}
+
+	// sock_err = receive_basic(client_socket, message);
+
+	// if (sock_err < 0) {
+	// 	printf("error de récéption\n");
+	// } else {
+	// 	printf("Chaine reçu : %s\n", message.c_str());
+	// }
+
+	Header header;
+
+	message = "abruti ça marche pas";
+
+	header.initForSend();
+	header.setContentLength(message.length());
+
+	std::string formatedHeader = header.getFormatedHeader();
+
+	sock_err = send(client_socket, formatedHeader.c_str(), formatedHeader.length(), 0);
+
+	if (sock_err < 0) {
+		printf("error de transmission\n");
+	} else {
+		printf("Chaine envoyée : %s\n", formatedHeader.c_str());
+	}
+
+	sock_err = send(client_socket, message.c_str(), message.length(), 0);
+
+	if (sock_err < 0) {
+		printf("error de transmission\n");
+	} else {
+		printf("Chaine envoyée : %s\n", message.c_str());
+	}
+
+	/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
+	shutdown(client_socket, 2);
+
+	/* Fermeture de la socket */
+	printf("Fermeture de la socket...\n");
+	closesocket(server_socket);
+
+	printf("Fermeture du serveur terminee\n");
+	#if defined (_WIN32) || defined (_WIN64)
+		WSACleanup();
+	#endif
 
 	return EXIT_SUCCESS;
 }
