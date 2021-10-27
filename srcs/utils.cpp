@@ -6,12 +6,9 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:08 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/26 17:27:33 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:09:07 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <sstream>
-#include <ctime>
 
 #include "../includes/utils.hpp"
 
@@ -20,14 +17,25 @@ std::string	getFormatedDate(const time_t &rawtime) {
 	char buffer[80];
 
 	timeinfo = gmtime(&rawtime);
-
 	strftime(buffer, sizeof(buffer), "%a, %m %b %Y %H:%M:%S %Z", timeinfo);
-
 	return std::string(buffer);
 }
 
-std::string getContentTypeByFileExtension(const std::string &url, const std::string &fallback) {
-	std::string fileExtension = url.substr(url.find_last_of(".") + 1);
+
+std::string	getFileContents(const std::string &filename) {
+	std::ifstream in(filename.c_str(), std::ios::in | std::ios::binary);
+	if (in) {
+		return (std::string((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()));
+	}
+	throw (std::runtime_error("getFileContents"));
+}
+
+std::string	getFileExtension(const std::string &filename) {
+	return filename.substr(filename.find_last_of(".") + 1);
+}
+
+std::string getContentTypeByFile(const std::string &filename, const std::string &fallback) {
+	std::string fileExtension = getFileExtension(filename);
 
 	if (fileExtension == "txt") {
 		return "text/plain";

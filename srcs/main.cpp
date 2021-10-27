@@ -6,12 +6,19 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/26 17:55:56 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:08:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include "../includes/webserv.hpp"
 
+volatile sig_atomic_t stop;
+
+void handleSignals(sig_atomic_t signum) {
+	(void)signum;
+	stop = 1;
+}
 
 ssize_t receive_basic(SOCKET s, std::string &result)
 {
@@ -85,14 +92,17 @@ int main(void) {
 	/* Attente pendant laquelle le client se connecte */
 	printf("Patientez pendant que le client se connecte sur le port %d...\n", ntohs(server_addr.sin_port));
 
-	client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &recsize);
-	printf("Un client se connecte avec la socket %d de %s:%d\n", client_socket, inet_ntoa(client_addr.sin_addr), htons(client_addr.sin_port));
+	signal(SIGINT, handleSignals);
+	while (!stop) {
 
-	if(!(fcntl(client_socket, F_GETFL) & O_NONBLOCK)) {
-		if(fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL) | O_NONBLOCK) < 0) {
+		client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &recsize);
+		printf("Un client se connecte avec la socket %d de %s:%d\n", client_socket, inet_ntoa(client_addr.sin_addr), htons(client_addr.sin_port));
 
+		if(!(fcntl(client_socket, F_GETFL) & O_NONBLOCK)) {
+			if(fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL) | O_NONBLOCK) < 0) {
+
+			}
 		}
-	}
 
 	// sock_err = receive_basic(client_socket, message);
 
@@ -102,33 +112,36 @@ int main(void) {
 	// 	printf("Chaine reçu : %s\n", message.c_str());
 	// }
 
-	Header header;
+		Header header;
+		Ressource currentRessource("./default_pages/index.html");
 
-	message = "abruti ça marche pas";
+		currentRessource.setContent(getFileContents(currentRessource.getUrl()));
+		currentRessource.setContentType(getContentTypeByFile(currentRessource.getUrl()));
 
-	header.initForSend();
-	header.setContentLength(message.length());
+		header.initForSend();
+		header.setContentType(currentRessource.getContentType());
+		header.setContentLength(currentRessource.getContent().length());
 
-	std::string formatedHeader = header.getFormatedHeader();
+		sock_err = send(client_socket, header.getFormatedHeader().c_str(), header.getFormatedHeader().length(), 0);
 
-	sock_err = send(client_socket, formatedHeader.c_str(), formatedHeader.length(), 0);
+		if (sock_err < 0) {
+			printf("error de transmission\n");
+		} else {
+			printf("Chaine envoyée : %s\n", header.getFormatedHeader().c_str());
+		}
 
-	if (sock_err < 0) {
-		printf("error de transmission\n");
-	} else {
-		printf("Chaine envoyée : %s\n", formatedHeader.c_str());
+		sock_err = send(client_socket, currentRessource.getContent().c_str(), currentRessource.getContent().length(), 0);
+
+		if (sock_err < 0) {
+			printf("error de transmission\n");
+		} else {
+			printf("Chaine envoyée : %s\n", currentRessource.getContent().c_str());
+		}
+
+		/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
+		shutdown(client_socket, 2);
+		closesocket(client_socket);
 	}
-
-	sock_err = send(client_socket, message.c_str(), message.length(), 0);
-
-	if (sock_err < 0) {
-		printf("error de transmission\n");
-	} else {
-		printf("Chaine envoyée : %s\n", message.c_str());
-	}
-
-	/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
-	shutdown(client_socket, 2);
 
 	/* Fermeture de la socket */
 	printf("Fermeture de la socket...\n");
