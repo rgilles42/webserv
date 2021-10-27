@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/26 16:42:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/27 18:37:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,14 @@
 # include <string>
 # include <iostream>
 # include <fcntl.h>
+# include <signal.h>
 
 # define PORT 80
 # define BUFFER_SIZE 50
 # define MAX_CONNECTION 50
 
 # include "./Ressource.hpp"
-# include "./Header.hpp"
+# include "./HttpRequest.hpp"
 # include "./utils.hpp"
 
 #endif

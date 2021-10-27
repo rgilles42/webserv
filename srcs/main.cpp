@@ -6,17 +6,17 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/27 16:08:05 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/27 18:41:09 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
 #include "../includes/webserv.hpp"
 
 volatile sig_atomic_t stop;
 
 void handleSignals(sig_atomic_t signum) {
 	(void)signum;
+	std::cout << signum << std::endl;
 	stop = 1;
 }
 
@@ -112,30 +112,22 @@ int main(void) {
 	// 	printf("Chaine reçu : %s\n", message.c_str());
 	// }
 
-		Header header;
+		HttpRequest request;
 		Ressource currentRessource("./default_pages/index.html");
 
 		currentRessource.setContent(getFileContents(currentRessource.getUrl()));
 		currentRessource.setContentType(getContentTypeByFile(currentRessource.getUrl()));
 
-		header.initForSend();
-		header.setContentType(currentRessource.getContentType());
-		header.setContentLength(currentRessource.getContent().length());
+		request.prepareRequest();
+		request.setContentType(currentRessource.getContentType());
+		request.setContentLength(currentRessource.getContent().length());
 
-		sock_err = send(client_socket, header.getFormatedHeader().c_str(), header.getFormatedHeader().length(), 0);
-
-		if (sock_err < 0) {
-			printf("error de transmission\n");
-		} else {
-			printf("Chaine envoyée : %s\n", header.getFormatedHeader().c_str());
-		}
-
-		sock_err = send(client_socket, currentRessource.getContent().c_str(), currentRessource.getContent().length(), 0);
+		sock_err = send(client_socket, request.formatToString().c_str(), request.formatToString().length(), 0);
 
 		if (sock_err < 0) {
 			printf("error de transmission\n");
 		} else {
-			printf("Chaine envoyée : %s\n", currentRessource.getContent().c_str());
+			printf("Chaine envoyée : %s\n", request.formatToString().c_str());
 		}
 
 		/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
@@ -154,3 +146,4 @@ int main(void) {
 
 	return EXIT_SUCCESS;
 }
+

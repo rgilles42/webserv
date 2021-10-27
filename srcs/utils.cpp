@@ -6,11 +6,25 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:08 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/27 16:09:07 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/27 17:40:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/utils.hpp"
+
+std::string	&ltrim(std::string &s) {
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+	return s;
+}
+
+std::string	&rtrim(std::string &s) {
+	s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+	return s;
+}
+
+std::string	&trim(std::string &s) {
+	return ltrim(rtrim(s));
+}
 
 std::string	getFormatedDate(const time_t &rawtime) {
 	struct tm *timeinfo;
