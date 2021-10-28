@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:23 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/27 17:40:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/28 18:06:48 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <string>
 # include <ctime>
 # include <algorithm>
+
+#include <iostream>
 
 # define SSTR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
 

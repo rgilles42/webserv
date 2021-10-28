@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/27 18:37:45 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/10/28 19:56:23 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 
 # include "./Ressource.hpp"
 # include "./HttpRequest.hpp"
+# include "./HttpResponse.hpp"
 # include "./utils.hpp"
 
 #endif
