@@ -12,6 +12,19 @@
 
 #include "../includes/HttpResponse.hpp"
 
+HttpResponse::HttpResponse(void) {}
+
+HttpResponse::HttpResponse(const HttpResponse &x) {
+	this->protocol = x.getProtocol();
+	this->statusCode = x.getStatusCode();
+	this->headers = x.getHeaders();
+	this->body = x.getBody();
+}
+
+HttpResponse::HttpResponse(const std::string &response) {
+	this->fromString(response);
+}
+
 // Request Methods
 void		HttpResponse::setProtocol(const std::string &protocol) {
 	this->protocol = protocol;
@@ -21,17 +34,25 @@ void		HttpResponse::setStatusCode(const std::string &statusCode) {
 	this->statusCode = statusCode;
 }
 
-const std::string   HttpResponse::getProtocol(void) const {
+const std::string	HttpResponse::getProtocol(void) const {
 	return this->protocol;
 }
 
-const std::string   HttpResponse::getStatusCode(void) const {
+const std::string	HttpResponse::getStatusCode(void) const {
 	return this->statusCode;
 }
 
+const std::string	HttpResponse::getBody(void) const {
+	return this->body;
+}
+
+const HttpHeaders	HttpResponse::getHeaders(void) const {
+	return this->headers;
+}
+
 // Headers Methods
-void		HttpResponse::setContent(const std::string &content) {
-	this->content = content;
+void		HttpResponse::setBody(const std::string &body) {
+	this->body = body;
 }
 
 void		HttpResponse::setContentType(const std::string &contentType) {
@@ -69,22 +90,22 @@ void		HttpResponse::prepareResponse() {
 
 void	HttpResponse::fromString(const std::string &response) {
 
-	std::string			line(response);
+	std::string			str(response);
 
 	// Parse response protocol
-	this->setProtocol(line.substr(0, line.find(' ')));
-	line = line.erase(0, line.find(' ') + 1);
+	this->setProtocol(str.substr(0, str.find(' ')));
+	str = str.erase(0, str.find(' ') + 1);
 
 	// Parse response status
-	this->setStatusCode(line.substr(0, line.find(LINE_BREAK)));
-	line = line.erase(0, line.find(LINE_BREAK) + LINE_BREAK.length());
+	this->setStatusCode(str.substr(0, str.find(LINE_BREAK)));
+	str = str.erase(0, str.find(LINE_BREAK) + LINE_BREAK.length());
 
 	// Parse response headers
-	this->headers.fromString(line.substr(0, line.find(LINE_BREAK + LINE_BREAK)));
-	line = line.erase(0, line.find(LINE_BREAK + LINE_BREAK) + (LINE_BREAK + LINE_BREAK).length());
+	this->headers.fromString(str.substr(0, str.find(LINE_BREAK + LINE_BREAK)));
+	str = str.erase(0, str.find(LINE_BREAK + LINE_BREAK) + (LINE_BREAK + LINE_BREAK).length());
 
-	// Parse response content
-	this->content = line;
+	// Parse response body
+	this->body = str;
 }
 
 std::string	HttpResponse::toString(void) const {
@@ -92,6 +113,6 @@ std::string	HttpResponse::toString(void) const {
 
 	formatedResponse += this->getProtocol() + " " + this->getStatusCode() + LINE_BREAK;
 	formatedResponse += this->headers.toString() + LINE_BREAK;
-	formatedResponse += this->content;
+	formatedResponse += this->body;
 	return formatedResponse;
 }

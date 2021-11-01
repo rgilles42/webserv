@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/28 19:58:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/01 18:19:54 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,23 @@ class HttpRequest {
 		std::string	path;
 		std::string	protocol;
 		HttpHeaders	headers;
+		std::string	body;
 
 	public:
+		HttpRequest(void);
+		HttpRequest(const HttpRequest &x);
+		HttpRequest(const std::string &request);
+
 		// Request Methods
 		void		setMethod(const std::string &method);
 		void		setPath(const std::string &path);
 		void		setProtocol(const std::string &protocol = HTTP_PROTOCOL);
+		void		setBody(const std::string &body);
 		const std::string	getMethod(void) const;
 		const std::string	getPath(void) const;
 		const std::string	getProtocol(void) const;
+		const std::string	getBody(void) const;
+		const HttpHeaders	getHeaders(void) const;
 
 		// Utils Methods
 		void		fromString(const std::string &request);

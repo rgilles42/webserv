@@ -6,22 +6,22 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:13:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/26 15:45:33 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/01 18:26:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Ressource.hpp"
 
-Ressource::Ressource(const std::string &url, const std::string &statusCode) {
-	this->url = url;
+Ressource::Ressource(const std::string &uri, const std::string &statusCode) {
+	this->uri = uri;
 	this->content = "";
 	this->contentType = "text/plain";
 	this->statusCode = statusCode;
 	this->hash = 1;
 }
 
-void		Ressource::setUrl(const std::string &url) {
-	this->url = url;
+void		Ressource::seturi(const std::string &uri) {
+	this->uri = uri;
 }
 
 void		Ressource::setContent(const std::string &content) {
@@ -41,8 +41,8 @@ uint32_t	Ressource::createHash(void) {
 	return 1;
 }
 
-std::string	Ressource::getUrl(void) const {
-	return this->url;
+std::string	Ressource::geturi(void) const {
+	return this->uri;
 }
 
 std::string	Ressource::getContent(void) const {

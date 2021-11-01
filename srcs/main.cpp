@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/28 20:27:33 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 00:19:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,24 @@ void handleSignals(sig_atomic_t signum) {
 ssize_t receive_basic(SOCKET s, std::string &result)
 {
 	ssize_t		size_read = 0;
-	ssize_t		total_size = 0;
 	char	buffer[BUFFER_SIZE + 1];
 
-	while (size_read >= 0) {
-		memset(buffer, 0, BUFFER_SIZE + 1);
-		size_read =  read(s, buffer, BUFFER_SIZE + 1);
-		if(size_read < 0) {
-			continue;
-		}
-		printf("%ld\n", size_read);
-		if (size_read == 0) {
-			break;
-		}
-		total_size += size_read;
-		result.append(buffer);
-	}
-	printf("%s\n", result.c_str());
-	return total_size;
+	// while (size_read >= 0) {
+	// 	memset(buffer, 0, BUFFER_SIZE + 1);
+	// 	size_read =  read(s, buffer, BUFFER_SIZE + 1);
+	// 	if(size_read < 0) {
+	// 		continue;
+	// 	}
+	// 	printf("%ld\n", size_read);
+	// 	if (size_read == 0) {
+	// 		break;
+	// 	}
+	// 	result.append(buffer);
+	// }
+	size_read = recv(s, buffer, BUFFER_SIZE + 1, 0);
+	buffer[size_read] = '\0';
+	result.append(buffer);
+	return result.length();
 }
 
 int main(void) {
@@ -57,7 +57,7 @@ int main(void) {
 
 	SOCKET server_socket;
 	SOCKADDR_IN server_addr;
-	SOCKET client_socket;
+	// SOCKET client_socket;
 	SOCKADDR_IN client_addr;
 	socklen_t recsize = sizeof(client_addr);
 	std::string message;
@@ -67,11 +67,16 @@ int main(void) {
 		perror("socket create");
 		return EXIT_FAILURE;
 	}
+	int optval = 1;
+	if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
+		perror("setsockopt(SO_REUSEADDR) failed");
+		return EXIT_FAILURE;
+	}
 
 	/* Configuration */
-	server_addr.sin_addr.s_addr    = htonl(INADDR_ANY);   /* Adresse IP automatique */
-	server_addr.sin_family         = AF_INET;             /* Protocole familial (IP) */
-	server_addr.sin_port           = htons(PORT);         /* Listage du port */
+	server_addr.sin_addr.s_addr	= htonl(INADDR_ANY);   /* Adresse IP automatique */
+	server_addr.sin_family		= AF_INET;             /* Protocole familial (IP) */
+	server_addr.sin_port		= htons(PORT);         /* Listage du port */
 
 	if (bind(server_socket, (SOCKADDR*) &server_addr, sizeof(server_addr)) < 0) {
 		perror("socket bind");
@@ -95,41 +100,47 @@ int main(void) {
 	signal(SIGINT, handleSignals);
 	while (!stop) {
 
-		client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &recsize);
+
+		SOCKET client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &recsize);
 		printf("Un client se connecte avec la socket %d de %s:%d\n", client_socket, inet_ntoa(client_addr.sin_addr), htons(client_addr.sin_port));
 
-		if(!(fcntl(client_socket, F_GETFL) & O_NONBLOCK)) {
-			if(fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL) | O_NONBLOCK) < 0) {
+		// if(!(fcntl(client_socket, F_GETFL) & O_NONBLOCK)) {
+		// 	if(fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL) | O_NONBLOCK) < 0) {
 
-			}
-		}
+		// 	}
+		// }
+		message.clear();
+		sock_err = receive_basic(client_socket, message);
 
-	// sock_err = receive_basic(client_socket, message);
+		// if (sock_err < 0) {
+		// 	printf("error de récéption\n");
+		// } else {
+		// 	printf("Chaine reçu : %s\n", message.c_str());
+		// }
 
-	// if (sock_err < 0) {
-	// 	printf("error de récéption\n");
-	// } else {
-	// 	printf("Chaine reçu : %s\n", message.c_str());
-	// }
+		HttpRequest request(message);
+
+		std::cout << "|" << message << "|" << std::endl;
+		std::cout << "|" << request.getBody() << "|" << std::endl;
 
 		HttpResponse response;
 		Ressource currentRessource("./default_pages/index.html");
 
-		currentRessource.setContent(getFileContents(currentRessource.getUrl()));
-		currentRessource.setContentType(getContentTypeByFile(currentRessource.getUrl()));
+		currentRessource.setContent(getFileContents(currentRessource.geturi()));
+		currentRessource.setContentType(getContentTypeByFile(currentRessource.geturi()));
 
 		response.prepareResponse();
 		response.setContentType(currentRessource.getContentType());
-		response.setContent(currentRessource.getContent());
+		response.setBody(currentRessource.getContent());
 		response.setContentLength(currentRessource.getContent().length());
 
 		sock_err = send(client_socket, response.toString().c_str(), response.toString().length(), 0);
 
-		if (sock_err < 0) {
-			printf("error de transmission\n");
-		} else {
-			printf("Chaine envoyée : %s\n", response.toString().c_str());
-		}
+		// if (sock_err < 0) {
+		// 	printf("error de transmission\n");
+		// } else {
+		// 	printf("Chaine envoyée : %s\n", response.toString().c_str());
+		// }
 
 		/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
 		shutdown(client_socket, 2);

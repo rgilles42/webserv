@@ -6,11 +6,13 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/28 20:13:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/01 18:25:44 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpHeaders.hpp"
+
+// can have multiple identique key but not same value
 
 // Headers Methods
 bool		HttpHeaders::isKeyValid(const std::string &key) {

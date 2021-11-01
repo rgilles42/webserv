@@ -33,14 +33,21 @@ class HttpResponse {
 		std::string	protocol;
 		std::string	statusCode;
 		HttpHeaders	headers;
-		std::string	content;
+		std::string	body;
 
 	public:
-		// Request Methods
+		HttpResponse(void);
+		HttpResponse(const HttpResponse &x);
+		HttpResponse(const std::string &response);
+
+		// response Methods
 		void		setProtocol(const std::string &protocol = HTTP_PROTOCOL);
 		void		setStatusCode(const std::string &statusCode = DEFAULT_STATUS_CODE);
+		void		setBody(const std::string &body);
 		const std::string	getProtocol(void) const;
 		const std::string	getStatusCode(void) const;
+		const std::string	getBody(void) const;
+		const HttpHeaders	getHeaders(void) const;
 
 		// Headers Methods
 		void		setContent(const std::string &content);
@@ -50,7 +57,7 @@ class HttpResponse {
 
 		// Utils Methods
 		void		prepareResponse();
-		void		fromString(const std::string &request);
+		void		fromString(const std::string &response);
 		std::string	toString(void) const;
 
 };
