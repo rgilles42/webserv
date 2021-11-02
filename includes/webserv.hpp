@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/01 18:08:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 01:20:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define MAX_CONNECTION 50
 
 # include "./Ressource.hpp"
+# include "./HttpUtils.hpp"
 # include "./HttpRequest.hpp"
 # include "./HttpResponse.hpp"
 # include "./utils.hpp"

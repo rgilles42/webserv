@@ -25,7 +25,8 @@
 
 # define DEFAULT_SERVER			std::string("Webserv/1.0.0")
 
-# define LINE_BREAK				std::string("\r\n")
+# define CR						std::string("\r")
+# define LF						std::string("\n")
 
 class HttpResponse {
 

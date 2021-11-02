@@ -97,12 +97,12 @@ void	HttpResponse::fromString(const std::string &response) {
 	str = str.erase(0, str.find(' ') + 1);
 
 	// Parse response status
-	this->setStatusCode(str.substr(0, str.find(LINE_BREAK)));
-	str = str.erase(0, str.find(LINE_BREAK) + LINE_BREAK.length());
+	this->setStatusCode(str.substr(0, str.find((CR + LF))));
+	str = str.erase(0, str.find((CR + LF)) + (CR + LF).length());
 
 	// Parse response headers
-	this->headers.fromString(str.substr(0, str.find(LINE_BREAK + LINE_BREAK)));
-	str = str.erase(0, str.find(LINE_BREAK + LINE_BREAK) + (LINE_BREAK + LINE_BREAK).length());
+	this->headers.fromString(str.substr(0, str.find((CR + LF) + (CR + LF))));
+	str = str.erase(0, str.find((CR + LF) + (CR + LF)) + ((CR + LF) + (CR + LF)).length());
 
 	// Parse response body
 	this->body = str;
@@ -111,8 +111,8 @@ void	HttpResponse::fromString(const std::string &response) {
 std::string	HttpResponse::toString(void) const {
 	std::string	formatedResponse = "";
 
-	formatedResponse += this->getProtocol() + " " + this->getStatusCode() + LINE_BREAK;
-	formatedResponse += this->headers.toString() + LINE_BREAK;
+	formatedResponse += this->getProtocol() + " " + this->getStatusCode() + (CR + LF);
+	formatedResponse += this->headers.toString() + (CR + LF);
 	formatedResponse += this->body;
 	return formatedResponse;
 }

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/01 18:20:36 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 02:18:30 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ void	HttpRequest::fromString(const std::string &request) {
 	str = str.erase(0, str.find(' ') + 1);
 
 	// Parse request protocol
-	this->setProtocol(str.substr(0, str.find(LINE_BREAK)));
-	str = str.erase(0, str.find(LINE_BREAK) + LINE_BREAK.length());
+	this->setProtocol(str.substr(0, str.find((CR + LF))));
+	str = str.erase(0, str.find((CR + LF)) + (CR + LF).length());
 
 	// Parse request headers
-	this->headers.fromString(str.substr(0, str.find(LINE_BREAK + LINE_BREAK)));
-	str = str.erase(0, str.find(LINE_BREAK + LINE_BREAK) + (LINE_BREAK + LINE_BREAK).length());
+	this->headers.fromString(str.substr(0, str.find((CR + LF) + (CR + LF))));
+	str = str.erase(0, str.find((CR + LF) + (CR + LF)) + ((CR + LF) + (CR + LF)).length());
 
 	this->body = str;
 }
@@ -90,8 +90,8 @@ void	HttpRequest::fromString(const std::string &request) {
 std::string	HttpRequest::toString(void) const {
 	std::string	formatedRequest = "";
 
-	formatedRequest += this->getMethod() + " " + this->getPath() + " " + this->getProtocol() + LINE_BREAK;
-	formatedRequest += this->headers.toString() + LINE_BREAK;
+	formatedRequest += this->getMethod() + " " + this->getPath() + " " + this->getProtocol() + (CR + LF);
+	formatedRequest += this->headers.toString() + (CR + LF);
 	formatedRequest += this->body;
 	return formatedRequest;
 }
