@@ -1,23 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpUtils.hpp                                      :+:      :+:    :+:   */
+/*   HttpStatusCode.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 00:38:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 02:10:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 20:08:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTPUTILS_HPP
-# define HTTPUTILS_HPP
+#ifndef HTTPSTATUSCODE_HPP
+# define HTTPSTATUSCODE_HPP
 
 # include <string>
 # include <map>
 
 // Need MIME config
+
+struct HttpMethod {
+
+	enum Method {
+		unknown = 0,
+
+		get = 1,
+	};
+
+};
+
 struct HttpStatusCode {
+
+	enum StatusCodeOffset {
+		unknown_offset = 0,
+
+		information_offset = 100,
+		success_offset = 200,
+		redirection_offset = 300,
+		client_error_offset = 400,
+		server_error_offset = 500,
+		misc_error_offset = 600,
+	};
 
 	enum StatusCode {
 		unknown = 0,
@@ -91,12 +113,18 @@ struct HttpStatusCode {
 		server_error_network_authentication_required
 	};
 
-	static std::string	getStatusCodeString(const HttpStatusCode::StatusCode &statusCode = HttpStatusCode::unknown);
+	typedef std::map<HttpStatusCode::StatusCode, std::string> StatusCodeStringMap;
 
 	static HttpStatusCode::StatusCode	getStatusCode(const int &statusCode = 0);
 	static HttpStatusCode::StatusCode	getStatusCode(const std::string &statusCodeString);
 
-	typedef std::map<HttpStatusCode::StatusCode, std::string> StatusCodeStringMap;
+	static std::string	getStatusCodeString(const HttpStatusCode::StatusCode &statusCode = HttpStatusCode::unknown);
+
+	bool				isInformation(const HttpStatusCode::StatusCode &statusCode);
+	bool				isSuccess(const HttpStatusCode::StatusCode &statusCode);
+	bool				isRedirect(const HttpStatusCode::StatusCode &statusCode);
+	bool				isClientError(const HttpStatusCode::StatusCode &statusCode);
+	bool				isServerError(const HttpStatusCode::StatusCode &statusCode);
 
 };
 
@@ -172,6 +200,6 @@ static const std::pair<HttpStatusCode::StatusCode, std::string> HttpStatusCodeSt
 	std::make_pair(HttpStatusCode::server_error_network_authentication_required, "511 Network Authentication Required"),
 };
 
-static const HttpStatusCode::StatusCodeStringMap HttpStatusCodeString(HttpStatusCodeStringData, HttpStatusCodeStringData + sizeof HttpStatusCodeStringData / sizeof HttpStatusCodeStringData[0]);
+static const HttpStatusCode::StatusCodeStringMap HttpStatusCodeStrings(HttpStatusCodeStringData, HttpStatusCodeStringData + (sizeof HttpStatusCodeStringData / sizeof HttpStatusCodeStringData[0]));
 
 #endif

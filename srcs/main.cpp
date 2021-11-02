@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 02:15:16 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 19:47:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,19 +159,33 @@ int main(void) {
 	return EXIT_SUCCESS;
 }
 
-int main(void) {
-	std::cout << "|" << HttpStatusCode::getStatusCodeString(HttpStatusCode::unknown) << "|" << std::endl;
-	std::cout << "|" << HttpStatusCode::getStatusCodeString(HttpStatusCode::information_continue) << "|" << std::endl;
+// int main(void) {
+// 	std::cout << "|" << HttpStatusCode::getStatusCodeString(HttpStatusCode::unknown) << "|" << std::endl;
+// 	std::cout << "|" << HttpStatusCode::getStatusCodeString(HttpStatusCode::information_continue) << "|" << std::endl;
 
-	HttpStatusCode::StatusCode code;
+// 	HttpStatusCode::StatusCode code;
 
-	code = HttpStatusCode::getStatusCode(200);
-	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
-	code = HttpStatusCode::getStatusCode(201);
-	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
-	code = HttpStatusCode::getStatusCode(189);
-	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
-	code = HttpStatusCode::getStatusCode("502 Bad Gateway");
-	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
-	return EXIT_SUCCESS;
-}
+// 	code = HttpStatusCode::getStatusCode(200);
+// 	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
+// 	code = HttpStatusCode::getStatusCode(201);
+// 	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
+// 	code = HttpStatusCode::getStatusCode(189);
+// 	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
+// 	code = HttpStatusCode::getStatusCode("502 Bad Gateway");
+// 	std::cout << "|" << HttpStatusCode::getStatusCodeString(code) << "|" << std::endl;
+
+// std::cout << "|" << HttpVersion::getVersion("") << "|" << std::endl;
+// std::cout << "|" << HttpVersion::getVersion("HTTP/0.9") << "|" << std::endl;
+// std::cout << "|" << HttpVersion::getVersion("HTTP/1.0") << "|" << std::endl;
+// std::cout << "|" << HttpVersion::getVersion("HTTP/1.1") << "|" << std::endl;
+// std::cout << "|" << HttpVersion::getVersion("HTTP/1.2") << "|" << std::endl;
+// std::cout << "|" << HttpVersion::getVersion("HTTP/2") << "|" << std::endl;
+// std::cout << "|" << HttpVersion::getVersion("HTTP/3") << "|" << std::endl;
+
+// 	return EXIT_SUCCESS;
+// }
+
+// int main(void) {
+
+// 	return EXIT_SUCCESS;
+// }
