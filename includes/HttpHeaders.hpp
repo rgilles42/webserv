@@ -6,19 +6,23 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/28 19:50:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 23:41:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPHEADERS_HPP
 # define HTTPHEADERS_HPP
 
-#include <string>
-#include <map>
+# include <string>
+# include <map>
+# include <stdexcept>
 
-#include "utils.hpp"
+# include "utils.hpp"
 
-# define LINE_BREAK				std::string("\r\n")
+# define CR						std::string("\r")
+# define LF						std::string("\n")
+# define CRLF					(CR + LF)
+
 # define AUTHORIZED_CHAR		std::string("!#$%&'*+-.^_`|~")
 
 # define IS_AUTHORIZED_KEY_CHAR( c ) (std::isalpha(c) || std::isdigit(c) || AUTHORIZED_CHAR.find(c))
@@ -26,7 +30,7 @@
 class HttpHeaders {
 
 	protected:
-		std::map<std::string, std::string>	headers;
+		std::multimap<std::string, std::string>	headers;
 
 	public:
 		// Headers Methods

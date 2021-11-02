@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/01 18:25:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 23:41:59 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,16 @@ void		HttpHeaders::set(const std::string &key, const std::string &value) {
 	if (!this->isKeyValid(key)) {
 		throw std::runtime_error("isKeyValid: " + key);
 	}
-	this->headers[key] = value;
+	this->headers.insert(std::make_pair(key, value));
+	// this->headers[key] = value;
 }
 
 const std::string	HttpHeaders::get(const std::string &key) const {
-	return this->headers.at(key);
+	std::multimap<std::string, std::string>::const_iterator it = this->headers.find(key);
+	if (it == this->headers.end()) {
+		throw std::out_of_range("HttpHeaders::get("+key+")");
+	}
+	return it->second;
 }
 
 std::string	HttpHeaders::toString(void) const {
@@ -41,7 +46,7 @@ std::string	HttpHeaders::toString(void) const {
 	std::string	formatedHeaders = "";
 
 	while (it != end) {
-		formatedHeaders += it->first + ": " + it->second + LINE_BREAK;
+		formatedHeaders += it->first + ": " + it->second + CRLF;
 		it++;
 	}
 	return formatedHeaders;

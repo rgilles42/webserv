@@ -27,6 +27,7 @@
 
 # define CR						std::string("\r")
 # define LF						std::string("\n")
+# define CRLF					(CR + LF)
 
 class HttpResponse {
 

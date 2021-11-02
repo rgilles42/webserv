@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 02:18:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 21:46:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 # define CR						std::string("\r")
 # define LF						std::string("\n")
+# define CRLF					(CR + LF)
 
 class HttpRequest {
 

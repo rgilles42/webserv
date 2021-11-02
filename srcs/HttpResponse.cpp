@@ -91,18 +91,22 @@ void		HttpResponse::prepareResponse() {
 void	HttpResponse::fromString(const std::string &response) {
 
 	std::string			str(response);
+	std::string			find = "";
 
 	// Parse response protocol
-	this->setProtocol(str.substr(0, str.find(' ')));
-	str = str.erase(0, str.find(' ') + 1);
+	find = ' ';
+	this->setProtocol(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
 
 	// Parse response status
-	this->setStatusCode(str.substr(0, str.find((CR + LF))));
-	str = str.erase(0, str.find((CR + LF)) + (CR + LF).length());
+	find = CRLF;
+	this->setStatusCode(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
 
 	// Parse response headers
-	this->headers.fromString(str.substr(0, str.find((CR + LF) + (CR + LF))));
-	str = str.erase(0, str.find((CR + LF) + (CR + LF)) + ((CR + LF) + (CR + LF)).length());
+	find = CRLF + CRLF;
+	this->headers.fromString(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
 
 	// Parse response body
 	this->body = str;
@@ -111,8 +115,8 @@ void	HttpResponse::fromString(const std::string &response) {
 std::string	HttpResponse::toString(void) const {
 	std::string	formatedResponse = "";
 
-	formatedResponse += this->getProtocol() + " " + this->getStatusCode() + (CR + LF);
-	formatedResponse += this->headers.toString() + (CR + LF);
+	formatedResponse += this->getProtocol() + " " + this->getStatusCode() + CRLF;
+	formatedResponse += this->headers.toString() + CRLF;
 	formatedResponse += this->body;
 	return formatedResponse;
 }

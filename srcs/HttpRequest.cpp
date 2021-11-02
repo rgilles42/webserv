@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 02:18:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 23:33:25 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,31 @@ const HttpHeaders	HttpRequest::getHeaders(void) const {
 void	HttpRequest::fromString(const std::string &request) {
 
 	std::string			str(request);
+	std::string			find = "";
 
 	// Parse request method
-	this->setMethod(str.substr(0, str.find(' ')));
-	str = str.erase(0, str.find(' ') + 1);
+	find = " ";
+	this->setMethod(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
 
 	// Parse request path
-	this->setPath(str.substr(0, str.find(' ')));
-	str = str.erase(0, str.find(' ') + 1);
+	find = " ";
+	this->setPath(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
 
 	// Parse request protocol
-	this->setProtocol(str.substr(0, str.find((CR + LF))));
-	str = str.erase(0, str.find((CR + LF)) + (CR + LF).length());
+	find = CRLF;
+	this->setProtocol(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
 
 	// Parse request headers
-	this->headers.fromString(str.substr(0, str.find((CR + LF) + (CR + LF))));
-	str = str.erase(0, str.find((CR + LF) + (CR + LF)) + ((CR + LF) + (CR + LF)).length());
+	find = CRLF;
+	this->headers.fromString(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
+
+	find = CRLF + CRLF;
+	this->headers.fromString(str.substr(0, str.find(find)));
+	str = str.erase(0, str.find(find) + find.length());
 
 	this->body = str;
 }
@@ -90,8 +99,8 @@ void	HttpRequest::fromString(const std::string &request) {
 std::string	HttpRequest::toString(void) const {
 	std::string	formatedRequest = "";
 
-	formatedRequest += this->getMethod() + " " + this->getPath() + " " + this->getProtocol() + (CR + LF);
-	formatedRequest += this->headers.toString() + (CR + LF);
-	formatedRequest += this->body;
+	formatedRequest += this->getMethod() + " " + this->getPath() + " " + this->getProtocol() + CRLF;
+	formatedRequest += this->headers.toString() + CRLF;
+	// formatedRequest += this->body;
 	return formatedRequest;
 }
