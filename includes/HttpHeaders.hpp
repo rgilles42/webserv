@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 23:50:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 18:01:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class HttpHeaders {
 		bool		isKeyValid(const std::string &key);
 		void		set(const std::string &key, const std::string &value);
 		const std::string	get(const std::string &key) const;
+		bool		has(const std::string &key) const;
 
 		// Utils Methods
 		std::string	toString(void) const;

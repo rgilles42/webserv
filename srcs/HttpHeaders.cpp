@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 23:49:49 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 18:03:33 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,15 @@ void		HttpHeaders::set(const std::string &key, const std::string &value) {
 }
 
 const std::string	HttpHeaders::get(const std::string &key) const {
-	std::multimap<std::string, std::string>::const_iterator it = this->headers.find(key);
-	if (it == this->headers.end()) {
+	if (!this->has(key)) {
 		throw std::out_of_range("HttpHeaders::get(" + key + ")");
 	}
+	std::multimap<std::string, std::string>::const_iterator it = this->headers.find(key);
 	return it->second;
+}
+
+bool				HttpHeaders::has(const std::string &key) const {
+	return this->headers.count(key) > 0;
 }
 
 std::string	HttpHeaders::toString(void) const {

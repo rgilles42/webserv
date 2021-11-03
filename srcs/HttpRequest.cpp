@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/03 01:30:54 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 18:28:04 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,23 @@ HttpRequest::HttpRequest(const std::string &response) {
 // Request Properties
 const std::string	HttpRequest::getBaseUrl(void) const {
 	// Return the origin from with router is provide the req
-	return std::string("To do");
+	size_t find = this->fullPath.find('?');
+	if (find != this->fullPath.npos) {
+		return fullPath.substr(0, find);
+	}
+	return this->fullPath;
 }
 
-const std::string	HttpRequest::getBody(void) const {
+const HttpRequest::MappedValuesValid	HttpRequest::getBody(void) const {
 	// Return undefined by defaut, need middleware to parse body and get values
-	return std::string("To do");
+	MappedValues values;
+	return std::make_pair(!values.empty(), values);
 }
 
-const std::string	HttpRequest::getCookies(void) const {
-	// Return undefined by defaut, need cookie parser middleware
-	return std::string("To do");
+const HttpRequest::MappedValues	HttpRequest::getCookies(void) const {
+	// Return undefined by defaut, need middleware to parse body and get values
+	MappedValues cookies;
+	return cookies;
 }
 
 bool				HttpRequest::isFresh(void) const {
@@ -49,26 +55,42 @@ bool				HttpRequest::isFresh(void) const {
 
 const std::string	HttpRequest::getHostname(void) const {
 	// Return the Host or if trust proxy is enable return X-Forwarded-Host
+	std::string hostname = "";
 	if (TRUST_PROXY) {
-		return this->headers.get("X-Forwarded-Host");
+		if (this->headers.has("X-Forwarded-Host")) {
+			hostname = this->headers.get("X-Forwarded-Host");
+		}
+	} else {
+		hostname = this->headers.get("Host");
 	}
-	return this->headers.get("Host");
+	return hostname;
 }
 
 const std::string	HttpRequest::getIp(void) const {
 	// Return the ip or if trust proxy is enable return left-most entry of X-Forwarded-For
+	std::string ip = "";
 	if (TRUST_PROXY) {
-		return this->headers.get("X-Forwarded-For");
+		if (this->headers.has("X-Forwarded-For")) {
+			ip = this->headers.get("X-Forwarded-For");
+		}
+	} else {
+		ip = "To do";
 	}
-	return std::string("To do");
+	return ip;
 }
 
-const std::string	HttpRequest::getIps(void) const {
+const HttpRequest::ListedValues	HttpRequest::getIps(void) const {
 	// Return if trust proxy is enable return every entry of X-Forwarded-For
+	ListedValues ips;
 	if (TRUST_PROXY) {
-		return this->headers.get("X-Forwarded-For");
+		if (this->headers.has("X-Forwarded-For")) {
+			ips.push_back(this->headers.get("X-Forwarded-For"));
+		}
+	} else {
+		ips.push_back("To do");
+		ips.push_back("To do");
 	}
-	return std::string("To do");
+	return ips;
 }
 
 const std::string	HttpRequest::getMethod(void) const {
@@ -80,9 +102,10 @@ const std::string	HttpRequest::getOriginalUrl(void) const {
 	return this->fullPath;
 }
 
-const std::string	HttpRequest::getParams(void) const {
+const HttpRequest::MappedValues	HttpRequest::getParams(void) const {
 	// Return all parameters in mapped value (std::map)
-	return std::string("To do");
+	MappedValues params;
+	return params;
 }
 
 const std::string	HttpRequest::getPath(void) const {
@@ -95,16 +118,22 @@ const std::string	HttpRequest::getPath(void) const {
 
 const std::string	HttpRequest::getProtocol(void) const {
 	// Return Http or Https (for TLS requests) if trust proxy is enable will return the value of X-Forwarded-Proto
-	// return this->protocol;
+	std::string protocol = "";
 	if (TRUST_PROXY) {
-		return this->headers.get("X-Forwarded-Proto");
+		if (this->headers.has("X-Forwarded-Proto")) {
+			protocol = this->headers.get("X-Forwarded-Proto");
+		}
+	} else {
+		protocol = "http";
 	}
-	return std::string("To do");
+	return protocol;
 }
 
-const std::string	HttpRequest::getQuery(void) const {
+const HttpRequest::MappedValues	HttpRequest::getQuery(void) const {
 	// Return empty object if no query parser
-	return std::string("To do");
+	MappedValues values;
+	values.insert(std::make_pair("To do", "To do"));
+	return values;
 }
 
 const std::string	HttpRequest::getRoute(void) const {
@@ -116,56 +145,96 @@ bool				HttpRequest::isSecure(void) const {
 	return this->getProtocol() == "https";
 }
 
-const std::string	HttpRequest::getSignedCookies(void) const {
+const HttpRequest::MappedValues	HttpRequest::getSignedCookies(void) const {
 	// Return undefined by defaut, need cookie parser middleware
-	return std::string("To do");
+	MappedValues cookies;
+	return cookies;
 }
 
 bool				HttpRequest::isStale(void) const {
 	// Indicates whether the request is “stale,” and is the opposite of req.fresh.
+	// To do
 	return false && !this->isFresh();
 }
 
-const std::string	HttpRequest::getSubdomains(void) const {
+const HttpRequest::ListedValues	HttpRequest::getSubdomains(void) const {
 	// Return An array of subdomains in the domain name of the request.
-	return std::string("To do");
+	ListedValues subdomains;
+	if (!isIpAddress(this->getHostname())) {
+		ListedValues splitHost = split(this->getHostname(), ".");
+		if (splitHost.size() > 2) {
+			subdomains.insert(subdomains.begin(), splitHost.begin(), splitHost.end() - 2);
+		}
+	}
+	return subdomains;
 }
 
 bool				HttpRequest::isXhr(void) const {
 	// Return A Boolean property that is true if the request’s X-Requested-With header field is “XMLHttpRequest”, indicating that the request was issued by a client library such as jQuery.
+	if (!this->headers.has("X-Requested-With")) {
+		return false;
+	}
 	return this->headers.get("X-Requested-With") == "“XMLHttpRequest”";
 }
 
 // Request Methods
-
-
 bool				HttpRequest::accepts(const std::string) {
-	return false;
+	std::string accepted = "";
+	if (this->headers.has("Accept")) {
+		accepted = this->headers.get("Accept");
+	}
+	return true;
 }
 
 bool				HttpRequest::acceptsCharsets(const std::string) {
-	return false;
+	std::string accepted = "";
+	if (this->headers.has("Accept-Charset")) {
+		accepted = this->headers.get("Accept-Charset");
+	}
+	return true;
 }
 
 bool				HttpRequest::acceptsEncodings(const std::string) {
-	return false;
+	std::string accepted = "";
+	if (this->headers.has("Accept-Encoding")) {
+		accepted = this->headers.get("Accept-Encoding");
+	}
+	return true;
 }
 
 bool				HttpRequest::acceptsLanguages(const std::string) {
-	return false;
+	std::string accepted = "";
+	if (this->headers.has("Accept-Language")) {
+		accepted = this->headers.get("Accept-Language");
+	}
+	return true;
 }
 
 
 const std::string	HttpRequest::get(const std::string &key) const {
-	return this->headers.get(key);
+		std::string value = "";
+	if (this->headers.has(key)) {
+		value = this->headers.get(key);
+	}
+	return value;
 }
 
 bool				HttpRequest::is(const std::string) {
+	std::string contentType = "";
+	if (this->headers.has("Content-Type")) {
+		contentType = this->headers.get("Content-Type");
+	}
 	return false;
 }
 
 const std::string	HttpRequest::param(const std::string &key, const std::string &defaultValue) const {
-	(void)key;
+	MappedValues params = this->getParams();
+	if (params.count(key) > 0) {
+		MappedValues::const_iterator it = params.find(key);
+		if (it != params.end()) {
+			return it->second;
+		}
+	}
 	return defaultValue;
 }
 

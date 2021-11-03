@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/03 01:30:50 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 18:26:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define HTTPREQUEST_HPP
 
 #include <string>
+#include <map>
+#include <vector>
 
 #include "HttpHeaders.hpp"
 #include "utils.hpp"
@@ -27,6 +29,11 @@
 # define TRUST_PROXY			false
 
 class HttpRequest {
+
+	public:
+		typedef	std::vector<std::string>			ListedValues;
+		typedef std::map<std::string, std::string>	MappedValues;
+		typedef std::pair<bool, MappedValues >		MappedValuesValid;
 
 	protected:
 		std::string	method;
@@ -42,23 +49,23 @@ class HttpRequest {
 
 		// Request Properties
 		const std::string	getBaseUrl(void) const;
-		const std::string	getBody(void) const;
-		const std::string	getCookies(void) const;
+		const MappedValuesValid	getBody(void) const;
+		const MappedValues	getCookies(void) const;
 		bool				isFresh(void) const;
 		const std::string	getHostname(void) const;
 		const std::string	getIp(void) const;
-		const std::string	getIps(void) const;
+		const ListedValues	getIps(void) const;
 		const std::string	getMethod(void) const;
 		const std::string	getOriginalUrl(void) const;
-		const std::string	getParams(void) const;
+		const MappedValues	getParams(void) const;
 		const std::string	getPath(void) const;
 		const std::string	getProtocol(void) const;
-		const std::string	getQuery(void) const;
+		const MappedValues	getQuery(void) const;
 		const std::string	getRoute(void) const;
 		bool				isSecure(void) const;
-		const std::string	getSignedCookies(void) const;
+		const MappedValues	getSignedCookies(void) const;
 		bool				isStale(void) const;
-		const std::string	getSubdomains(void) const;
+		const ListedValues	getSubdomains(void) const;
 		bool				isXhr(void) const;
 
 

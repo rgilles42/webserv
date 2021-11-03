@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:23 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/28 18:06:48 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 17:48:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,24 @@
 # include <string>
 # include <ctime>
 # include <algorithm>
+# include <vector>
 
-#include <iostream>
+# include <iostream>
+
+# if defined (_WIN32) || defined (_WIN64)
+	#  include <winsock2.h>
+	typedef int socklen_t;
+# elif defined (__unix__)
+	#  include <sys/types.h>
+	#  include <sys/socket.h>
+	#  include <netinet/in.h>
+	#  include <arpa/inet.h>
+	#  include <unistd.h>
+	#  define closesocket(s) close(s)
+	typedef int SOCKET;
+	typedef struct sockaddr_in SOCKADDR_IN;
+	typedef struct sockaddr SOCKADDR;
+# endif
 
 # define SSTR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
 
@@ -34,5 +50,11 @@ std::string	getFileContents(const std::string &filename);
 std::string	getFileExtension(const std::string &filename);
 
 std::string getContentTypeByFile(const std::string &filename, const std::string &fallback = "text/plain");
+
+bool		isIpv4Address(const std::string &str);
+bool		isIpv6Address(const std::string &str);
+bool		isIpAddress(const std::string &str);
+
+std::vector<std::string>	split(const std::string &str, const std::string &token);
 
 #endif
