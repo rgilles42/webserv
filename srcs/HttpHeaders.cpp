@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/03 18:03:33 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:18:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,23 @@ void		HttpHeaders::set(const std::string &key, const std::string &value) {
 	if (!this->isKeyValid(key)) {
 		throw std::runtime_error("HttpHeaders::isKeyValid(" + key + ", " + value + ")");
 	}
-	this->headers.insert(std::make_pair(key, value));
-	// this->headers[key] = value;
+	// this->headers.insert(std::make_pair(key, value));
+	this->headers[key] = value;
+}
+
+void		HttpHeaders::append(const std::string &key, const std::string &value) {
+	if (!this->has(key)) {
+		this->set(key, value);
+	} else {
+		this->headers[key] += ", " + value;
+	}
 }
 
 const std::string	HttpHeaders::get(const std::string &key) const {
 	if (!this->has(key)) {
 		throw std::out_of_range("HttpHeaders::get(" + key + ")");
 	}
-	std::multimap<std::string, std::string>::const_iterator it = this->headers.find(key);
+	headerType::const_iterator it = this->headers.find(key);
 	return it->second;
 }
 

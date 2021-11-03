@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/03 18:01:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:17:18 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,14 @@
 class HttpHeaders {
 
 	protected:
-		typedef std::multimap<std::string, std::string>	headerType;
+		typedef std::map<std::string, std::string>	headerType;
 		headerType	headers;
 
 	public:
 		// Headers Methods
 		bool		isKeyValid(const std::string &key);
 		void		set(const std::string &key, const std::string &value);
+		void		append(const std::string &key, const std::string &value);
 		const std::string	get(const std::string &key) const;
 		bool		has(const std::string &key) const;
 
