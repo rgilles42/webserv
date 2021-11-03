@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 21:46:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 01:30:50 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@
 # define LF						std::string("\n")
 # define CRLF					(CR + LF)
 
+# define TRUST_PROXY			false
+
 class HttpRequest {
 
 	protected:
 		std::string	method;
-		std::string	path;
+		std::string	fullPath;
 		std::string	protocol;
 		HttpHeaders	headers;
 		std::string	body;
@@ -38,16 +40,38 @@ class HttpRequest {
 		HttpRequest(const HttpRequest &x);
 		HttpRequest(const std::string &request);
 
-		// Request Methods
-		void		setMethod(const std::string &method);
-		void		setPath(const std::string &path);
-		void		setProtocol(const std::string &protocol = HTTP_PROTOCOL);
-		void		setBody(const std::string &body);
+		// Request Properties
+		const std::string	getBaseUrl(void) const;
+		const std::string	getBody(void) const;
+		const std::string	getCookies(void) const;
+		bool				isFresh(void) const;
+		const std::string	getHostname(void) const;
+		const std::string	getIp(void) const;
+		const std::string	getIps(void) const;
 		const std::string	getMethod(void) const;
+		const std::string	getOriginalUrl(void) const;
+		const std::string	getParams(void) const;
 		const std::string	getPath(void) const;
 		const std::string	getProtocol(void) const;
-		const std::string	getBody(void) const;
-		const HttpHeaders	getHeaders(void) const;
+		const std::string	getQuery(void) const;
+		const std::string	getRoute(void) const;
+		bool				isSecure(void) const;
+		const std::string	getSignedCookies(void) const;
+		bool				isStale(void) const;
+		const std::string	getSubdomains(void) const;
+		bool				isXhr(void) const;
+
+
+		// Request Methods
+		bool				accepts(const std::string);
+		bool				acceptsCharsets(const std::string);
+		bool				acceptsEncodings(const std::string);
+		bool				acceptsLanguages(const std::string);
+		const std::string	get(const std::string &key) const;
+		bool				is(const std::string);
+		const std::string	param(const std::string &key, const std::string &defaultValue = "") const;
+
+
 
 		// Utils Methods
 		void		fromString(const std::string &request);
