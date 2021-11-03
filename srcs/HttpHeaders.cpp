@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 23:41:59 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 23:49:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool		HttpHeaders::isKeyValid(const std::string &key) {
 
 void		HttpHeaders::set(const std::string &key, const std::string &value) {
 	if (!this->isKeyValid(key)) {
-		throw std::runtime_error("isKeyValid: " + key);
+		throw std::runtime_error("HttpHeaders::isKeyValid(" + key + ", " + value + ")");
 	}
 	this->headers.insert(std::make_pair(key, value));
 	// this->headers[key] = value;
@@ -35,14 +35,14 @@ void		HttpHeaders::set(const std::string &key, const std::string &value) {
 const std::string	HttpHeaders::get(const std::string &key) const {
 	std::multimap<std::string, std::string>::const_iterator it = this->headers.find(key);
 	if (it == this->headers.end()) {
-		throw std::out_of_range("HttpHeaders::get("+key+")");
+		throw std::out_of_range("HttpHeaders::get(" + key + ")");
 	}
 	return it->second;
 }
 
 std::string	HttpHeaders::toString(void) const {
-	std::map<std::string, std::string>::const_iterator it = this->headers.begin();
-	std::map<std::string, std::string>::const_iterator end = this->headers.end();
+	headerType::const_iterator it = this->headers.begin();
+	headerType::const_iterator end = this->headers.end();
 	std::string	formatedHeaders = "";
 
 	while (it != end) {

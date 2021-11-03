@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/02 23:41:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/02 23:50:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 class HttpHeaders {
 
 	protected:
-		std::multimap<std::string, std::string>	headers;
+		typedef std::multimap<std::string, std::string>	headerType;
+		headerType	headers;
 
 	public:
 		// Headers Methods
