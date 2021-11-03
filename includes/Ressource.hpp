@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:15:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/01 18:26:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:00:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ class Ressource {
 	public:
 		Ressource(const std::string &uri, const std::string &statusCode = "200 OK");
 
-		void		seturi(const std::string &uri = "");
+		void		setUri(const std::string &uri = "");
 		void		setContent(const std::string &content = "");
 		void		setContentType(const std::string &contentType = "text/plain");
 		void		setStatusCode(const std::string &statusCode = "200 OK");
 
 		uint32_t	createHash(void);
 
-		std::string		geturi(void) const;
+		std::string		getUri(void) const;
 		std::string		getContent(void) const;
 		std::string		getContentType(void) const;
 		std::string		getStatusCode(void) const;

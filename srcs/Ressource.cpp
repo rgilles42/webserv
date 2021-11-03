@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:13:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/01 18:26:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:00:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Ressource::Ressource(const std::string &uri, const std::string &statusCode) {
 	this->hash = 1;
 }
 
-void		Ressource::seturi(const std::string &uri) {
+void		Ressource::setUri(const std::string &uri) {
 	this->uri = uri;
 }
 
@@ -41,7 +41,7 @@ uint32_t	Ressource::createHash(void) {
 	return 1;
 }
 
-std::string	Ressource::geturi(void) const {
+std::string	Ressource::getUri(void) const {
 	return this->uri;
 }
 
