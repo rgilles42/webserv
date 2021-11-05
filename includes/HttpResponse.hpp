@@ -46,19 +46,16 @@ class HttpResponse {
 
 		// response Methods
 		void				append(const std::string &key, const std::string &value);
-		void				attachment(void);
+		void				attachment(const std::string &filename = "");
 		void				cookie(const std::string &name, const std::string &value, const std::string &options = "");
 		void				clearCookie(const std::string &name, const std::string &options = "");
-		void				download(const std::string &path, const std::string &filename = "", const std::string &options = "", const std::string &fn = "");
-		void				end(const std::string &data = "", const std::string &encoding = "");
-		void				format(const std::string &object);
+		void				download(const std::string &path, const std::string &filename = "", const std::string &options = "");
 		const std::string	get(const std::string &key) const;
-		void				json(const std::string &body = "");
 		void				links(const std::string &next = "", const std::string &last = "");
 		void				location(const std::string &path);
 		void				redirect(const std::string &path, const std::string &statusCode = "320 Found");
 		void				send(const std::string &body = "");
-		void				sendFile(const std::string &path, const std::string &options = "", const std::string &fn = "");
+		void				sendFile(const std::string &path, const std::string &options = "");
 		void				sendStatus(const std::string &statusCode);
 		void				set(const std::string &key, const std::string &value);
 		void				status(const std::string &statusCode);

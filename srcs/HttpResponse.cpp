@@ -59,8 +59,16 @@ void		HttpResponse::append(const std::string &key, const std::string &value) {
 	this->headers.append(key, value);
 }
 
-void		HttpResponse::attachment(void) {
+void		HttpResponse::attachment(const std::string &file) {
+	if (file.length() <= 0) {
+		this->headers.set("Content-Disposition", "attachement");
+		return ;
+	}
+	std::string filetype = getContentTypeByFile(file, "");
+	std::string filename = file.substr(file.find_last_of("/") + 1);
 
+	this->headers.set("Content-Disposition", "attachement; filename=\"" + filename + "\"");
+	this->type(filetype);
 }
 
 void		HttpResponse::cookie(const std::string &name, const std::string &value, const std::string &options) {
@@ -74,20 +82,13 @@ void		HttpResponse::clearCookie(const std::string &name, const std::string &opti
 	(void)options;
 }
 
-void		HttpResponse::download(const std::string &path, const std::string &filename, const std::string &options, const std::string &fn) {
-	(void)path;
-	(void)filename;
-	(void)options;
-	(void)fn;
-}
-
-void		HttpResponse::end(const std::string &data, const std::string &encoding) {
-	(void)data;
-	(void)encoding;
-}
-
-void		HttpResponse::format(const std::string &object) {
-	(void)object;
+void		HttpResponse::download(const std::string &path, const std::string &filename, const std::string &options) {
+	if (filename.length() <= 0) {
+		this->headers.set("Content-Disposition", "attachement; filename=\"" + path + "\"");
+	} else {
+		this->headers.set("Content-Disposition", "attachement; filename=\"" + filename + "\"");
+	}
+	this->sendFile(path, options);
 }
 
 const std::string	HttpResponse::get(const std::string &key) const {
@@ -98,17 +99,17 @@ const std::string	HttpResponse::get(const std::string &key) const {
 	return value;
 }
 
-void		HttpResponse::json(const std::string &body) {
-	this->body = body;
-}
-
 void		HttpResponse::links(const std::string &next, const std::string &last) {
-	(void)next;
-	(void)last;
+	if (next.length() > 0) {
+		this->headers.append("Link", "<"+ next +">; rel=\"next\"");
+	}
+	if (last.length() > 0) {
+		this->headers.append("Link", "<"+ last +">; rel=\"last\"");
+	}
 }
 
 void		HttpResponse::location(const std::string &path) {
-	(void)path;
+	this->headers.set("Location", path);
 }
 
 void		HttpResponse::redirect(const std::string &path, const std::string &statusCode) {
@@ -120,14 +121,14 @@ void		HttpResponse::send(const std::string &body) {
 	(void)body;
 }
 
-void		HttpResponse::sendFile(const std::string &path, const std::string &options, const std::string &fn) {
-	(void)path;
+void		HttpResponse::sendFile(const std::string &path, const std::string &options) {
+	std::string filetype = getContentTypeByFile(path, "");
+	this->type(filetype);
 	(void)options;
-	(void)fn;
 }
 
 void		HttpResponse::sendStatus(const std::string &statusCode) {
-	(void)statusCode;
+	this->status(statusCode);
 }
 
 void		HttpResponse::set(const std::string &key, const std::string &value) {
