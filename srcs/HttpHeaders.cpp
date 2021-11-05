@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/03 19:18:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/05 12:08:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,29 @@ bool		HttpHeaders::isKeyValid(const std::string &key) {
 
 void		HttpHeaders::set(const std::string &key, const std::string &value) {
 	if (!this->isKeyValid(key)) {
-		throw std::runtime_error("HttpHeaders::isKeyValid(" + key + ", " + value + ")");
+		throw std::runtime_error("HttpHeaders::set(" + key + ", " + value + ")");
 	}
-	// this->headers.insert(std::make_pair(key, value));
-	this->headers[key] = value;
+	this->headers.erase(key);
+	this->headers.insert(std::make_pair(key, value));
+	// this->headers[key] = value;
 }
 
 void		HttpHeaders::append(const std::string &key, const std::string &value) {
-	if (!this->has(key)) {
-		this->set(key, value);
-	} else {
-		this->headers[key] += ", " + value;
+	if (!this->isKeyValid(key)) {
+		throw std::runtime_error("HttpHeaders::append(" + key + ", " + value + ")");
 	}
+	if (!this->has(key)) {
+		return this->set(key, value);
+	}
+	this->headers.insert(std::make_pair(key, value));
+	// this->headers[key] += ", " + value;
 }
 
 const std::string	HttpHeaders::get(const std::string &key) const {
 	if (!this->has(key)) {
 		throw std::out_of_range("HttpHeaders::get(" + key + ")");
 	}
-	headerType::const_iterator it = this->headers.find(key);
+	headerType::const_iterator it = this->headers.lower_bound(key);
 	return it->second;
 }
 
