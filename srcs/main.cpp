@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/05 13:31:50 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/11 19:44:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,11 +129,11 @@ int main(void) {
 
 		sock_err = send(client_socket, response.toString().c_str(), response.toString().length(), 0);
 
-		if (sock_err < 0) {
-			printf("error de transmission\n");
-		} else {
-			printf("Chaine envoyée : %s\n", response.toString().c_str());
-		}
+		// if (sock_err < 0) {
+		// 	printf("error de transmission\n");
+		// } else {
+		// 	printf("Chaine envoyée : %s\n", response.toString().c_str());
+		// }
 
 		/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
 		shutdown(client_socket, 2);
