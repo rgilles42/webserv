@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/11 19:40:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/12 16:27:31 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ class MimeTypes {
 		MimeTypes(const std::string &fileContent);
 
 		// MimeTypes				operator=(const MimeTypes &x);
+
+		void						merge(const MimeTypes &x);
 
 		void						set(const std::string &key, const std::string &value);
 

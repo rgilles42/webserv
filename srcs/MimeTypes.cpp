@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/12 16:19:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/12 16:36:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,17 @@ MimeTypes::MimeTypes(const std::string &fileContent) {
 	this->fromString(fileContent);
 }
 
+void						MimeTypes::merge(const MimeTypes &x) {
+	MapType::const_iterator it = x.mappedTypes.begin();
+
+	while  (it != x.mappedTypes.end()) {
+		this->set(it->first, it->second);
+		it++;
+	}
+}
+
 void						MimeTypes::set(const std::string &key, const std::string &value) {
-	this->mappedTypes.insert(std::make_pair(key, value));
+	this->mappedTypes[key] = value;
 }
 
 const std::string	MimeTypes::getType(const std::string &path, const std::string &fallback) const {
