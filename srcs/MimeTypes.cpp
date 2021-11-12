@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/11 19:50:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/12 16:19:24 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ void									MimeTypes::fromString(const std::string &mimeTypesContent) {
 		value = "";
 		while (!line.empty()) {
 			it = std::find_if(line.begin(), line.end(), std::ptr_fun<int, int>(std::isspace));
-			key = line.substr(0, std::distance(line.begin(), it));
-			line.erase(line.begin(), it);
-			line = trim(line);
 			if (i <= 0) {
-				value = key;
+				value = line.substr(0, std::distance(line.begin(), it));
 			} else {
+				key = line.substr(0, std::distance(line.begin(), it));
 				this->set(key, value);
 			}
+			line.erase(line.begin(), it);
+			line = trim(line);
 			i++;
 		}
 	}
