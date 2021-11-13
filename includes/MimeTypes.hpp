@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/12 16:27:31 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/13 18:34:32 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class MimeTypes {
 		 * Mapped MIME types in key/value
 		 * @param key This is the extension of the current type
 		 * @param value This is the type of the current extension
+		 * if types is not in config, it will not use 'default_type' and it will use another list wich is probably write in the source code of NGINX
 		*/
 		MapType		mappedTypes;
 
