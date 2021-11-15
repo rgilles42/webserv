@@ -19,7 +19,7 @@
 #include <ctring>
 #include <pollh
 
-using namespace webserv
+namespace webserv
 {
 	class Poll
 	{
@@ -27,16 +27,28 @@ using namespace webserv
 			struct pollfd					poll_fds;
 			size_t							n_fds;
 			size_t							n_srv;
-			std::map<std::string, std::vector<>>	call_functions
+			std::map<eventTypes, std::vector<void (*f)(int)> >	events;
+			bool							is_enable;
+
 
 			bool	is_socket_server(int socket);
 		public:
 			Poll(void);
-			Poll(std::vector<Socket> sockets_servers, std::map<std::string, std::vector<> >)
+			Poll(std::vector<Socket> sockets_servers)	//TO DO - def
+			Poll(std::vector<Socket> sockets_servers);	//TO DO - def
 			~Poll(void);
 
-			void	init(std::vector<Socket> sockets_servers, std::map<std::string, std::vector<> >)
+			void 	registerEvent(eventType, method);
+
+			void	init(std::vector<Socket> sockets_servers)	//def
 			int		start(void);
+
+			enum eventTypes
+			{
+				onConnection,
+				onReadyRead,
+				onReadyWrite
+			};
 	};
 }
 

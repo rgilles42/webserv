@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Pollhpp
+#include "../Poll.hpp"
 
 Poll::Poll(void)
 {
     this->poll_fds = NULL;
     this->n_fds = 0;
-    this->call_functions = NULL;
+    this->events = NULL;
 }
 
 Poll::Poll(std::vector<Socket> sockets_servers, std::map<std::string, std::vector<> >)
@@ -28,9 +28,15 @@ Poll::~Poll(void)
 {
     if (poll_fds)
         delete [] poll_fds;
+    events.clear();
 }
 
-void Poll::init(std::vector<Socket> sockets_servers, std::map<std::string, std::vector<> >)
+void    Poll::registerEvent(eventType type, void (*f)(int))
+{
+    events.insert(std::make_pair(type, &f));
+}
+
+void Poll::init(std::vector<Socket> sockets_servers)
 {
     this->n_fds = sockets_server.size();
     this->n_srv = n_fds;
@@ -54,9 +60,10 @@ int Poll::start(void)
     int j = 0;
 
     //TO DO change with new stop condition
-    while (42)
+    this->is_enable = true;
+    while (is_enable)
     {
-        ret = poll(poll_fds, n_fds);
+        ret = poll(poll_fds, n_fds, -);
         if (ret < 0)
             perror("poll");
         else
@@ -82,14 +89,20 @@ int Poll::start(void)
 					poll_fds[nb_fds].fd = client_socket;
 					poll_fds[nb_fds].events = POLLIN;
 					nb_fds++;
+                    j = 0;
+                    while (events[Poll::onConnection][j])
+                    {
+                        events[Poll::onConnection][j](poll_fds[i].fd);
+                        j++;
+                    }
 				}
 				else if (poll_fds[i].revents & POLLIN)
 				{
 					/* Read client socket - call functions*/
                     j = 0;
-                    while (call_functions["read"][j])
+                    while (events[Poll::onReadConnetion][j])
                     {
-                        call_functions["read"][j](poll_fds[i].fd;
+                        events[Poll::onReadConnection][j](poll_fds[i].fd);
                         j++;
                     }
 					/* Change events socket_client to write*/
@@ -99,9 +112,9 @@ int Poll::start(void)
 				{
 					/* Send response*/
                     j = 0;
-                    while (call_functions["write"][j])
+                    while (events[poll::onReadyWrite][j])
                     {
-                        call_functions["write"][j](poll_fds[i].fd);
+                        events[Poll::onReadyWrite][j](poll_fds[i].fd);
                         j++;
                     }
                     /* TO DO - replace by Socket fct*/
