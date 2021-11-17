@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/11 19:44:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/17 10:00:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,114 +43,114 @@ ssize_t receive_basic(SOCKET s, std::string &result)
 	return result.length();
 }
 
-int main(void) {
-	int error = 0;
-	#if defined (_WIN32) || defined (_WIN64)
-		WSADATA WSAData;
-		error = WSAStartup(MAKEWORD(2,2), &WSAData);
-	#endif
+// int main(void) {
+// 	int error = 0;
+// 	#if defined (_WIN32) || defined (_WIN64)
+// 		WSADATA WSAData;
+// 		error = WSAStartup(MAKEWORD(2,2), &WSAData);
+// 	#endif
 
-	if (error) {
-		perror("windows startup");
-		return EXIT_FAILURE;
-	}
+// 	if (error) {
+// 		perror("windows startup");
+// 		return EXIT_FAILURE;
+// 	}
 
-	SOCKET server_socket;
-	SOCKADDR_IN server_addr;
-	// SOCKET client_socket;
-	SOCKADDR_IN client_addr;
-	socklen_t recsize = sizeof(client_addr);
-	std::string message;
-	int sock_err;
+// 	SOCKET server_socket;
+// 	SOCKADDR_IN server_addr;
+// 	// SOCKET client_socket;
+// 	SOCKADDR_IN client_addr;
+// 	socklen_t recsize = sizeof(client_addr);
+// 	std::string message;
+// 	int sock_err;
 
-	if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		perror("socket create");
-		return EXIT_FAILURE;
-	}
-	int optval = 1;
-	if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
-		perror("setsockopt(SO_REUSEADDR) failed");
-		return EXIT_FAILURE;
-	}
+// 	if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+// 		perror("socket create");
+// 		return EXIT_FAILURE;
+// 	}
+// 	int optval = 1;
+// 	if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
+// 		perror("setsockopt(SO_REUSEADDR) failed");
+// 		return EXIT_FAILURE;
+// 	}
 
-	/* Configuration */
-	server_addr.sin_addr.s_addr	= htonl(INADDR_ANY);   /* Adresse IP automatique */
-	server_addr.sin_family		= AF_INET;             /* Protocole familial (IP) */
-	server_addr.sin_port		= htons(PORT);         /* Listage du port */
+// 	/* Configuration */
+// 	server_addr.sin_addr.s_addr	= htonl(INADDR_ANY);   /* Adresse IP automatique */
+// 	server_addr.sin_family		= AF_INET;             /* Protocole familial (IP) */
+// 	server_addr.sin_port		= htons(PORT);         /* Listage du port */
 
-	if (bind(server_socket, (SOCKADDR*) &server_addr, sizeof(server_addr)) < 0) {
-		perror("socket bind");
-		return EXIT_FAILURE;
-	}
+// 	if (bind(server_socket, (SOCKADDR*) &server_addr, sizeof(server_addr)) < 0) {
+// 		perror("socket bind");
+// 		return EXIT_FAILURE;
+// 	}
 
-	printf("La socket %d est maintenant ouverte en mode TCP/IP (%d:%d)\n", server_socket, ntohl(server_addr.sin_addr.s_addr), ntohs(server_addr.sin_port));
-
-
-	/* Démarrage du listage (mode server) */
-	if (listen(server_socket, MAX_CONNECTION) < 0) {
-		perror("socket listen");
-		return EXIT_FAILURE;
-	}
-
-	printf("Listage du port %d...\n", ntohs(server_addr.sin_port));
-
-	/* Attente pendant laquelle le client se connecte */
-	printf("Patientez pendant que le client se connecte sur le port %d...\n", ntohs(server_addr.sin_port));
-
-	signal(SIGINT, handleSignals);
-	while (!stop) {
+// 	printf("La socket %d est maintenant ouverte en mode TCP/IP (%d:%d)\n", server_socket, ntohl(server_addr.sin_addr.s_addr), ntohs(server_addr.sin_port));
 
 
-		SOCKET client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &recsize);
-		printf("Un client se connecte avec la socket %d de %s:%d\n", client_socket, inet_ntoa(client_addr.sin_addr), htons(client_addr.sin_port));
+// 	/* Démarrage du listage (mode server) */
+// 	if (listen(server_socket, MAX_CONNECTION) < 0) {
+// 		perror("socket listen");
+// 		return EXIT_FAILURE;
+// 	}
 
-		// if(!(fcntl(client_socket, F_GETFL) & O_NONBLOCK)) {
-		// 	if(fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL) | O_NONBLOCK) < 0) {
+// 	printf("Listage du port %d...\n", ntohs(server_addr.sin_port));
 
-		// 	}
-		// }
-		message.clear();
-		sock_err = receive_basic(client_socket, message);
+// 	/* Attente pendant laquelle le client se connecte */
+// 	printf("Patientez pendant que le client se connecte sur le port %d...\n", ntohs(server_addr.sin_port));
 
-		// if (sock_err < 0) {
-		// 	printf("error de récéption\n");
-		// } else {
-		// 	printf("Chaine reçu : %s\n", message.c_str());
-		// }
+// 	signal(SIGINT, handleSignals);
+// 	while (!stop) {
 
-		HttpRequest request(message);
 
-		Ressource currentRessource("./default_pages/index.html");
+// 		SOCKET client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &recsize);
+// 		printf("Un client se connecte avec la socket %d de %s:%d\n", client_socket, inet_ntoa(client_addr.sin_addr), htons(client_addr.sin_port));
 
-		currentRessource.setContent(getFileContents(currentRessource.getUri()));
-		currentRessource.setContentType(getContentTypeByFile(currentRessource.getUri()));
+// 		// if(!(fcntl(client_socket, F_GETFL) & O_NONBLOCK)) {
+// 		// 	if(fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL) | O_NONBLOCK) < 0) {
 
-		HttpResponse response(currentRessource);
+// 		// 	}
+// 		// }
+// 		message.clear();
+// 		sock_err = receive_basic(client_socket, message);
 
-		sock_err = send(client_socket, response.toString().c_str(), response.toString().length(), 0);
+// 		// if (sock_err < 0) {
+// 		// 	printf("error de récéption\n");
+// 		// } else {
+// 		// 	printf("Chaine reçu : %s\n", message.c_str());
+// 		// }
 
-		// if (sock_err < 0) {
-		// 	printf("error de transmission\n");
-		// } else {
-		// 	printf("Chaine envoyée : %s\n", response.toString().c_str());
-		// }
+// 		HttpRequest request(message);
 
-		/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
-		shutdown(client_socket, 2);
-		closesocket(client_socket);
-	}
+// 		Ressource currentRessource("./default_pages/index.html");
 
-	/* Fermeture de la socket */
-	printf("Fermeture de la socket...\n");
-	closesocket(server_socket);
+// 		currentRessource.setContent(getFileContents(currentRessource.getUri()));
+// 		currentRessource.setContentType(getContentTypeByFile(currentRessource.getUri()));
 
-	printf("Fermeture du serveur terminee\n");
-	#if defined (_WIN32) || defined (_WIN64)
-		WSACleanup();
-	#endif
+// 		HttpResponse response(currentRessource);
 
-	return EXIT_SUCCESS;
-}
+// 		sock_err = send(client_socket, response.toString().c_str(), response.toString().length(), 0);
+
+// 		// if (sock_err < 0) {
+// 		// 	printf("error de transmission\n");
+// 		// } else {
+// 		// 	printf("Chaine envoyée : %s\n", response.toString().c_str());
+// 		// }
+
+// 		/* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
+// 		shutdown(client_socket, 2);
+// 		closesocket(client_socket);
+// 	}
+
+// 	/* Fermeture de la socket */
+// 	printf("Fermeture de la socket...\n");
+// 	closesocket(server_socket);
+
+// 	printf("Fermeture du serveur terminee\n");
+// 	#if defined (_WIN32) || defined (_WIN64)
+// 		WSACleanup();
+// 	#endif
+
+// 	return EXIT_SUCCESS;
+// }
 
 // int main(void) {
 // 	std::cout << "|" << HttpStatusCode::getStatusCodeString(HttpStatusCode::unknown) << "|" << std::endl;
@@ -190,3 +190,100 @@ int main(void) {
 
 // 	return EXIT_SUCCESS;
 // }
+
+void writeJson(const Json *data, size_t indent = 0) {
+	if (!data) {
+		std::cout << "NULL" << std::endl;
+		return ;
+	}
+
+	switch (data->getValueType()) {
+
+		default:
+		case Json::T_NULL: {
+			std::cout << "NULL" << std::endl;
+			break;
+		}
+
+		case Json::T_BOOLEAN: {
+			std::cout << (data->asBool() ? "true" : "false") << std::endl;
+			break;
+		}
+
+		case Json::T_NUMBER: {
+			std::cout << data->asNumber() << std::endl;
+			break;
+		}
+
+		case Json::T_STRING: {
+			std::cout << data->asString() << std::endl;
+			break;
+		}
+
+		case Json::T_ARRAY: {
+			Json::array_type array = data->asArray();
+			Json::array_type::const_iterator it = array.begin();
+			std::cout << "[" << std::endl;
+			while (it != array.end()) {
+				writeJson((*it), indent + 1);
+				it++;
+			}
+			std::cout << "]" << std::endl;
+			break;
+		}
+
+		case Json::T_OBJECT: {
+			Json::object_type object = data->asObject();
+			Json::object_type::const_iterator it = object.begin();
+			std::cout << "{" << std::endl;
+			while (it != object.end()) {
+				std::cout << (*it).first << ":";
+				writeJson((*it).second, indent + 1);
+				it++;
+			}
+			std::cout << "}" << std::endl;
+			break;
+		}
+
+	}
+}
+
+
+int main(void) {
+
+	{
+		Json data;
+		{
+			Json::object_type config;
+			{
+				config["types"] = NULL;
+			}
+			{
+				Json::array_type servers;
+				{
+					Json::object_type server1;
+					server1["listen"] = new Json("80");
+					{
+						Json::object_type server1_locations;
+						{
+							Json::array_type server1_locations_limit;
+							server1_locations_limit.push_back(new Json("GET"));
+							server1_locations_limit.push_back(new Json("POST"));
+							server1_locations_limit.push_back(new Json("DELETE"));
+							server1_locations["/"] = new Json(server1_locations_limit);
+						}
+						server1["locations"] = new Json(server1_locations);
+					}
+					servers.push_back(new Json(server1));
+				}
+				config["servers"] = new Json(servers);
+			}
+			data = config;
+		}
+		writeJson(&data);
+	}
+
+
+
+	return EXIT_SUCCESS;
+}

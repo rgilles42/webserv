@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/11/11 19:40:48 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/11/17 06:41:14 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/HttpHeaders.hpp \
 				$(HEADER_DIR)/HttpRequest.hpp \
 				$(HEADER_DIR)/HttpResponse.hpp \
-				$(HEADER_DIR)/utils.hpp
+				$(HEADER_DIR)/utils.hpp \
+				$(HEADER_DIR)/Json.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/MimeTypes.cpp \
@@ -37,7 +38,8 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/HttpHeaders.cpp \
 				$(SRC_DIR)/HttpRequest.cpp \
 				$(SRC_DIR)/HttpResponse.cpp \
-				${SRC_DIR}/utils.cpp
+				${SRC_DIR}/utils.cpp \
+				${SRC_DIR}/Json.cpp
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
 OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)
