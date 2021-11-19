@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/19 16:16:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/19 16:28:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,20 @@ namespace Webserv {
 		}
 
 		bool			Lexer::checkTokens(void) const {
+			/**
+			 * We need to create another system of "token", that will be the real things i think
+			 * We're gonna create block:
+			 * T_COMMENT: start with a T_COMMENT and end with a T_NEWLINE, we can delete all of this part
+			 * T_SIMPLE: start with a T_TEXT and end with a T_SIMPLE_END
+			 * T_COMPLEX: start with a T_COMPLEX_START and end with a T_COMPLEX_END (can start with one or multiple T_TEXT)
+			 *
+			 * But how i can use all of it to using the parser..
+			 * i really don't know for the moment so i'll continue to write something.. i'll probably find how.. but not now..
+			 * If you read this, we're gonna play a game, okay ? Try to don't read the last line.
+			 *
+			 * You stupid because you loose the game so easily..
+			*/
+
 			return true;
 		}
 
