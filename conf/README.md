@@ -82,7 +82,7 @@ with this example, consider that there's multiple types of ending (`;` for `simp
 
 So `tokens` will be like this:
 - `server {`: This is the start of a `complex` context, the content will normaly be stored into an `object`
-- `listen 80`: This is a `simple` context, the content will normaly be stored into a `string` (because it's a server_name)
+- `server_name localhost.com`: This is a `simple` context, the content will normaly be stored into a `string` (because it's a server_name)
 - `;`: This mark the end of previous `simple` context
 - `# listen 0.0.0.0:8000;`: This is a `comment` context, it will be ended when there's a newline, this content doesn't need to be stored
 - `location / {`: This is the start of a `complex` context, the content will normaly be stored into an `object`
