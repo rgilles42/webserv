@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/19 01:42:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/19 16:05:06 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,198 +286,15 @@ void writeJson(const Json *data, size_t indent = 0) {
 // 	return EXIT_SUCCESS;
 // }
 
-class Token {
-	public:
-		enum token_type {
-			T_TEXT,
-			T_SIMPLE_END,
-			T_COMPLEX_START,
-			T_COMPLEX_END,
-			T_COMMENT,
-			T_NEWLINE_CRLF,
-			T_NEWLINE_CR,
-			T_NEWLINE_LF,
-		};
-		typedef	std::string							token_value;
-
-		typedef std::map<token_type, token_value>	token_map;
-		typedef std::vector<Token>					token_vector;
-
-		const static token_map	tokensList;
-
-	protected:
-		token_value	value;
-		token_type	type;
-
-		static bool	isblank(int c) {
-			return ::isblank(c);
-		}
-
-	public:
-		// Non-static Methods
-		Token(const token_value &value = token_value(), const token_type &type = Token::T_TEXT) {
-			this->value = value;
-			this->type = type;
-		}
-
-		const token_value	getValue(void) const {
-			return this->value;
-		}
-
-		token_type			getType(void) const {
-			return this->type;
-		}
-
-		bool				is(token_type &type) const {
-			return this->type == type;
-		}
-
-		bool				isText(void) {
-			return Token::isText(this->type);
-		}
-
-		bool				isComplex(void) {
-			return Token::isComplex(this->type);
-		}
-
-		bool				isEnd(void) {
-			return Token::isEnd(this->type);
-		}
-
-		bool				isComment(void) {
-			return Token::isComment(this->type);
-		}
-
-		bool				isNewLine(void) {
-			return Token::isNewLine(this->type);
-		}
-
-		// Static Methods
-
-		static bool			isText(token_type &type) {
-			return type == Token::T_TEXT;
-		}
-
-		static bool			isComplex(token_type &type) {
-			return type == Token::T_COMPLEX_START || type == Token::T_COMPLEX_END;
-		}
-
-		static bool			isEnd(token_type &type) {
-			return type == Token::T_SIMPLE_END || type == T_COMPLEX_END;
-		}
-
-		static bool			isComment(token_type &type) {
-			return type == Token::T_COMMENT;
-		}
-
-		static bool			isNewLine(token_type &type) {
-			return type == Token::T_NEWLINE_CRLF || type == T_NEWLINE_CR || type == T_NEWLINE_LF;
-		}
-
-		static const token_map	fillMap(void) {
-			token_map tokensList;
-
-			tokensList[Token::T_SIMPLE_END] = ";";
-			tokensList[Token::T_COMMENT] = "#";
-			tokensList[Token::T_COMPLEX_START] = "{";
-			tokensList[Token::T_COMPLEX_END] = "}";
-			tokensList[Token::T_NEWLINE_CRLF] = "\r\n";
-			tokensList[Token::T_NEWLINE_CR] = "\r";
-			tokensList[Token::T_NEWLINE_LF] = "\n";
-
-			return tokensList;
-		}
-
-		static token_type 	getTokenTypeByStr(std::string &str, size_t start) {
-			token_map::const_iterator it = Token::tokensList.begin();
-			while (it != Token::tokensList.end()) {
-				if (str.compare(start, (*it).second.length(), (*it).second) == 0) {
-					return (*it).first;
-				}
-				it++;
-			}
-			return Token::T_TEXT;
-		}
-
-		static token_value	getTokenValueByType(token_type type) {
-			if (Token::tokensList.count(type) <= 0) {
-				return token_value();
-			}
-			return Token::tokensList.at(type);
-		}
-
-		static Token::token_vector	tokenize(std::string &str) {
-			token_vector tokens;
-			token_value value;
-			token_type type;
-			size_t i = 0;
-			size_t j = 0;
-
-			while (i < str.length()) {
-				// Skip blank
-				while (i < str.length()) {
-					if (!Token::isblank(str[i])) {
-						break ;
-					}
-					i++;
-				}
-				// Get the current type of token
-				type = Token::getTokenTypeByStr(str, i);
-				if (type != Token::T_TEXT) {
-					// If the type of the token is a special type (not a text), then add this token and continue
-					value = Token::getTokenValueByType(type);
-					tokens.push_back(Token(value, type));
-					i += value.length();
-					continue ;
-				}
-				j = i + 1;
-				while (j < str.length()) {
-					if (Token::isblank(str[j]) || Token::getTokenTypeByStr(str, j) != Token::T_TEXT) {
-						break ;
-					}
-					j++;
-				}
-				if (i != j) {
-					value = str.substr(i, j - i);
-					tokens.push_back(Token(value, type));
-				}
-				i = j;
-			}
-			return tokens;
-		}
-
-		static void			drawVector(const token_vector &tokens) {
-			Token::token_vector::const_iterator it = tokens.begin();
-			while (it != tokens.end()) {
-				std::cout << "|" << (*it).getValue() << ":" << (*it).getType() << "|" << std::endl;
-				it++;
-			}
-		}
-
-};
-
-const Token::token_map Token::tokensList =  Token::fillMap();
-
-class Lexer {
-	public:
-		typedef std::map<Token::token_type, std::string>	token_map;
-		typedef std::pair<std::string, Token::token_type>	token_pair;
-		typedef std::vector<token_pair>						token_pair_vector;
-
-	private:
-
-	public:
-		Lexer(void);
-
-};
-
 
 int main(void) {
 
 	std::string configContent(getFileContents("./conf/test.conf"));
 
-	Token::token_vector tokens = Token::tokenize(configContent);
-	Token::drawVector(tokens);
+	Webserv::Utils::Lexer lexer;
+
+	lexer.tokenize(configContent);
+	lexer.drawVector();
 
 	return EXIT_SUCCESS;
 }

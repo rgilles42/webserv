@@ -80,7 +80,7 @@ Here's the example of what should bring this config in `JSON` format.
 
 with this example, consider that there's multiple types of ending (`;` for `simple`, `}`, for `context`, `newline` for `comment`)
 
-So `tokens` will be like this:
+So `tokens` will be like this (forgive me about this bullshit, this is a fusion between the lexer and the parser.. i need to redo this **shit**):
 - `server {`: This is the start of a `complex` context, the content will normaly be stored into an `object`
 - `server_name localhost.com`: This is a `simple` context, the content will normaly be stored into a `string` (because it's a server_name)
 - `;`: This mark the end of previous `simple` context
