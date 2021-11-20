@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/19 16:15:22 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/20 18:01:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,28 +54,26 @@ namespace Webserv {
 				token_type				getType(void) const;
 
 				bool					is(token_type &type) const;
-
 				bool					isText(void) const;
-
-				bool					isComplex(void) const;
-
-				bool					isEnd(void) const;
-
+				bool					isSimpleEnd(void) const;
+				bool					isComplexStart(void) const;
+				bool					isComplexEnd(void) const;
 				bool					isComment(void) const;
-
 				bool					isNewLine(void) const;
+				bool					isComplex(void) const;
+				bool					isEnd(void) const;
 
 				// Static Methods
 
+				static bool				is(const token_type &type, const token_type &type2);
 				static bool				isText(const token_type &type);
-
-				static bool				isComplex(const token_type &type);
-
-				static bool				isEnd(const token_type &type);
-
+				static bool				isSimpleEnd(const token_type &type);
+				static bool				isComplexStart(const token_type &type);
+				static bool				isComplexEnd(const token_type &type);
 				static bool				isComment(const token_type &type);
-
 				static bool				isNewLine(const token_type &type);
+				static bool				isEnd(const token_type &type);
+				static bool				isComplex(const token_type &type);
 
 				static const token_map	fillMap(void);
 

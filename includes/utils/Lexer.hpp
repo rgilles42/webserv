@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/19 16:16:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/20 17:12:54 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,21 @@ namespace Webserv {
 			public:
 				typedef Webserv::Utils::Token	token;
 				typedef std::vector<token>		token_vector;
+
+				// class block {
+				// 	public:
+				// 		enum block_type {
+				// 			T_SIMPLE,
+				// 			T_COMPLEX,
+				// 			T_COMMENT,
+				// 		};
+				// 	protected:
+				// 		token_vector	tokens;
+				// 		block_type		type;
+
+				// 	public:
+
+				// };
 
 			protected:
 				token_vector	tokens;
