@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/20 18:01:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/21 14:51:20 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ namespace Webserv {
 					T_NEWLINE_LF,
 				};
 				typedef	std::string							token_value;
+				typedef	std::size_t							token_pos;
 
 				typedef std::map<token_type, token_value>	token_map;
 
@@ -44,14 +45,17 @@ namespace Webserv {
 			protected:
 				token_value	value;
 				token_type	type;
+				token_pos	position;
 
 			public:
 				// Non-static Methods
-				Token(const token_value &value = token_value(), const token_type &type = Token::T_TEXT);
+				Token(const token_value &value = token_value(), const token_type &type = Token::T_TEXT, const token_pos &position = token_pos());
 
 				const token_value		getValue(void) const;
 
 				token_type				getType(void) const;
+
+				token_pos				getPosition(void) const;
 
 				bool					is(token_type &type) const;
 				bool					isText(void) const;

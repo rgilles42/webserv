@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/20 17:12:54 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/21 15:09:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <string>
 # include <vector>
+# include <exception>
 
 # include "Token.hpp"
 
@@ -24,8 +25,8 @@ namespace Webserv {
 
 		class Lexer {
 			public:
-				typedef Webserv::Utils::Token	token;
-				typedef std::vector<token>		token_vector;
+				typedef Webserv::Utils::Token	token_type;
+				typedef std::vector<token_type>		token_vector;
 
 				// class block {
 				// 	public:
@@ -42,8 +43,27 @@ namespace Webserv {
 
 				// };
 
+
 			protected:
 				token_vector	tokens;
+
+				class LexerException : public std::exception {
+					protected:
+						std::string	msg;
+						token_type	token;
+
+					public:
+						LexerException(const std::string &msg = "", const token_type &token = token_type()) : std::exception() {
+							this->msg = msg;
+							this->token = token;
+						}
+						const token_type getToken() const {
+							return this->token;
+						}
+						virtual const char	*what() const throw() {
+							return this->msg.c_str();
+						}
+				};
 
 				bool	isblank(int c) {
 					return ::isblank(c);

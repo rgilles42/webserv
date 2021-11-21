@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/20 18:38:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/21 14:45:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace Webserv {
 				if (type != token::T_TEXT) {
 					// If the type of the token is a special type (not a text), then add this token and continue
 					value = token::getTokenValueByType(type);
-					this->tokens.push_back(token(value, type));
+					this->tokens.push_back(token(value, type, i));
 					i += value.length();
 					continue ;
 				}
@@ -58,7 +58,7 @@ namespace Webserv {
 				}
 				if (i != j) {
 					value = str.substr(i, j - i);
-					this->tokens.push_back(token(value, type));
+					this->tokens.push_back(token(value, type, i));
 				}
 				i = j;
 			}
@@ -81,8 +81,6 @@ namespace Webserv {
 			 * - missingEndOfSimpleContextError: When a T_SIMPLE don't have T_SIMPLE_END
 			 * - missingEndOfComplexContextError: When a T_COMPLEX don't have T_COMPLEX_END
 			 * - unexpectedThing: When a T_SIMPLE_END or T_COMPLEX_END is placed in an unexpected position (when 0 directive before for example)
-			 *
-			 * Need to speparate thoses detection for detect the perfect error (like doing a {{, it's an unexpected "{" in the second position)
 			 *
 			 * But how i can use all of it to using the parser..
 			 * i really don't know for the moment so i'll continue to write something.. i'll probably find how.. but not now..
@@ -114,7 +112,7 @@ namespace Webserv {
 					}
 				} else if (this->tokens[pos].isComplexStart()) {
 					if (pos <= 0 || (pos > 0 && !this->tokens[pos - 1].isText())) {
-						throw std::runtime_error("Unexpected \"{\""); // This need to pe trigered if {{ is doing for exemple
+						throw std::runtime_error("Unexpected \"{\"");
 					}
 					i++;
 					bool isBracketEnded = false;
