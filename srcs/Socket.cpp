@@ -6,14 +6,14 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:51:02 by rgilles           #+#    #+#             */
-/*   Updated: 2021/11/22 15:24:35 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/11/22 18:28:48 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/Socket.hpp"
 
-Socket::Socket() : _fd(-1) {}
+Socket::Socket() : _fd(-1), _len(sizeof(struct sockaddr)) {}
 
-Socket::Socket(const char* addr, unsigned short port) : _fd(socket(AF_INET, SOCK_STREAM, 0))
+Socket::Socket(const char* addr, unsigned short port) : _fd(socket(AF_INET, SOCK_STREAM, 0)), _len(sizeof(struct sockaddr))
 {
 	int					optval = 1;
 	struct sockaddr_in&	address = reinterpret_cast<struct sockaddr_in&>(this->_addr);
@@ -25,7 +25,6 @@ Socket::Socket(const char* addr, unsigned short port) : _fd(socket(AF_INET, SOCK
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = inet_addr(addr);
 	address.sin_port = htons(port);
-	this->_len = sizeof(this->_addr);
 }
 
 Socket::Socket(const Socket& src) {*this = src;}
