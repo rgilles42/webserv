@@ -34,8 +34,8 @@ public:
 	ssize_t			read(void *buf, size_t count);
 	ssize_t			write(const void *buf, size_t count);
 	int				close(void);
-	int				fd(void);
-	struct sockaddr	addr(void);
+	int&			fd(void);
+	struct sockaddr&	addr(void);
 
 	struct SocketNotCreatedException : public std::exception
 	{

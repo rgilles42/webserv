@@ -100,12 +100,12 @@ int	Socket::close(void)
 	return (::close(this->_fd));
 }
 
-int Socket::fd(void) 
+int& Socket::fd(void)
 {
 	return (this->_fd);
 }
 
-struct sockaddr Socket::addr(void) 
+struct sockaddr& Socket::addr(void)
 {
 	return(this->_addr);
 }
