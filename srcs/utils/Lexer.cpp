@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 11:33:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/22 11:45:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ namespace Webserv {
 
 		size_t				Lexer::checkTokenSimpleEnd(size_t pos) const {
 			if (pos <= 0 || (pos > 0 && !this->tokens[pos - 1].isText())) {
-				throw missingEndOfDirectiveException(this->tokens[pos]);
+				throw UnexpectedTokenException(this->tokens[pos]);
 			}
 			return pos;
 		}
