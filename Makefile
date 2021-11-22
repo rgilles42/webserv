@@ -17,7 +17,7 @@ HEADER_DIR	=	includes
 OBJ_DIR		=	objs
 SRC_DIR		=	srcs
 
-CXX			=	clang++
+CXX			=	g++
 CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
@@ -28,6 +28,7 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/HttpHeaders.hpp \
 				$(HEADER_DIR)/HttpRequest.hpp \
 				$(HEADER_DIR)/HttpResponse.hpp \
+				$(HEADER_DIR)/Socket.hpp \
 				$(HEADER_DIR)/utils.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
@@ -37,6 +38,7 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/HttpHeaders.cpp \
 				$(SRC_DIR)/HttpRequest.cpp \
 				$(SRC_DIR)/HttpResponse.cpp \
+				$(SRC_DIR)/Socket.cpp \
 				${SRC_DIR}/utils.cpp
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
