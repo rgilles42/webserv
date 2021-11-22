@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:50:57 by rgilles           #+#    #+#             */
-/*   Updated: 2021/11/22 19:05:32 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/11/22 19:22:06 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ public:
 	~Socket();
 
 	int				bind(void);
+	int				listen(void);
 	Socket			accept(void);
 	ssize_t			read(void *buf, size_t count);
 	ssize_t			write(const void *buf, size_t count);

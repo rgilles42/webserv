@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:51:02 by rgilles           #+#    #+#             */
-/*   Updated: 2021/11/22 19:06:21 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/11/22 19:21:37 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/Socket.hpp"
@@ -54,14 +54,14 @@ Socket::~Socket() {}
 int	Socket::bind()
 {
 	int	bindret = ::bind(this->_fd, &this->_addr, sizeof(this->_addr));
-	int	listenret = 0;
-
 	if (bindret)
-	{
-		perror("Error is ");
 		throw Socket::BindFailedException();
-	}
-	listenret = ::listen(this->_fd, 50);
+	return (bindret);
+}
+
+int	Socket::listen()
+{
+	int listenret = ::listen(this->_fd, 50);
 	if (listenret)
 		throw Socket::ListenFailedException();
 	return (listenret);
@@ -74,18 +74,13 @@ Socket	Socket::accept()
 	newSocket._fd = ::accept(this->_fd, &newSocket._addr, &newSocket._len);
 	if (newSocket._fd < 0)
 		throw AcceptFailedException();
-	printf("New fd is %d\n", newSocket._fd);
 	return (newSocket);
 }
 
 ssize_t	Socket::read(void* buf, size_t count)
 {
 	int ret;
-
-	printf("New fd is %d\n", this->_fd);
 	ret = ::read(this->_fd, buf, count);
-	printf("Read ret value is %d\n", ret);
-	perror("Read status is ");
 	return (ret);
 }
 
