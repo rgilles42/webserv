@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:51:02 by rgilles           #+#    #+#             */
-/*   Updated: 2021/11/22 18:28:48 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/11/22 19:06:21 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/Socket.hpp"
@@ -49,7 +49,7 @@ Socket&	Socket::operator=(const Socket& src)
 	return (*this);
 }
 
-Socket::~Socket() {if (this->_fd >= 0) this->close();}
+Socket::~Socket() {}
 
 int	Socket::bind()
 {
@@ -61,7 +61,7 @@ int	Socket::bind()
 		perror("Error is ");
 		throw Socket::BindFailedException();
 	}
-	listenret = ::listen(this->_fd, 10);
+	listenret = ::listen(this->_fd, 50);
 	if (listenret)
 		throw Socket::ListenFailedException();
 	return (listenret);

@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 18:32:35 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/11/22 19:05:29 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,14 @@ ssize_t receive_basic(SOCKET s, std::string &result)
 	// 	}
 	// 	result.append(buffer);
 	// }
+	printf("Client socket fd is %d\n", s);
 	size_read = read(s, buffer, BUFFER_SIZE + 1);
-	buffer[size_read] = '\0';
-	result.append(buffer);
+	perror("Read status code: ");
+	if (size_read >= 0)
+	{
+		buffer[size_read] = '\0';
+		result.append(buffer);
+	}
 	return result.length();
 }
 

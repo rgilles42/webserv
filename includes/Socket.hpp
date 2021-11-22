@@ -6,13 +6,14 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:50:57 by rgilles           #+#    #+#             */
-/*   Updated: 2021/11/22 15:24:15 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/11/22 19:05:32 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SOCKET_HPP
 # define SOCKET_HPP
 # include <sys/socket.h>
+# include <sys/types.h>
 # include <exception>
 # include <netinet/in.h>
 # include <arpa/inet.h>
