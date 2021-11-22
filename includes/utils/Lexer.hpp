@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/21 15:09:56 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/22 11:35:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <string>
 # include <vector>
 # include <exception>
+# include <sstream>
+# include <sys/types.h>
 
 # include "Token.hpp"
 
@@ -43,20 +45,17 @@ namespace Webserv {
 
 				// };
 
-
-			protected:
-				token_vector	tokens;
-
 				class LexerException : public std::exception {
 					protected:
 						std::string	msg;
 						token_type	token;
 
 					public:
-						LexerException(const std::string &msg = "", const token_type &token = token_type()) : std::exception() {
+						LexerException(const token_type &token = token_type(), const std::string &msg = "") : std::exception() {
 							this->msg = msg;
 							this->token = token;
 						}
+						virtual ~LexerException() throw() {}
 						const token_type getToken() const {
 							return this->token;
 						}
@@ -65,9 +64,64 @@ namespace Webserv {
 						}
 				};
 
+				class missingEndOfDirectiveException : public LexerException {
+					public:
+						missingEndOfDirectiveException(const token_type &token = token_type()) : LexerException(token) {
+							std::ostringstream ss;
+
+							ss << "directive \"" << token.getValue() << "\" is not terminated by \";\" at " << token.getLine();
+
+							this->msg = ss.str();
+						}
+				};
+
+				class unexpectedEndOfStrException : public LexerException {
+					public:
+						unexpectedEndOfStrException(const token_type &token = token_type()) : LexerException(token) {
+							std::ostringstream ss;
+
+							ss << "Unexpected end of string, expecting \"}\"";
+
+							this->msg = ss.str();
+						}
+				};
+
+				class UnexpectedTokenException : public LexerException {
+					public:
+						UnexpectedTokenException(const token_type &token = token_type()) : LexerException(token) {
+							std::ostringstream ss;
+
+							ss << "Unexpected \"" << token.getValue() << "\" at " << token.getLine();
+
+							this->msg = ss.str();
+						}
+				};
+
+				class UnknownTokenException : public LexerException {
+					public:
+						UnknownTokenException(const token_type &token = token_type()) : LexerException(token) {
+							std::ostringstream ss;
+
+							ss << "Unknown token \"" << token.getValue() << "\" at " << token.getLine();
+
+							this->msg = ss.str();
+						}
+				};
+
+
+			protected:
+				token_vector	tokens;
+
 				bool	isblank(int c) {
 					return ::isblank(c);
 				}
+
+				size_t				checkTokenText(size_t pos) const;
+				size_t				checkTokenSimpleEnd(size_t pos) const;
+				size_t				checkTokenComplexStart(size_t pos) const;
+				size_t				checkTokenComplexEnd(size_t pos) const;
+				size_t				checkTokenComment(size_t pos) const;
+				size_t				checkTokenNewLine(size_t pos) const;
 
 			public:
 				Lexer(void);
@@ -82,6 +136,8 @@ namespace Webserv {
 				bool				checkTokens(void) const;
 
 				static void			drawVector(const token_vector &tokens);
+
+
 
 		};
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/21 14:45:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/22 11:33:00 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ namespace Webserv {
 		}
 
 		const Lexer::token_vector Lexer::tokenize(const std::string &str) {
-			token::token_value value;
-			token::token_type type;
+			token_type::token_value value;
+			token_type::token_type type;
 			size_t i = 0;
 			size_t j = 0;
+			size_t line = 1;
 
 			while (i < str.length()) {
 				// Skip blank
@@ -41,24 +42,27 @@ namespace Webserv {
 					i++;
 				}
 				// Get the current type of token
-				type = token::getTokenTypeByStr(str, i);
-				if (type != token::T_TEXT) {
+				type = token_type::getTokenTypeByStr(str, i);
+				if (token_type::isNewLine(type)) {
+					line++;
+				}
+				if (type != token_type::T_TEXT) {
 					// If the type of the token is a special type (not a text), then add this token and continue
-					value = token::getTokenValueByType(type);
-					this->tokens.push_back(token(value, type, i));
+					value = token_type::getTokenValueByType(type);
+					this->tokens.push_back(token_type(value, type, line, i));
 					i += value.length();
 					continue ;
 				}
 				j = i + 1;
 				while (j < str.length()) {
-					if (Lexer::isblank(str[j]) || token::getTokenTypeByStr(str, j) != token::T_TEXT) {
+					if (Lexer::isblank(str[j]) || token_type::getTokenTypeByStr(str, j) != token_type::T_TEXT) {
 						break ;
 					}
 					j++;
 				}
 				if (i != j) {
 					value = str.substr(i, j - i);
-					this->tokens.push_back(token(value, type, i));
+					this->tokens.push_back(token_type(value, type, line, i));
 				}
 				i = j;
 			}
@@ -80,7 +84,7 @@ namespace Webserv {
 			 * The config can have differents warnings/errors:
 			 * - missingEndOfSimpleContextError: When a T_SIMPLE don't have T_SIMPLE_END
 			 * - missingEndOfComplexContextError: When a T_COMPLEX don't have T_COMPLEX_END
-			 * - unexpectedThing: When a T_SIMPLE_END or T_COMPLEX_END is placed in an unexpected position (when 0 directive before for example)
+			 * - unexpectedToken: When a T_SIMPLE_END or T_COMPLEX_END is placed in an unexpected position (when 0 directive before for example)
 			 *
 			 * But how i can use all of it to using the parser..
 			 * i really don't know for the moment so i'll continue to write something.. i'll probably find how.. but not now..
@@ -90,60 +94,86 @@ namespace Webserv {
 			*/
 
 			size_t pos = 0;
-			size_t i = 0;
+			ssize_t	bracket = 0;
 
 			while (pos < this->tokens.size()) {
-				i = pos;
 				// std::cout << "|" << this->tokens[pos].getValue() << ":" << this->tokens[pos].getType() << "|" << std::endl;
 				if (this->tokens[pos].isComment()) {
-					while (!this->tokens[pos].isNewLine() && pos < this->tokens.size()) {
-						pos++;
-					}
+					pos = this->checkTokenComment(pos);
 				} else if (this->tokens[pos].isText()) {
-					while (!this->tokens[i].isSimpleEnd() && !this->tokens[i].isComplexStart() && i < this->tokens.size()) {
-						i++;
-					}
-					if (i >= this->tokens.size() && !this->tokens[i].isSimpleEnd() && !this->tokens[i].isComplexStart()) {
-						throw std::runtime_error("Missing \";\"");
-					}
+					pos = this->checkTokenText(pos);
 				} else if (this->tokens[pos].isSimpleEnd()) {
-					if (pos <= 0 || (pos > 0 && !this->tokens[pos - 1].isText())) {
-						throw std::runtime_error("Unexpected \";\"");
-					}
+					pos = this->checkTokenSimpleEnd(pos);
 				} else if (this->tokens[pos].isComplexStart()) {
-					if (pos <= 0 || (pos > 0 && !this->tokens[pos - 1].isText())) {
-						throw std::runtime_error("Unexpected \"{\"");
-					}
-					i++;
-					bool isBracketEnded = false;
-					size_t bracketLevel = 0;
-					while (i < this->tokens.size()) {
-						if (this->tokens[i].isComplexStart()) {
-							bracketLevel++;
-						}
-						if (this->tokens[i].isComplexEnd()) {
-							if (bracketLevel == 0) {
-								isBracketEnded = true;
-								break ;
-							}
-							bracketLevel--;
-						}
-						i++;
-					}
-					if (!isBracketEnded) {
-						throw std::runtime_error("Missing \"}\"");
-					}
+					bracket++;
+					pos = this->checkTokenComplexStart(pos);
 				} else if (this->tokens[pos].isComplexEnd()) {
-					if (pos <= 0) {
-						throw std::runtime_error("Unexpected \"}\"");
-					}
-					// find the start
+					pos = this->checkTokenComplexEnd(pos);
+					bracket--;
+				} else if (this->tokens[pos].isNewLine()) {
+					pos = this->checkTokenNewLine(pos);
+				} else {
+					throw UnknownTokenException(this->tokens[pos]);
 				}
 				pos++;
 			}
-
+			if (bracket > 0) {
+				throw unexpectedEndOfStrException();
+			}
 			return true;
 		}
+
+		size_t				Lexer::checkTokenText(size_t pos) const {
+			size_t i = pos;
+			while (!this->tokens[i].isSimpleEnd() && !this->tokens[i].isComplexStart() && !this->tokens[i].isNewLine() && i < this->tokens.size()) {
+				i++;
+			}
+			if (i >= this->tokens.size() || !(this->tokens[i].isSimpleEnd() || this->tokens[i].isComplexStart())) {
+				throw missingEndOfDirectiveException(this->tokens[pos]);
+			}
+			return pos;
+		}
+
+		size_t				Lexer::checkTokenSimpleEnd(size_t pos) const {
+			if (pos <= 0 || (pos > 0 && !this->tokens[pos - 1].isText())) {
+				throw missingEndOfDirectiveException(this->tokens[pos]);
+			}
+			return pos;
+		}
+
+		size_t				Lexer::checkTokenComplexStart(size_t pos) const {
+			if (pos <= 0 || (pos > 0 && !this->tokens[pos - 1].isText())) {
+				throw UnexpectedTokenException(this->tokens[pos]);
+			}
+			return pos;
+		}
+
+		size_t				Lexer::checkTokenComplexEnd(size_t pos) const {
+			if (pos <= 0) {
+				throw UnexpectedTokenException(this->tokens[pos]);
+			}
+			return pos;
+		}
+
+		size_t				Lexer::checkTokenComment(size_t pos) const {
+			while (!this->tokens[pos].isNewLine() && pos < this->tokens.size()) {
+				pos++;
+			}
+			return pos;
+		}
+
+		size_t				Lexer::checkTokenNewLine(size_t pos) const {
+			bool skip = false;
+			while (this->tokens[pos].isNewLine() && pos < this->tokens.size()) {
+				pos++;
+				skip = true;
+			}
+			if (skip) {
+				pos--;
+			}
+			return pos;
+		}
+
 
 		// Static methods
 

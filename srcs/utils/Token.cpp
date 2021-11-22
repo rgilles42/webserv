@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/21 14:44:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/22 11:22:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ namespace Webserv {
 
 		const Token::token_map Token::tokensList =  Token::fillMap();
 
-		Token::Token(const token_value &value, const token_type &type, const token_pos &position) {
+		Token::Token(const token_value &value, const token_type &type, const token_line &line, const token_pos &position) {
 			this->value = value;
 			this->type = type;
+			this->line = line;
 			this->position = position;
 		}
 
@@ -30,6 +31,10 @@ namespace Webserv {
 
 		Token::token_type			Token::getType(void) const {
 			return this->type;
+		}
+
+		Token::token_line			Token::getLine(void) const {
+			return this->line;
 		}
 
 		Token::token_pos			Token::getPosition(void) const {
