@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lexer.hpp                                          :+:      :+:    :+:   */
+/*   Parser.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_HPP
-# define LEXER_HPP
+#ifndef PARSER_HPP
+# define PARSER_HPP
 
 # include <string>
 # include <vector>
@@ -20,82 +20,39 @@
 # include <sys/types.h>
 
 # include "Token.hpp"
+# include "Block.hpp"
 
 namespace Webserv {
 
 	namespace Utils {
 
-		class Lexer {
+		class Parser {
 			public:
 				typedef Webserv::Utils::Token	token_type;
+				typedef Webserv::Utils::Token	block_type;
 				typedef std::vector<token_type>		token_vector;
 
-				class LexerException : public std::exception {
+				class Parser : public std::exception {
 					protected:
 						std::string	msg;
-						token_type	token;
+						block_type	block;
 
 					public:
-						LexerException(const token_type &token = token_type(), const std::string &msg = "") : std::exception() {
+						Parser(const block_type &block = block_type(), const std::string &msg = "") : std::exception() {
 							this->msg = msg;
-							this->token = token;
+							this->block = block;
 						}
-						virtual ~LexerException() throw() {}
-						const token_type getToken() const {
-							return this->token;
+						virtual ~Parser() throw() {}
+						const block_type getblock() const {
+							return this->block;
 						}
 						virtual const char	*what() const throw() {
 							return this->msg.c_str();
 						}
 				};
 
-				class missingEndOfDirectiveException : public LexerException {
-					public:
-						missingEndOfDirectiveException(const token_type &token = token_type()) : LexerException(token) {
-							std::ostringstream ss;
-
-							ss << "directive \"" << token.getValue() << "\" is not terminated by \";\" at " << token.getLine();
-
-							this->msg = ss.str();
-						}
-				};
-
-				class unexpectedEndOfStrException : public LexerException {
-					public:
-						unexpectedEndOfStrException(const token_type &token = token_type()) : LexerException(token) {
-							std::ostringstream ss;
-
-							ss << "Unexpected end of string, expecting \"}\"";
-
-							this->msg = ss.str();
-						}
-				};
-
-				class UnexpectedTokenException : public LexerException {
-					public:
-						UnexpectedTokenException(const token_type &token = token_type()) : LexerException(token) {
-							std::ostringstream ss;
-
-							ss << "Unexpected \"" << token.getValue() << "\" at " << token.getLine();
-
-							this->msg = ss.str();
-						}
-				};
-
-				class UnknownTokenException : public LexerException {
-					public:
-						UnknownTokenException(const token_type &token = token_type()) : LexerException(token) {
-							std::ostringstream ss;
-
-							ss << "Unknown token \"" << token.getValue() << "\" at " << token.getLine();
-
-							this->msg = ss.str();
-						}
-				};
-
-
 			protected:
-				token_vector	tokens;
+				token_vector	block;
 
 				bool	isblank(int c) {
 					return ::isblank(c);
@@ -109,8 +66,8 @@ namespace Webserv {
 				size_t				checkTokenNewLine(size_t pos) const;
 
 			public:
-				Lexer(void);
-				Lexer(const std::string &str);
+				Parser(void);
+				Parser(const std::string &str);
 
 				const token_vector	tokenize(const std::string &str);
 
@@ -130,4 +87,4 @@ namespace Webserv {
 
 } // namespace Webserv
 
-#endif // endif LEXER_HPP
+#endif // endif PARSER_HPP
