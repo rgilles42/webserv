@@ -12,14 +12,16 @@
 
 #include "../Poll.hpp"
 
+namespace webserv
+{
+
 Poll::Poll(void)
 {
-    this->poll_fds = NULL;
     this->n_fds = 0;
-    this->events = NULL;
+    this->events.insert(webserv::Poll::eventTypes.onReadConnection, )
 }
 
-Poll::Poll(std::vector<Socket> sockets_servers, std::map<std::string, std::vector<> >)
+Poll::Poll(std::vector<Socket> sockets_servers)
 {
     this->init(sockets_server, functions);
 }
@@ -59,7 +61,7 @@ int Poll::start(void)
     int ret = 0;
     int j = 0;
 
-    //TO DO change with new stop condition
+    void (*f) (int);
     this->is_enable = true;
     while (is_enable)
     {
@@ -90,9 +92,11 @@ int Poll::start(void)
 					poll_fds[nb_fds].events = POLLIN;
 					nb_fds++;
                     j = 0;
-                    while (events[Poll::onConnection][j])
+                    std::vector<void (*)(int)> vect1 =  = this->events[Poll::onConnection];
+                    while (j < vect1.size())
                     {
-                        events[Poll::onConnection][j](poll_fds[i].fd);
+                        f = vect1[j];
+                        f(poll_fds[i].fd);
                         j++;
                     }
 				}
@@ -100,9 +104,11 @@ int Poll::start(void)
 				{
 					/* Read client socket - call functions*/
                     j = 0;
-                    while (events[Poll::onReadConnetion][j])
+                    std::vector<void (*)(int)> vect2 = this->events[Poll::onReadConnection];
+                    while (j < vect2.size())
                     {
-                        events[Poll::onReadConnection][j](poll_fds[i].fd);
+                        f = vect2[j];
+                        f(poll_fds[i].fd);
                         j++;
                     }
 					/* Change events socket_client to write*/
@@ -112,9 +118,11 @@ int Poll::start(void)
 				{
 					/* Send response*/
                     j = 0;
-                    while (events[poll::onReadyWrite][j])
+                    std::vector<void (*)(int)> vect3 = this->events[Poll::onReadyWrite];
+                    while (j < vect3.size())
                     {
-                        events[Poll::onReadyWrite][j](poll_fds[i].fd);
+                        f = vect3[j];
+                        f(poll_fds[i].fd);
                         j++;
                     }
                     /* TO DO - replace by Socket fct*/
@@ -137,4 +145,6 @@ bool    Poll::is_socket_server(int socket)
         if (poll_fds[i] == socket)
             return (1);
     return (0);
+}
+
 }

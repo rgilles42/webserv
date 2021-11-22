@@ -6,7 +6,7 @@
 /*   By: pkevin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2021/11/15 16:36:05 by pkevin           ###   ########.fr       */
+/*   Updated: 2021/11/18 09:13:29 by yun              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,18 @@ namespace webserv
 {
 	class Poll
 	{
+		public:
+			enum eventTypes
+			{
+				onConnection,
+				onReadyRead,
+				onReadyWrite
+			};
 		private:
 			struct pollfd					poll_fds;
 			size_t							n_fds;
 			size_t							n_srv;
-			std::map<eventTypes, std::vector<void (*f)(int)> >	events;
+			std::map<Poll::eventTypes, std::vector<void (*)(int)> >	events;
 			bool							is_enable;
 
 
@@ -38,17 +45,11 @@ namespace webserv
 			Poll(std::vector<Socket> sockets_servers);	//TO DO - def
 			~Poll(void);
 
-			void 	registerEvent(eventType, method);
+			void 	registerEvent(Poll::eventTypes type, void (*ft)(int));
 
 			void	init(std::vector<Socket> sockets_servers)	//def
 			int		start(void);
 
-			enum eventTypes
-			{
-				onConnection,
-				onReadyRead,
-				onReadyWrite
-			};
 	};
 }
 
