@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/11/22 17:59:02 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/11/23 14:03:23 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/Json.hpp \
 				$(HEADER_DIR)/utils/Token.hpp \
 				$(HEADER_DIR)/utils/Lexer.hpp \
-				$(HEADER_DIR)/utils/Block.hpp
+				$(HEADER_DIR)/utils/Block.hpp \
+				$(HEADER_DIR)/utils/Parser.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/MimeTypes.cpp \
@@ -45,7 +46,8 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/Json.cpp \
 				$(SRC_DIR)/utils/Token.cpp \
 				$(SRC_DIR)/utils/Lexer.cpp \
-				$(SRC_DIR)/utils/Block.cpp
+				$(SRC_DIR)/utils/Block.cpp \
+				$(SRC_DIR)/utils/Parser.cpp
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
 OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)

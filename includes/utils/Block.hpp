@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:32:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 18:35:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/23 15:47:44 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,7 @@ namespace Webserv {
 				childs_type		childs;
 
 			public:
-				Block(const block_type &typestatic bool				isText(const token_type &type);
-				static bool				isSimpleEnd(const token_type &type);
-				static bool				isComplexStart(const token_type &type);
-				static bool				isComplexEnd(const token_type &type);
-				static bool				isComment(const token_type &type);
-				static bool				isNewLine(const token_type &type);
-				static bool				isEnd(const token_type &type);
-				static bool				isComplex(const token_type &type);= Block::T_SIMPLE);
+				Block(const block_type &type= Block::T_SIMPLE);
 
 				block_type			getType(void) const;
 				const values_type	getValues(void) const;
@@ -57,6 +50,18 @@ namespace Webserv {
 				void				addValue(const token_type &token);
 
 				void				addChild(const Block &child);
+
+				bool				is(block_type &type) const;
+				bool				isSimple(void) const;
+				bool				isComplex(void) const;
+				bool				isComment(void) const;
+
+				// Static Methods
+
+				static bool			is(const block_type &type, const block_type &type2);
+				static bool			isSimple(const block_type &type);
+				static bool			isComplex(const block_type &type);
+				static bool			isComment(const block_type &type);
 
 		};
 

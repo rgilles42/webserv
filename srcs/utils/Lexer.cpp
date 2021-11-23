@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 11:45:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/23 14:13:26 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ namespace Webserv {
 			return this->tokens;
 		}
 
-		void			Lexer::drawVector(void) const {
-			Lexer::drawVector(this->tokens);
+		void			Lexer::drawTokens(void) const {
+			Lexer::drawTokens(this->tokens);
 		}
 
 		bool			Lexer::checkTokens(void) const {
@@ -98,9 +98,7 @@ namespace Webserv {
 
 			while (pos < this->tokens.size()) {
 				// std::cout << "|" << this->tokens[pos].getValue() << ":" << this->tokens[pos].getType() << "|" << std::endl;
-				if (this->tokens[pos].isComment()) {
-					pos = this->checkTokenComment(pos);
-				} else if (this->tokens[pos].isText()) {
+				if (this->tokens[pos].isText()) {
 					pos = this->checkTokenText(pos);
 				} else if (this->tokens[pos].isSimpleEnd()) {
 					pos = this->checkTokenSimpleEnd(pos);
@@ -110,6 +108,8 @@ namespace Webserv {
 				} else if (this->tokens[pos].isComplexEnd()) {
 					pos = this->checkTokenComplexEnd(pos);
 					bracket--;
+				} else if (this->tokens[pos].isComment()) {
+					pos = this->checkTokenComment(pos);
 				} else if (this->tokens[pos].isNewLine()) {
 					pos = this->checkTokenNewLine(pos);
 				} else {
@@ -177,7 +177,7 @@ namespace Webserv {
 
 		// Static methods
 
-		void			Lexer::drawVector(const token_vector &tokens) {
+		void			Lexer::drawTokens(const token_vector &tokens) {
 			token_vector::const_iterator it = tokens.begin();
 			while (it != tokens.end()) {
 				std::cout << "|" << (*it).getValue() << ":" << (*it).getType() << "|" << std::endl;

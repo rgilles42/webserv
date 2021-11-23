@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 17:31:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/23 14:02:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,11 @@ namespace Webserv {
 
 				const token_vector	getTokens(void) const;
 
-				void				drawVector(void) const;
+				void				drawTokens(void) const;
 
 				bool				checkTokens(void) const;
 
-				static void			drawVector(const token_vector &tokens);
-
-
+				static void			drawTokens(const token_vector &tokens);
 
 		};
 

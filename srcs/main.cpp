@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 17:38:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/23 15:32:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,7 +295,13 @@ int main(void) {
 
 	lexer.tokenize(configContent);
 	lexer.checkTokens();
-	lexer.drawVector();
+	// lexer.drawTokens();
+
+	Webserv::Utils::Parser parser;
+
+	parser.blockenize(lexer.getTokens());
+	parser.checkBlocks();
+	parser.drawBlocks();
 
 	return EXIT_SUCCESS;
 }

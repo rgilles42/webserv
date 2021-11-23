@@ -28,21 +28,22 @@ namespace Webserv {
 
 		class Parser {
 			public:
-				typedef Webserv::Utils::Token	token_type;
-				typedef Webserv::Utils::Token	block_type;
+				typedef Webserv::Utils::Token		token_type;
+				typedef Webserv::Utils::Block		block_type;
 				typedef std::vector<token_type>		token_vector;
+				typedef std::vector<block_type>		block_vector;
 
-				class Parser : public std::exception {
+				class ParserException : public std::exception {
 					protected:
 						std::string	msg;
 						block_type	block;
 
 					public:
-						Parser(const block_type &block = block_type(), const std::string &msg = "") : std::exception() {
+						ParserException(const block_type &block = block_type(), const std::string &msg = "") : std::exception() {
 							this->msg = msg;
 							this->block = block;
 						}
-						virtual ~Parser() throw() {}
+						virtual ~ParserException() throw() {}
 						const block_type getblock() const {
 							return this->block;
 						}
@@ -52,34 +53,29 @@ namespace Webserv {
 				};
 
 			protected:
-				token_vector	block;
+				block_vector	blocks;
 
 				bool	isblank(int c) {
 					return ::isblank(c);
 				}
 
-				size_t				checkTokenText(size_t pos) const;
-				size_t				checkTokenSimpleEnd(size_t pos) const;
-				size_t				checkTokenComplexStart(size_t pos) const;
-				size_t				checkTokenComplexEnd(size_t pos) const;
-				size_t				checkTokenComment(size_t pos) const;
-				size_t				checkTokenNewLine(size_t pos) const;
+				typedef std::pair<const Block, bool> parse_type;
+
+				parse_type	parseBlock(const token_vector &tokens, size_t &pos);
 
 			public:
 				Parser(void);
-				Parser(const std::string &str);
+				Parser(const token_vector &tokens);
 
-				const token_vector	tokenize(const std::string &str);
+				const block_vector	blockenize(const token_vector &tokens);
 
-				const token_vector	getTokens(void) const;
+				const block_vector	getBlocks(void) const;
 
-				void				drawVector(void) const;
+				void				drawBlocks(void) const;
 
-				bool				checkTokens(void) const;
+				bool				checkBlocks(void) const;
 
-				static void			drawVector(const token_vector &tokens);
-
-
+				static void			drawBlocks(const block_vector &blocks);
 
 		};
 
