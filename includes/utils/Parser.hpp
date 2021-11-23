@@ -33,31 +33,68 @@ namespace Webserv {
 				typedef std::vector<token_type>		token_vector;
 				typedef std::vector<block_type>		block_vector;
 
+				// map[directive] = [context1, context2, ...]
+				typedef std::map<std::string, std::vector<std::string> >	directive_map;
+
 				class ParserException : public std::exception {
 					protected:
 						std::string	msg;
 						block_type	block;
+						token_type	token;
 
 					public:
-						ParserException(const block_type &block = block_type(), const std::string &msg = "") : std::exception() {
+						ParserException(const block_type &block = block_type(), const token_type &token = token_type(), const std::string &msg = "") : std::exception() {
 							this->msg = msg;
 							this->block = block;
+							this->token = token;
 						}
 						virtual ~ParserException() throw() {}
-						const block_type getblock() const {
+						const block_type	getBlock() const {
 							return this->block;
+
+						}const token_type	getToken() const {
+							return this->token;
 						}
 						virtual const char	*what() const throw() {
 							return this->msg.c_str();
 						}
 				};
 
+				class UnknownDirectiveException : public ParserException {
+					public:
+						UnknownDirectiveException(const block_type &block = block_type(), const token_type &token = token_type()) : ParserException(block) {
+							std::ostringstream ss;
+
+							ss << "Unknown directive \"" << token.getValue() << "\" at " << token.getLine();
+
+							this->msg = ss.str();
+						}
+				};
+
+				class DirectiveNotAllowedHereException : public ParserException {
+					public:
+						DirectiveNotAllowedHereException(const block_type &block = block_type(), const token_type &token = token_type()) : ParserException(block) {
+							std::ostringstream ss;
+
+							ss << "Directive \"" << token.getValue() << "\" is not allowed here at " << token.getLine();
+
+							this->msg = ss.str();
+						}
+				};
+
+				class UnknownException : public ParserException {
+					public:
+						UnknownException(const block_type &block = block_type()) : ParserException(block) {
+							std::ostringstream ss;
+
+							ss << "Unknown error at " << token.getLine();
+
+							this->msg = ss.str();
+						}
+				};
+
 			protected:
 				block_vector	blocks;
-
-				bool	isblank(int c) {
-					return ::isblank(c);
-				}
 
 				typedef std::pair<const Block, bool> parse_type;
 
@@ -73,7 +110,7 @@ namespace Webserv {
 
 				void				drawBlocks(void) const;
 
-				bool				checkBlocks(void) const;
+				bool				checkBlocks(const directive_map &directives = directive_map()) const;
 
 				static void			drawBlocks(const block_vector &blocks);
 

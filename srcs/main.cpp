@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/23 15:32:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/23 16:54:48 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,32 @@ int main(void) {
 	Webserv::Utils::Parser parser;
 
 	parser.blockenize(lexer.getTokens());
-	parser.checkBlocks();
+
+	Webserv::Utils::Parser::directive_map directives;
+
+	directives["server"].push_back("main");
+	directives["listen"].push_back("server");
+	directives["server_name"].push_back("server");
+	directives["error_page"].push_back("server");
+	directives["error_page"].push_back("location");
+	directives["client_max_body_size"].push_back("server");
+	directives["client_max_body_size"].push_back("location");
+	directives["location"].push_back("server");
+	directives["location"].push_back("location");
+	directives["limit_except"].push_back("location");
+	directives["return"].push_back("server");
+	directives["return"].push_back("location");
+	directives["autoindex"].push_back("server");
+	directives["autoindex"].push_back("location");
+	directives["root"].push_back("server");
+	directives["root"].push_back("location");
+	directives["index"].push_back("server");
+	directives["index"].push_back("location");
+	directives["upload_store"].push_back("server");
+	directives["upload_store"].push_back("location");
+	directives["cgi_pass"].push_back("location");
+
+	parser.checkBlocks(directives);
 	parser.drawBlocks();
 
 	return EXIT_SUCCESS;

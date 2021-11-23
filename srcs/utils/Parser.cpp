@@ -78,7 +78,8 @@ namespace Webserv {
 			Parser::drawBlocks(this->blocks);
 		}
 
-		bool			Parser::checkBlocks(void) const {
+		bool			Parser::checkBlocks(const directive_map &directives) const {
+			(void)directives;
 			return true;
 		}
 
