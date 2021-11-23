@@ -17,7 +17,7 @@ HEADER_DIR	=	includes
 OBJ_DIR		=	objs
 SRC_DIR		=	srcs
 
-CXX			=	clang++
+CXX			=	g++
 CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
