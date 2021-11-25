@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/23 16:54:48 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/25 15:29:51 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,12 +294,13 @@ int main(void) {
 	Webserv::Utils::Lexer lexer;
 
 	lexer.tokenize(configContent);
-	lexer.checkTokens();
 	// lexer.drawTokens();
+	lexer.checkTokens();
 
 	Webserv::Utils::Parser parser;
 
 	parser.blockenize(lexer.getTokens());
+	// parser.drawBlocks();
 
 	Webserv::Utils::Parser::directive_map directives;
 
@@ -326,7 +327,6 @@ int main(void) {
 	directives["cgi_pass"].push_back("location");
 
 	parser.checkBlocks(directives);
-	parser.drawBlocks();
 
 	return EXIT_SUCCESS;
 }

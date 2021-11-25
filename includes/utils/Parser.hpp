@@ -13,11 +13,15 @@
 #ifndef PARSER_HPP
 # define PARSER_HPP
 
+# include <iostream>
+
 # include <string>
 # include <vector>
+# include <map>
 # include <exception>
 # include <sstream>
 # include <sys/types.h>
+# include <algorithm>
 
 # include "Token.hpp"
 # include "Block.hpp"
@@ -52,7 +56,8 @@ namespace Webserv {
 						const block_type	getBlock() const {
 							return this->block;
 
-						}const token_type	getToken() const {
+						}
+						const token_type	getToken() const {
 							return this->token;
 						}
 						virtual const char	*what() const throw() {
@@ -96,9 +101,11 @@ namespace Webserv {
 			protected:
 				block_vector	blocks;
 
-				typedef std::pair<const Block, bool> parse_type;
+				typedef std::pair<const block_type, bool> parse_type;
 
-				parse_type	parseBlock(const token_vector &tokens, size_t &pos);
+				parse_type			parseBlock(const token_vector &tokens, size_t &pos);
+
+				bool				checkBlock(const directive_map &directives, const block_type &block, const std::string &context) const;
 
 			public:
 				Parser(void);

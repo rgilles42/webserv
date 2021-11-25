@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/23 14:13:26 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/25 14:51:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,13 +163,8 @@ namespace Webserv {
 		}
 
 		size_t				Lexer::checkTokenNewLine(size_t pos) const {
-			bool skip = false;
-			while (this->tokens[pos].isNewLine() && pos < this->tokens.size()) {
+			while (this->tokens[pos + 1].isNewLine() && pos + 1 < this->tokens.size()) {
 				pos++;
-				skip = true;
-			}
-			if (skip) {
-				pos--;
 			}
 			return pos;
 		}

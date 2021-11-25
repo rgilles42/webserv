@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/11/23 14:03:23 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/11/25 15:18:28 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJ_DIR		=	objs
 SRC_DIR		=	srcs
 
 CXX			=	g++
-CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98 -g
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/MimeTypes.hpp \
