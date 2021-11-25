@@ -109,15 +109,17 @@ namespace Webserv {
 			}
 			token_type::token_value currentDirective = values[0].getValue();
 
-			if (directives.count(currentDirective) <= 0) {
-				throw UnknownDirectiveException(block, values[0]);
+			if (currentDirective != "types" && context != "types") {
+				if (directives.count(currentDirective) <= 0) {
+					throw UnknownDirectiveException(block, values[0]);
+				}
+				directive_map::mapped_type allowedContext = directives.at(currentDirective);
+				directive_map::mapped_type::const_iterator find = std::find(allowedContext.begin(), allowedContext.end(), context);
+				if (find == allowedContext.end()) {
+					throw DirectiveNotAllowedHereException(block, values[0]);
+				}
 			}
 
-			directive_map::mapped_type allowedContext = directives.at(currentDirective);
-			directive_map::mapped_type::const_iterator find = std::find(allowedContext.begin(), allowedContext.end(), context);
-			if (find == allowedContext.end()) {
-				throw DirectiveNotAllowedHereException(block, values[0]);
-			}
 			block_type::childs_type childs = block.getChilds();
 			if (childs.size() > 0) {
 				if (block.isSimple()) {

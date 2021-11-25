@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:23 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/23 13:45:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/25 16:38:42 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ bool		isIpAddress(const std::string &str);
 
 std::vector<std::string>	split(const std::string &str, const std::string &token);
 
-# include "MimeTypes.hpp"
+# include "./utils/MimeTypes.hpp"
 
 # include "./utils/Token.hpp"
 # include "./utils/Lexer.hpp"

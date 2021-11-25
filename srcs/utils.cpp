@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:08 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/11 19:47:55 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/25 16:41:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ std::string getContentTypeByFile(const std::string &filename, const std::string 
 	test = "\r\n";
 	fileContent = fileContent.substr(0, fileContent.find_last_of(test));
 
-	MimeTypes types(fileContent);
+	Webserv::Utils::MimeTypes types(fileContent);
 	return types.getType(filename, fallback);
 }
 

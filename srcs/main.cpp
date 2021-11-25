@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/25 15:29:51 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/25 17:03:00 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,8 @@ void writeJson(const Json *data, size_t indent = 0) {
 int main(void) {
 
 	std::string configContent(getFileContents("./conf/test.conf"));
+
+	// configContent += getFileContents("./conf/mime.types");
 
 	Webserv::Utils::Lexer lexer;
 
