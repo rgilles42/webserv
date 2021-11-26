@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/11/25 16:39:18 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/11/26 11:53:54 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Lexer.hpp \
 				$(HEADER_DIR)/utils/Block.hpp \
 				$(HEADER_DIR)/utils/Parser.hpp \
-				$(HEADER_DIR)/utils/MimeTypes.hpp
+				$(HEADER_DIR)/utils/MimeTypes.hpp \
+				$(HEADER_DIR)/utils/Config.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/Ressource.cpp \
@@ -47,7 +48,8 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Lexer.cpp \
 				$(SRC_DIR)/utils/Block.cpp \
 				$(SRC_DIR)/utils/Parser.cpp \
-				$(SRC_DIR)/utils/MimeTypes.cpp
+				$(SRC_DIR)/utils/MimeTypes.cpp \
+				$(SRC_DIR)/utils/Config.cpp
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
 OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)

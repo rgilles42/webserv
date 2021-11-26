@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/25 16:43:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 12:02:44 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ namespace Webserv {
 
 				void						fromString(const std::string &fileContent);
 		};
+
+		// TODO: remove this
+		std::string getContentTypeByFile(const std::string &filename, const std::string &fallback);
 
 	}
 

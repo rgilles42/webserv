@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:23 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/25 16:38:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 12:02:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ std::string	getFormatedDate(const time_t &rawtime);
 std::string	getFileContents(const std::string &filename);
 std::string	getFileExtension(const std::string &filename);
 
-std::string getContentTypeByFile(const std::string &filename, const std::string &fallback = "text/plain");
-
 bool		isIpv4Address(const std::string &str);
 bool		isIpv6Address(const std::string &str);
 bool		isIpAddress(const std::string &str);
@@ -71,10 +69,5 @@ bool		isIpAddress(const std::string &str);
 std::vector<std::string>	split(const std::string &str, const std::string &token);
 
 # include "./utils/MimeTypes.hpp"
-
-# include "./utils/Token.hpp"
-# include "./utils/Lexer.hpp"
-# include "./utils/Block.hpp"
-# include "./utils/Parser.hpp"
 
 #endif

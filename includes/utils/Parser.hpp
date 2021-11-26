@@ -115,6 +115,8 @@ namespace Webserv {
 
 				const block_vector	getBlocks(void) const;
 
+				void				resetParser(void);
+
 				void				drawBlocks(void) const;
 
 				bool				checkBlocks(const directive_map &directives = directive_map()) const;

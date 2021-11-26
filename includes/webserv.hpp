@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/25 16:38:06 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 11:55:23 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,19 @@
 # define MAX_CONNECTION 50
 
 # include "./Ressource.hpp"
-# include "./utils/MimeTypes.hpp"
 # include "./HttpVersion.hpp"
 # include "./HttpStatusCode.hpp"
 # include "./HttpRequest.hpp"
 # include "./HttpResponse.hpp"
 # include "./utils.hpp"
+
+# include "./utils/Token.hpp"
+# include "./utils/Lexer.hpp"
+# include "./utils/Block.hpp"
+# include "./utils/Parser.hpp"
+# include "./utils/MimeTypes.hpp"
+
+# include "./utils/Config.hpp"
 
 # include "Json.hpp"
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:08 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/25 16:41:16 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 11:59:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,6 @@ std::string	getFileContents(const std::string &filename) {
 
 std::string	getFileExtension(const std::string &filename) {
 	return filename.substr(filename.find_last_of(".") + 1);
-}
-
-std::string getContentTypeByFile(const std::string &filename, const std::string &fallback) {
-	std::string test;
-	std::string fileContent(getFileContents("./conf/mime.types"));
-
-	test = "types";
-	fileContent = fileContent.substr(fileContent.find(test) + test.length());
-	test = "{";
-	fileContent = fileContent.substr(fileContent.find(test) + test.length());
-	test = "\r\n";
-	fileContent = fileContent.substr(fileContent.find(test) + test.length());
-	test = "}";
-	fileContent = fileContent.substr(0, fileContent.find(test));
-	test = "\r\n";
-	fileContent = fileContent.substr(0, fileContent.find_last_of(test));
-
-	Webserv::Utils::MimeTypes types(fileContent);
-	return types.getType(filename, fallback);
 }
 
 bool	isIpv4Address(const std::string& str) {

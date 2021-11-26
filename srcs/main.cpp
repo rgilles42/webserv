@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/25 17:03:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 11:51:32 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,46 +289,11 @@ void writeJson(const Json *data, size_t indent = 0) {
 
 int main(void) {
 
-	std::string configContent(getFileContents("./conf/test.conf"));
+	Webserv::Utils::Config config;
 
-	// configContent += getFileContents("./conf/mime.types");
+	config.addConfigFile("./conf/test.conf");
 
-	Webserv::Utils::Lexer lexer;
-
-	lexer.tokenize(configContent);
-	// lexer.drawTokens();
-	lexer.checkTokens();
-
-	Webserv::Utils::Parser parser;
-
-	parser.blockenize(lexer.getTokens());
-	// parser.drawBlocks();
-
-	Webserv::Utils::Parser::directive_map directives;
-
-	directives["server"].push_back("main");
-	directives["listen"].push_back("server");
-	directives["server_name"].push_back("server");
-	directives["error_page"].push_back("server");
-	directives["error_page"].push_back("location");
-	directives["client_max_body_size"].push_back("server");
-	directives["client_max_body_size"].push_back("location");
-	directives["location"].push_back("server");
-	directives["location"].push_back("location");
-	directives["limit_except"].push_back("location");
-	directives["return"].push_back("server");
-	directives["return"].push_back("location");
-	directives["autoindex"].push_back("server");
-	directives["autoindex"].push_back("location");
-	directives["root"].push_back("server");
-	directives["root"].push_back("location");
-	directives["index"].push_back("server");
-	directives["index"].push_back("location");
-	directives["upload_store"].push_back("server");
-	directives["upload_store"].push_back("location");
-	directives["cgi_pass"].push_back("location");
-
-	parser.checkBlocks(directives);
+	config.processFiles();
 
 	return EXIT_SUCCESS;
 }

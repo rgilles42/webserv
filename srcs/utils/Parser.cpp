@@ -26,6 +26,10 @@ namespace Webserv {
 			return this->blocks;
 		}
 
+		void						Parser::resetParser(void) {
+			this->blocks.clear();
+		}
+
 		const Parser::block_vector Parser::blockenize(const token_vector &tokens) {
 			size_t pos = 0;
 

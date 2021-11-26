@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/23 14:02:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 11:27:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ namespace Webserv {
 				Lexer(const std::string &str);
 
 				const token_vector	tokenize(const std::string &str);
+
+				void				resetLexer(void);
 
 				const token_vector	getTokens(void) const;
 
