@@ -13,6 +13,9 @@
 #ifndef CGI_HPP
 # define CGI_HPP
 
+#include <exception>
+	
+
 namespace webserv
 {
 	class CGI
@@ -20,20 +23,43 @@ namespace webserv
 		private:
 			std::string	location_cgi;
 			std::string location_file;
+			int		fd_save[2];
+			int		fd_return;
 			char	*args[3];
-			char	**env;
+			std::map<std:string, std::string> m_env;
 
 		public:
 			CGI();
 			CGI(std::string path_cgi, std::string location_file);
 			~CGI();
 
-
-			int	exec();
-			int		set_env_var(std::string var);
+			char	**env();
+			int		exec();
+			int		add_env_var(std::string var);
 			char	*message();
 
-		private:
+		struct	dupCGIFailed : public std::exception
+		{
+			virtual const char* what() const throw()
+			{
+				return ("CGI: Dup failed");
+			}
+		}
+		struct	pipeCGIFailed : public std::exception
+		{
+			virtual const char* what() const throw()
+			{
+				return ("CGI: Pipe failed");
+			}
+		}
+
+		struct	pidCGIFailed : public std::exception
+		{
+			virtual const char* what() const throw()
+			{
+				return ("CGI: Pid failed");
+			}
+		}
 	}
 }
 
