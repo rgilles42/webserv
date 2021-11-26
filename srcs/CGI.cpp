@@ -8,10 +8,19 @@ namespace webserv
         args[1] = NULL;
         args[2] = NULL;
 
-        this->location_cgi = NULL;
-        this->location_file = NULL;
+        this->fd_save = dup(0);
+        if (!fd_save)
+            throw dupCGIFailed();
+    }
 
-        this->m_env = NULL;
+    CGI::CGI(std::string location, std::string file)
+    {
+        location_cgi = location;
+        location_file = file;
+        args[0] = (char*)location_cgi.c_str();
+        args[1] = (char*)location_file.c_str();
+        args[2] = NULL;
+
         this->fd_save = dup(0);
         if (!fd_save)
             throw dupCGIFailed();
@@ -30,25 +39,26 @@ namespace webserv
         this->m_env.insert(std::make_pair(name, value));
     }
 
+    void   CGI::set_args(std::string location, std::string file)
+    {
+        location_cgi = location;
+        location_file = file;
+        args[0] = (char*)location_cgi.c_str();
+        args[1] = (char*)location_file.c_str();
+        args[2] = NULL;
+    }
+
     char    **CGI::env()
     {
         char    **ret;
-        std::string str;
-        int i = 0;
-        std::allocator<char*> alloc;
-        std::map<std::string, std::string>::iterator ite;
+        size_t i = 0;
+        std::map<std::string, std::string>::iterator ite = this->m_env.end();
 
-        ret = this->alloc.allocate(this->m_env.size());
-        ite =this->m_env.end();
-        for (std::map<std::string, std::string>::iterator it = this->m_env.begin(); it != ite; it++)
+        ret = (char**)malloc(this->m_env.size() * sizeof(ret));
+        for(std::map<std::string, std::string>::iterator it = this->m_env.begin(); it != ite; it++)
         {
-            str =*it.first;
-            str+= " = ";
-            str+= *it.second;
-            this->alloc.contruct(&ret[i], str.c_str());
-//            ret[i] = str.c_str();
+            ret[i] = (char *)std::string(it->first + "=" + it->second).c_str();
             i++;
-            str.clear();
         }
         ret[i] = NULL;
         return ret;
@@ -75,7 +85,7 @@ namespace webserv
             close(fd[0]);
             if (dup2(fd[1], 1))
                 exit(500);
-            ret = execve(this->args[0], this->args, this->env);
+            ret = execve(this->args[0], this->args, this->env());
             if(ret < 0)
                 exit(500);
             exit(0);

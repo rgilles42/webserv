@@ -35,32 +35,33 @@ namespace webserv
 
 			char	**env();
 			int		exec();
-			int		add_env_var(std::string var);
-			char	*message();
+			void	add_env_var(std::string var);
+			void	set_args(std::string location, std::string file);
 
-		struct	dupCGIFailed : public std::exception
-		{
-			virtual const char* what() const throw()
-			{
-				return ("CGI: Dup failed");
-			}
-		}
-		struct	pipeCGIFailed : public std::exception
-		{
-			virtual const char* what() const throw()
-			{
-				return ("CGI: Pipe failed");
-			}
-		}
 
-		struct	pidCGIFailed : public std::exception
-		{
-			virtual const char* what() const throw()
+			struct	dupCGIFailed : public std::exception
 			{
-				return ("CGI: Pid failed");
-			}
-		}
-	}
+				virtual const char* what() const throw()
+				{
+					return ("CGI: Dup failed");
+				}
+			};
+			struct	pipeCGIFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("CGI: Pipe failed");
+				}
+			};
+
+			struct	pidCGIFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("CGI: Pid failed");
+				}
+			};
+	};
 }
 
 #endif
