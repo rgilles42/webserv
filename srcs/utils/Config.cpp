@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 12:05:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 13:51:09 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,22 @@ namespace Webserv {
 			directives["upload_store"].push_back("location");
 			directives["cgi_pass"].push_back("location");
 
+			// Get all files contents
 			it = this->files.begin();
 			while (it != this->files.end()) {
 
 				try {
 					this->filesMap[(*it)] = getFileContents((*it));
 				}
-				catch(const std::exception& e) {
-					std::cerr << e.what() << '\n';
+				catch (const std::exception& e) {
+					std::cerr << e.what() << " in " << (*it) << std::endl;
 					return false;
 				}
 
 				it++;
 			}
 
+			// Lexing all files
 			it = this->files.begin();
 			while (it != this->files.end()) {
 
@@ -79,14 +81,19 @@ namespace Webserv {
 						return false;
 					}
 				}
-				catch(const std::exception& e) {
-					std::cerr << e.what() << '\n';
+				catch (const lexer_type::LexerException& e) {
+					std::cerr << e.what() << " in " << (*it);
+					if (e.getToken().getLine() > 0) {
+						std::cerr << ":" << e.getToken().getLine();
+					}
+					std::cerr << std::endl;
 					return false;
 				}
 
 				it++;
 			}
 
+			// Parsing all files
 			it = this->files.begin();
 			while (it != this->files.end()) {
 
@@ -97,8 +104,12 @@ namespace Webserv {
 						return false;
 					}
 				}
-				catch(const std::exception& e) {
-					std::cerr << e.what() << '\n';
+				catch (const parser_type::ParserException& e) {
+					std::cerr << e.what() << " in " << (*it);
+					if (e.getToken().getLine() > 0) {
+						std::cerr << ":" << e.getToken().getLine();
+					}
+					std::cerr << std::endl;
 					return false;
 				}
 

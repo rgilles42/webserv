@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 11:23:31 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 13:50:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ namespace Webserv {
 
 			public:
 				// Non-static Methods
-				Token(const token_value &value = token_value(), const token_type &type = Token::T_TEXT, const token_line &line = 1, const token_pos &position = token_pos());
+				Token(const token_value &value = token_value(), const token_type &type = Token::T_TEXT, const token_line &line = token_line(), const token_pos &position = token_pos());
 
 				const token_value		getValue(void) const;
 
