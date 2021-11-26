@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 14:29:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 17:17:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,18 @@
 # include <vector>
 # include <map>
 
+# include "../utils/Byte.hpp"
+
 namespace Webserv {
 
 	namespace Http {
 
 		class Route {
 			public:
+				typedef	Webserv::Utils::Byte		byte_type;
 
 				typedef std::map<std::string, std::string>	error_pages_type;
-				typedef	std::size_t					client_max_body_size_type;
+				typedef	byte_type					client_max_body_size_type;
 				typedef std::string					upload_store_type;
 
 				typedef std::string					return_type;

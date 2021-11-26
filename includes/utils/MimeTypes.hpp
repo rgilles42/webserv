@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 14:01:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 16:39:24 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <functional>
 
 # include "../utils.hpp"
+
+# include "ci_less.hpp"
 
 # define DEFAULT_MIME_TYPE std::string("application/octet-stream")
 

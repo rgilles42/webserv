@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:47:23 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 12:02:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 16:32:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,6 @@
 # endif
 
 # define SSTR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
-
-struct ci_less : std::binary_function<std::string, std::string, bool> {
-	// case-independent (ci) compare_less binary function
-	struct nocase_compare : public std::binary_function<unsigned char,unsigned char,bool>
-	{
-		bool operator() (const unsigned char& c1, const unsigned char& c2) const {
-			return std::tolower (c1) < std::tolower (c2);
-		}
-	};
-	bool operator() (const std::string & s1, const std::string & s2) const {
-		return std::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end(), nocase_compare ());
-	}
-};
 
 std::string	&ltrim(std::string &s);
 std::string	&rtrim(std::string &s);

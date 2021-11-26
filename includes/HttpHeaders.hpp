@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/11 18:04:59 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 16:39:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdexcept>
 
 # include "utils.hpp"
+
+# include "../includes/utils/ci_less.hpp"
 
 # define CR						std::string("\r")
 # define LF						std::string("\n")

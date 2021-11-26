@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 15:00:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 17:16:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,25 @@
 # include <vector>
 # include <map>
 
+# include "../utils/Byte.hpp"
+
 namespace Webserv {
 
 	namespace Http {
 
 		class Server {
 			public:
+				typedef	Webserv::Utils::Byte		byte_type;
+
 				typedef std::string					name_type;
 				typedef std::string					host_type;
 				typedef std::string					port_type;
 
 				typedef std::map<std::string, std::string>	error_pages_type;
-				typedef	std::size_t					client_max_body_size_type;
+				typedef	byte_type					client_max_body_size_type;
 				typedef std::string					upload_store_type;
 
-				typedef std::string					return_type;
+				typedef std::vector<std::string>	return_type;
 				typedef bool						autoindex_type;
 				typedef std::string					root_type;
 				typedef std::vector<std::string>	index_type;
@@ -73,7 +77,7 @@ namespace Webserv {
 				void	setPort(const port_type &port = "80");
 
 				void	setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page);
-				void	setClientMaxBodySize(const client_max_body_size_type &size = 1048576);
+				void	setClientMaxBodySize(const client_max_body_size_type &size = client_max_body_size_type(1, client_max_body_size_type::U_MB));
 		};
 
 

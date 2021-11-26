@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 11:55:23 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 17:17:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # include "./HttpResponse.hpp"
 # include "./utils.hpp"
 
+# include "./utils/Byte.hpp"
 # include "./utils/Token.hpp"
 # include "./utils/Lexer.hpp"
 # include "./utils/Block.hpp"
