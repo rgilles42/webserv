@@ -23,7 +23,7 @@ namespace webserv
 		private:
 			std::string	location_cgi;
 			std::string location_file;
-			int		fd_save[2];
+			int		fd_save;
 			int		fd_return;
 			char	*args[3];
 			std::map<std:string, std::string> m_env;
