@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 12:02:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/26 14:01:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ namespace Webserv {
 
 	namespace Utils {
 
+		// Need to be into the http module
 		class MimeTypes {
 
 			protected:
