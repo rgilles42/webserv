@@ -6,7 +6,7 @@
 /*   By: pkevin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2021/11/18 09:13:29 by yun              ###   ########.fr       */
+/*   Updated: 2021/11/29 11:37:41 by pkevin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 #include <map>
 #include <vector>
 #include <ctring>
-#include <pollh
+#include <poll.h>
+#include <unistd.h>
+#include <fnctl.h>
 
 namespace webserv
 {

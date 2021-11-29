@@ -6,7 +6,7 @@
 /*   By: pkevin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2021/11/29 09:41:16 by pkevin           ###   ########.fr       */
+/*   Updated: 2021/11/29 11:38:00 by pkevin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int Poll::start(void)
 					SOCKET client_socket = accept(poll_fds[i].fd, (SOCKADDR*)&client_addr, &client_lenght);
 
                     /* Change non-blocking socket_client*/
-					if (fcntl(c_socket, F_SETFL, O_NONBLOCK) < 0)
+					if (fcntl(client_socket, F_SETFL, O_NONBLOCK) < 0)
 					{
 						perror("fnctl");
 					}
