@@ -68,7 +68,8 @@ namespace webserv
     {
         pid_t   pid;
         int     status;
-        int     fd[2];
+        int     fd_in[2];
+	int	fd_out[2];
         int     ret;
 
         if(pipe(fd) < 0)
