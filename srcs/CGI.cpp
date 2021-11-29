@@ -68,7 +68,7 @@ namespace webserv
     {
         pid_t   pid;
         int     status;
-        int     fd_in[2];
+//        int     fd_in[2];
 	int	fd_out[2];
         int     ret;
 
@@ -82,9 +82,9 @@ namespace webserv
         }
         else (pid == 0)
         {
-            close(fd_in[1]);
-	    dup2(fd_in[0], 0);
-	    close(fd_in[0]);
+//          close(fd_in[1]);
+//	    dup2(fd_in[0], 0);
+//	    close(fd_in[0]);
             close(fd_out[0]);
 	    dup2(fd_out[1], 1);
             close(fd_out[1]);
@@ -105,7 +105,6 @@ namespace webserv
             dup2(fd_save, 1)
             close(fd[0]);
         }
-        this->fd_return = fd[1];
         return ret;
     }
 }
