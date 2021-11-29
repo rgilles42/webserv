@@ -20,6 +20,7 @@
 #include <map>
 #include <sys/types.h>
 #include <sys/wait.h>
+//#include <Request.hpp>
 
 namespace webserv
 {
@@ -32,10 +33,11 @@ namespace webserv
 			int		fd;
 			char	*args[3];
 			std::map<std::string, std::string> m_env;
+//			Request request;
 
 		public:
-			CGI();
-			CGI(std::string path_cgi, std::string location_file);
+			CGI(/*Request req*/);
+			CGI(/*Rquest req*/,std::string path_cgi, std::string location_file);
 			~CGI();
 
 			char	**env();
