@@ -82,10 +82,12 @@ namespace webserv
         }
         else (pid == 0)
         {
-            close(1);
-            close(fd[0]);
-            if (dup2(fd[1], 1))
-                exit(500);
+            close(fd_in[1]);
+	    dup2(fd_in[0], 0);
+	    close(fd_in[0]);
+            close(fd_out[0]);
+	    dup2(fd_out[1], 1);
+            close(fd_out[1]);
             ret = execve(this->args[0], this->args, this->env());
             if(ret < 0)
                 exit(500);
@@ -93,6 +95,10 @@ namespace webserv
         }
         else
         {
+//	    this->fd = fd_out[0];
+//	    fnctl();
+//          select()
+//          read
             waitpid(pid, &status, 0);
             if (WEXITED(status))
                 ret = WEXITSTATUS(status);
