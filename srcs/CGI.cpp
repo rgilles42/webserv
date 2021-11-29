@@ -90,11 +90,11 @@ namespace webserv
         else (pid == 0)
         {
             close(fd_in[1]);
-                if (dup2(fd_in[0], 0) < 0)
+            if (dup2(fd_in[0], 0) < 0)
                 throw dupCGIFailed();
-                close(fd_in[0]);
+            close(fd_in[0]);
             close(fd_out[0]);
-                if (dup2(fd_out[1], 1) < 0)
+            if (dup2(fd_out[1], 1) < 0)
                 throw dupCGIFailed();
             close(fd_out[1]);
             ret = execve(this->args[0], this->args, this->env());
