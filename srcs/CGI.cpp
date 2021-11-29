@@ -7,10 +7,6 @@ namespace webserv
         args[0] = NULL;
         args[1] = NULL;
         args[2] = NULL;
-
-        this->fd_save = dup(0);
-        if (!fd_save)
-            throw dupCGIFailed();
     }
 
     CGI::CGI(std::string location, std::string file)
@@ -20,18 +16,12 @@ namespace webserv
         args[0] = (char*)location_cgi.c_str();
         args[1] = (char*)location_file.c_str();
         args[2] = NULL;
-
-        this->fd_save = dup(0);
-        if (!fd_save)
-            throw dupCGIFailed();
     }
 
     CGI::~CGI()
     {
-        if(fd_save)
-            close(fd_save[1]);
-        if (fd_return)
-            close (fd_return);
+        if (this->fd)
+            close(this->fd);
     }
 
     void    CGI::add_env_var(std::string name, std::string value)
@@ -64,12 +54,29 @@ namespace webserv
         return ret;
     }
 
+    void    CGI::readFD()
+    {
+        ssize_t         size_read = 0;
+        char    buffer[2048 + 1];
+
+        size_read = read(this->fd, buffer, 2048 + 1);
+        if (size_read < 0)
+        {
+            perror("recv:");
+        }
+        std::cout<<size_read<<std::endl;
+        buffer[size_read] = '\0';
+        this->cgi_message = buffer;
+        std::cout<<"read end"<<std::endl;
+        close(fd);
+    }
+
     int CGI::exec()
     {
         pid_t   pid;
         int     status;
-//        int     fd_in[2];
-	int	fd_out[2];
+        int     fd_in[2];
+	    int     fd_out[2];
         int     ret;
 
         if(pipe(fd) < 0)
@@ -82,11 +89,13 @@ namespace webserv
         }
         else (pid == 0)
         {
-//          close(fd_in[1]);
-//	    dup2(fd_in[0], 0);
-//	    close(fd_in[0]);
+            close(fd_in[1]);
+                if (dup2(fd_in[0], 0) < 0)
+                throw dupCGIFailed();
+                close(fd_in[0]);
             close(fd_out[0]);
-	    dup2(fd_out[1], 1);
+                if (dup2(fd_out[1], 1) < 0)
+                throw dupCGIFailed();
             close(fd_out[1]);
             ret = execve(this->args[0], this->args, this->env());
             if(ret < 0)
@@ -95,15 +104,18 @@ namespace webserv
         }
         else
         {
-//	    this->fd = fd_out[0];
-//	    fnctl();
-//          select()
-//          read
+            this->fd = fd_out[0];
+//          if (fcntl(this->fd, F_SETFL,O_NONBLOCK) < 0)
+  //            perror("Fnctl: ");
+//          select ?
+            readFD();
             waitpid(pid, &status, 0);
-            if (WEXITED(status))
+            if (WIFEXITED(status))
                 ret = WEXITSTATUS(status);
-            dup2(fd_save, 1)
-            close(fd[0]);
+            close(fd_in[0]);
+            close(fd_in[1]);
+            close(fd_out[0]);
+            close(fd_out[1]);
         }
         return ret;
     }

@@ -14,7 +14,12 @@
 # define CGI_HPP
 
 #include <exception>
-	
+#include <string.h>
+#include <iostream>
+#include <unistd.h>
+#include <map>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 namespace webserv
 {
@@ -23,10 +28,10 @@ namespace webserv
 		private:
 			std::string	location_cgi;
 			std::string location_file;
-			int		fd_save;
-			int		fd_return;
+			std::string	cgi_message;
+			int		fd;
 			char	*args[3];
-			std::map<std:string, std::string> m_env;
+			std::map<std::string, std::string> m_env;
 
 		public:
 			CGI();
@@ -35,9 +40,9 @@ namespace webserv
 
 			char	**env();
 			int		exec();
-			void	add_env_var(std::string var);
+			void	add_env_var(std::string name, std::string value);
 			void	set_args(std::string location, std::string file);
-
+			void	readFD();
 
 			struct	dupCGIFailed : public std::exception
 			{
