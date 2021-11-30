@@ -49,16 +49,17 @@ void    Poll::add_fd(int fd, short events, Poll::fd_type type)
 
 void Poll::init(std::vector<Socket> sockets_servers)
 {
-    this->n_fds = sockets_server.size();
-    this->n_srv = n_fds;
-    this->poll_fds = new pollfd[n_fds * 2];
+    this->nb_fds = sockets_server.size();
+    this->nb_srv = nb_fds;
+    this->poll_fds = new pollfd[nb_fds * 3];
 
     for (int i = 0; i < this->n_fds; i++)
     {
-        poll_fds[i].fd = sockets_servers[i];
-        poll_fds[i].events = POLLIN;
+/*        poll_fds[i].fd = sockets_servers[i];
+        poll_fds[i].events = POLLIN;*/
+        add_fd(socket_server[i], POLLIN, Poll::Socket_server);
     }
-    for (int i = this->n_fds; i < thi->n_fds * 2; i++)
+    for (int i = this->nb_fds; i < thi->nb_fds * 2; i++)
     {
         poll_fds[i].fd = -1;
         poll_fds[i].events = 0;
@@ -82,7 +83,7 @@ int Poll::exec(void)
 		{
 			if (!poll_fds[i].revents)	//if no event detected - continue
 				continue;
-			if (poll_fds[i].revents & POLLIN && is_socket_srv(poll_fds[i].fd)
+			if (poll_fds[i].revents & POLLIN && fds[poll_fds[i] == Poll::Socket_server])
 			{
                 /* TO DO - replace socket fct*/
 			    socklen_t client_lenght = sizeof(client_addr);
@@ -92,7 +93,7 @@ int Poll::exec(void)
 					perror("fnctl");
                 /* End TO DO*/
 
-                this->add_fd(client_socket, POLLIN);
+                this->add_fd(client_socket, POLLIN, Poll::Socket_client);
                 j = 0;
                 std::vector<void (*)(int)> vect1 =  = this->events[Poll::onConnection];
                 while (j < vect1.size())
@@ -147,14 +148,6 @@ int Poll::exec(void)
 			}
 		}
     }
-}
-
-bool    Poll::is_socket_server(int socket)
-{
-    for (size_t i = 0; i < this->n_srv; i++)
-        if (poll_fds[i] == socket)
-            return (1);
-    return (0);
 }
 
 }

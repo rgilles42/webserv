@@ -36,7 +36,8 @@ namespace webserv
 
 			enum fd_types
 			{
-				Socket,
+				Socket_server,
+				Socket_client,
 				CGI
 			}
 
@@ -46,9 +47,6 @@ namespace webserv
 			size_t							nb_srv;
 			std::map<Poll::eventTypes, std::vector<void (*)(int)> >	events;
 			std::map<int, Poll::fd_types>	fds;
-			bool							is_enable;
-
-			bool	is_socket_server(int socket);
 
 		public:
 			/* Constructors */
