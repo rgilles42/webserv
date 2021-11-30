@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 12:00:52 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/30 17:41:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ namespace Webserv {
 			this->fromString(fileContent);
 		}
 
+		MimeTypes::MimeTypes(const block_vector &blocks) {
+			this->fromBlocks(blocks);
+		}
+
 		void						MimeTypes::merge(const MimeTypes &x) {
 			MapType::const_iterator it = x.mappedTypes.begin();
 
@@ -37,6 +41,10 @@ namespace Webserv {
 
 		void						MimeTypes::set(const std::string &key, const std::string &value) {
 			this->mappedTypes[key] = value;
+		}
+
+		void						MimeTypes::clear(void) {
+			this->mappedTypes.clear();
 		}
 
 		const std::string	MimeTypes::getType(const std::string &path, const std::string &fallback) const {
@@ -71,6 +79,7 @@ namespace Webserv {
 		 * - type (whitespaces) extensions ;
 		 * - type (no extensions) ;
 		 * If there's no ';' this is will throw an error in console and block the starting of the webserv
+		 * TODO: delete this and everything liked to this method
 		*/
 		void									MimeTypes::fromString(const std::string &mimeTypesContent) {
 			std::string				line;
@@ -99,6 +108,31 @@ namespace Webserv {
 					line = trim(line);
 					i++;
 				}
+			}
+		}
+
+		void									MimeTypes::fromBlocks(const block_vector &blocks) {
+			size_t							i;
+			std::string						key;
+			std::string						value;
+			block_vector::const_iterator	blockIt = blocks.begin();
+			while (blockIt != blocks.end()) {
+				if (!blockIt->isComment()) {
+					i = 0;
+					block_vector::value_type::values_type values = blockIt->getValues();
+					block_vector::value_type::values_type::const_iterator valueIt = values.begin();
+					while (valueIt != values.end()) {
+						if (i <= 0) {
+							value = valueIt->getValue();
+						} else {
+							key = valueIt->getValue();
+							this->set(key, value);
+						}
+						valueIt++;
+						i++;
+					}
+				}
+				blockIt++;
 			}
 		}
 

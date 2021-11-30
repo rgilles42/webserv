@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/11/26 17:13:12 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/11/30 17:37:16 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,9 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Block.hpp \
 				$(HEADER_DIR)/utils/Parser.hpp \
 				$(HEADER_DIR)/utils/MimeTypes.hpp \
-				$(HEADER_DIR)/utils/Config.hpp
+				$(HEADER_DIR)/Config.hpp \
+				$(HEADER_DIR)/http/Server.hpp \
+				$(HEADER_DIR)/http/Route.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/Ressource.cpp \
@@ -52,7 +54,9 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Block.cpp \
 				$(SRC_DIR)/utils/Parser.cpp \
 				$(SRC_DIR)/utils/MimeTypes.cpp \
-				$(SRC_DIR)/utils/Config.cpp
+				$(SRC_DIR)/Config.cpp \
+				$(SRC_DIR)/http/Server.cpp \
+				$(SRC_DIR)/http/Route.cpp
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
 OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)

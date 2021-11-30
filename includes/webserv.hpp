@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 17:17:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/30 16:42:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@
 # include "./utils/Parser.hpp"
 # include "./utils/MimeTypes.hpp"
 
-# include "./utils/Config.hpp"
+# include "./Config.hpp"
 
 # include "Json.hpp"
 

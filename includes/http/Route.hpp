@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 17:45:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/30 18:29:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <map>
 
 # include "../utils/Byte.hpp"
+# include "../utils/Block.hpp"
 
 namespace Webserv {
 
@@ -27,6 +28,8 @@ namespace Webserv {
 		class Route {
 			public:
 				typedef	Webserv::Utils::Byte		byte_type;
+				typedef	Webserv::Utils::Block		block_type;
+				typedef std::vector<block_type>		block_vector;
 
 				typedef std::map<std::string, std::string>	error_pages_type;
 				typedef	byte_type					client_max_body_size_type;
@@ -59,7 +62,10 @@ namespace Webserv {
 
 			public:
 				Route(void);
+				Route(const block_vector &blocks);
 				~Route();
+
+				void	fromBlocks(const block_vector &blocks);
 
 				void	setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page);
 				void	setClientMaxBodySize(const client_max_body_size_type &size = client_max_body_size_type(1, client_max_body_size_type::U_MB));
@@ -75,47 +81,6 @@ namespace Webserv {
 				void	addRoute(const routes_map::key_type &path, const routes_map::mapped_type &route);
 
 		};
-
-		Route::Route(void) {}
-
-		Route::~Route() {}
-
-		void 	Route::setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page) {
-			this->error_pages[errorCode] = page;
-		}
-
-		void 	Route::setClientMaxBodySize(const client_max_body_size_type &client_max_body_size) {
-			this->client_max_body_size = client_max_body_size;
-		}
-
-		void 	Route::setUploadStore(const upload_store_type &upload_store) {
-			this->upload_store = upload_store;
-		}
-
-		void 	Route::setReturn(const return_type &_return) {
-			this->_return = _return;
-		}
-
-
-		void 	Route::setAutoindex(const autoindex_type &autoindex) {
-			this->autoindex = autoindex;
-		}
-
-		void 	Route::setRoot(const root_type &root) {
-			this->root = root;
-		}
-
-		void 	Route::setIndex(const index_type &index) {
-			this->index = index;
-		}
-
-		void 	Route::setLimitExcept(const limit_except_type &limit_except) {
-			this->limit_except = limit_except;
-		}
-
-		void 	Route::addRoute(const routes_map::key_type &path, const routes_map::mapped_type &route) {
-			this->routes[path] = route;
-		}
 
 	} // namespace Http
 

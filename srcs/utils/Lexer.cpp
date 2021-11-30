@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 11:27:51 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/30 16:37:31 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ namespace Webserv {
 			ssize_t	bracket = 0;
 
 			while (pos < this->tokens.size()) {
-				// std::cout << "|" << this->tokens[pos].getValue() << ":" << this->tokens[pos].getType() << "|" << std::endl;
 				if (this->tokens[pos].isText()) {
 					pos = this->checkTokenText(pos);
 				} else if (this->tokens[pos].isSimpleEnd()) {

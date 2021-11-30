@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 17:10:52 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/30 16:42:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,7 +289,7 @@ void writeJson(const Json *data, size_t indent = 0) {
 
 int main(void) {
 
-	Webserv::Utils::Config config;
+	Webserv::Config config;
 
 	config.addConfigFile("./conf/test.conf");
 

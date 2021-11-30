@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 17:44:07 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/11/30 18:27:26 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,17 @@
 # include <string>
 # include <vector>
 # include <map>
+# include <algorithm>
 
+# include "Route.hpp"
+
+# include "../utils/Block.hpp"
 # include "../utils/Byte.hpp"
+
+# define DEFAULT_SERVER_NAME Webserv::Http::Server::name_type("")
+# define DEFAULT_HOST Webserv::Http::Server::host_type("0.0.0.0")
+# define DEFAULT_PORT Webserv::Http::Server::port_type("80")
+# define DEFAULT_CLIENT_MAX_BODY_SIZE Webserv::Http::Server::client_max_body_size_type(1, Webserv::Http::Server::client_max_body_size_type::U_MB)
 
 namespace Webserv {
 
@@ -27,6 +36,8 @@ namespace Webserv {
 		class Server {
 			public:
 				typedef	Webserv::Utils::Byte		byte_type;
+				typedef	Webserv::Utils::Block		block_type;
+				typedef std::vector<block_type>		block_vector;
 
 				typedef std::string					name_type;
 				typedef std::string					host_type;
@@ -43,7 +54,7 @@ namespace Webserv {
 
 				// typedef std::vector<std::string>	limit_except_type;
 
-				typedef std::string					route_type;
+				typedef Webserv::Http::Route				route_type;
 				typedef std::map<std::string, route_type>	routes_map;
 
 			protected:
@@ -70,15 +81,18 @@ namespace Webserv {
 
 			public:
 				Server(void);
+				Server(const block_vector &blocks);
 				~Server();
 
-				void	setServerName(const name_type &serverName);
-				void	setHost(const host_type &host = "0.0.0.0");
-				void	setPort(const port_type &port = "80");
+				void	fromBlocks(const block_vector &blocks);
+
+				void	setServerName(const name_type &serverName = DEFAULT_SERVER_NAME);
+				void	setHost(const host_type &host = DEFAULT_HOST);
+				void	setPort(const port_type &port = DEFAULT_PORT);
 
 				void	setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page);
-				void	setClientMaxBodySize(const client_max_body_size_type &client_max_body_size = client_max_body_size_type(1, client_max_body_size_type::U_MB));
-				void	setUploadStore(const upload_store_type &upload_store = "/");
+				void	setClientMaxBodySize(const client_max_body_size_type &client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE);
+				void	setUploadStore(const upload_store_type &upload_store);
 
 				void	setReturn(const return_type &_return);
 				void	setAutoindex(const autoindex_type &autoindex);
@@ -88,58 +102,6 @@ namespace Webserv {
 				void	addRoute(const routes_map::key_type &path, const routes_map::mapped_type &route);
 
 		};
-
-
-		Server::Server(void) {}
-
-		Server::~Server() {}
-
-		void 	Server::setServerName(const name_type &serverName) {
-			this->serverName = serverName;
-		}
-
-		void 	Server::setHost(const host_type &host) {
-			this->host = host;
-		}
-
-		void 	Server::setPort(const port_type &port) {
-			this->port = port;
-		}
-
-
-		void 	Server::setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page) {
-			this->error_pages[errorCode] = page;
-		}
-
-		void 	Server::setClientMaxBodySize(const client_max_body_size_type &client_max_body_size) {
-			this->client_max_body_size = client_max_body_size;
-		}
-
-		void 	Server::setUploadStore(const upload_store_type &upload_store) {
-			this->upload_store = upload_store;
-		}
-
-		void 	Server::setReturn(const return_type &_return) {
-			this->_return = _return;
-		}
-
-
-		void 	Server::setAutoindex(const autoindex_type &autoindex) {
-			this->autoindex = autoindex;
-		}
-
-		void 	Server::setRoot(const root_type &root) {
-			this->root = root;
-		}
-
-		void 	Server::setIndex(const index_type &index) {
-			this->index = index;
-		}
-
-
-		void 	Server::addRoute(const routes_map::key_type &path, const routes_map::mapped_type &route) {
-			this->routes[path] = route;
-		}
 
 	} // namespace Http
 
