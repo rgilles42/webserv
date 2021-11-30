@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 //#include <Request.hpp>
+//#include <Poll.hpp>
 
 namespace webserv
 {
@@ -34,6 +35,10 @@ namespace webserv
 			char	*args[3];
 			std::map<std::string, std::string> m_env;
 //			Request request;
+//			VirtualServer srv;
+//			Poll	poll_cgi;
+
+			void	free_dtab(char **tab);
 
 		public:
 			CGI(/*Request req*/);
@@ -42,6 +47,7 @@ namespace webserv
 
 			char	**env();
 			int		exec();
+			void	init_env_var();
 			void	add_env_var(std::string name, std::string value);
 			void	set_args(std::string location, std::string file);
 			void	readFD();

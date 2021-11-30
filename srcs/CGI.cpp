@@ -24,6 +24,46 @@ namespace webserv
             close(this->fd);
     }
 
+    void    init_env_var()
+    {
+        /*--------*/
+        /* SERVER */
+        /*--------*/
+
+        add_env_var("SERVER_SOFTWARE", "Webserv/HTTP/1.1");
+//        add_env_var("SERVER_NAME", this->srv.name());
+        add_env_var("GATEWAY_INTERFACE", "CGI/1.1");
+
+        /*---------*/
+        /* Request */
+        /*---------*/
+
+        add_env_var("SERVER_PROTOCOL", )
+//        add_env_var("SERVER_PORT", srv.port());
+//        add_env_var("REQUEST_METHODS",this->request.methods());
+//        add_env_var("PATH_INFO", this->request.path_info());
+        add_env_var("PATH_TRANSLATED", "") //? Need more infos
+        add_env_var("SCRIPT_NAME", this->location_cgi.c_str());
+//        add_env_var("QUERY_STRING", this->request.query_string());
+//        add_env_var("REMOTE_HOTE", this->request.hote_client());
+//        add_env_var("REMOTE_ADDR", this->request.client_add());
+        add_env_var("AUTH_SCRIPT", "") //? Need more infos
+        add_env_var("REMOTE_USER", this->request.client_user()); //if script protect and srv allow identification
+//        add_env_var("CONTENT_TYPE", this->request.content_type());
+        add_env_var("CONTENT_LENGHT", this->request.content_lenght());
+
+        /*--------*/
+        /* Client */
+        /*--------*/
+
+//        add_env_var("HTTP_ACCEPT", this->request.http_accept());
+//        add_env_var("HTTP_ACCEPT_LANGUAGE", this->request.http_accept_language());
+//        add_env_var("HTTP_USER_AGENT", this->request.navigateur());
+//        add_env_var("HTTP_COOKIE", this->request.cookie());   //BONUS
+        add_env_var("HTTP_COOKIE", "");
+        add_env_var("HTTP_REFERER", ""); //? Need more infos
+    }
+
     void    CGI::add_env_var(std::string name, std::string value)
     {
         this->m_env.insert(std::make_pair(name, value));
@@ -52,6 +92,19 @@ namespace webserv
         }
         ret[i] = NULL;
         return ret;
+    }
+
+    void    CGI::free_dtab(char **tab)
+    {
+        int i;
+
+        i = 0;
+        while (tab[i] != NULL)
+        {
+            free(tab[i]);
+            i++;
+        }
+        free(tab);
     }
 
     void    CGI::readFD()
@@ -83,7 +136,13 @@ namespace webserv
         if(pipe(fd_in) < 0)
             throw pipeCGIFailed();
         if(pipe(fd_out) < 0)
+         {
+            close(fd_in[0]);
+            close(fd_in[1]);
             throw pipeCGIFailed();
+         }
+
+        this->poll_cgi.add_fd(this->fd, POLLIN);
 
         env =this->env();
         pid = fork();
@@ -97,14 +156,19 @@ namespace webserv
             close(fd_in[1]);
             if (dup2(fd_in[0], 0) < 0)
             {
-//                free_dtab(env);
+                close(fd_in[0]);
+                close(fd_out[0]);
+                close(fd_out[0]);
+                free_dtab(env);
                 throw dupCGIFailed();
             }
             close(fd_in[0]);
             close(fd_out[0]);
             if (dup2(fd_out[1], 1) < 0)
             {
-//                free_dtab(env);
+                close(fd_in[0]);
+                close(fd_out[1]);
+                free_dtab(env);
                 throw dupCGIFailed();
             }
             close(fd_out[1]);
@@ -116,19 +180,15 @@ namespace webserv
         else
         {
             this->fd = fd_out[0];
-//          if (fcntl(this->fd, F_SETFL,O_NONBLOCK) < 0)
-  //            perror("Fnctl: ");
-//          select ?
-            readFD();
             waitpid(pid, &status, 0);
             if (WIFEXITED(status))
                 ret = WEXITSTATUS(status);
+            //this->fd = fd_out[0] ?
             close(fd_in[0]);
             close(fd_in[1]);
-            close(fd_out[0]);
             close(fd_out[1]);
         }
-//      free_dtab(env);        
+        free_dtab(env);        
         return ret;
     }
 }
