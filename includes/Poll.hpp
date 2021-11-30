@@ -32,25 +32,36 @@ namespace webserv
 				onReadyRead,
 				onReadyWrite
 			};
+
 		private:
 			struct pollfd					poll_fds;
-			size_t							n_fds;
-			size_t							n_srv;
+			size_t							nb_fds;
+			size_t							nb_srv;
 			std::map<Poll::eventTypes, std::vector<void (*)(int)> >	events;
 			bool							is_enable;
 
-
 			bool	is_socket_server(int socket);
+
 		public:
+			/* Constructors */
 			Poll(void);
 			Poll(std::vector<Socket> sockets_servers)	//TO DO - def
 			Poll(std::vector<Socket> sockets_servers);	//TO DO - def
 			~Poll(void);
 
 			void 	registerEvent(Poll::eventTypes type, void (*ft)(int));
+			void	add_fd(int fd, short events);
 
 			void	init(std::vector<Socket> sockets_servers)	//def
-			int		start(void);
+			int		exec(void);
+
+			struct  pollFailed : public std::exception
+            {
+                virtual const char* what() const throw()
+                {
+                    return ("Poll: failed execution");
+                }
+            };
 
 	};
 }
