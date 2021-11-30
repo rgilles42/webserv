@@ -136,14 +136,20 @@ namespace webserv
         if(pipe(fd_in) < 0)
             throw pipeCGIFailed();
         if(pipe(fd_out) < 0)
-         {
+        {
             close(fd_in[0]);
             close(fd_in[1]);
             throw pipeCGIFailed();
-         }
+        }
+
+        if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
+            perror("Fcntl");
+        if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
+            perror("Fcntl");
 
         this->poll_cgi.add_fd(this->fd, POLLIN);
 
+        init_env();
         env =this->env();
         pid = fork();
         if (pid < 0)
