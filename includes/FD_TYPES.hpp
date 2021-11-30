@@ -22,8 +22,7 @@ namespace webserv
         FD_TYPES(int fd, enum FD_TYPES::fd_type) type;
         ~FD_TYPES();
 
-        bool is_socket(int fd);
-        bool is_cgi(int fd);
+        bool is_socket();
     };
 }
 

@@ -6,23 +6,10 @@ namespace webserv
 
     FD_TYPES::~FD_TYPES();
 
-    bool    FD_TYPES::is_socket(int fd)
+    bool    FD_TYPES::is_socket()
     {
-        if (this->m_fd == fd)
-        {
-            if (this->type == FD_TYPES::Socket)
+        if (this->type == FD_TYPES::Socket)
                 return true;
-        }
-        return false;
-    }
-
-    bool    FD_TYPES::is_cgi(int fd)
-    {
-        if (this->m_fd == fd)
-        {
-            if (this->type == FD_TYPES::CGI)
-                return true;
-        }
         return false;
     }
 }
