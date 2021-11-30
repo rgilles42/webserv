@@ -38,11 +38,12 @@ void    Poll::registerEvent(eventType type, void (*f)(int))
     events.insert(std::make_pair(type, &f));
 }
 
-void    Poll::add_fd(int fd, short events)
+void    Poll::add_fd(int fd, short events, Poll::fd_type type)
 {
     this->poll_fds[this->nb_fds].fd = fd;
     this->poll_fds[this->nb_fds].events = events;
 
+    this->fds.insert(std::make_pair(fd, types));
     this->nb_fds++;
 }
 
@@ -103,6 +104,7 @@ int Poll::exec(void)
 			}
 			else if (poll_fds[i].revents & POLLIN)
 			{
+                // if (fds[poll_fds[i].fd] == Poll::Socket)
                 j = 0;
                 std::vector<void (*)(int)> vect2 = this->events[Poll::onReadConnection];
                 while (j < vect2.size())
@@ -112,9 +114,11 @@ int Poll::exec(void)
                     j++;
                 }
 				poll_fds[i].events = POLLOUT;
+                // else
 			}
 			else if (poll_fds[i].revents & POLLOUT)
 			{
+                // if (fds[poll_fds[i].fd] == Poll::Socket)
                 j = 0;
                 std::vector<void (*)(int)> vect3 = this->events[Poll::onReadyWrite];
                 while (j < vect3.size())
@@ -128,6 +132,9 @@ int Poll::exec(void)
 				closesocket(poll_fds[i].fd);
                 /* End TO DO*/
 
+                //else
+
+//                fds.erase(poll_fds[i].fd); //Can change
 				poll_fds[i].fd = -1;
 				poll_fds[i].events = 0;
                 while (i + 1 <= n_fds)

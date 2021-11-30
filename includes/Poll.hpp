@@ -20,6 +20,7 @@
 #include <poll.h>
 #include <unistd.h>
 #include <fnctl.h>
+#include "FD_TYPES.hpp"
 
 namespace webserv
 {
@@ -33,11 +34,18 @@ namespace webserv
 				onReadyWrite
 			};
 
+			enum fd_types
+			{
+				Socket,
+				CGI
+			}
+
 		private:
 			struct pollfd					poll_fds;
 			size_t							nb_fds;
 			size_t							nb_srv;
 			std::map<Poll::eventTypes, std::vector<void (*)(int)> >	events;
+			std::map<int, Poll::fd_types>	fds;
 			bool							is_enable;
 
 			bool	is_socket_server(int socket);
