@@ -56,7 +56,7 @@ namespace webserv
 			~Poll(void);
 
 			void 	registerEvent(Poll::eventTypes type, void (*ft)(int));
-			void	add_fd(int fd, short events);
+			void	add_fd(int fd, short events, Poll::fd_type type);
 
 			void	init(std::vector<Socket> sockets_servers)	//def
 			int		exec(void);
