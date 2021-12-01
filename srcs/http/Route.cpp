@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 18:39:56 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 22:55:17 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ namespace Webserv {
 				}
 				blockIt++;
 			}
+		}
+
+		void	Route::setMimesTypes(const mimes_types_type &mimesTypes) {
+			this->mimesTypes = mimesTypes;
 		}
 
 		void 	Route::setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page) {

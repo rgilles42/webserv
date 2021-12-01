@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:14:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 22:50:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@
 # include "./utils/Block.hpp"
 # include "./utils/Parser.hpp"
 # include "./utils/MimeTypes.hpp"
+# include "./utils/Address.hpp"
 
 # include "./Config.hpp"
 

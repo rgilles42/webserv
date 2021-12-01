@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 19:15:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 22:54:42 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ namespace Webserv {
 				block_type::values_type::value_type::token_value value(values.at(0).getValue());
 				if (value == "server") {
 					server_type newServer;
-					newServer;
+					newServer.setMimesTypes(this->globalMimesTypes);
 					newServer.fromBlocks(it->getChilds());
 					this->servers.push_back(newServer);
 				} else if (value == "types") {

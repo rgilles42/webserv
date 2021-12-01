@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 18:39:53 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 22:55:09 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ namespace Webserv {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
 						if (directive == "location") {
 							route_type newRoute;
+							newRoute.setMimesTypes(this->mimesTypes);
 							newRoute.fromBlocks(blockIt->getChilds());
 							this->routes["/"] = newRoute;
 						} else if (directive == "types") {
@@ -40,11 +41,18 @@ namespace Webserv {
 							this->mimesTypes.fromBlocks(blockIt->getChilds());
 						} else if (directive == "server_name" && values.size() > 2) {
 							this->setServerName(values.at(1).getValue());
+						} else if (directive == "listen" && values.size() > 2) {
+							this->setServerName(values.at(1).getValue());
 						}
 					}
 				}
 				blockIt++;
 			}
+		}
+
+
+		void	Server::setMimesTypes(const mimes_types_type &mimesTypes) {
+			this->mimesTypes = mimesTypes;
 		}
 
 		void 	Server::setServerName(const name_type &serverName) {

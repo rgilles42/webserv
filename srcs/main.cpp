@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:15:19 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 23:20:21 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,11 +231,17 @@ ssize_t receive_basic(SOCKET s, std::string &result)
 
 int main(void) {
 
-	Webserv::Config config;
+	// Webserv::Config config;
 
-	config.addConfigFile("./conf/test.conf");
+	// config.addConfigFile("./conf/test.conf");
 
-	config.processFiles();
+	// config.processFiles();
+
+	Webserv::Utils::Address myIp;
+
+	myIp.fromString("192.168.1.1");
+
+	std::cout << myIp.toString() << std::endl;
 
 	return EXIT_SUCCESS;
 }
