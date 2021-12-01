@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/30 18:29:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:23:43 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 # include "../utils/Byte.hpp"
 # include "../utils/Block.hpp"
+# include "../utils/MimeTypes.hpp"
 
 namespace Webserv {
 
@@ -30,6 +31,8 @@ namespace Webserv {
 				typedef	Webserv::Utils::Byte		byte_type;
 				typedef	Webserv::Utils::Block		block_type;
 				typedef std::vector<block_type>		block_vector;
+
+				typedef Webserv::Utils::MimeTypes	mimes_types_type;
 
 				typedef std::map<std::string, std::string>	error_pages_type;
 				typedef	byte_type					client_max_body_size_type;
@@ -46,6 +49,7 @@ namespace Webserv {
 				typedef std::map<std::string, route_type>	routes_map;
 
 			protected:
+				mimes_types_type	mimesTypes;
 
 				error_pages_type	error_pages;
 				client_max_body_size_type	client_max_body_size;
@@ -62,7 +66,6 @@ namespace Webserv {
 
 			public:
 				Route(void);
-				Route(const block_vector &blocks);
 				~Route();
 
 				void	fromBlocks(const block_vector &blocks);

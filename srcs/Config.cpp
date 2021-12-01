@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/30 18:16:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:24:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,8 @@ namespace Webserv {
 				block_type::values_type::value_type::token_value value(values.at(0).getValue());
 				std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 				if (value == "server") {
-					server_type newServer(it->getChilds());
+					server_type newServer;
+					newServer.fromBlocks(it->getChilds());
 					this->servers.push_back(newServer);
 				} else if (value == "types") {
 					this->globalMimesTypes.clear();

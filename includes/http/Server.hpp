@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/30 18:27:26 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:23:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 # include "../utils/Block.hpp"
 # include "../utils/Byte.hpp"
+# include "../utils/MimeTypes.hpp"
 
 # define DEFAULT_SERVER_NAME Webserv::Http::Server::name_type("")
 # define DEFAULT_HOST Webserv::Http::Server::host_type("0.0.0.0")
@@ -38,6 +39,8 @@ namespace Webserv {
 				typedef	Webserv::Utils::Byte		byte_type;
 				typedef	Webserv::Utils::Block		block_type;
 				typedef std::vector<block_type>		block_vector;
+
+				typedef Webserv::Utils::MimeTypes	mimes_types_type;
 
 				typedef std::string					name_type;
 				typedef std::string					host_type;
@@ -58,6 +61,8 @@ namespace Webserv {
 				typedef std::map<std::string, route_type>	routes_map;
 
 			protected:
+				mimes_types_type	mimesTypes;
+
 				name_type			serverName;
 				host_type			host;
 				port_type			port;
@@ -81,7 +86,6 @@ namespace Webserv {
 
 			public:
 				Server(void);
-				Server(const block_vector &blocks);
 				~Server();
 
 				void	fromBlocks(const block_vector &blocks);

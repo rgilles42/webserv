@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/30 18:30:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:26:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@ namespace Webserv {
 		Route::Route(void) {}
 
 		Route::~Route() {}
-		Route::Route(const block_vector &blocks) {
-			this->fromBlocks(blocks);
-		}
 
 		void	Route::fromBlocks(const block_vector &blocks) {
 			block_vector::const_iterator	blockIt = blocks.begin();
@@ -32,14 +29,19 @@ namespace Webserv {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
 						std::transform(directive.begin(), directive.end(), directive.begin(), ::tolower);
 						if (directive == "location") {
-							route_type newRoute(blockIt->getChilds());
+							route_type newRoute;
+							newRoute.fromBlocks(blockIt->getChilds());
 							this->routes["/"] = newRoute;
+						} else if (directive == "types") {
+							this->mimesTypes.clear();
+							this->mimesTypes.fromBlocks(blockIt->getChilds());
 						}
 					}
 				}
 				blockIt++;
 			}
 		}
+
 		void 	Route::setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page) {
 			this->error_pages[errorCode] = page;
 		}
