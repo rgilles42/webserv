@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/11/30 17:37:16 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/12/01 17:15:03 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/HttpRequest.hpp \
 				$(HEADER_DIR)/HttpResponse.hpp \
 				$(HEADER_DIR)/utils.hpp \
-				$(HEADER_DIR)/Json.hpp \
 				$(HEADER_DIR)/utils/ci_less.hpp \
 				$(HEADER_DIR)/utils/Byte.hpp \
 				$(HEADER_DIR)/utils/Token.hpp \
@@ -47,7 +46,6 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/HttpRequest.cpp \
 				$(SRC_DIR)/HttpResponse.cpp \
 				${SRC_DIR}/utils.cpp \
-				${SRC_DIR}/Json.cpp \
 				$(SRC_DIR)/utils/Byte.cpp \
 				$(SRC_DIR)/utils/Token.cpp \
 				$(SRC_DIR)/utils/Lexer.cpp \

@@ -22,7 +22,7 @@ namespace Webserv {
 			this->blockenize(tokens);
 		}
 
-		const Parser::block_vector	Parser::getBlocks(void) const {
+		const Parser::block_vector	&Parser::getBlocks(void) const {
 			return this->blocks;
 		}
 
@@ -30,7 +30,7 @@ namespace Webserv {
 			this->blocks.clear();
 		}
 
-		const Parser::block_vector Parser::blockenize(const token_vector &tokens) {
+		const Parser::block_vector	&Parser::blockenize(const token_vector &tokens) {
 			size_t pos = 0;
 
 			while (pos < tokens.size()) {

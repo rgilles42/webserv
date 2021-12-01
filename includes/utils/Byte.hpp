@@ -49,8 +49,8 @@ namespace Webserv {
 				void				setValue(const value_type &value);
 				void				setUnit(const unit_type &unit = Byte::U_B);
 
-				value_type			getValue(void) const;
-				unit_type			getUnit(void) const;
+				const value_type	&getValue(void) const;
+				const unit_type		&getUnit(void) const;
 
 				value_type			toUnit(const unit_type &unit) const;
 

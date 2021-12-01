@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 16:18:23 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:15:19 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,64 +190,6 @@ ssize_t receive_basic(SOCKET s, std::string &result)
 
 // 	return EXIT_SUCCESS;
 // }
-
-void writeJson(const Json *data, size_t indent = 0) {
-	if (!data) {
-		std::cout << "NULL" << std::endl;
-		return ;
-	}
-
-	switch (data->getValueType()) {
-
-		default:
-		case Json::T_NULL: {
-			std::cout << "NULL" << std::endl;
-			break;
-		}
-
-		case Json::T_BOOLEAN: {
-			std::cout << (data->asBool() ? "true" : "false") << std::endl;
-			break;
-		}
-
-		case Json::T_NUMBER: {
-			std::cout << data->asNumber() << std::endl;
-			break;
-		}
-
-		case Json::T_STRING: {
-			std::cout << data->asString() << std::endl;
-			break;
-		}
-
-		case Json::T_ARRAY: {
-			Json::array_type array = data->asArray();
-			Json::array_type::const_iterator it = array.begin();
-			std::cout << "[" << std::endl;
-			while (it != array.end()) {
-				writeJson((*it), indent + 1);
-				it++;
-			}
-			std::cout << "]" << std::endl;
-			break;
-		}
-
-		case Json::T_OBJECT: {
-			Json::object_type object = data->asObject();
-			Json::object_type::const_iterator it = object.begin();
-			std::cout << "{" << std::endl;
-			while (it != object.end()) {
-				std::cout << (*it).first << ":";
-				writeJson((*it).second, indent + 1);
-				it++;
-			}
-			std::cout << "}" << std::endl;
-			break;
-		}
-
-	}
-}
-
 
 // int main(void) {
 

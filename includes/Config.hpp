@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 16:23:31 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:13:07 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,15 @@ namespace Webserv {
 
 			typedef Webserv::Utils::MimeTypes		mimes_types_type;
 
+			struct comp_block_vector {
+				bool operator() (block_type b1, block_type b2) {
+					(void)b2;
+					return (b1.isSimple());
+				}
+			};
+
 		protected:
+			comp_block_vector					compBlockVector;
 			file_vector							files;
 
 			std::map<file_type, std::string>	filesMap;
@@ -55,6 +63,7 @@ namespace Webserv {
 			server_vector						servers;
 			mimes_types_type					globalMimesTypes;
 
+			void	sortBlocks(const block_vector &blocks);
 		public:
 			Config(void);
 			~Config();

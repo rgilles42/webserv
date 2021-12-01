@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:32:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/30 17:15:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:07:19 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ namespace Webserv {
 			public:
 				Block(const block_type &type= Block::T_SIMPLE);
 
-				block_type			getType(void) const;
-				const values_type	getValues(void) const;
-				const childs_type	getChilds(void) const;
+				const block_type	&getType(void) const;
+				const values_type	&getValues(void) const;
+				const childs_type	&getChilds(void) const;
 
 				void				setType(const block_type &type = Block::T_SIMPLE);
 

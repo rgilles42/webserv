@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:51:10 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/23 13:40:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:07:31 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ namespace Webserv {
 			this->type = type;
 		}
 
-		Block::block_type			Block::getType(void) const {
+		const Block::block_type		&Block::getType(void) const {
 			return this->type;
 		}
 
-		const Block::values_type	Block::getValues(void) const {
+		const Block::values_type	&Block::getValues(void) const {
 			return this->values;
 		}
 
-		const Block::childs_type	Block::getChilds(void) const {
+		const Block::childs_type	&Block::getChilds(void) const {
 			return this->childs;
 		}
 

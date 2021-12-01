@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 11:27:53 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:10:18 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ namespace Webserv {
 							this->token = token;
 						}
 						virtual ~LexerException() throw() {}
-						const token_type getToken() const {
+						const token_type &getToken() const {
 							return this->token;
 						}
 						virtual const char	*what() const throw() {
@@ -112,11 +112,11 @@ namespace Webserv {
 				Lexer(void);
 				Lexer(const std::string &str);
 
-				const token_vector	tokenize(const std::string &str);
+				const token_vector	&tokenize(const std::string &str);
 
 				void				resetLexer(void);
 
-				const token_vector	getTokens(void) const;
+				const token_vector	&getTokens(void) const;
 
 				void				drawTokens(void) const;
 

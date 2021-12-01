@@ -111,9 +111,9 @@ namespace Webserv {
 				Parser(void);
 				Parser(const token_vector &tokens);
 
-				const block_vector	blockenize(const token_vector &tokens);
+				const block_vector	&blockenize(const token_vector &tokens);
 
-				const block_vector	getBlocks(void) const;
+				const block_vector	&getBlocks(void) const;
 
 				void				resetParser(void);
 

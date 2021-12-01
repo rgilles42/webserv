@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 16:24:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:50:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,28 +117,42 @@ namespace Webserv {
 			filesIt++;
 		}
 
-		block_vector::const_iterator it = this->blocks.begin();
-		while (it != this->blocks.end()) {
-			block_type::values_type values = it->getValues();
-			if (values.size() > 0) {
-				block_type::values_type::value_type::token_value value(values.at(0).getValue());
-				std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-				if (value == "server") {
-					server_type newServer;
-					newServer.fromBlocks(it->getChilds());
-					this->servers.push_back(newServer);
-				} else if (value == "types") {
-					this->globalMimesTypes.clear();
-					this->globalMimesTypes.fromBlocks(it->getChilds());
-				} else {
-					std::cerr << "Unknown context: \"" << value << "\"" << std::endl;
-					return false;
-				}
-			}
-			it++;
-		}
+		this->sortBlocks(this->blocks);
+
+		parser_type::drawBlocks(this->blocks);
+
+		// block_vector::const_iterator it = this->blocks.begin();
+		// while (it != this->blocks.end()) {
+		// 	block_type::values_type values = it->getValues();
+		// 	if (values.size() > 0) {
+		// 		block_type::values_type::value_type::token_value value(values.at(0).getValue());
+		// 		std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+		// 		if (value == "server") {
+		// 			server_type newServer;
+		// 			newServer.fromBlocks(it->getChilds());
+		// 			this->servers.push_back(newServer);
+		// 		} else if (value == "types") {
+		// 			this->globalMimesTypes.clear();
+		// 			this->globalMimesTypes.fromBlocks(it->getChilds());
+		// 		} else {
+		// 			std::cerr << "Unknown context: \"" << value << "\"" << std::endl;
+		// 			return false;
+		// 		}
+		// 	}
+		// 	it++;
+		// }
 
 		return true;
+	}
+
+	void	Config::sortBlocks(const block_vector &blocks) {
+		// std::sort(blocks.begin(), blocks.end(), this->compBlockVector);
+		block_vector::const_iterator it = blocks.begin();
+		while (it != blocks.end()) {
+			block_vector child = it->getChilds();
+			this->sortBlocks(child);
+			it++;
+		}
 	}
 
 

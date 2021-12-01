@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 16:14:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 17:18:22 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:08:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ namespace Webserv {
 			this->unit = unit;
 		}
 
-		Byte::value_type		Byte::getValue(void) const {
+		const Byte::value_type	&Byte::getValue(void) const {
 			return this->value;
 		}
 
-		Byte::unit_type		Byte::getUnit(void) const {
+		const Byte::unit_type	&Byte::getUnit(void) const {
 			return this->unit;
 		}
 

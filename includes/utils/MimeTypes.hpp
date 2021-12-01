@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/30 17:33:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:21:04 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace Webserv {
 				void						set(const std::string &key, const std::string &value);
 				void						clear(void);
 
-				const std::string			getType(const std::string &path, const std::string &fallback = DEFAULT_MIME_TYPE) const;
+				const std::string			&getType(const std::string &path, const std::string &fallback = DEFAULT_MIME_TYPE) const;
 				const ReturnExtensionsType	getExtensions(const std::string &type) const;
 
 				void						fromString(const std::string &fileContent);

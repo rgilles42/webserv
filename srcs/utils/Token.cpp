@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 11:22:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:19:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@ namespace Webserv {
 			this->position = position;
 		}
 
-		const Token::token_value	Token::getValue(void) const {
+		const Token::token_value	&Token::getValue(void) const {
 			return this->value;
 		}
 
-		Token::token_type			Token::getType(void) const {
+		const Token::token_type		&Token::getType(void) const {
 			return this->type;
 		}
 
-		Token::token_line			Token::getLine(void) const {
+		const Token::token_line		&Token::getLine(void) const {
 			return this->line;
 		}
 
-		Token::token_pos			Token::getPosition(void) const {
+		const Token::token_pos		&Token::getPosition(void) const {
 			return this->position;
 		}
 

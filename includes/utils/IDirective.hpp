@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Directive.hpp                                      :+:      :+:    :+:   */
+/*   IDirective.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 16:25:51 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 10:37:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:09:17 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ namespace Webserv {
 
 				virtual ~IDirective() {};
 
-				virtual const name_type			getName(void) const {
+				virtual const name_type			&getName(void) const {
 					return this->name;
 				}
-				virtual const context_vector	getContexts(void) const {
+				virtual const context_vector	&getContexts(void) const {
 					return this->contexts;
 				}
-				virtual const argc_type			getArgc(void) const {
+				virtual const argc_type			&getArgc(void) const {
 					return this->argc;
 				}
-				virtual const value_type		getdefaultValue(void) const {
+				virtual const value_type		&getdefaultValue(void) const {
 					return this->defaultValue;
 				}
 

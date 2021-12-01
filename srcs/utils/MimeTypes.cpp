@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/30 17:41:05 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 17:21:01 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ namespace Webserv {
 			this->mappedTypes.clear();
 		}
 
-		const std::string	MimeTypes::getType(const std::string &path, const std::string &fallback) const {
+		const std::string			&MimeTypes::getType(const std::string &path, const std::string &fallback) const {
 			std::string fileExtension = getFileExtension(path);
 			if (path.length() <= 0 || fileExtension.length() <= 0) {
 				return fallback;
