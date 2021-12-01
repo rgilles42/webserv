@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 16:23:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 19:15:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ namespace Webserv {
 				~Server();
 
 				void	fromBlocks(const block_vector &blocks);
+
+				void	setMimesTypes(const mimes_types_type &mimestypes);
 
 				void	setServerName(const name_type &serverName = DEFAULT_SERVER_NAME);
 				void	setHost(const host_type &host = DEFAULT_HOST);

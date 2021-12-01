@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:32:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:07:19 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 18:02:25 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ namespace Webserv {
 
 				void				addValue(const token_type &token);
 
+				void				setChilds(const childs_type &childs);
 				void				addChild(const Block &child);
 
 				bool				is(block_type &type) const;

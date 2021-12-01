@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 16:26:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 18:39:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ namespace Webserv {
 					block_vector::value_type::values_type values = blockIt->getValues();
 					if (values.size() > 0) {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
-						std::transform(directive.begin(), directive.end(), directive.begin(), ::tolower);
 						if (directive == "location") {
 							route_type newRoute;
 							newRoute.fromBlocks(blockIt->getChilds());

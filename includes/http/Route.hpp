@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 16:23:43 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 19:16:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ namespace Webserv {
 				~Route();
 
 				void	fromBlocks(const block_vector &blocks);
+
+				void	setMimesTypes(const mimes_types_type &mimesTypes);
 
 				void	setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page);
 				void	setClientMaxBodySize(const client_max_body_size_type &size = client_max_body_size_type(1, client_max_body_size_type::U_MB));

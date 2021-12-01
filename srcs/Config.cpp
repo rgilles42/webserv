@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 16:50:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/01 19:15:03 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,49 @@ namespace Webserv {
 		}
 		this->files.push_back(file);
 		return true;
+	}
+
+	void	Config::formatBlocks(block_vector &blocks) {
+		if (blocks.size() <= 0) {
+			return ;
+		}
+		block_vector newVector;
+		block_vector simpleVector;
+		block_vector typesVector;
+		block_vector otherVector;
+		block_vector::const_iterator blockIt;
+		// directives tolower
+		blockIt = blocks.begin();
+		while (blockIt != blocks.end()) {
+			block_type::values_type values = blockIt->getValues();
+			block_type::values_type::value_type::token_value directive;
+			if (values.size() > 0) {
+				directive = values.at(0).getValue();
+			}
+			if (blockIt->isSimple()) {
+				simpleVector.push_back(*blockIt);
+			} else if (blockIt->isComplex()) {
+				if (directive == "types") {
+					typesVector.push_back(*blockIt);
+				} else {
+					otherVector.push_back(*blockIt);
+				}
+			}
+			blockIt++;
+		}
+		newVector.insert(newVector.end(), simpleVector.begin(), simpleVector.end());
+		newVector.insert(newVector.end(), typesVector.begin(), typesVector.end());
+		newVector.insert(newVector.end(), otherVector.begin(), otherVector.end());
+		blocks = newVector;
+		block_vector::iterator it = blocks.begin();
+		while (it != blocks.end()) {
+			block_type::childs_type childs = it->getChilds();
+			if (childs.size() > 0) {
+				this->formatBlocks(childs);
+				it->setChilds(childs);
+			}
+			it++;
+		}
 	}
 
 	bool	Config::processFiles(void) {
@@ -68,10 +111,10 @@ namespace Webserv {
 			filesIt++;
 		}
 
-		// Lexing all files
 		filesIt = this->files.begin();
 		while (filesIt != this->files.end()) {
 
+			// Lexing all files
 			this->lexerMap[(*filesIt)].tokenize(this->filesMap[(*filesIt)]);
 
 			try {
@@ -88,13 +131,7 @@ namespace Webserv {
 				return false;
 			}
 
-			filesIt++;
-		}
-
-		// Parsing all files
-		filesIt = this->files.begin();
-		while (filesIt != this->files.end()) {
-
+			// Parsing all files
 			this->parserMap[(*filesIt)].blockenize(this->lexerMap[(*filesIt)].getTokens());
 
 			try {
@@ -117,43 +154,32 @@ namespace Webserv {
 			filesIt++;
 		}
 
-		this->sortBlocks(this->blocks);
+		this->formatBlocks(this->blocks);
 
 		parser_type::drawBlocks(this->blocks);
 
-		// block_vector::const_iterator it = this->blocks.begin();
-		// while (it != this->blocks.end()) {
-		// 	block_type::values_type values = it->getValues();
-		// 	if (values.size() > 0) {
-		// 		block_type::values_type::value_type::token_value value(values.at(0).getValue());
-		// 		std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-		// 		if (value == "server") {
-		// 			server_type newServer;
-		// 			newServer.fromBlocks(it->getChilds());
-		// 			this->servers.push_back(newServer);
-		// 		} else if (value == "types") {
-		// 			this->globalMimesTypes.clear();
-		// 			this->globalMimesTypes.fromBlocks(it->getChilds());
-		// 		} else {
-		// 			std::cerr << "Unknown context: \"" << value << "\"" << std::endl;
-		// 			return false;
-		// 		}
-		// 	}
-		// 	it++;
-		// }
+		block_vector::const_iterator it = this->blocks.begin();
+		while (it != this->blocks.end()) {
+			block_type::values_type values = it->getValues();
+			if (values.size() > 0) {
+				block_type::values_type::value_type::token_value value(values.at(0).getValue());
+				if (value == "server") {
+					server_type newServer;
+					newServer;
+					newServer.fromBlocks(it->getChilds());
+					this->servers.push_back(newServer);
+				} else if (value == "types") {
+					this->globalMimesTypes.clear();
+					this->globalMimesTypes.fromBlocks(it->getChilds());
+				} else {
+					std::cerr << "Unknown context: \"" << value << "\"" << std::endl;
+					return false;
+				}
+			}
+			it++;
+		}
 
 		return true;
 	}
-
-	void	Config::sortBlocks(const block_vector &blocks) {
-		// std::sort(blocks.begin(), blocks.end(), this->compBlockVector);
-		block_vector::const_iterator it = blocks.begin();
-		while (it != blocks.end()) {
-			block_vector child = it->getChilds();
-			this->sortBlocks(child);
-			it++;
-		}
-	}
-
 
 } // namespace Webserv
