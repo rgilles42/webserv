@@ -65,6 +65,7 @@ namespace webserv
 
 
 			/* Error struct*/
+
 			struct	dupCGIFailed : public std::exception
 			{
 				virtual const char* what() const throw()

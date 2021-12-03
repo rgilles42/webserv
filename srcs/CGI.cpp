@@ -38,6 +38,7 @@ namespace webserv
 //      this->request = req;
 //      this->server = srv;
 
+        init_env();
         if(pipe(fd_in) < 0)
             throw pipeCGIFailed();
         if(pipe(fd_out) < 0)
@@ -65,6 +66,8 @@ namespace webserv
             close(this->fd_out[1]);
     }
 
+    /* Moifiers data functions */
+
     void    init_env_var()
     {
         /*--------*/
@@ -72,7 +75,7 @@ namespace webserv
         /*--------*/
 
         add_env_var("SERVER_SOFTWARE", "Webserv/HTTP/1.1");
-//        add_env_var("SERVER_NAME", this->srv.name());
+//        add_env_var("SERVER_NAME", this->server.name());
         add_env_var("GATEWAY_INTERFACE", "CGI/1.1");
 
         /*---------*/
@@ -110,43 +113,7 @@ namespace webserv
         this->m_env.insert(std::make_pair(name, value));
     }
 
-    void   CGI::set_args(std::string location, std::string file)
-    {
-        location_cgi = location;
-        location_file = file;
-        args[0] = (char*)location_cgi.c_str();
-        args[1] = (char*)location_file.c_str();
-        args[2] = NULL;
-    }
-
-    char    **CGI::env()
-    {
-        char    **ret;
-        size_t i = 0;
-        std::map<std::string, std::string>::iterator ite = this->m_env.end();
-
-        ret = (char**)malloc(this->m_env.size() * sizeof(ret));
-        for(std::map<std::string, std::string>::iterator it = this->m_env.begin(); it != ite; it++)
-        {
-            ret[i] = (char *)std::string(it->first + "=" + it->second).c_str();
-            i++;
-        }
-        ret[i] = NULL;
-        return ret;
-    }
-
-    void    CGI::free_dtab(char **tab)
-    {
-        int i;
-
-        i = 0;
-        while (tab[i] != NULL)
-        {
-            free(tab[i]);
-            i++;
-        }
-        free(tab);
-    }
+    /* Utils functions */
 
     void    CGI::readFD()
     {
@@ -169,7 +136,6 @@ namespace webserv
         char    **env;
         int     ret;
 
-        init_env();
         env =this->env();
         pid = fork();
         if (pid < 0)
@@ -221,6 +187,24 @@ namespace webserv
         return ret;
     }
 
+    /* Getters */
+
+    char    **CGI::env()
+    {
+        char    **ret;
+        size_t i = 0;
+        std::map<std::string, std::string>::iterator ite = this->m_env.end();
+
+        ret = (char**)malloc(this->m_env.size() * sizeof(ret));
+        for(std::map<std::string, std::string>::iterator it = this->m_env.begin(); it != ite; it++)
+        {
+            ret[i] = (char *)std::string(it->first + "=" + it->second).c_str();
+            i++;
+        }
+        ret[i] = NULL;
+        return ret;
+    }
+
     int CGI::getWriteFD()
     {
         return this->fd_in[0];
@@ -231,8 +215,23 @@ namespace webserv
         return this->fd_out[0];
     }
 
-    int CGI::getResult()
+    std::string CGI::getResult()
     {
         return this->cgi_message;
+    }
+
+    /* Private */
+
+    void    CGI::free_dtab(char **tab)
+    {
+        int i;
+
+        i = 0;
+        while (tab[i] != NULL)
+        {
+            free(tab[i]);
+            i++;
+        }
+        free(tab);
     }
 }
