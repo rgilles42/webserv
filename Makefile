@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/12/03 12:46:46 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/12/03 14:10:12 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ CXX			=	g++
 CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
+				$(HEADER_DIR)/Core.hpp \
 				$(HEADER_DIR)/Ressource.hpp \
 				$(HEADER_DIR)/Socket.hpp \
 				$(HEADER_DIR)/utils.hpp \
@@ -42,6 +43,7 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/http/HttpResponse.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
+				${SRC_DIR}/Core.cpp \
 				${SRC_DIR}/Ressource.cpp \
 				$(SRC_DIR)/Socket.cpp \
 				${SRC_DIR}/utils.cpp \

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2021/12/03 14:03:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/03 14:09:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ namespace Webserv
 			{
 				onConnection,
 				onReadConnection,
-//				onReadConnectionCGI,
-//				onReadyWriteCGI,
+				// onReadConnectionCGI,
+				// onReadyWriteCGI,
 				onReadyWrite
 			};
 
@@ -64,12 +64,12 @@ namespace Webserv
 			int		exec(void);
 
 			struct  pollFailed : public std::exception
-            {
-                virtual const char* what() const throw()
-                {
-                    return ("Poll: failed execution");
-                }
-            };
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Poll: failed execution");
+				}
+			};
 
 	};
 }
