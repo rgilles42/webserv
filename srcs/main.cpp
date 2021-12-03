@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 23:20:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/03 01:30:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,42 +188,39 @@ ssize_t receive_basic(SOCKET s, std::string &result)
 // 	std::cout << request.get("Connection") << std::endl;
 // 	std::cout << request.get("Cache-Control") << std::endl;
 
-// 	return EXIT_SUCCESS;
-// }
 
-// int main(void) {
+// //The "localhost" IPv4 address
+// Webserv::Utils::Address::test("8000");
 
-// 	{
-// 		Json data;
-// 		{
-// 			Json::object_type config;
-// 			{
-// 				config["types"] = NULL;
-// 			}
-// 			{
-// 				Json::array_type servers;
-// 				{
-// 					Json::object_type server1;
-// 					server1["listen"] = new Json("80");
-// 					{
-// 						Json::object_type server1_locations;
-// 						{
-// 							Json::array_type server1_locations_limit;
-// 							server1_locations_limit.push_back(new Json("GET"));
-// 							server1_locations_limit.push_back(new Json("POST"));
-// 							server1_locations_limit.push_back(new Json("DELETE"));
-// 							server1_locations["/"] = new Json(server1_locations_limit);
-// 						}
-// 						server1["locations"] = new Json(server1_locations);
-// 					}
-// 					servers.push_back(new Json(server1));
-// 				}
-// 				config["servers"] = new Json(servers);
-// 			}
-// 			data = config;
-// 		}
-// 		writeJson(&data);
-// 	}
+// //The "localhost" IPv4 address
+// Webserv::Utils::Address::test("0.0.0.0");
+
+// //The "localhost" IPv4 address
+// Webserv::Utils::Address::test("127.0.0.1");
+
+// // The "localhost" IPv4 address, with a specified port (80)
+// Webserv::Utils::Address::test("127.0.0.1:80");
+// //The "localhost" IPv6 address
+// Webserv::Utils::Address::test("::1");
+// //The "localhost" IPv6 address, with a specified port (80)
+// Webserv::Utils::Address::test("[::1]:80");
+// //Rosetta Code's primary server's public IPv6 address
+// Webserv::Utils::Address::test("2605:2700:0:3::4713:93e3");
+// //Rosetta Code's primary server's public IPv6 address, with a specified port (80)
+// Webserv::Utils::Address::test("[2605:2700:0:3::4713:93e3]:80");
+
+// //ipv4 space
+// Webserv::Utils::Address::test("::ffff:192.168.173.22");
+// //ipv4 space with port
+// Webserv::Utils::Address::test("[::ffff:192.168.173.22]:80");
+// //trailing compression
+// Webserv::Utils::Address::test("1::");
+// //trailing compression with port
+// Webserv::Utils::Address::test("[1::]:80");
+// //'any' address compression
+// Webserv::Utils::Address::test("::");
+// //'any' address compression with port
+// Webserv::Utils::Address::test("[::]:80");
 
 // 	return EXIT_SUCCESS;
 // }
@@ -237,11 +234,17 @@ int main(void) {
 
 	// config.processFiles();
 
-	Webserv::Utils::Address myIp;
+	// Webserv::Utils::Address myIp;
 
-	myIp.fromString("192.168.1.1");
+	// myIp.fromString("192.168.1.1");
 
-	std::cout << myIp.toString() << std::endl;
+	// std::cout << myIp.toString() << std::endl;
+
+	Webserv::Utils::Address test;
+
+	test.fromString("127.0.0.1:80");
+
+	std::cout << test.getStrAddress() << "|" << test.getIntPort() << std::endl;
 
 	return EXIT_SUCCESS;
 }
