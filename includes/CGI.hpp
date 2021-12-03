@@ -31,27 +31,40 @@ namespace webserv
 			std::string	location_cgi;
 			std::string location_file;
 			std::string	cgi_message;
-			int		fd;
+			int		fd_in[2];
+			int		fd_out[2];
 			char	*args[3];
 			std::map<std::string, std::string> m_env;
 //			Request request;
-//			VirtualServer srv;
-//			Poll	poll_cgi;
+//			VirtualServer server;
 
 			void	free_dtab(char **tab);
 
 		public:
-			CGI(/*Request req*/);
-			CGI(/*Rquest req*/,std::string path_cgi, std::string location_file);
+			/* Constructor / Destructor */
+
+			CGI(/*Rquest req*, VirtualServer srv*/,std::string path_cgi, std::string location_file);
 			~CGI();
 
-			char	**env();
-			int		exec();
-			void	init_env_var();
-			void	add_env_var(std::string name, std::string value);
-			void	set_args(std::string location, std::string file);
-			void	readFD();
+			/* Getter */
+	
+			std::string	getResult();	//Return cgi result after read
+			int		getWriteFD();		//Return fd to write bodu request
+			int		getReadFD();		//Return fd to read result cgi
+			char	**env();			//Return convert env with char ** format
 
+			/* Modifers data functions */
+
+			void	init_env_var();	//init env
+			void	add_env_var(std::string name, std::string value);	//Add var in env map
+
+			/* Utils functions*/
+
+			int		exec();		//Execve cgi
+			void	readFD();	//Read fd_out[0] and stock in std::string (cgi_message += buffer)
+
+
+			/* Error struct*/
 			struct	dupCGIFailed : public std::exception
 			{
 				virtual const char* what() const throw()
@@ -59,11 +72,28 @@ namespace webserv
 					return ("CGI: Dup failed");
 				}
 			};
+
 			struct	pipeCGIFailed : public std::exception
 			{
 				virtual const char* what() const throw()
 				{
 					return ("CGI: Pipe failed");
+				}
+			};
+
+			struct	fcntlCGIFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("CGI: Fcntl failed");
+				}
+			};
+
+			struct	readCGIFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("CGI: Read failed");
 				}
 			};
 

@@ -2,26 +2,67 @@
 
 namespace webserv
 {
-    CGI::CGI()
-    {
+//    CGI::CGI(/*Request req, VirtualServer srv*/)
+/*    {
         args[0] = NULL;
         args[1] = NULL;
         args[2] = NULL;
-    }
 
-    CGI::CGI(std::string location, std::string file)
+//      this->request = req;
+//      this->server = srv;
+
+        init_env();
+        if(pipe(fd_in) < 0)
+            throw pipeCGIFailed();
+        if(pipe(fd_out) < 0)
+        {
+            close(fd_in[0]);
+            close(fd_in[1]);
+            throw pipeCGIFailed();
+        }
+
+        if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
+            perror("Fcntl");
+        if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
+            perror("Fcntl");
+    }*/
+
+    CGI::CGI(/*Request req, VirtualServer srv*/std::string location, std::string file)
     {
         location_cgi = location;
         location_file = file;
         args[0] = (char*)location_cgi.c_str();
         args[1] = (char*)location_file.c_str();
         args[2] = NULL;
+
+//      this->request = req;
+//      this->server = srv;
+
+        if(pipe(fd_in) < 0)
+            throw pipeCGIFailed();
+        if(pipe(fd_out) < 0)
+        {
+            close(fd_in[0]);
+            close(fd_in[1]);
+            throw pipeCGIFailed();
+        }
+
+        if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
+            throw fcntlCGIFailed();
+        if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
+            throw fcntlCGIFailed();
     }
 
     CGI::~CGI()
     {
-        if (this->fd)
-            close(this->fd);
+        if (this->fd_in[0])
+            close(this->fd_in[0]);
+        if (this->fd_in[1])
+            close(this->fd_in[1]);
+        if (this->fd_out[0])
+            close(this->fd_out[0]);
+        if (this->fd_out[1])
+            close(this->fd_out[1]);
     }
 
     void    init_env_var()
@@ -115,69 +156,51 @@ namespace webserv
         size_read = read(this->fd, buffer, 2048 + 1);
         if (size_read < 0)
         {
-            perror("recv:");
+            throw readCGIFailed();
         }
-        std::cout<<size_read<<std::endl;
         buffer[size_read] = '\0';
-        this->cgi_message = buffer;
-        std::cout<<"read end"<<std::endl;
-        close(fd);
+        this->cgi_message += buffer;
     }
 
     int CGI::exec()
     {
         pid_t   pid;
         int     status;
-        int     fd_in[2];
-	    int     fd_out[2];
         char    **env;
         int     ret;
-
-        if(pipe(fd_in) < 0)
-            throw pipeCGIFailed();
-        if(pipe(fd_out) < 0)
-        {
-            close(fd_in[0]);
-            close(fd_in[1]);
-            throw pipeCGIFailed();
-        }
-
-        if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
-            perror("Fcntl");
-        if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
-            perror("Fcntl");
-
-        this->poll_cgi.add_fd(this->fd, POLLIN);
 
         init_env();
         env =this->env();
         pid = fork();
         if (pid < 0)
         {
-//            free_dtab(env);
+            free_dtab(env);
             throw pidCGIFailed();
         }
         else (pid == 0)
         {
-            close(fd_in[1]);
-            if (dup2(fd_in[0], 0) < 0)
+            /* Redirect stdin */
+            close(this->fd_in[1]);
+            if (dup2(this->fd_in[0], 0) < 0)
             {
-                close(fd_in[0]);
-                close(fd_out[0]);
-                close(fd_out[0]);
+                close(this->fd_in[0]);
+                close(this->fd_out[0]);
+                close(this->fd_out[0]);
                 free_dtab(env);
                 throw dupCGIFailed();
             }
-            close(fd_in[0]);
-            close(fd_out[0]);
-            if (dup2(fd_out[1], 1) < 0)
+            close(this->fd_in[0]);
+            /* Redirect stdout */
+            close(this->fd_out[0]);
+            if (dup2(this->fd_out[1], 1) < 0)
             {
-                close(fd_in[0]);
-                close(fd_out[1]);
+                close(this->fd_in[0]);
+                close(this->fd_out[1]);
                 free_dtab(env);
                 throw dupCGIFailed();
             }
             close(fd_out[1]);
+            /* Execve CGI */
             ret = execve(this->args[0], this->args, this->env());
             if(ret < 0)
                 exit(500);
@@ -185,16 +208,31 @@ namespace webserv
         }
         else
         {
-            this->fd = fd_out[0];
+            /* Waitpid and receive status */
             waitpid(pid, &status, 0);
             if (WIFEXITED(status))
                 ret = WEXITSTATUS(status);
-            //this->fd = fd_out[0] ?
+            /* close useless fds */
             close(fd_in[0]);
             close(fd_in[1]);
             close(fd_out[1]);
         }
         free_dtab(env);        
         return ret;
+    }
+
+    int CGI::getWriteFD()
+    {
+        return this->fd_in[0];
+    }
+
+    int CGI::getReadFD()
+    {
+        return this->fd_out[0];
+    }
+
+    int CGI::getResult()
+    {
+        return this->cgi_message;
     }
 }
