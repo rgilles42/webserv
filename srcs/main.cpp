@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:50:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/03 14:47:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,3 +78,14 @@ int main(void) {
 	return EXIT_SUCCESS;
 }
 
+// int main(void) {
+
+// 	Webserv::Core webserv;
+
+// 	if (!webserv.init()) {
+// 		std::cout << "Fail" << std::endl;
+// 		return EXIT_FAILURE;
+// 	}
+// 	std::cout << "Success" << std::endl;
+// 	return EXIT_SUCCESS;
+// }

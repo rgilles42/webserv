@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 18:38:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/03 14:19:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ namespace Webserv {
 		public:
 			Config(void);
 			~Config();
+
+			void	reset(void);
 
 			bool	addConfigFile(const file_type &file);
 
