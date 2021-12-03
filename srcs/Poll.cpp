@@ -116,6 +116,16 @@ int Poll::exec(void)
                 }
 				poll_fds[i].events = POLLOUT;
                 // else
+                /*
+                j = 0;
+                std::vector<void (*)(int)> vect_cgi2 = this->events[Poll::onReadConnectionCGI];
+                while (j < vect_cgi2.size())
+                {
+                    f = vect_cgi2[j];
+                    f(poll_fds[i].fd);
+                    j++;
+                }
+                */
 			}
 			else if (poll_fds[i].revents & POLLOUT)
 			{
@@ -134,7 +144,17 @@ int Poll::exec(void)
                 /* End TO DO*/
 
                 //else
+                /*
+                std::vector<void (*)(int)> vect_cgi3 = this->events[Poll::onReadyWriteCGI];
+                while (j < vect_cgi3.size())
+                {
+                    f = vect_cgi3[j];
+                    f(poll_fds[i].fd);
+                    j++;
+                }
+                /* 
 
+                */
 //                fds.erase(poll_fds[i].fd); //Can change
 				poll_fds[i].fd = -1;
 				poll_fds[i].events = 0;

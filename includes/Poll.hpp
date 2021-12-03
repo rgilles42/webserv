@@ -30,7 +30,9 @@ namespace webserv
 			enum eventTypes
 			{
 				onConnection,
-				onReadyRead,
+				onReadConnection,
+//				onReadConnectionCGI,
+//				onReadyWriteCGI,
 				onReadyWrite
 			};
 
