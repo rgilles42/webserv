@@ -64,7 +64,7 @@ void		HttpResponse::attachment(const std::string &file) {
 		this->headers.set("Content-Disposition", "attachement");
 		return ;
 	}
-	std::string filetype = getContentTypeByFile(file, "");
+	std::string filetype = Webserv::Utils::getContentTypeByFile(file, "");
 	std::string filename = file.substr(file.find_last_of("/") + 1);
 
 	this->headers.set("Content-Disposition", "attachement; filename=\"" + filename + "\"");
@@ -122,7 +122,7 @@ void		HttpResponse::send(const std::string &body) {
 }
 
 void		HttpResponse::sendFile(const std::string &path, const std::string &options) {
-	std::string filetype = getContentTypeByFile(path, "");
+	std::string filetype = Webserv::Utils::getContentTypeByFile(path, "");
 	this->type(filetype);
 	(void)options;
 }

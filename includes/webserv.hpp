@@ -41,12 +41,21 @@
 # define MAX_CONNECTION 50
 
 # include "./Ressource.hpp"
-# include "./MimeTypes.hpp"
 # include "./HttpVersion.hpp"
 # include "./HttpStatusCode.hpp"
 # include "./HttpRequest.hpp"
 # include "./HttpResponse.hpp"
 # include "./utils.hpp"
 # include "./Socket.hpp"
+
+# include "./utils/Byte.hpp"
+# include "./utils/Token.hpp"
+# include "./utils/Lexer.hpp"
+# include "./utils/Block.hpp"
+# include "./utils/Parser.hpp"
+# include "./utils/MimeTypes.hpp"
+# include "./utils/Address.hpp"
+
+# include "./Config.hpp"
 
 #endif

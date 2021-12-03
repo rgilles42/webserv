@@ -75,6 +75,6 @@ int main(void) {
 	ServerSocket.close();
 	printf("Fermeture du serveur terminee\n");
 
-	return EXIT_SUCCESS;
-}
+// 	return EXIT_SUCCESS;
+// }
 
