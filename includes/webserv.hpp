@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/19 18:23:41 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/03 12:47:12 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@
 # define MAX_CONNECTION 50
 
 # include "./Ressource.hpp"
-# include "./HttpVersion.hpp"
-# include "./HttpStatusCode.hpp"
-# include "./HttpRequest.hpp"
-# include "./HttpResponse.hpp"
 # include "./utils.hpp"
 # include "./Socket.hpp"
+
+# include "./http/HttpVersion.hpp"
+# include "./http/HttpStatusCode.hpp"
+# include "./http/HttpRequest.hpp"
+# include "./http/HttpResponse.hpp"
 
 # include "./utils/Byte.hpp"
 # include "./utils/Token.hpp"

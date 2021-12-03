@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/12/01 22:54:10 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/12/03 12:46:46 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,13 +22,7 @@ CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/Ressource.hpp \
-				$(HEADER_DIR)/HttpVersion.hpp \
-				$(HEADER_DIR)/HttpStatusCode.hpp \
-				$(HEADER_DIR)/HttpHeaders.hpp \
-				$(HEADER_DIR)/HttpRequest.hpp \
-				$(HEADER_DIR)/HttpResponse.hpp \
 				$(HEADER_DIR)/Socket.hpp \
-				$(HEADER_DIR)/utils.hpp
 				$(HEADER_DIR)/utils.hpp \
 				$(HEADER_DIR)/utils/ci_less.hpp \
 				$(HEADER_DIR)/utils/Byte.hpp \
@@ -40,14 +34,16 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Address.hpp \
 				$(HEADER_DIR)/Config.hpp \
 				$(HEADER_DIR)/http/Server.hpp \
-				$(HEADER_DIR)/http/Route.hpp
+				$(HEADER_DIR)/http/Route.hpp \
+				$(HEADER_DIR)/http/HttpVersion.hpp \
+				$(HEADER_DIR)/http/HttpStatusCode.hpp \
+				$(HEADER_DIR)/http/HttpHeaders.hpp \
+				$(HEADER_DIR)/http/HttpRequest.hpp \
+				$(HEADER_DIR)/http/HttpResponse.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/Ressource.cpp \
-				$(SRC_DIR)/HttpStatusCode.cpp \
-				$(SRC_DIR)/HttpHeaders.cpp \
-				$(SRC_DIR)/HttpRequest.cpp \
-				$(SRC_DIR)/HttpResponse.cpp \
+				$(SRC_DIR)/Socket.cpp \
 				${SRC_DIR}/utils.cpp \
 				$(SRC_DIR)/utils/Byte.cpp \
 				$(SRC_DIR)/utils/Token.cpp \
@@ -58,7 +54,12 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Address.cpp \
 				$(SRC_DIR)/Config.cpp \
 				$(SRC_DIR)/http/Server.cpp \
-				$(SRC_DIR)/http/Route.cpp
+				$(SRC_DIR)/http/Route.cpp \
+				$(SRC_DIR)/http/HttpVersion.cpp \
+				$(SRC_DIR)/http/HttpStatusCode.cpp \
+				$(SRC_DIR)/http/HttpHeaders.cpp \
+				$(SRC_DIR)/http/HttpRequest.cpp \
+				$(SRC_DIR)/http/HttpResponse.cpp
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
 OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)

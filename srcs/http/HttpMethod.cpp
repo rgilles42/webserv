@@ -10,23 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/HttpMethod.hpp"
+#include "../../includes/http/HttpMethod.hpp"
 
-HttpMethod::Method	HttpMethod::getMethod(const std::string &methodString) {
-	HttpMethod::MethodStringMap::const_iterator it = HttpMethodStrings.begin();
+namespace Webserv {
 
-	while (it != HttpMethodStrings.end()) {
-		if (it->second == methodString) {
-			return it->first;
+	namespace Http {
+
+		HttpMethod::Method	HttpMethod::getMethod(const std::string &methodString) {
+			HttpMethod::MethodStringMap::const_iterator it = HttpMethodStrings.begin();
+
+			while (it != HttpMethodStrings.end()) {
+				if (it->second == methodString) {
+					return it->first;
+				}
+				it++;
+			}
+			return HttpMethod::unknown;
 		}
-		it++;
-	}
-	return HttpMethod::unknown;
-}
 
-std::string			HttpMethod::getMethodString(const HttpMethod::Method &method) {
-	if (HttpMethodStrings.count(method) <= 0) {
-		return HttpMethodStrings.at(HttpMethod::unknown);
-	}
-	return HttpMethodStrings.at(method);
-}
+		std::string			HttpMethod::getMethodString(const HttpMethod::Method &method) {
+			if (HttpMethodStrings.count(method) <= 0) {
+				return HttpMethodStrings.at(HttpMethod::unknown);
+			}
+			return HttpMethodStrings.at(method);
+		}
+
+	} // namespace Http
+
+} // namespace Webserv

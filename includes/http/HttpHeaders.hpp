@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 16:39:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/03 12:41:48 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # include <functional>
 # include <stdexcept>
 
-# include "utils.hpp"
+# include "../utils.hpp"
 
-# include "../includes/utils/ci_less.hpp"
+# include "../utils/ci_less.hpp"
 
 # define CR						std::string("\r")
 # define LF						std::string("\n")
@@ -31,24 +31,31 @@
 
 # define IS_AUTHORIZED_KEY_CHAR( c ) (std::isalpha(c) || std::isdigit(c) || AUTHORIZED_CHAR.find(c))
 
-class HttpHeaders {
+namespace Webserv {
 
-	protected:
-		typedef std::multimap<std::string, std::string, ci_less>	headerType;
-		headerType	headers;
+	namespace Http {
 
-	public:
-		// Headers Methods
-		bool		isKeyValid(const std::string &key);
-		void		set(const std::string &key, const std::string &value);
-		void		append(const std::string &key, const std::string &value);
-		const std::string	get(const std::string &key) const;
-		bool		has(const std::string &key) const;
+		class HttpHeaders {
 
-		// Utils Methods
-		std::string	toString(void) const;
-		void		fromString(const std::string &request);
+			protected:
+				typedef std::multimap<std::string, std::string, ci_less>	headerType;
+				headerType	headers;
 
-};
+			public:
+				// Headers Methods
+				bool		isKeyValid(const std::string &key);
+				void		set(const std::string &key, const std::string &value);
+				void		append(const std::string &key, const std::string &value);
+				const std::string	get(const std::string &key) const;
+				bool		has(const std::string &key) const;
+
+				// Utils Methods
+				std::string	toString(void) const;
+				void		fromString(const std::string &request);
+		};
+
+	} // namespace Utils
+
+} // namespace Webserv
 
 #endif

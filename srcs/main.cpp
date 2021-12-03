@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/22 19:27:09 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/03 12:50:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ int main(void) {
 		}
 		printf("Chaine reçue : %s\n", message.c_str());
 
-		HttpRequest request(message);
+		Webserv::Http::HttpRequest request(message);
 		Ressource currentRessource("./default_pages/index.html");
 		currentRessource.setContent(getFileContents(currentRessource.getUri()));
-		currentRessource.setContentType(getContentTypeByFile(currentRessource.getUri()));
-		HttpResponse response(currentRessource);
+		currentRessource.setContentType(Webserv::Utils::getContentTypeByFile(currentRessource.getUri(), "text/plain"));
+		Webserv::Http::HttpResponse response(currentRessource);
 		ClientSocket.write(response.toString().c_str(), response.toString().length());
 		printf("Chaine envoyée : %s\n", response.toString().c_str());
 		shutdown(ClientSocket.fd(), 2);
@@ -75,6 +75,6 @@ int main(void) {
 	ServerSocket.close();
 	printf("Fermeture du serveur terminee\n");
 
-// 	return EXIT_SUCCESS;
-// }
+	return EXIT_SUCCESS;
+}
 
