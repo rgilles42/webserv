@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yun <marvin@42.fr>                         +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 16:50:50 by yun               #+#    #+#             */
-/*   Updated: 2021/11/24 17:05:17 by yun              ###   ########.fr       */
+/*   Updated: 2021/12/03 14:03:33 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 //#include <Request.hpp>
 //#include <Poll.hpp>
 
-namespace webserv
+namespace Webserv
 {
 	class CGI
 	{
@@ -47,7 +47,7 @@ namespace webserv
 			~CGI();
 
 			/* Getter */
-	
+
 			std::string	getResult();	//Return cgi result after read
 			int		getWriteFD();		//Return fd to write bodu request
 			int		getReadFD();		//Return fd to read result cgi

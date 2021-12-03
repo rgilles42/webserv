@@ -1,6 +1,6 @@
 #include "../includes/CGI.hpp"
 
-namespace webserv
+namespace Webserv
 {
 //    CGI::CGI(/*Request req, VirtualServer srv*/)
 /*    {
@@ -183,7 +183,7 @@ namespace webserv
             close(fd_in[1]);
             close(fd_out[1]);
         }
-        free_dtab(env);        
+        free_dtab(env);
         return ret;
     }
 

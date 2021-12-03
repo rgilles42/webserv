@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   Poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pkevin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2021/11/29 11:38:00 by pkevin           ###   ########.fr       */
+/*   Updated: 2021/12/03 14:03:42 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Poll.hpp"
 
-namespace webserv
+namespace Webserv
 {
 
 Poll::Poll(void)
 {
     this->n_fds = 0;
-    this->events.insert(webserv::Poll::eventTypes.onReadConnection, )
+    this->events.insert(Webserv::Poll::eventTypes.onReadConnection, )
 }
 
 Poll::Poll(std::vector<Socket> sockets_servers)
@@ -152,7 +152,7 @@ int Poll::exec(void)
                     f(poll_fds[i].fd);
                     j++;
                 }
-                /* 
+                /*
 
                 */
 //                fds.erase(poll_fds[i].fd); //Can change
