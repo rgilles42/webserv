@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 16:25:51 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:09:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/06 23:56:02 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <string>
 # include <vector>
+# include <iostream>
 
 namespace Webserv {
 
@@ -26,7 +27,7 @@ namespace Webserv {
 				typedef	std::vector<std::string>	context_vector;
 				typedef std::pair<int, int>			argc_type;
 				typedef	std::string					value_type;
-				typedef	std::string					src_value_type;
+				typedef	std::vector<std::string>	src_value_type;
 
 			protected:
 				const name_type			name;
@@ -35,13 +36,15 @@ namespace Webserv {
 				const value_type		defaultValue;
 				value_type				value;
 
-			public:
 				virtual const context_vector	fillContexts(void) const {
 					context_vector newContext;
+					std::cout << "sub" << std::endl;
 					return newContext;
 				};
 
-				IDirective(void) : contexts(this->fillContexts()) {}
+			public:
+
+				IDirective(const name_type &name = name_type(), const argc_type &argc = argc_type(-1, -1), const value_type &defaultValue = value_type()) : name(name), argc(argc), defaultValue(defaultValue) {};
 
 				virtual ~IDirective() {};
 
@@ -54,11 +57,14 @@ namespace Webserv {
 				virtual const argc_type			&getArgc(void) const {
 					return this->argc;
 				}
-				virtual const value_type		&getdefaultValue(void) const {
+				virtual const value_type		&getDefaultValue(void) const {
 					return this->defaultValue;
 				}
+				virtual const value_type		&getValue(void) const {
+					return this->value;
+				}
 
-				virtual const value_type		parseValue(const src_value_type &src) const = 0;
+				virtual void					parseValue(const src_value_type &src) = 0;
 		};
 
 	} // namespace Utils

@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/12/06 17:15:59 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/12/06 22:50:48 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,8 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Parser.hpp \
 				$(HEADER_DIR)/utils/MimeTypes.hpp \
 				$(HEADER_DIR)/utils/Address.hpp \
+				$(HEADER_DIR)/utils/IDirective.hpp \
+				$(HEADER_DIR)/utils/directives/DirectiveServerName.hpp \
 				$(HEADER_DIR)/Config.hpp \
 				$(HEADER_DIR)/http/Server.hpp \
 				$(HEADER_DIR)/http/Route.hpp \
