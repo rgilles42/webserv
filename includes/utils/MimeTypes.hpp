@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:49:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:15:43 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 # include "Block.hpp"
 
-# include "ci_less.hpp"
+# include "Ci_less.hpp"
 
 # define DEFAULT_MIME_TYPE std::string("application/octet-stream")
 
@@ -38,7 +38,7 @@ namespace Webserv {
 				typedef Webserv::Utils::Block						block_type;
 				typedef std::vector<block_type>						block_vector;
 
-				typedef	std::map<std::string, std::string, ci_less>	MapType;
+				typedef	std::map<std::string, std::string, Ci_less>	MapType;
 				typedef std::vector<std::string>					ReturnExtensionsType;
 				/**
 				 * Mapped MIME types in key/value

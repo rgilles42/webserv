@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ci_less.hpp                                        :+:      :+:    :+:   */
+/*   Ci_less.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 16:31:22 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/26 16:39:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:15:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <string>
 # include <algorithm>
 
-struct ci_less : std::binary_function<std::string, std::string, bool> {
+struct Ci_less : std::binary_function<std::string, std::string, bool> {
 	// case-independent (ci) compare_less binary function
 	struct nocase_compare : public std::binary_function<unsigned char,unsigned char,bool>
 	{

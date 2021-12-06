@@ -18,7 +18,7 @@
 # include <cmath>
 # include <map>
 
-# include "ci_less.hpp"
+# include "Ci_less.hpp"
 
 namespace Webserv {
 
@@ -35,7 +35,7 @@ namespace Webserv {
 				};
 				typedef long double	value_type;
 
-				typedef std::map<std::string, unit_type, ci_less>	unit_map;
+				typedef std::map<std::string, unit_type, Ci_less>	unit_map;
 
 				const static unit_map	unitsMap;
 

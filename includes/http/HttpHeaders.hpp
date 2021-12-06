@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:41:48 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:15:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 # include "../utils.hpp"
 
-# include "../utils/ci_less.hpp"
+# include "../utils/Ci_less.hpp"
 
 # define CR						std::string("\r")
 # define LF						std::string("\n")
@@ -38,7 +38,7 @@ namespace Webserv {
 		class HttpHeaders {
 
 			protected:
-				typedef std::multimap<std::string, std::string, ci_less>	headerType;
+				typedef std::multimap<std::string, std::string, Ci_less>	headerType;
 				headerType	headers;
 
 			public:

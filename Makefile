@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/12/03 14:10:12 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/12/06 17:15:59 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/Ressource.hpp \
 				$(HEADER_DIR)/Socket.hpp \
 				$(HEADER_DIR)/utils.hpp \
-				$(HEADER_DIR)/utils/ci_less.hpp \
+				$(HEADER_DIR)/utils/Ci_less.hpp \
 				$(HEADER_DIR)/utils/Byte.hpp \
 				$(HEADER_DIR)/utils/Token.hpp \
 				$(HEADER_DIR)/utils/Lexer.hpp \
