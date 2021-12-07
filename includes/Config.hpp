@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 14:19:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 15:41:36 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ namespace Webserv {
 			typedef	Webserv::Utils::Parser			parser_type;
 			typedef	parser_type::block_vector		block_vector;
 			typedef	parser_type::block_type			block_type;
+			typedef parser_type::directive_type		directive_type;
+			typedef parser_type::directive_map		directive_map;
 
 			typedef Webserv::Http::Server			server_type;
 			typedef std::vector<server_type>		server_vector;
@@ -56,6 +58,8 @@ namespace Webserv {
 			mimes_types_type					globalMimesTypes;
 
 			void	formatBlocks(block_vector &blocks);
+
+			const directive_map	getDirectiveMap(void) const;
 		public:
 			Config(void);
 			~Config();

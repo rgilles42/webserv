@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 14:47:31 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 16:12:12 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,32 +79,102 @@ namespace Webserv {
 		}
 	}
 
+	const Config::directive_map	Config::getDirectiveMap(void) const {
+		directive_map directives;
+
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("main");
+			directives["server"] = directive_type("server", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("main");
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["types"] = directive_type("types", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			directives["listen"] = directive_type("listen", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			directives["listen"] = directive_type("listen", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			directives["server_name"] = directive_type("server_name", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["error_page"] = directive_type("error_page", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["client_max_body_size"] = directive_type("client_max_body_size", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["location"] = directive_type("location", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("location");
+			directives["limit_except"] = directive_type("limit_except", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["return"] = directive_type("return", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["autoindex"] = directive_type("autoindex", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["root"] = directive_type("root", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["index"] = directive_type("index", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["upload_store"] = directive_type("upload_store", std::make_pair(-1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("location");
+			directives["cgi_pass"] = directive_type("cgi_pass", std::make_pair(-1, -1), contexts);
+		}
+		return directives;
+	}
+
+
 	bool	Config::processFiles(void) {
 		file_vector::const_iterator	filesIt;
 
-		parser_type::directive_map	directives;
-
-		directives["server"].push_back("main");
-		directives["listen"].push_back("server");
-		directives["server_name"].push_back("server");
-		directives["error_page"].push_back("server");
-		directives["error_page"].push_back("location");
-		directives["client_max_body_size"].push_back("server");
-		directives["client_max_body_size"].push_back("location");
-		directives["location"].push_back("server");
-		directives["location"].push_back("location");
-		directives["limit_except"].push_back("location");
-		directives["return"].push_back("server");
-		directives["return"].push_back("location");
-		directives["autoindex"].push_back("server");
-		directives["autoindex"].push_back("location");
-		directives["root"].push_back("server");
-		directives["root"].push_back("location");
-		directives["index"].push_back("server");
-		directives["index"].push_back("location");
-		directives["upload_store"].push_back("server");
-		directives["upload_store"].push_back("location");
-		directives["cgi_pass"].push_back("location");
+		directive_map	directives = this->getDirectiveMap();
 
 		// Get all files contents
 		filesIt = this->files.begin();

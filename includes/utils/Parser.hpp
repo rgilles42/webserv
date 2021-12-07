@@ -25,6 +25,7 @@
 
 # include "Token.hpp"
 # include "Block.hpp"
+# include "Directive.hpp"
 
 namespace Webserv {
 
@@ -37,8 +38,9 @@ namespace Webserv {
 				typedef std::vector<token_type>		token_vector;
 				typedef std::vector<block_type>		block_vector;
 
-				// map[directive] = [context1, context2, ...]
-				typedef std::map<std::string, std::vector<std::string> >	directive_map;
+				// map[directive] = [directive1, directive2, ...]
+				typedef Webserv::Utils::Directive	directive_type;
+				typedef directive_type::directive_map	directive_map;
 
 				class ParserException : public std::exception {
 					protected:

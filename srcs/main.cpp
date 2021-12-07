@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/06 22:55:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 15:57:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,27 +80,12 @@ void handleSignals(sig_atomic_t signum) {
 
 int main(void) {
 
-	// Webserv::Core webserv;
+	Webserv::Core webserv;
 
-	// if (!webserv.init()) {
-	// 	std::cout << "Fail" << std::endl;
-	// 	return EXIT_FAILURE;
-	// }
-	// std::cout << "Success" << std::endl;
-
-	std::vector<std::string> vec;
-
-	vec.push_back("server_name");
-	vec.push_back("google.fr");
-
-
-	Webserv::Utils::DirectiveServerName dir;
-
-	dir.parseValue(vec);
-
-	std::cout << dir.getName() << std::endl;
-	std::cout << dir.getDefaultValue() << std::endl;
-	std::cout << dir.getValue() << std::endl;
-
+	if (!webserv.init()) {
+		std::cout << "Fail" << std::endl;
+		return EXIT_FAILURE;
+	}
+	std::cout << "Success" << std::endl;
 	return EXIT_SUCCESS;
 }
