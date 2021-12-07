@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 22:55:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 15:11:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace Webserv {
 
 		Route::~Route() {}
 
-		void	Route::fromBlocks(const block_vector &blocks) {
+		bool	Route::fromBlocks(const block_vector &blocks) {
 			block_vector::const_iterator	blockIt = blocks.begin();
 			while (blockIt != blocks.end()) {
 				if (!blockIt->isComment()) {
@@ -39,6 +39,7 @@ namespace Webserv {
 				}
 				blockIt++;
 			}
+			return true;
 		}
 
 		void	Route::setMimesTypes(const mimes_types_type &mimesTypes) {

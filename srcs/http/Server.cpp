@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 22:55:09 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 15:10:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace Webserv {
 
 		Server::~Server() {}
 
-		void	Server::fromBlocks(const block_vector &blocks) {
+		bool	Server::fromBlocks(const block_vector &blocks) {
 			this->setServerName();
 			this->setHost();
 			this->setPort();
@@ -39,7 +39,11 @@ namespace Webserv {
 						} else if (directive == "types") {
 							this->mimesTypes.clear();
 							this->mimesTypes.fromBlocks(blockIt->getChilds());
-						} else if (directive == "server_name" && values.size() > 2) {
+						} else if (directive == "server_name") {
+							if (values.size() < 2) {
+								std::cerr << "Unknown context: \"" << directive << "\"" << std::endl;
+								return false;
+							}
 							this->setServerName(values.at(1).getValue());
 						} else if (directive == "listen" && values.size() > 2) {
 							this->setServerName(values.at(1).getValue());
@@ -48,6 +52,7 @@ namespace Webserv {
 				}
 				blockIt++;
 			}
+			return true;
 		}
 
 

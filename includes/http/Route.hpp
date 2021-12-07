@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 19:16:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 15:10:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ namespace Webserv {
 				Route(void);
 				~Route();
 
-				void	fromBlocks(const block_vector &blocks);
+				bool	fromBlocks(const block_vector &blocks);
 
 				void	setMimesTypes(const mimes_types_type &mimesTypes);
 
