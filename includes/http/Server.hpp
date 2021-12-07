@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 15:10:51 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 18:23:32 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 
 # include "Route.hpp"
 
+# include "../utils/Directive.hpp"
+
 # include "../utils/Block.hpp"
 # include "../utils/Byte.hpp"
 # include "../utils/MimeTypes.hpp"
 
 # define DEFAULT_SERVER_NAME Webserv::Http::Server::name_type("")
-# define DEFAULT_HOST Webserv::Http::Server::host_type("0.0.0.0")
-# define DEFAULT_PORT Webserv::Http::Server::port_type("80")
+# define DEFAULT_LISTEN Webserv::Http::Server::listen_type("0.0.0.0:80")
 # define DEFAULT_CLIENT_MAX_BODY_SIZE Webserv::Http::Server::client_max_body_size_type(1, Webserv::Http::Server::client_max_body_size_type::U_MB)
 
 namespace Webserv {
@@ -36,26 +37,29 @@ namespace Webserv {
 
 		class Server {
 			public:
-				typedef	Webserv::Utils::Byte		byte_type;
-				typedef	Webserv::Utils::Block		block_type;
-				typedef std::vector<block_type>		block_vector;
+				typedef	Webserv::Utils::Byte					byte_type;
+				typedef	Webserv::Utils::Block					block_type;
+				typedef std::vector<block_type>					block_vector;
 
-				typedef Webserv::Utils::MimeTypes	mimes_types_type;
+				typedef Webserv::Utils::MimeTypes				mimes_types_type;
 
-				typedef std::string					name_type;
-				typedef std::string					host_type;
-				typedef std::string					port_type;
+				typedef Webserv::Utils::Directive				directive_type;
 
-				typedef std::map<std::string, std::string>	error_pages_type;
-				typedef	byte_type					client_max_body_size_type;
-				typedef std::string					upload_store_type;
+				typedef directive_type::dir_server_name_type	name_type;
+				typedef directive_type::dir_listen_type			listen_type;
 
-				typedef std::vector<std::string>	return_type;
-				typedef bool						autoindex_type;
-				typedef std::string					root_type;
-				typedef std::vector<std::string>	index_type;
+				typedef directive_type::dir_error_page_type		error_pages_pair;
 
-				// typedef std::vector<std::string>	limit_except_type;
+				typedef std::map<error_pages_pair::first_type, error_pages_pair::second_type>	error_pages_type;
+				typedef directive_type::dir_client_max_body_size_type	client_max_body_size_type;
+				typedef directive_type::dir_upload_store_type	upload_store_type;
+
+				typedef directive_type::dir_return_type			return_type;
+				typedef directive_type::dir_autoindex_type		autoindex_type;
+				typedef directive_type::dir_root_type			root_type;
+				typedef directive_type::dir_index_type			index_type;
+
+				// typedef directive_type::dir_limit_except_type	limit_except_type;
 
 				typedef Webserv::Http::Route				route_type;
 				typedef std::map<std::string, route_type>	routes_map;
@@ -64,8 +68,7 @@ namespace Webserv {
 				mimes_types_type	mimesTypes;
 
 				name_type			serverName;
-				host_type			host;
-				port_type			port;
+				listen_type			listen;
 
 				// For routes too
 
@@ -93,8 +96,7 @@ namespace Webserv {
 				void	setMimesTypes(const mimes_types_type &mimestypes);
 
 				void	setServerName(const name_type &serverName = DEFAULT_SERVER_NAME);
-				void	setHost(const host_type &host = DEFAULT_HOST);
-				void	setPort(const port_type &port = DEFAULT_PORT);
+				void	setListen(const listen_type &listen = DEFAULT_LISTEN);
 
 				void	setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page);
 				void	setClientMaxBodySize(const client_max_body_size_type &client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE);

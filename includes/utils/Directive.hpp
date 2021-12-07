@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 16:12:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 18:07:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <iostream>
 
 # include "Token.hpp"
+# include "Address.hpp"
+# include "Byte.hpp"
+# include "../http/HttpStatusCode.hpp"
 
 namespace Webserv {
 
@@ -36,6 +39,21 @@ namespace Webserv {
 				typedef	std::vector<token_type>		src_value_type;
 
 				typedef std::map<name_type, Directive>	directive_map;
+
+				typedef Webserv::Http::HttpStatusCode	http_status_code_type;
+
+				typedef std::string												dir_server_name_type;
+				typedef Webserv::Utils::Address									dir_listen_type;
+				typedef std::pair<std::string, std::string>						dir_error_page_type;
+				typedef Webserv::Utils::Byte									dir_client_max_body_size_type;
+				typedef std::vector<std::string>								dir_limit_except_type;
+				typedef std::pair<http_status_code_type::StatusCode, std::string>	dir_return_type;
+				typedef bool													dir_autoindex_type;
+				typedef std::string												dir_root_type;
+				typedef std::vector<std::string>								dir_index_type;
+				typedef std::string												dir_upload_store_type;
+				typedef std::string												dir_cgi_pass_type;
+
 
 			protected:
 				name_type			name;
@@ -65,6 +83,7 @@ namespace Webserv {
 				bool					isSrcValueIsValid(const src_value_type &src) const {
 					size_t size = src.size();
 					if (size > 0) {
+						// Check if the directive is the good one
 						if (src[0].getValue() != this->name) {
 							return false;
 						}
@@ -79,6 +98,149 @@ namespace Webserv {
 					}
 					return true;
 				}
+
+				// Parsing with static methods
+
+				static bool				parseListen(const src_value_type &src, dir_listen_type &value, const dir_listen_type &defaultValue = dir_listen_type()) {
+					value = defaultValue;
+					if (src.size() > 1) {
+						if (!value.fromString(src[1].getValue())) {
+							return false;
+						}
+						if (src.size() > 2) {
+							if (value.getPort() != 0) {
+								return false;
+							}
+							value.setPort(std::atoi((src[2].getValue()).c_str()));
+						}
+					}
+					return true;
+				}
+
+				static bool				parseServerName(const src_value_type &src, dir_server_name_type &value, const dir_server_name_type &defaultValue = dir_server_name_type()) {
+					value = defaultValue;
+					if (src.size() > 1) {
+						value = src[1].getValue();
+					}
+					return true;
+				}
+
+				static bool				parseErrorPage(const src_value_type &src, dir_error_page_type &value, const dir_error_page_type &defaultValue = dir_error_page_type()) {
+					value = defaultValue;
+					if (src.size() != 3) {
+						return false;
+					}
+					value.first = src[1].getValue();
+					value.second = src[2].getValue();
+					return true;
+				}
+
+				static bool				parseClientMaxBodySize(const src_value_type &src, dir_client_max_body_size_type &value, const dir_client_max_body_size_type &defaultValue = dir_client_max_body_size_type()) {
+					value = defaultValue;
+					if (src.size() != 1) {
+						return false;
+					}
+					src_value_type::value_type::token_value tokValue = src[1].getValue();
+					value.setValue(std::atoi((tokValue).c_str()));
+					size_t pos = tokValue.find_first_not_of("0123456789");
+					value.setUnit(dir_client_max_body_size_type::getUnitByStr(tokValue.substr(pos, tokValue.length() - pos)));
+					return true;
+				}
+
+				static bool				parseLimitExcept(const src_value_type &src, dir_limit_except_type &value, const dir_limit_except_type &defaultValue = dir_limit_except_type()) {
+					value = defaultValue;
+					if (src.size() < 2) {
+						return false;
+					}
+					src_value_type::const_iterator it = src.begin() + 1;
+					while (it != src.end()) {
+						value.push_back(it->getValue());
+						it++;
+					}
+					return true;
+				}
+
+				static bool				parseReturn(const src_value_type &src, dir_return_type &value, const dir_return_type &defaultValue = dir_return_type()) {
+					value = defaultValue;
+					if (src.size() < 2) {
+						return false;
+					}
+					if (src.size() == 2) {
+						value.first = http_status_code_type::unknown;
+						value.second = src[1].getValue();
+					} else {
+						src_value_type::value_type::token_value tokValue1 = src[1].getValue();
+						if (tokValue1.find_first_not_of("0123456789") != tokValue1.npos) {
+							return false;
+						}
+						value.first = http_status_code_type::getStatusCode(std::atoi(tokValue1.c_str()));
+						if (value.first <= 0) {
+							return false;
+						}
+						if (src.size() > 2) {
+							value.second = src[2].getValue();
+						}
+					}
+					return true;
+				}
+
+				static bool				parseAutoIndex(const src_value_type &src, dir_autoindex_type &value, const dir_autoindex_type &defaultValue = dir_autoindex_type()) {
+					value = defaultValue;
+					if (src.size() != 2) {
+						return false;
+					}
+					src_value_type::value_type::token_value tokValue = src[1].getValue();
+					if (tokValue == "on" || tokValue == "true") {
+						value = true;
+						return true;
+					}
+					if (tokValue == "off" || tokValue == "false") {
+						value = false;
+						return true;
+					}
+					return false;
+				}
+
+				static bool				parseRoot(const src_value_type &src, dir_root_type &value, const dir_root_type &defaultValue = dir_root_type()) {
+					value = defaultValue;
+					if (src.size() != 2) {
+						return false;
+					}
+					value = src[1].getValue();
+					return true;
+				}
+
+				static bool				parseIndex(const src_value_type &src, dir_index_type &value, const dir_index_type &defaultValue = dir_index_type()) {
+					value = defaultValue;
+					if (src.size() < 2) {
+						return false;
+					}
+					src_value_type::const_iterator it = src.begin() + 1;
+					while (it != src.end()) {
+						value.push_back(it->getValue());
+						it++;
+					}
+					return true;
+				}
+
+				static bool				parseUploadStore(const src_value_type &src, dir_upload_store_type &value, const dir_upload_store_type &defaultValue = dir_upload_store_type()) {
+					value = defaultValue;
+					if (src.size() != 2) {
+						return false;
+					}
+					value = src[1].getValue();
+					return true;
+				}
+
+				static bool				parseCgiPass(const src_value_type &src, dir_cgi_pass_type &value, const dir_cgi_pass_type &defaultValue = dir_cgi_pass_type()) {
+					value = defaultValue;
+					if (src.size() != 2) {
+						return false;
+					}
+					value = src[1].getValue();
+					return true;
+				}
+
 		};
 
 	} // namespace Utils

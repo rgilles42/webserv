@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 16:12:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 16:37:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,91 +85,85 @@ namespace Webserv {
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("main");
-			directives["server"] = directive_type("server", std::make_pair(-1, -1), contexts);
+			directives["server"] = directive_type("server", std::make_pair(0, 0), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("main");
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["types"] = directive_type("types", std::make_pair(-1, -1), contexts);
+			directives["types"] = directive_type("types", std::make_pair(0, 0), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
-			directives["listen"] = directive_type("listen", std::make_pair(-1, -1), contexts);
+			directives["listen"] = directive_type("listen", std::make_pair(1, 2), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
-			directives["listen"] = directive_type("listen", std::make_pair(-1, -1), contexts);
-		}
-		{
-			directive_type::context_vector contexts;
-			contexts.push_back("server");
-			directives["server_name"] = directive_type("server_name", std::make_pair(-1, -1), contexts);
+			directives["server_name"] = directive_type("server_name", std::make_pair(0, 1), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["error_page"] = directive_type("error_page", std::make_pair(-1, -1), contexts);
+			directives["error_page"] = directive_type("error_page", std::make_pair(2, 2), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["client_max_body_size"] = directive_type("client_max_body_size", std::make_pair(-1, -1), contexts);
+			directives["client_max_body_size"] = directive_type("client_max_body_size", std::make_pair(1, 1), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["location"] = directive_type("location", std::make_pair(-1, -1), contexts);
+			directives["location"] = directive_type("location", std::make_pair(1, 2), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("location");
-			directives["limit_except"] = directive_type("limit_except", std::make_pair(-1, -1), contexts);
-		}
-		{
-			directive_type::context_vector contexts;
-			contexts.push_back("server");
-			contexts.push_back("location");
-			directives["return"] = directive_type("return", std::make_pair(-1, -1), contexts);
+			directives["limit_except"] = directive_type("limit_except", std::make_pair(0, -1), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["autoindex"] = directive_type("autoindex", std::make_pair(-1, -1), contexts);
+			directives["return"] = directive_type("return", std::make_pair(1, 2), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["root"] = directive_type("root", std::make_pair(-1, -1), contexts);
+			directives["autoindex"] = directive_type("autoindex", std::make_pair(1, 1), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["index"] = directive_type("index", std::make_pair(-1, -1), contexts);
+			directives["root"] = directive_type("root", std::make_pair(1, 1), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("server");
 			contexts.push_back("location");
-			directives["upload_store"] = directive_type("upload_store", std::make_pair(-1, -1), contexts);
+			directives["index"] = directive_type("index", std::make_pair(1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["upload_store"] = directive_type("upload_store", std::make_pair(1, 1), contexts);
 		}
 		{
 			directive_type::context_vector contexts;
 			contexts.push_back("location");
-			directives["cgi_pass"] = directive_type("cgi_pass", std::make_pair(-1, -1), contexts);
+			directives["cgi_pass"] = directive_type("cgi_pass", std::make_pair(1, 1), contexts);
 		}
 		return directives;
 	}
-
 
 	bool	Config::processFiles(void) {
 		file_vector::const_iterator	filesIt;
@@ -247,11 +241,15 @@ namespace Webserv {
 				if (value == "server") {
 					server_type newServer;
 					newServer.setMimesTypes(this->globalMimesTypes);
-					newServer.fromBlocks(it->getChilds());
+					if (!newServer.fromBlocks(it->getChilds())) {
+						return false;
+					}
 					this->servers.push_back(newServer);
 				} else if (value == "types") {
 					this->globalMimesTypes.clear();
-					this->globalMimesTypes.fromBlocks(it->getChilds());
+					if (!this->globalMimesTypes.fromBlocks(it->getChilds())) {
+						return false;
+					}
 				} else {
 					std::cerr << "Unknown context: \"" << value << "\"" << std::endl;
 					return false;

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:21:01 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 16:18:22 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ namespace Webserv {
 			}
 		}
 
-		void									MimeTypes::fromBlocks(const block_vector &blocks) {
+		bool									MimeTypes::fromBlocks(const block_vector &blocks) {
 			size_t							i;
 			std::string						key;
 			std::string						value;
@@ -134,6 +134,7 @@ namespace Webserv {
 				}
 				blockIt++;
 			}
+			return true;
 		}
 
 		std::string getContentTypeByFile(const std::string &filename, const std::string &fallback) {

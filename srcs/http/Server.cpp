@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 15:10:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/07 18:19:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ namespace Webserv {
 
 		bool	Server::fromBlocks(const block_vector &blocks) {
 			this->setServerName();
-			this->setHost();
-			this->setPort();
+			this->setListen();
 			this->setClientMaxBodySize();
 			block_vector::const_iterator	blockIt = blocks.begin();
 			while (blockIt != blocks.end()) {
@@ -34,11 +33,15 @@ namespace Webserv {
 						if (directive == "location") {
 							route_type newRoute;
 							newRoute.setMimesTypes(this->mimesTypes);
-							newRoute.fromBlocks(blockIt->getChilds());
+							if (!newRoute.fromBlocks(blockIt->getChilds())) {
+								return false;
+							}
 							this->routes["/"] = newRoute;
 						} else if (directive == "types") {
 							this->mimesTypes.clear();
-							this->mimesTypes.fromBlocks(blockIt->getChilds());
+							if (!this->mimesTypes.fromBlocks(blockIt->getChilds())) {
+								return false;
+							}
 						} else if (directive == "server_name") {
 							if (values.size() < 2) {
 								std::cerr << "Unknown context: \"" << directive << "\"" << std::endl;
@@ -64,12 +67,8 @@ namespace Webserv {
 			this->serverName = serverName;
 		}
 
-		void 	Server::setHost(const host_type &host) {
-			this->host = host;
-		}
-
-		void 	Server::setPort(const port_type &port) {
-			this->port = port;
+		void 	Server::setListen(const listen_type &listen) {
+			this->listen = listen;
 		}
 
 
