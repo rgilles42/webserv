@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 18:07:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 10:10:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@
 # include "Address.hpp"
 # include "Byte.hpp"
 # include "../http/HttpStatusCode.hpp"
+
+# define DEFAULT_SERVER_NAME Webserv::Utils::Directive::dir_server_name_type("")
+# define DEFAULT_LISTEN Webserv::Utils::Directive::dir_listen_type("0.0.0.0:80")
+# define DEFAULT_CLIENT_MAX_BODY_SIZE Webserv::Utils::Directive::dir_client_max_body_size_type(1, Webserv::Utils::Directive::dir_client_max_body_size_type::U_MB)
+# define DEFAULT_RETURN Webserv::Utils::Directive::dir_return_type(Webserv::Utils::Directive::http_status_code_type::unknown, "")
+# define DEFAULT_AUTOINDEX Webserv::Utils::Directive::dir_autoindex_type(false)
+# define DEFAULT_ROOT Webserv::Utils::Directive::dir_root_type("")
+# define DEFAULT_UPLOAD_STORE Webserv::Utils::Directive::dir_upload_store_type("")
 
 namespace Webserv {
 
@@ -44,7 +52,7 @@ namespace Webserv {
 
 				typedef std::string												dir_server_name_type;
 				typedef Webserv::Utils::Address									dir_listen_type;
-				typedef std::pair<std::string, std::string>						dir_error_page_type;
+				typedef std::pair<http_status_code_type::StatusCode, std::string>	dir_error_page_type;
 				typedef Webserv::Utils::Byte									dir_client_max_body_size_type;
 				typedef std::vector<std::string>								dir_limit_except_type;
 				typedef std::pair<http_status_code_type::StatusCode, std::string>	dir_return_type;
@@ -130,14 +138,21 @@ namespace Webserv {
 					if (src.size() != 3) {
 						return false;
 					}
-					value.first = src[1].getValue();
+					src_value_type::value_type::token_value tokValue1 = src[1].getValue();
+					if (tokValue1.find_first_not_of("0123456789") != tokValue1.npos) {
+						return false;
+					}
+					value.first = http_status_code_type::getStatusCode(std::atoi(tokValue1.c_str()));
+					if (value.first <= 0) {
+						return false;
+					}
 					value.second = src[2].getValue();
 					return true;
 				}
 
 				static bool				parseClientMaxBodySize(const src_value_type &src, dir_client_max_body_size_type &value, const dir_client_max_body_size_type &defaultValue = dir_client_max_body_size_type()) {
 					value = defaultValue;
-					if (src.size() != 1) {
+					if (src.size() != 2) {
 						return false;
 					}
 					src_value_type::value_type::token_value tokValue = src[1].getValue();
