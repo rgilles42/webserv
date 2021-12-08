@@ -6,14 +6,17 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 17:32:41 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 19:07:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CORE_HPP
 # define CORE_HPP
 
+# include <sstream>
+
 # include "./utils/Env.hpp"
+# include "./utils/Args.hpp"
 
 # include "Config.hpp"
 
@@ -26,6 +29,7 @@ namespace Webserv {
 		public:
 			typedef Webserv::Config		config_type;
 			typedef Webserv::Utils::Env	env_type;
+			typedef Webserv::Utils::Args	args_type;
 
 		protected:
 			std::string	customConfigFile;
@@ -33,6 +37,7 @@ namespace Webserv {
 			config_type config;
 			bool		isInit;
 			env_type	env;
+			args_type	args;
 
 		public:
 			Core(void);
@@ -45,6 +50,8 @@ namespace Webserv {
 			bool		init(void);
 
 			const bool	&isReady(void) const;
+
+			std::string	getHelp(void) const;
 	};
 
 } // namespace Webserv
