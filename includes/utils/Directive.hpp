@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 10:10:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:15:32 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <vector>
 # include <map>
 # include <algorithm>
+# include <exception>
+# include <sstream>
 
 # include <iostream>
 
@@ -61,6 +63,49 @@ namespace Webserv {
 				typedef std::vector<std::string>								dir_index_type;
 				typedef std::string												dir_upload_store_type;
 				typedef std::string												dir_cgi_pass_type;
+
+
+				class DirectiveException : public std::exception {
+					protected:
+						std::string	msg;
+						name_type	directive;
+
+					public:
+						DirectiveException(const name_type &directive = name_type(), const std::string &msg = "") : std::exception() {
+							this->msg = msg;
+							this->directive = directive;
+						}
+						virtual ~DirectiveException() throw() {}
+						const name_type	getDirective() const {
+							return this->directive;
+
+						}
+						virtual const char	*what() const throw() {
+							return this->msg.c_str();
+						}
+				};
+
+				class UnknownDirectiveException : public DirectiveException {
+					public:
+						UnknownDirectiveException(const name_type &directive = name_type()) : DirectiveException(directive) {
+							std::ostringstream ss;
+
+							ss << "Unknown directive \"" << this->directive << "\"";
+
+							this->msg = ss.str();
+						}
+				};
+
+				class InvalidValueDirectiveException : public DirectiveException {
+					public:
+						InvalidValueDirectiveException(const name_type &directive = name_type()) : DirectiveException(directive) {
+							std::ostringstream ss;
+
+							ss << "\"" << this->directive << "\" directive invalid value";
+
+							this->msg = ss.str();
+						}
+				};
 
 
 			protected:
@@ -143,7 +188,7 @@ namespace Webserv {
 						return false;
 					}
 					value.first = http_status_code_type::getStatusCode(std::atoi(tokValue1.c_str()));
-					if (value.first <= 0) {
+					if (value.first <= 0 || !http_status_code_type::isError(value.first)) {
 						return false;
 					}
 					value.second = src[2].getValue();
@@ -158,7 +203,14 @@ namespace Webserv {
 					src_value_type::value_type::token_value tokValue = src[1].getValue();
 					value.setValue(std::atoi((tokValue).c_str()));
 					size_t pos = tokValue.find_first_not_of("0123456789");
-					value.setUnit(dir_client_max_body_size_type::getUnitByStr(tokValue.substr(pos, tokValue.length() - pos)));
+					if (pos == tokValue.npos) {
+						return false;
+					}
+					tokValue = tokValue.substr(pos, tokValue.length() - pos);
+					if (tokValue.empty() || !dir_client_max_body_size_type::isUnitValid(tokValue)) {
+						return false;
+					}
+					value.setUnit(dir_client_max_body_size_type::getUnitByStr(tokValue));
 					return true;
 				}
 

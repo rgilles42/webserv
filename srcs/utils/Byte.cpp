@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 16:14:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:08:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:00:32 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ namespace Webserv {
 			return unitsMap;
 		}
 
+		bool					Byte::isUnitValid(const std::string &unit) {
+			return Byte::unitsMap.count(unit) > 0;
+		}
+
 		const std::string		Byte::getStrByUnit(const unit_type &unit) {
 			Byte::unit_map::const_iterator it = Byte::unitsMap.begin();
 			while (it != Byte::unitsMap.end()) {
@@ -67,7 +71,7 @@ namespace Webserv {
 		}
 
 		Byte::unit_type		Byte::getUnitByStr(const std::string &unit) {
-			if (Byte::unitsMap.count(unit) <= 0) {
+			if (!Byte::isUnitValid(unit)) {
 				return Byte::U_B;
 			}
 			return Byte::unitsMap.at(unit);

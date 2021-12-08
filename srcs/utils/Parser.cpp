@@ -122,7 +122,7 @@ namespace Webserv {
 					throw DirectiveNotAllowedHereException(block, values[0]);
 				}
 				if (!directive.isSrcValueIsValid(values)) {
-					throw UnknownDirectiveException(block, values[0]);
+					throw InvalidArgumentsDirectiveException(block, values[0]);
 				}
 			}
 

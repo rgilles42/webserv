@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 00:38:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 18:04:05 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:15:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ namespace Webserv {
 			static bool				isRedirect(const HttpStatusCode::StatusCode &statusCode);
 			static bool				isClientError(const HttpStatusCode::StatusCode &statusCode);
 			static bool				isServerError(const HttpStatusCode::StatusCode &statusCode);
+
+			static bool				isError(const HttpStatusCode::StatusCode &statusCode);
 
 		};
 

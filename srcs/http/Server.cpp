@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 11:50:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:08:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,53 +65,53 @@ namespace Webserv {
 							}
 						} else if (directive == "server_name") {
 							if (!directive_type::parseServerName(values, this->serverName, DEFAULT_SERVER_NAME)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else if (directive == "listen") {
 							if (!directive_type::parseListen(values, this->listen, DEFAULT_LISTEN)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else if (directive == "error_page") {
 							error_pages_pair errorPage;
 							if (!directive_type::parseErrorPage(values, errorPage)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 							this->error_pages.insert(errorPage);
 						} else if (directive == "client_max_body_size") {
 							if (!directive_type::parseClientMaxBodySize(values, this->client_max_body_size, DEFAULT_CLIENT_MAX_BODY_SIZE)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else if (directive == "return") {
 							if (!directive_type::parseReturn(values, this->_return, DEFAULT_RETURN)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else if (directive == "autoindex") {
 							if (!directive_type::parseAutoIndex(values, this->autoindex, DEFAULT_AUTOINDEX)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else if (directive == "root") {
 							if (!directive_type::parseRoot(values, this->root, DEFAULT_ROOT)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else if (directive == "index") {
 							if (!directive_type::parseIndex(values, this->index)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else if (directive == "upload_store") {
 							if (!directive_type::parseUploadStore(values, this->upload_store, DEFAULT_UPLOAD_STORE)) {
-								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
 								return false;
 							}
 						} else {
-							std::cerr << "Unknown directive: \"" << directive << "\"" << std::endl;
+							std::cerr << directive_type::UnknownDirectiveException(directive).what() << std::endl;
 							return false;
 						}
 					}

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 11:50:43 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 14:51:44 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace Webserv {
 		block_vector typesVector;
 		block_vector otherVector;
 		block_vector::const_iterator blockIt;
-		// directives tolower
+
 		blockIt = blocks.begin();
 		while (blockIt != blocks.end()) {
 			block_type::values_type values = blockIt->getValues();
@@ -248,7 +248,7 @@ namespace Webserv {
 						return false;
 					}
 				} else {
-					std::cerr << "Unknown directive: \"" << directive << "\"" << std::endl;
+					std::cerr << directive_type::UnknownDirectiveException(directive).what() << std::endl;
 					return false;
 				}
 			}

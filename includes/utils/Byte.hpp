@@ -56,6 +56,8 @@ namespace Webserv {
 
 				static const unit_map	fillMap(void);
 
+				static bool					isUnitValid(const std::string &unit);
+
 				static const std::string	getStrByUnit(const unit_type &unit);
 				static unit_type			getUnitByStr(const std::string &unit);
 
