@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 16:37:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 11:50:43 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,28 +230,25 @@ namespace Webserv {
 
 		this->formatBlocks(this->blocks);
 
-		// Todo remive this
-		// parser_type::drawBlocks(this->blocks);
-
 		block_vector::const_iterator it = this->blocks.begin();
 		while (it != this->blocks.end()) {
 			block_type::values_type values = it->getValues();
 			if (values.size() > 0) {
-				block_type::values_type::value_type::token_value value(values.at(0).getValue());
-				if (value == "server") {
+				block_type::values_type::value_type::token_value directive(values.at(0).getValue());
+				if (directive == "server") {
 					server_type newServer;
 					newServer.setMimesTypes(this->globalMimesTypes);
 					if (!newServer.fromBlocks(it->getChilds())) {
 						return false;
 					}
 					this->servers.push_back(newServer);
-				} else if (value == "types") {
+				} else if (directive == "types") {
 					this->globalMimesTypes.clear();
 					if (!this->globalMimesTypes.fromBlocks(it->getChilds())) {
 						return false;
 					}
 				} else {
-					std::cerr << "Unknown context: \"" << value << "\"" << std::endl;
+					std::cerr << "Unknown directive: \"" << directive << "\"" << std::endl;
 					return false;
 				}
 			}

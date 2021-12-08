@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 10:07:43 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 11:41:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@
 # include "Route.hpp"
 
 # include "../utils/Directive.hpp"
-
 # include "../utils/Block.hpp"
-# include "../utils/Byte.hpp"
 # include "../utils/MimeTypes.hpp"
 
 namespace Webserv {
@@ -33,7 +31,6 @@ namespace Webserv {
 
 		class Server {
 			public:
-				typedef	Webserv::Utils::Byte					byte_type;
 				typedef	Webserv::Utils::Block					block_type;
 				typedef std::vector<block_type>					block_vector;
 
@@ -56,8 +53,6 @@ namespace Webserv {
 				typedef directive_type::dir_root_type			root_type;
 				typedef directive_type::dir_index_type			index_type;
 
-				// typedef directive_type::dir_limit_except_type	limit_except_type;
-
 				typedef Webserv::Http::Route				route_type;
 				typedef std::map<std::string, route_type>	routes_map;
 
@@ -77,10 +72,6 @@ namespace Webserv {
 				autoindex_type		autoindex;
 				root_type			root;
 				index_type			index;
-
-				// Only for routes
-
-				// limit_except_type	limit_except;
 
 				routes_map			routes;
 

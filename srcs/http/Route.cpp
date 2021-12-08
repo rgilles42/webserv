@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 10:06:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 11:50:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,9 @@ namespace Webserv {
 								std::cerr << "Error parsing: \"" << directive << "\"" << std::endl;
 								return false;
 							}
+						} else {
+							std::cerr << "Unknown directive: \"" << directive << "\"" << std::endl;
+							return false;
 						}
 					}
 				}

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 10:08:02 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 11:41:32 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 # include <map>
 
 # include "../utils/Directive.hpp"
-
-# include "../utils/Byte.hpp"
 # include "../utils/Block.hpp"
 # include "../utils/MimeTypes.hpp"
 
@@ -30,7 +28,6 @@ namespace Webserv {
 
 		class Route {
 			public:
-				typedef	Webserv::Utils::Byte		byte_type;
 				typedef	Webserv::Utils::Block		block_type;
 				typedef std::vector<block_type>		block_vector;
 
