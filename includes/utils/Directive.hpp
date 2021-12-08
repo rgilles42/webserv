@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 15:15:32 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:56:24 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,17 +155,25 @@ namespace Webserv {
 				// Parsing with static methods
 
 				static bool				parseListen(const src_value_type &src, dir_listen_type &value, const dir_listen_type &defaultValue = dir_listen_type()) {
+					dir_listen_type tmp;
+
 					value = defaultValue;
 					if (src.size() > 1) {
-						if (!value.fromString(src[1].getValue())) {
+						if (!tmp.fromString(src[1].getValue())) {
 							return false;
 						}
 						if (src.size() > 2) {
-							if (value.getPort() != 0) {
+							if (tmp.getPort() != 0) {
 								return false;
 							}
-							value.setPort(std::atoi((src[2].getValue()).c_str()));
+							tmp.setPort(std::atoi((src[2].getValue()).c_str()));
 						}
+					}
+					if (tmp.isAddressValid()) {
+						value.setAddress(tmp.getAddress());
+					}
+					if (tmp.getPort() != 0) {
+						value.setPort(tmp.getIntPort());
 					}
 					return true;
 				}

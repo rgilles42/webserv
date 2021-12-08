@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:18:20 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 01:30:45 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:45:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ namespace Webserv {
 				value_type		address;
 				address_type	type;
 				port_type		port;
+				bool			addressIsValid;
 
 				uint16_t	my_htons(uint16_t netshort) const;
 				uint16_t	my_ntohs(uint16_t netshort) const;
@@ -69,7 +70,10 @@ namespace Webserv {
 				bool				isIpv4(void) const;
 				bool				isIpv6(void) const;
 
+				const bool			&isAddressValid(void) const;
+
 				bool				setPort(const int &port);
+				bool				setAddress(const value_type &address);
 
 				bool				fromString(const std::string &address);
 				const std::string	toString(void) const;

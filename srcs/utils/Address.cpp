@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:53:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 01:32:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:47:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ namespace Webserv {
 			this->port = 0;
 			this->type = Address::unknown;
 			std::memset(this->address, 0, ADDRESS_BITS);
+			this->addressIsValid = false;
 		}
 
 		const Address::value_type	&Address::getAddress(void) const {
@@ -78,11 +79,21 @@ namespace Webserv {
 			return this->is(Address::ipv6);
 		}
 
+		const bool					&Address::isAddressValid(void) const {
+			return this->addressIsValid;
+		}
+
 		bool				Address::setPort(const int &number) {
 			if (number < 0 || number > 65535) {
 				return false;
 			}
 			this->port = this->my_htons(number);
+			return true;
+		}
+
+		bool				Address::setAddress(const value_type &address) {
+			std::memcpy(this->address, address, ADDRESS_BITS);
+			this->addressIsValid = true;
 			return true;
 		}
 
@@ -162,6 +173,9 @@ namespace Webserv {
 				}
 			} else if (this->isIpv6()) {
 				std::cout << "je suis une IPV6 non traiter" << std::endl;
+			}
+			if (success) {
+				this->addressIsValid = true;
 			}
 			return success;
 		}
