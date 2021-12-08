@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 14:44:16 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 17:40:48 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ namespace Webserv {
 
 	void		Core::setCustomMimeTypesFile(const std::string &mimeTypesFile) {
 		this->customMimeTypesFile = mimeTypesFile;
+	}
+
+	bool		Core::preInit(int argc, char *argv[], char *envp[]) {
+		(void)argc;
+		(void)argv;
+		this->env.fromEnvp(envp);
+		return true;
 	}
 
 	bool		Core::init(void) {

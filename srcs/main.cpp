@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 18:13:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/08 17:32:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,20 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-int main(void) {
+int main(int argc, char *argv[], char *envp[]) {
 
 	Webserv::Core webserv;
 
-	if (!webserv.init()) {
-		std::cout << "Fail" << std::endl;
+	if (!webserv.preInit(argc, argv, envp)) {
+		std::cout << "Fail 1" << std::endl;
 		return EXIT_FAILURE;
 	}
+
+	if (!webserv.init()) {
+		std::cout << "Fail 2" << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	std::cout << "Success" << std::endl;
 	return EXIT_SUCCESS;
 }
