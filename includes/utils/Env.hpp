@@ -6,18 +6,18 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 16:19:25 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 17:33:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:31:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_HPP
 # define ENV_HPP
 
-# include <cstring>
-# include <string>
-# include <map>
-
-# include <iostream>
+# include <cctype>		// For isalnum, isdigit
+# include <cstring>		// For strcpy
+# include <string>		// For string
+# include <map>			// For map
+# include <stdexcept>				// For runtime_error, out_of_range
 
 namespace Webserv {
 
@@ -38,17 +38,15 @@ namespace Webserv {
 				virtual ~Env();
 
 
-				bool				isKeyValid(const key_type &key);
-				bool				set(const key_type &key, const value_type &value = "");
-				bool				append(const key_type &key, const value_type &value);
-				const value_type	get(const key_type &key) const;
-				bool				has(const key_type &key) const;
+				bool				isKeyValid(const key_type& key);
+				void				set(const key_type& key, const value_type& value = "");
+				void				append(const key_type& key, const value_type& value);
+				const value_type&	get(const key_type& key) const;
+				bool				has(const key_type& key) const;
 
 				// Utils Methods
 				char**				toEnvp(void) const;
 				void				fromEnvp(char** envp);
-
-				static void			printEnvp(char** envp);
 
 				static void			freeEnvp(char** envp);
 

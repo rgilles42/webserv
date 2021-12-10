@@ -20,12 +20,12 @@ namespace Webserv {
 
 		Args::~Args() {}
 
-		bool		Args::set(const key_type &key, const value_type &value) {
+		bool					Args::set(const key_type& key, const value_type& value) {
 			this->argsArray[key] = value;
 			return true;
 		}
 
-		bool		Args::append(const key_type &key, const value_type &value) {
+		bool					Args::append(const key_type& key, const value_type& value) {
 			if (!this->has(key)) {
 				return this->set(key, value);
 			}
@@ -33,23 +33,23 @@ namespace Webserv {
 			return true;
 		}
 
-		const Args::value_type	Args::get(const key_type &key) const {
+		const Args::value_type&	Args::get(const key_type& key) const {
 			if (!this->has(key)) {
-				return value_type();
+				throw std::out_of_range("Args::get(" + key + ")");
 			}
 			map_type::const_iterator it = this->argsArray.lower_bound(key);
 			return it->second;
 		}
 
-		bool				Args::has(const key_type &key) const {
+		bool					Args::has(const key_type& key) const {
 			return this->argsArray.count(key) > 0;
 		}
 
-		const Args::map_type	&Args::getArgs(void) const {
+		const Args::map_type&	Args::getArgs(void) const {
 			return this->argsArray;
 		}
 
-		void				Args::fromArg(int argc, char **argv) {
+		void					Args::fromArg(int argc, char **argv) {
 			if (argc <= 0 || !argv) {
 				return;
 			}

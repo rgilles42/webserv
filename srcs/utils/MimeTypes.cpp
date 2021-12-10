@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:30:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:38:50 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@ namespace Webserv {
 
 		MimeTypes::MimeTypes(void) {}
 
-		MimeTypes::MimeTypes(const MimeTypes &x) {
+		MimeTypes::MimeTypes(const MimeTypes& x) {
 			this->mappedTypes = x.mappedTypes;
 		}
 
-		MimeTypes::MimeTypes(const std::string &fileContent) {
+		MimeTypes::MimeTypes(const std::string& fileContent) {
 			this->fromString(fileContent);
 		}
 
-		MimeTypes::MimeTypes(const block_vector &blocks) {
+		MimeTypes::MimeTypes(const block_vector& blocks) {
 			this->fromBlocks(blocks);
 		}
 
-		void						MimeTypes::merge(const MimeTypes &x) {
+		void						MimeTypes::merge(const MimeTypes& x) {
 			MapType::const_iterator it = x.mappedTypes.begin();
 
 			while  (it != x.mappedTypes.end()) {
@@ -39,7 +39,7 @@ namespace Webserv {
 			}
 		}
 
-		void						MimeTypes::set(const std::string &key, const std::string &value) {
+		void						MimeTypes::set(const std::string& key, const std::string& value) {
 			this->mappedTypes[key] = value;
 		}
 
@@ -47,7 +47,7 @@ namespace Webserv {
 			this->mappedTypes.clear();
 		}
 
-		const std::string			&MimeTypes::getType(const std::string &path, const std::string &fallback) const {
+		const std::string&			MimeTypes::getType(const std::string& path, const std::string& fallback) const {
 			std::string fileExtension = getFileExtension(path);
 			if (path.length() <= 0 || fileExtension.length() <= 0) {
 				return fallback;
@@ -61,7 +61,7 @@ namespace Webserv {
 			return fallback;
 		}
 
-		const MimeTypes::ReturnExtensionsType	MimeTypes::getExtensions(const std::string &type) const {
+		const MimeTypes::ReturnExtensionsType	MimeTypes::getExtensions(const std::string& type) const {
 			ReturnExtensionsType extensions;
 			MapType::const_iterator it = this->mappedTypes.begin();
 
@@ -81,7 +81,7 @@ namespace Webserv {
 		 * If there's no ';' this is will throw an error in console and block the starting of the webserv
 		 * TODO: delete this and everything liked to this method
 		*/
-		void									MimeTypes::fromString(const std::string &mimeTypesContent) {
+		void									MimeTypes::fromString(const std::string& mimeTypesContent) {
 			std::string				line;
 			std::stringstream		ss(mimeTypesContent);
 			std::string::iterator	it;
@@ -105,13 +105,13 @@ namespace Webserv {
 						this->set(key, value);
 					}
 					line.erase(line.begin(), it);
-					line = trim(line);
+					line = Webserv::Utils::trim(line);
 					i++;
 				}
 			}
 		}
 
-		bool									MimeTypes::fromBlocks(const block_vector &blocks) {
+		bool									MimeTypes::fromBlocks(const block_vector& blocks) {
 			size_t							i;
 			std::string						key;
 			std::string						value;
@@ -137,9 +137,9 @@ namespace Webserv {
 			return true;
 		}
 
-		std::string getContentTypeByFile(const std::string &filename, const std::string &fallback) {
+		std::string getContentTypeByFile(const std::string& filename, const std::string& fallback) {
 			std::string test;
-			std::string fileContent(getFileContents("./conf/mime.types"));
+			std::string fileContent(Webserv::Utils::getFileContents("./conf/mime.types"));
 
 			test = "types";
 			fileContent = fileContent.substr(fileContent.find(test) + test.length());

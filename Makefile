@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/12/10 13:20:01 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/12/10 14:23:04 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Parser.cpp \
 				$(SRC_DIR)/utils/MimeTypes.cpp \
 				$(SRC_DIR)/utils/Address.cpp \
+				$(SRC_DIR)/utils/Directive.cpp \
 				$(SRC_DIR)/utils/Env.cpp \
 				$(SRC_DIR)/utils/Args.cpp \
 				$(SRC_DIR)/Config.cpp \

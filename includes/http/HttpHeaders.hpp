@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:26:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:32:03 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <cctype>					// For isalpha, isdigit, etc..
 # include <string>					// For string
 # include <map>						// For map
-# include <stdexcept>				// For exceptions
+# include <stdexcept>				// For runtime_error, out_of_range
 # include <sstream>					// For stringstream
 
 # include "../utils/common.hpp"		// For trim
@@ -39,7 +39,7 @@ namespace Webserv {
 				typedef std::string										key_type;
 				typedef std::string										value_type;
 
-				typedef std::multimap<key_type, value_type, ci_less>	headerType;
+				typedef std::multimap<key_type, value_type, Webserv::Utils::ci_less>	headerType;
 
 			protected:
 				headerType	headers;
@@ -49,7 +49,7 @@ namespace Webserv {
 				bool				isKeyValid(const key_type& key);
 				void				set(const key_type& key, const value_type& value);
 				void				append(const key_type& key, const value_type& value);
-				const value_type	&get(const key_type& key) const;
+				const value_type&	get(const key_type& key) const;
 				bool				has(const key_type& key) const;
 
 				// Utils Methods

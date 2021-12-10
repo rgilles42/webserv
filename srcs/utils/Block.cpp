@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:51:10 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 18:02:07 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:03:04 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,40 @@ namespace Webserv {
 
 	namespace Utils {
 
-		Block::Block(const block_type &type) {
+		Block::Block(const block_type& type) {
 			this->type = type;
 		}
 
-		const Block::block_type		&Block::getType(void) const {
+		const Block::block_type&	Block::getType(void) const {
 			return this->type;
 		}
 
-		const Block::values_type	&Block::getValues(void) const {
+		const Block::values_type&	Block::getValues(void) const {
 			return this->values;
 		}
 
-		const Block::childs_type	&Block::getChilds(void) const {
+		const Block::childs_type&	Block::getChilds(void) const {
 			return this->childs;
 		}
 
-		void						Block::setType(const block_type &type) {
+		void						Block::setType(const block_type& type) {
 			this->type = type;
 		}
 
-		void						Block::addValue(const token_type &token) {
+		void						Block::addValue(const token_type& token) {
 			this->values.push_back(token);
 		}
 
-		void						Block::setChilds(const childs_type &childs) {
+		void						Block::setChilds(const childs_type& childs) {
 			this->childs = childs;
 		}
 
-		void						Block::addChild(const Block &child) {
+		void						Block::addChild(const Block& child) {
 			this->childs.push_back(child);
 		}
 
 
-		bool						Block::is(block_type &type) const {
+		bool						Block::is(block_type& type) const {
 			return Block::is(this->type, type);
 		}
 
@@ -67,19 +67,19 @@ namespace Webserv {
 
 		// Static methods
 
-		bool						Block::is(const block_type &type, const block_type &type2) {
+		bool						Block::is(const block_type& type, const block_type& type2) {
 			return type == type2;
 		}
 
-		bool						Block::isSimple(const block_type &type) {
+		bool						Block::isSimple(const block_type& type) {
 			return Block::is(type, T_SIMPLE);
 		}
 
-		bool						Block::isComplex(const block_type &type) {
+		bool						Block::isComplex(const block_type& type) {
 			return Block::is(type, T_COMPLEX);
 		}
 
-		bool						Block::isComment(const block_type &type) {
+		bool						Block::isComment(const block_type& type) {
 			return Block::is(type, T_COMMENT);
 		}
 

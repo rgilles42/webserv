@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:19:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:46:12 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,30 @@ namespace Webserv {
 
 		const Token::token_map Token::tokensList =  Token::fillMap();
 
-		Token::Token(const token_value &value, const token_type &type, const token_line &line, const token_pos &position) {
+		Token::Token(const token_value& value, const token_type& type, const token_line& line, const token_pos& position) {
 			this->value = value;
 			this->type = type;
 			this->line = line;
 			this->position = position;
 		}
 
-		const Token::token_value	&Token::getValue(void) const {
+		const Token::token_value&	Token::getValue(void) const {
 			return this->value;
 		}
 
-		const Token::token_type		&Token::getType(void) const {
+		const Token::token_type&	Token::getType(void) const {
 			return this->type;
 		}
 
-		const Token::token_line		&Token::getLine(void) const {
+		const Token::token_line&	Token::getLine(void) const {
 			return this->line;
 		}
 
-		const Token::token_pos		&Token::getPosition(void) const {
+		const Token::token_pos&		Token::getPosition(void) const {
 			return this->position;
 		}
 
-		bool						Token::is(token_type &type) const {
+		bool						Token::is(token_type& type) const {
 			return Token::is(this->type, type);
 		}
 
@@ -93,43 +93,43 @@ namespace Webserv {
 			return tokensList;
 		}
 
-		bool						Token::is(const token_type &type, const token_type &type2) {
+		bool						Token::is(const token_type& type, const token_type& type2) {
 			return type == type2;
 		}
 
-		bool						Token::isText(const token_type &type) {
+		bool						Token::isText(const token_type& type) {
 			return Token::is(type, T_TEXT);
 		}
 
-		bool						Token::isSimpleEnd(const token_type &type) {
+		bool						Token::isSimpleEnd(const token_type& type) {
 			return Token::is(type, T_SIMPLE_END);
 		}
 
-		bool						Token::isComplexStart(const token_type &type) {
+		bool						Token::isComplexStart(const token_type& type) {
 			return Token::is(type, T_COMPLEX_START);
 		}
 
-		bool						Token::isComplexEnd(const token_type &type) {
+		bool						Token::isComplexEnd(const token_type& type) {
 			return Token::is(type, T_COMPLEX_END);
 		}
 
-		bool						Token::isComment(const token_type &type) {
+		bool						Token::isComment(const token_type& type) {
 			return Token::is(type, T_COMMENT);
 		}
 
-		bool						Token::isNewLine(const token_type &type) {
+		bool						Token::isNewLine(const token_type& type) {
 			return Token::is(type, T_NEWLINE_CRLF) || Token::is(type, T_NEWLINE_CR) || Token::is(type, T_NEWLINE_LF);
 		}
 
-		bool						Token::isEnd(const token_type &type) {
+		bool						Token::isEnd(const token_type& type) {
 			return Token::isSimpleEnd(type) || Token::isComplexEnd(type);
 		}
 
-		bool						Token::isComplex(const token_type &type) {
+		bool						Token::isComplex(const token_type& type) {
 			return Token::isComplexStart(type) || Token::isComplexEnd(type);
 		}
 
-		Token::token_type			Token::getTokenTypeByStr(const std::string &str, size_t start) {
+		Token::token_type			Token::getTokenTypeByStr(const std::string& str, size_t start) {
 			token_map::const_iterator it = Token::tokensList.begin();
 			while (it != Token::tokensList.end()) {
 				if (str.compare(start, (*it).second.length(), (*it).second) == 0) {

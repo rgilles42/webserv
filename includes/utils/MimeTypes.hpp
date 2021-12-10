@@ -6,23 +6,24 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:27:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:42:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MIMETYPES_HPP
 # define MIMETYPES_HPP
 
-# include <string.h>
-# include <map>
-# include <vector>
-# include <functional>
+# include <string>					// For string
+# include <map>						// For map
+# include <vector>					// For vector
+# include <algorithm>				// For find_if, ptr_fun
+# include <cctype>					// For isspace
+# include <iterator>				// For distance
+# include <sstream>					// For stringstream
 
-# include "../utils/common.hpp"
-
-# include "Block.hpp"
-
-# include "ci_less.hpp"
+# include "../utils/common.hpp"		// For trim
+# include "Block.hpp"				// For Block
+# include "ci_less.hpp"				// For ci_less
 
 # define DEFAULT_MIME_TYPE std::string("application/octet-stream")
 
@@ -35,11 +36,11 @@ namespace Webserv {
 		class MimeTypes {
 
 			protected:
-				typedef Webserv::Utils::Block						block_type;
-				typedef std::vector<block_type>						block_vector;
+				typedef Webserv::Utils::Block		block_type;
+				typedef std::vector<block_type>		block_vector;
 
-				typedef	std::map<std::string, std::string, ci_less>	MapType;
-				typedef std::vector<std::string>					ReturnExtensionsType;
+				typedef	std::map<std::string, std::string, Webserv::Utils::ci_less>	MapType;
+				typedef std::vector<std::string>	ReturnExtensionsType;
 				/**
 				 * Mapped MIME types in key/value
 				 * @param key This is the extension of the current type
@@ -50,26 +51,26 @@ namespace Webserv {
 
 			public:
 				MimeTypes(void);
-				MimeTypes(const MimeTypes &x);
-				MimeTypes(const std::string &fileContent);
-				MimeTypes(const block_vector &blocks);
+				MimeTypes(const MimeTypes& x);
+				MimeTypes(const std::string& fileContent);
+				MimeTypes(const block_vector& blocks);
 
-				// MimeTypes				operator=(const MimeTypes &x);
+				// MimeTypes				operator=(const MimeTypes& x);
 
-				void						merge(const MimeTypes &x);
+				void						merge(const MimeTypes& x);
 
-				void						set(const std::string &key, const std::string &value);
+				void						set(const std::string& key, const std::string& value);
 				void						clear(void);
 
-				const std::string			&getType(const std::string &path, const std::string &fallback = DEFAULT_MIME_TYPE) const;
-				const ReturnExtensionsType	getExtensions(const std::string &type) const;
+				const std::string&			getType(const std::string& path, const std::string& fallback = DEFAULT_MIME_TYPE) const;
+				const ReturnExtensionsType	getExtensions(const std::string& type) const;
 
-				void						fromString(const std::string &fileContent);
-				bool						fromBlocks(const block_vector &blocks);
+				void						fromString(const std::string& fileContent);
+				bool						fromBlocks(const block_vector& blocks);
 		};
 
 		// TODO: remove this
-		std::string getContentTypeByFile(const std::string &filename, const std::string &fallback);
+		std::string getContentTypeByFile(const std::string& filename, const std::string& fallback);
 
 	}
 

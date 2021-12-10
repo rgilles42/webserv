@@ -18,11 +18,11 @@ namespace Webserv {
 
 		Parser::Parser(void) {}
 
-		Parser::Parser(const token_vector &tokens) {
+		Parser::Parser(const token_vector& tokens) {
 			this->blockenize(tokens);
 		}
 
-		const Parser::block_vector	&Parser::getBlocks(void) const {
+		const Parser::block_vector&	Parser::getBlocks(void) const {
 			return this->blocks;
 		}
 
@@ -30,7 +30,7 @@ namespace Webserv {
 			this->blocks.clear();
 		}
 
-		const Parser::block_vector	&Parser::blockenize(const token_vector &tokens) {
+		const Parser::block_vector&	Parser::blockenize(const token_vector& tokens) {
 			size_t pos = 0;
 
 			while (pos < tokens.size()) {
@@ -43,7 +43,7 @@ namespace Webserv {
 			return this->blocks;
 		}
 
-		Parser::parse_type	Parser::parseBlock(const token_vector &tokens, size_t &pos) {
+		Parser::parse_type	Parser::parseBlock(const token_vector& tokens, size_t& pos) {
 			bool		valid = false;
 			block_type	newBlock;
 			if (tokens[pos].isNewLine()) {
@@ -92,7 +92,7 @@ namespace Webserv {
 			Parser::drawBlocks(this->blocks);
 		}
 
-		bool			Parser::checkBlocks(const directive_map &directives) const {
+		bool			Parser::checkBlocks(const directive_map& directives) const {
 			block_vector::const_iterator it = this->blocks.begin();
 			while (it != this->blocks.end()) {
 				if (!this->checkBlock(directives, (*it), "main")) {
@@ -103,7 +103,7 @@ namespace Webserv {
 			return true;
 		}
 
-		bool			Parser::checkBlock(const directive_map &directives, const block_type &block, const std::string &context) const {
+		bool			Parser::checkBlock(const directive_map& directives, const block_type& block, const std::string& context) const {
 			if (block.isComment()) {
 				return true;
 			}
@@ -144,7 +144,7 @@ namespace Webserv {
 
 		// Static methods
 
-		void			Parser::drawBlocks(const block_vector &blocks) {
+		void			Parser::drawBlocks(const block_vector& blocks) {
 			block_vector::const_iterator it = blocks.begin();
 			while (it != blocks.end()) {
 				block_type block = (*it);

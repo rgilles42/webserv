@@ -13,19 +13,17 @@
 #ifndef PARSER_HPP
 # define PARSER_HPP
 
-# include <iostream>
+# include <string>			// For string
+# include <vector>			// For vector
+# include <map>				// For map
+# include <exception>		// For exception
+# include <sstream>			// For ostringstream
 
-# include <string>
-# include <vector>
-# include <map>
-# include <exception>
-# include <sstream>
-# include <sys/types.h>
-# include <algorithm>
+# include <iostream>		// For cout, endl TODO: remove
 
-# include "Token.hpp"
-# include "Block.hpp"
-# include "Directive.hpp"
+# include "Token.hpp"		// For Token
+# include "Block.hpp"		// For Block
+# include "Directive.hpp"	// For Directive
 
 namespace Webserv {
 
@@ -49,7 +47,7 @@ namespace Webserv {
 						token_type	token;
 
 					public:
-						ParserException(const block_type &block = block_type(), const token_type &token = token_type(), const std::string &msg = "") : std::exception() {
+						ParserException(const block_type& block = block_type(), const token_type& token = token_type(), const std::string& msg = "") : std::exception() {
 							this->msg = msg;
 							this->block = block;
 							this->token = token;
@@ -69,7 +67,7 @@ namespace Webserv {
 
 				class UnknownDirectiveException : public ParserException {
 					public:
-						UnknownDirectiveException(const block_type &block = block_type(), const token_type &token = token_type()) : ParserException(block) {
+						UnknownDirectiveException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block) {
 							std::ostringstream ss;
 
 							ss << "Unknown directive \"" << token.getValue() << "\" at " << token.getLine();
@@ -80,7 +78,7 @@ namespace Webserv {
 
 				class DirectiveNotAllowedHereException : public ParserException {
 					public:
-						DirectiveNotAllowedHereException(const block_type &block = block_type(), const token_type &token = token_type()) : ParserException(block) {
+						DirectiveNotAllowedHereException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block) {
 							std::ostringstream ss;
 
 							ss << "Directive \"" << token.getValue() << "\" is not allowed here at " << token.getLine();
@@ -91,7 +89,7 @@ namespace Webserv {
 
 				class InvalidArgumentsDirectiveException : public ParserException {
 					public:
-						InvalidArgumentsDirectiveException(const block_type &block = block_type(), const token_type &token = token_type()) : ParserException(block) {
+						InvalidArgumentsDirectiveException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block) {
 							std::ostringstream ss;
 
 							ss << "Invalid number of arguments in \"" << token.getValue() << "\" directive at " << token.getLine();
@@ -102,7 +100,7 @@ namespace Webserv {
 
 				class UnknownException : public ParserException {
 					public:
-						UnknownException(const block_type &block = block_type()) : ParserException(block) {
+						UnknownException(const block_type& block = block_type()) : ParserException(block) {
 							std::ostringstream ss;
 
 							ss << "Unknown error at " << token.getLine();
@@ -116,25 +114,25 @@ namespace Webserv {
 
 				typedef std::pair<const block_type, bool> parse_type;
 
-				parse_type			parseBlock(const token_vector &tokens, size_t &pos);
+				parse_type			parseBlock(const token_vector& tokens, size_t& pos);
 
-				bool				checkBlock(const directive_map &directives, const block_type &block, const std::string &context) const;
+				bool				checkBlock(const directive_map& directives, const block_type& block, const std::string& context) const;
 
 			public:
 				Parser(void);
-				Parser(const token_vector &tokens);
+				Parser(const token_vector& tokens);
 
-				const block_vector	&blockenize(const token_vector &tokens);
+				const block_vector&	blockenize(const token_vector& tokens);
 
-				const block_vector	&getBlocks(void) const;
+				const block_vector&	getBlocks(void) const;
 
 				void				resetParser(void);
 
 				void				drawBlocks(void) const;
 
-				bool				checkBlocks(const directive_map &directives = directive_map()) const;
+				bool				checkBlocks(const directive_map& directives = directive_map()) const;
 
-				static void			drawBlocks(const block_vector &blocks);
+				static void			drawBlocks(const block_vector& blocks);
 
 		};
 

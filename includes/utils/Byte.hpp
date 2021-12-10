@@ -13,12 +13,11 @@
 #ifndef BYTE_HPP
 # define BYTE_HPP
 
-# include <string>
-# include <cstddef>
-# include <cmath>
-# include <map>
+# include <string>		// For string
+# include <cmath>		// For pow
+# include <map>			// For map
 
-# include "ci_less.hpp"
+# include "ci_less.hpp"	// For ci_less
 
 namespace Webserv {
 
@@ -35,7 +34,7 @@ namespace Webserv {
 				};
 				typedef long double	value_type;
 
-				typedef std::map<std::string, unit_type, ci_less>	unit_map;
+				typedef std::map<std::string, unit_type, Webserv::Utils::ci_less>	unit_map;
 
 				const static unit_map	unitsMap;
 
@@ -44,22 +43,22 @@ namespace Webserv {
 				unit_type	unit;
 
 			public:
-				Byte(const value_type &value = value_type(), const unit_type &unit = Byte::U_B);
+				Byte(const value_type& value = value_type(), const unit_type& unit = Byte::U_B);
 
-				void				setValue(const value_type &value);
-				void				setUnit(const unit_type &unit = Byte::U_B);
+				void				setValue(const value_type& value);
+				void				setUnit(const unit_type& unit = Byte::U_B);
 
-				const value_type	&getValue(void) const;
-				const unit_type		&getUnit(void) const;
+				const value_type&	getValue(void) const;
+				const unit_type&	getUnit(void) const;
 
-				value_type			toUnit(const unit_type &unit) const;
+				value_type			toUnit(const unit_type& unit) const;
 
 				static const unit_map	fillMap(void);
 
-				static bool					isUnitValid(const std::string &unit);
+				static bool					isUnitValid(const std::string& unit);
 
-				static const std::string	getStrByUnit(const unit_type &unit);
-				static unit_type			getUnitByStr(const std::string &unit);
+				static const std::string	getStrByUnit(const unit_type& unit);
+				static unit_type			getUnitByStr(const std::string& unit);
 
 		};
 

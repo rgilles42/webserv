@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:12:59 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 17:44:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:27:23 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace Webserv {
 
 		Env::~Env() {}
 
-		bool		Env::isKeyValid(const key_type &key) {
+		bool		Env::isKeyValid(const key_type& key) {
 			if (key.empty() || std::isdigit(key[0])) {
 				return false;
 			}
@@ -34,34 +34,32 @@ namespace Webserv {
 			return true;
 		}
 
-		bool		Env::set(const key_type &key, const value_type &value) {
+		void		Env::set(const key_type& key, const value_type& value) {
 			if (!this->isKeyValid(key)) {
-				return false;
+				throw std::runtime_error("Env::set(" + key + ", " + value + ")");
 			}
 			this->envArray[key] = value;
-			return true;
 		}
 
-		bool		Env::append(const key_type &key, const value_type &value) {
+		void		Env::append(const key_type& key, const value_type& value) {
 			if (!this->isKeyValid(key)) {
-				return false;
+				throw std::runtime_error("Env::append(" + key + ", " + value + ")");
 			}
 			if (!this->has(key)) {
 				return this->set(key, value);
 			}
 			this->envArray[key] += value;
-			return true;
 		}
 
-		const Env::value_type	Env::get(const key_type &key) const {
+		const Env::value_type	&Env::get(const key_type& key) const {
 			if (!this->has(key)) {
-				return value_type();
+				throw std::out_of_range("Env::get(" + key + ")");
 			}
 			map_type::const_iterator it = this->envArray.lower_bound(key);
 			return it->second;
 		}
 
-		bool				Env::has(const key_type &key) const {
+		bool				Env::has(const key_type& key) const {
 			return this->envArray.count(key) > 0;
 		}
 
@@ -105,20 +103,6 @@ namespace Webserv {
 						value = tmp.substr(pos + 1, tmp.length() - (pos + 1));
 						this->set(key, value);
 					}
-				}
-				i++;
-			}
-		}
-
-		void			Env::printEnvp(char** envp) {
-			if (!envp) {
-				std::cout << "envp is empty" << std::endl;
-				return;
-			}
-			size_t i = 0;
-			while (envp[i] != NULL) {
-				if (envp[i]) {
-					std::cout << envp[i] << std::endl;
 				}
 				i++;
 			}

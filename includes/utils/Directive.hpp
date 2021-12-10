@@ -6,26 +6,26 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 15:56:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:21:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DIRECTIVE_HPP
 # define DIRECTIVE_HPP
 
-# include <string>
-# include <vector>
-# include <map>
-# include <algorithm>
-# include <exception>
-# include <sstream>
+# include <string>						// For string
+# include <vector>						// For vector
+# include <map>							// For map
+# include <algorithm>					// For
+# include <exception>					// For exceptions
+# include <sstream>						// For stringstream
 
-# include <iostream>
+# include <iostream>					// For
 
-# include "Token.hpp"
-# include "Address.hpp"
-# include "Byte.hpp"
-# include "../http/HttpStatusCode.hpp"
+# include "Token.hpp"					// For Token
+# include "Address.hpp"					// For Address
+# include "Byte.hpp"					// For Byte
+# include "../http/HttpStatusCode.hpp"	// For HttpStatusCode
 
 # define DEFAULT_SERVER_NAME Webserv::Utils::Directive::dir_server_name_type("")
 # define DEFAULT_LISTEN Webserv::Utils::Directive::dir_listen_type("0.0.0.0:80")
@@ -71,7 +71,7 @@ namespace Webserv {
 						name_type	directive;
 
 					public:
-						DirectiveException(const name_type &directive = name_type(), const std::string &msg = "") : std::exception() {
+						DirectiveException(const name_type& directive = name_type(), const std::string& msg = "") : std::exception() {
 							this->msg = msg;
 							this->directive = directive;
 						}
@@ -87,7 +87,7 @@ namespace Webserv {
 
 				class UnknownDirectiveException : public DirectiveException {
 					public:
-						UnknownDirectiveException(const name_type &directive = name_type()) : DirectiveException(directive) {
+						UnknownDirectiveException(const name_type& directive = name_type()) : DirectiveException(directive) {
 							std::ostringstream ss;
 
 							ss << "Unknown directive \"" << this->directive << "\"";
@@ -98,7 +98,7 @@ namespace Webserv {
 
 				class InvalidValueDirectiveException : public DirectiveException {
 					public:
-						InvalidValueDirectiveException(const name_type &directive = name_type()) : DirectiveException(directive) {
+						InvalidValueDirectiveException(const name_type& directive = name_type()) : DirectiveException(directive) {
 							std::ostringstream ss;
 
 							ss << "\"" << this->directive << "\" directive invalid value";
@@ -114,207 +114,41 @@ namespace Webserv {
 				context_vector	contexts;
 
 			public:
-				Directive(const name_type &name = name_type(), const argc_type &argc = argc_type(-1, -1), const context_vector &contexts = context_vector()) : name(name), argc(argc), contexts(contexts) {};
+				Directive(const name_type& name = name_type(), const argc_type& argc = argc_type(-1, -1), const context_vector& contexts = context_vector());
 
-				virtual ~Directive() {};
+				virtual ~Directive();
 
-				const name_type			&getName(void) const {
-					return this->name;
-				}
-				const context_vector	&getContexts(void) const {
-					return this->contexts;
-				}
-				const argc_type			&getArgc(void) const {
-					return this->argc;
-				}
+				const name_type&		getName(void) const;
+				const context_vector&	getContexts(void) const;
+				const argc_type&		getArgc(void) const;
 
-				bool					isContextValid(const context_type &context) const {
-					context_vector::const_iterator it = std::find(this->contexts.begin(), this->contexts.end(), context);
-					return it != this->contexts.end();
-				}
+				bool					isContextValid(const context_type& context) const;
 
-				bool					isSrcValueIsValid(const src_value_type &src) const {
-					size_t size = src.size();
-					if (size > 0) {
-						// Check if the directive is the good one
-						if (src[0].getValue() != this->name) {
-							return false;
-						}
-						// Don't count the directive keyword
-						size -= 1;
-					}
-					if (this->argc.first != (size_t)-1 && size < this->argc.first) {
-						return false;
-					}
-					if (this->argc.second != (size_t)-1 && size > this->argc.second) {
-						return false;
-					}
-					return true;
-				}
+				bool					isSrcValueIsValid(const src_value_type& src) const;
 
 				// Parsing with static methods
 
-				static bool				parseListen(const src_value_type &src, dir_listen_type &value, const dir_listen_type &defaultValue = dir_listen_type()) {
-					dir_listen_type tmp;
+				static bool				parseListen(const src_value_type& src, dir_listen_type& value, const dir_listen_type& defaultValue = dir_listen_type());
 
-					value = defaultValue;
-					if (src.size() > 1) {
-						if (!tmp.fromString(src[1].getValue())) {
-							return false;
-						}
-						if (src.size() > 2) {
-							if (tmp.getPort() != 0) {
-								return false;
-							}
-							tmp.setPort(std::atoi((src[2].getValue()).c_str()));
-						}
-					}
-					if (tmp.isAddressValid()) {
-						value.setAddress(tmp.getAddress());
-					}
-					if (tmp.getPort() != 0) {
-						value.setPort(tmp.getIntPort());
-					}
-					return true;
-				}
+				static bool				parseServerName(const src_value_type& src, dir_server_name_type& value, const dir_server_name_type& defaultValue = dir_server_name_type());
 
-				static bool				parseServerName(const src_value_type &src, dir_server_name_type &value, const dir_server_name_type &defaultValue = dir_server_name_type()) {
-					value = defaultValue;
-					if (src.size() > 1) {
-						value = src[1].getValue();
-					}
-					return true;
-				}
+				static bool				parseErrorPage(const src_value_type& src, dir_error_page_type& value, const dir_error_page_type& defaultValue = dir_error_page_type());
 
-				static bool				parseErrorPage(const src_value_type &src, dir_error_page_type &value, const dir_error_page_type &defaultValue = dir_error_page_type()) {
-					value = defaultValue;
-					if (src.size() != 3) {
-						return false;
-					}
-					src_value_type::value_type::token_value tokValue1 = src[1].getValue();
-					if (tokValue1.find_first_not_of("0123456789") != tokValue1.npos) {
-						return false;
-					}
-					value.first = http_status_code_type::getStatusCode(std::atoi(tokValue1.c_str()));
-					if (value.first <= 0 || !http_status_code_type::isError(value.first)) {
-						return false;
-					}
-					value.second = src[2].getValue();
-					return true;
-				}
+				static bool				parseClientMaxBodySize(const src_value_type& src, dir_client_max_body_size_type& value, const dir_client_max_body_size_type& defaultValue = dir_client_max_body_size_type());
 
-				static bool				parseClientMaxBodySize(const src_value_type &src, dir_client_max_body_size_type &value, const dir_client_max_body_size_type &defaultValue = dir_client_max_body_size_type()) {
-					value = defaultValue;
-					if (src.size() != 2) {
-						return false;
-					}
-					src_value_type::value_type::token_value tokValue = src[1].getValue();
-					value.setValue(std::atoi((tokValue).c_str()));
-					size_t pos = tokValue.find_first_not_of("0123456789");
-					if (pos == tokValue.npos) {
-						return false;
-					}
-					tokValue = tokValue.substr(pos, tokValue.length() - pos);
-					if (tokValue.empty() || !dir_client_max_body_size_type::isUnitValid(tokValue)) {
-						return false;
-					}
-					value.setUnit(dir_client_max_body_size_type::getUnitByStr(tokValue));
-					return true;
-				}
+				static bool				parseLimitExcept(const src_value_type& src, dir_limit_except_type& value, const dir_limit_except_type& defaultValue = dir_limit_except_type());
 
-				static bool				parseLimitExcept(const src_value_type &src, dir_limit_except_type &value, const dir_limit_except_type &defaultValue = dir_limit_except_type()) {
-					value = defaultValue;
-					if (src.size() < 2) {
-						return false;
-					}
-					src_value_type::const_iterator it = src.begin() + 1;
-					while (it != src.end()) {
-						value.push_back(it->getValue());
-						it++;
-					}
-					return true;
-				}
+				static bool				parseReturn(const src_value_type& src, dir_return_type& value, const dir_return_type& defaultValue = dir_return_type());
 
-				static bool				parseReturn(const src_value_type &src, dir_return_type &value, const dir_return_type &defaultValue = dir_return_type()) {
-					value = defaultValue;
-					if (src.size() < 2) {
-						return false;
-					}
-					if (src.size() == 2) {
-						value.first = http_status_code_type::unknown;
-						value.second = src[1].getValue();
-					} else {
-						src_value_type::value_type::token_value tokValue1 = src[1].getValue();
-						if (tokValue1.find_first_not_of("0123456789") != tokValue1.npos) {
-							return false;
-						}
-						value.first = http_status_code_type::getStatusCode(std::atoi(tokValue1.c_str()));
-						if (value.first <= 0) {
-							return false;
-						}
-						if (src.size() > 2) {
-							value.second = src[2].getValue();
-						}
-					}
-					return true;
-				}
+				static bool				parseAutoIndex(const src_value_type& src, dir_autoindex_type& value, const dir_autoindex_type& defaultValue = dir_autoindex_type());
 
-				static bool				parseAutoIndex(const src_value_type &src, dir_autoindex_type &value, const dir_autoindex_type &defaultValue = dir_autoindex_type()) {
-					value = defaultValue;
-					if (src.size() != 2) {
-						return false;
-					}
-					src_value_type::value_type::token_value tokValue = src[1].getValue();
-					if (tokValue == "on" || tokValue == "true") {
-						value = true;
-						return true;
-					}
-					if (tokValue == "off" || tokValue == "false") {
-						value = false;
-						return true;
-					}
-					return false;
-				}
+				static bool				parseRoot(const src_value_type& src, dir_root_type& value, const dir_root_type& defaultValue = dir_root_type());
 
-				static bool				parseRoot(const src_value_type &src, dir_root_type &value, const dir_root_type &defaultValue = dir_root_type()) {
-					value = defaultValue;
-					if (src.size() != 2) {
-						return false;
-					}
-					value = src[1].getValue();
-					return true;
-				}
+				static bool				parseIndex(const src_value_type& src, dir_index_type& value, const dir_index_type& defaultValue = dir_index_type());
 
-				static bool				parseIndex(const src_value_type &src, dir_index_type &value, const dir_index_type &defaultValue = dir_index_type()) {
-					value = defaultValue;
-					if (src.size() < 2) {
-						return false;
-					}
-					src_value_type::const_iterator it = src.begin() + 1;
-					while (it != src.end()) {
-						value.push_back(it->getValue());
-						it++;
-					}
-					return true;
-				}
+				static bool				parseUploadStore(const src_value_type& src, dir_upload_store_type& value, const dir_upload_store_type& defaultValue = dir_upload_store_type());
 
-				static bool				parseUploadStore(const src_value_type &src, dir_upload_store_type &value, const dir_upload_store_type &defaultValue = dir_upload_store_type()) {
-					value = defaultValue;
-					if (src.size() != 2) {
-						return false;
-					}
-					value = src[1].getValue();
-					return true;
-				}
-
-				static bool				parseCgiPass(const src_value_type &src, dir_cgi_pass_type &value, const dir_cgi_pass_type &defaultValue = dir_cgi_pass_type()) {
-					value = defaultValue;
-					if (src.size() != 2) {
-						return false;
-					}
-					value = src[1].getValue();
-					return true;
-				}
+				static bool				parseCgiPass(const src_value_type& src, dir_cgi_pass_type& value, const dir_cgi_pass_type& defaultValue = dir_cgi_pass_type());
 
 		};
 

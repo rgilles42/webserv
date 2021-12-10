@@ -13,13 +13,10 @@
 #ifndef ARGS_HPP
 # define ARGS_HPP
 
-# include <cstring>
-# include <string>
-# include <map>
-# include <exception>
-# include <sstream>
-
-# include <iostream>
+# include <string>		// For string
+# include <map>			// For map
+# include <exception>	// For exception
+# include <sstream>		// For stringstream
 
 namespace Webserv {
 
@@ -38,7 +35,7 @@ namespace Webserv {
 						key_type	arg;
 
 					public:
-						ArgException(const key_type &arg = key_type(), const std::string &msg = "") : std::exception() {
+						ArgException(const key_type& arg = key_type(), const std::string& msg = "") : std::exception() {
 							this->msg = msg;
 							this->arg = arg;
 						}
@@ -54,7 +51,7 @@ namespace Webserv {
 
 				class BadFormatException : public ArgException {
 					public:
-						BadFormatException(const key_type &arg = key_type()) : ArgException(arg) {
+						BadFormatException(const key_type& arg = key_type()) : ArgException(arg) {
 							std::ostringstream ss;
 
 							ss << "Bad format for argument \"" << this->arg << "\"";
@@ -65,7 +62,7 @@ namespace Webserv {
 
 				class UnknownArgException : public ArgException {
 					public:
-						UnknownArgException(const key_type &arg = key_type()) : ArgException(arg) {
+						UnknownArgException(const key_type& arg = key_type()) : ArgException(arg) {
 							std::ostringstream ss;
 
 							ss << "Unknown argument \"" << this->arg << "\"";
@@ -81,12 +78,12 @@ namespace Webserv {
 				Args(void);
 				virtual ~Args();
 
-				bool				set(const key_type &key, const value_type &value = "");
-				bool				append(const key_type &key, const value_type &value);
-				const value_type	get(const key_type &key) const;
-				bool				has(const key_type &key) const;
+				bool				set(const key_type& key, const value_type& value = "");
+				bool				append(const key_type& key, const value_type& value);
+				const value_type&	get(const key_type& key) const;
+				bool				has(const key_type& key) const;
 
-				const map_type		&getArgs(void) const;
+				const map_type&		getArgs(void) const;
 
 				// Utils Methods
 				void				fromArg(int argc = 0, char **argv = NULL);
