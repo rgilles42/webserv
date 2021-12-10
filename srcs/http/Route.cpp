@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 15:08:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:45:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ namespace Webserv {
 			this->routes.clear();
 		}
 
-		bool	Route::fromBlocks(const block_vector &blocks) {
+		bool	Route::fromBlocks(const block_vector& blocks) {
 			block_vector::const_iterator	blockIt = blocks.begin();
 			while (blockIt != blocks.end()) {
 				if (!blockIt->isComment()) {
@@ -115,11 +115,11 @@ namespace Webserv {
 			return true;
 		}
 
-		void	Route::setMimesTypes(const mimes_types_type &mimesTypes) {
+		void	Route::setMimesTypes(const mimes_types_type& mimesTypes) {
 			this->mimesTypes = mimesTypes;
 		}
 
-		void 	Route::addRoute(const routes_map::key_type &path, const routes_map::mapped_type &route) {
+		void 	Route::addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route) {
 			this->routes[path] = route;
 		}
 

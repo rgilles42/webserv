@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:39:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:32:17 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ namespace Webserv {
 		// can have multiple identique key but not same value
 
 		// Headers Methods
-		bool		HttpHeaders::isKeyValid(const std::string &key) {
+		bool	HttpHeaders::isKeyValid(const key_type& key) {
 			for (size_t i = 0; i < key.length(); i++) {
 				if (!IS_AUTHORIZED_KEY_CHAR(key[i])) {
 					return false;
@@ -27,7 +27,7 @@ namespace Webserv {
 			return true;
 		}
 
-		void		HttpHeaders::set(const std::string &key, const std::string &value) {
+		void	HttpHeaders::set(const key_type& key, const value_type& value) {
 			if (!this->isKeyValid(key)) {
 				throw std::runtime_error("HttpHeaders::set(" + key + ", " + value + ")");
 			}
@@ -36,7 +36,7 @@ namespace Webserv {
 			// this->headers[key] = value;
 		}
 
-		void		HttpHeaders::append(const std::string &key, const std::string &value) {
+		void	HttpHeaders::append(const key_type& key, const value_type& value) {
 			if (!this->isKeyValid(key)) {
 				throw std::runtime_error("HttpHeaders::append(" + key + ", " + value + ")");
 			}
@@ -47,7 +47,7 @@ namespace Webserv {
 			// this->headers[key] += ", " + value;
 		}
 
-		const std::string	HttpHeaders::get(const std::string &key) const {
+		const HttpHeaders::value_type&	HttpHeaders::get(const key_type& key) const {
 			if (!this->has(key)) {
 				throw std::out_of_range("HttpHeaders::get(" + key + ")");
 			}
@@ -55,11 +55,11 @@ namespace Webserv {
 			return it->second;
 		}
 
-		bool				HttpHeaders::has(const std::string &key) const {
+		bool	HttpHeaders::has(const key_type& key) const {
 			return this->headers.count(key) > 0;
 		}
 
-		std::string	HttpHeaders::toString(void) const {
+		const std::string				HttpHeaders::toString(void) const {
 			headerType::const_iterator it = this->headers.begin();
 			headerType::const_iterator end = this->headers.end();
 			std::string	formatedHeaders = "";
@@ -71,16 +71,16 @@ namespace Webserv {
 			return formatedHeaders;
 		}
 
-		void	HttpHeaders::fromString(const std::string &stringHeaders) {
+		void	HttpHeaders::fromString(const std::string& stringHeaders) {
 			std::string			line;
 			std::stringstream	ss(stringHeaders);
 
 			while (std::getline(ss, line)) {
-				line = trim(line);
+				line = Webserv::Utils::trim(line);
 				std::string key = line.substr(0, line.find(':'));
 				line = line.erase(0, line.find(':') + 1);
 				std::string value = line;
-				this->set(trim(key), trim(value));
+				this->set(Webserv::Utils::trim(key), Webserv::Utils::trim(value));
 			}
 		}
 

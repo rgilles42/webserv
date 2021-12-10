@@ -6,15 +6,15 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 00:38:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 15:15:05 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:43:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPSTATUSCODE_HPP
 # define HTTPSTATUSCODE_HPP
 
-# include <string>
-# include <map>
+# include <string>	// For string
+# include <map>		// For map
 
 namespace Webserv {
 
@@ -111,18 +111,18 @@ namespace Webserv {
 
 			static const StatusCodeStringMap	fillMap(void);
 
-			static HttpStatusCode::StatusCode	getStatusCode(const int &statusCode = 0);
-			static HttpStatusCode::StatusCode	getStatusCode(const std::string &statusCodeString);
+			static HttpStatusCode::StatusCode	getStatusCode(const int& statusCode = 0);
+			static HttpStatusCode::StatusCode	getStatusCode(const std::string& statusCodeString);
 
-			static std::string		getStatusCodeString(const HttpStatusCode::StatusCode &statusCode = HttpStatusCode::unknown);
+			static std::string		getStatusCodeString(const HttpStatusCode::StatusCode& statusCode = HttpStatusCode::unknown);
 
-			static bool				isInformation(const HttpStatusCode::StatusCode &statusCode);
-			static bool				isSuccess(const HttpStatusCode::StatusCode &statusCode);
-			static bool				isRedirect(const HttpStatusCode::StatusCode &statusCode);
-			static bool				isClientError(const HttpStatusCode::StatusCode &statusCode);
-			static bool				isServerError(const HttpStatusCode::StatusCode &statusCode);
+			static bool				isInformation(const HttpStatusCode::StatusCode& statusCode);
+			static bool				isSuccess(const HttpStatusCode::StatusCode& statusCode);
+			static bool				isRedirect(const HttpStatusCode::StatusCode& statusCode);
+			static bool				isClientError(const HttpStatusCode::StatusCode& statusCode);
+			static bool				isServerError(const HttpStatusCode::StatusCode& statusCode);
 
-			static bool				isError(const HttpStatusCode::StatusCode &statusCode);
+			static bool				isError(const HttpStatusCode::StatusCode& statusCode);
 
 		};
 

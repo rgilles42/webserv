@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:18:20 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 15:45:55 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:27:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # include <stdint.h>
 
-# include "../utils.hpp"
+# include "../utils/common.hpp"
 
 # define ADDRESS_BITS 16
 

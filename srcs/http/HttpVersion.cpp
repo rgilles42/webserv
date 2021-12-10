@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 01:17:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:50:32 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:45:48 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ namespace Webserv {
 
 	namespace Http {
 
-		HttpVersion::Version	HttpVersion::getVersion(const std::string &version) {
+		HttpVersion::Version	HttpVersion::getVersion(const std::string& version) {
 			if (version.length() <= 0) {
 				return HttpVersion::http_0_9;
 			}
@@ -51,7 +51,7 @@ namespace Webserv {
 			}
 		}
 
-		std::string			HttpVersion::getVersionString(const HttpVersion::Version &version) {
+		std::string			HttpVersion::getVersionString(const HttpVersion::Version& version) {
 			switch (version) {
 				case HttpVersion::http_0_9:
 					return "";

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 14:51:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:31:43 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ namespace Webserv {
 		while (filesIt != this->files.end()) {
 
 			try {
-				this->filesMap[(*filesIt)] = getFileContents((*filesIt));
+				this->filesMap[(*filesIt)] = Webserv::Utils::getFileContents((*filesIt));
 			}
 			catch (const std::exception& e) {
 				std::cerr << e.what() << " in " << (*filesIt) << std::endl;

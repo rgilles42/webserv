@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 01:17:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 15:15:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:45:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ namespace Webserv {
 			return map;
 		}
 
-		HttpStatusCode::StatusCode	HttpStatusCode::getStatusCode(const int &statusCode) {
+		HttpStatusCode::StatusCode	HttpStatusCode::getStatusCode(const int& statusCode) {
 			const HttpStatusCode::StatusCode newStatusCode = static_cast<HttpStatusCode::StatusCode>(statusCode);
 			if (HttpStatusCode::HttpStatusCodeStrings.count(newStatusCode) <= 0) {
 				return HttpStatusCode::unknown;
@@ -102,7 +102,7 @@ namespace Webserv {
 			return newStatusCode;
 		}
 
-		HttpStatusCode::StatusCode	HttpStatusCode::getStatusCode(const std::string &statusCodeString) {
+		HttpStatusCode::StatusCode	HttpStatusCode::getStatusCode(const std::string& statusCodeString) {
 			HttpStatusCode::StatusCodeStringMap::const_iterator it = HttpStatusCode::HttpStatusCodeStrings.begin();
 
 			while (it != HttpStatusCode::HttpStatusCodeStrings.end()) {
@@ -114,39 +114,39 @@ namespace Webserv {
 			return HttpStatusCode::unknown;
 		}
 
-		std::string					HttpStatusCode::getStatusCodeString(const HttpStatusCode::StatusCode &statusCode) {
+		std::string					HttpStatusCode::getStatusCodeString(const HttpStatusCode::StatusCode& statusCode) {
 			if (HttpStatusCode::HttpStatusCodeStrings.count(statusCode) <= 0) {
 				return HttpStatusCode::HttpStatusCodeStrings.at(HttpStatusCode::unknown);
 			}
 			return HttpStatusCode::HttpStatusCodeStrings.at(statusCode);
 		}
 
-		bool						HttpStatusCode::isInformation(const HttpStatusCode::StatusCode &statusCode) {
+		bool						HttpStatusCode::isInformation(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
 			return (HttpStatusCode::information_offset <= newStatusCode && newStatusCode < HttpStatusCode::success_offset);
 		}
 
-		bool						HttpStatusCode::isSuccess(const HttpStatusCode::StatusCode &statusCode) {
+		bool						HttpStatusCode::isSuccess(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
 			return (HttpStatusCode::success_offset <= newStatusCode && newStatusCode < HttpStatusCode::redirection_offset);
 		}
 
-		bool						HttpStatusCode::isRedirect(const HttpStatusCode::StatusCode &statusCode) {
+		bool						HttpStatusCode::isRedirect(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
 			return (HttpStatusCode::redirection_offset <= newStatusCode && newStatusCode < HttpStatusCode::client_error_offset);
 		}
 
-		bool						HttpStatusCode::isClientError(const HttpStatusCode::StatusCode &statusCode) {
+		bool						HttpStatusCode::isClientError(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
 			return (HttpStatusCode::client_error_offset <= newStatusCode && newStatusCode < HttpStatusCode::server_error_offset);
 		}
 
-		bool						HttpStatusCode::isServerError(const HttpStatusCode::StatusCode &statusCode) {
+		bool						HttpStatusCode::isServerError(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
 			return (HttpStatusCode::server_error_offset <= newStatusCode && newStatusCode < HttpStatusCode::misc_error_offset);
 		}
 
-		bool						HttpStatusCode::isError(const HttpStatusCode::StatusCode &statusCode) {
+		bool						HttpStatusCode::isError(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
 			return (HttpStatusCode::redirection_offset <= newStatusCode && newStatusCode < HttpStatusCode::misc_error_offset);
 		}

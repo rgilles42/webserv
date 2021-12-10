@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 16:18:22 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:30:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ namespace Webserv {
 			std::string				value;
 
 			while (std::getline(ss, line, ';')) {
-				line = trim(line);
+				line = Webserv::Utils::trim(line);
 
 				it = line.begin();
 				i = 0;

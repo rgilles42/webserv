@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/07 17:27:22 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:27:17 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <vector>
 # include <functional>
 
-# include "../utils.hpp"
+# include "../utils/common.hpp"
 
 # include "Block.hpp"
 
