@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 17:32:49 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 18:07:00 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,40 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-int main(int argc, char *argv[], char *envp[]) {
+// int main(int argc, char *argv[], char *envp[]) {
 
-	Webserv::Core webserv;
+	// Webserv::Core webserv;
 
-	if (!webserv.preInit(argc, argv, envp)) {
-		std::cout << "Fail 1" << std::endl;
-		return EXIT_FAILURE;
-	}
+	// if (!webserv.preInit(argc, argv, envp)) {
+	// 	std::cout << "Fail 1" << std::endl;
+	// 	return EXIT_FAILURE;
+	// }
 
-	if (!webserv.init()) {
-		std::cout << "Fail 2" << std::endl;
-		return EXIT_FAILURE;
-	}
+	// if (!webserv.init()) {
+	// 	std::cout << "Fail 2" << std::endl;
+	// 	return EXIT_FAILURE;
+	// }
 
-	std::cout << "Success" << std::endl;
+	// std::cout << "Success" << std::endl;
+// 	return EXIT_SUCCESS;
+// }
+
+int main(void) {
+	Webserv::Logger log;
+
+	// log << "coucou bande de nouilles!" << std::endl;
+	// log.setFile("res.txt");
+	// log << "mblc frr" << std::endl;
+	// log.setFile();
+	// log << "coucou toa sava?" << std::endl;
+	// log << NULL << std::endl;
+
+	log.write("coucou bande de nouilles!\n");
+	log.setFile("res.txt");
+	log.write("mblc frr\n");
+	log.setFile();
+	log.write("coucou toa sava?\n");
+	log.write(NULL);
+
 	return EXIT_SUCCESS;
 }
