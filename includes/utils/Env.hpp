@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 16:19:25 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:31:52 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 15:03:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <cstring>		// For strcpy
 # include <string>		// For string
 # include <map>			// For map
-# include <stdexcept>				// For runtime_error, out_of_range
+# include <stdexcept>	// For runtime_error, out_of_range
 
 namespace Webserv {
 

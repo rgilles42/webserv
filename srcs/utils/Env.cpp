@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:12:59 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:27:23 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 15:03:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ namespace Webserv {
 				return false;
 			}
 			size_t	i = 0;
-			while (i <= key.length()) {
-				if (!std::isalnum(key[i]) && !(key[i] != '_')) {
+			while (i < key.length()) {
+				if (!std::isalnum(key[i]) && !(key[i] == '_')) {
 					return false;
 				}
 				i++;
@@ -101,7 +101,9 @@ namespace Webserv {
 					if (pos != tmp.npos) {
 						key = tmp.substr(0, pos);
 						value = tmp.substr(pos + 1, tmp.length() - (pos + 1));
-						this->set(key, value);
+						if (this->isKeyValid(key)) {
+							this->set(key, value);
+						}
 					}
 				}
 				i++;

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:31:43 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:50:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 namespace Webserv {
 
-	Config::Config() {}
+	Config::Config(void) {}
 
-	Config::~Config() {}
+	Config::~Config(void) {}
 
 	void	Config::reset(void) {
 		this->files.clear();
@@ -28,7 +28,7 @@ namespace Webserv {
 		this->globalMimesTypes.clear();
 	}
 
-	bool	Config::addConfigFile(const file_type &file) {
+	bool	Config::addConfigFile(const file_type& file) {
 		if (std::find(this->files.begin(), this->files.end(), file) != this->files.end()) {
 			return false;
 		}
@@ -36,7 +36,7 @@ namespace Webserv {
 		return true;
 	}
 
-	void	Config::formatBlocks(block_vector &blocks) {
+	void	Config::formatBlocks(block_vector& blocks) {
 		if (blocks.size() <= 0) {
 			return ;
 		}

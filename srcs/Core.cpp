@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 19:13:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:51:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ namespace Webserv {
 		this->isInit = false;
 	}
 
-	Core::~Core() {}
+	Core::~Core(void) {}
 
-	void		Core::setCustomConfigFile(const std::string &configFile) {
+	void		Core::setCustomConfigFile(const std::string& configFile) {
 		this->customConfigFile = configFile;
 	}
 
-	void		Core::setCustomMimeTypesFile(const std::string &mimeTypesFile) {
+	void		Core::setCustomMimeTypesFile(const std::string& mimeTypesFile) {
 		this->customMimeTypesFile = mimeTypesFile;
 	}
 
@@ -71,7 +71,7 @@ namespace Webserv {
 		return true;
 	}
 
-	const bool	&Core::isReady(void) const {
+	const bool&	Core::isReady(void) const {
 		return this->isInit;
 	}
 
