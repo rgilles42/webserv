@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 18:07:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/11 19:44:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,21 +97,23 @@ void handleSignals(sig_atomic_t signum) {
 // }
 
 int main(void) {
-	Webserv::Logger log;
+	Webserv::Logger log(std::cout);
 
-	// log << "coucou bande de nouilles!" << std::endl;
-	// log.setFile("res.txt");
-	// log << "mblc frr" << std::endl;
-	// log.setFile();
-	// log << "coucou toa sava?" << std::endl;
-	// log << NULL << std::endl;
-
-	log.write("coucou bande de nouilles!\n");
+	log <<  "coucou bande de nouilles!\n" << std::endl;
 	log.setFile("res.txt");
-	log.write("mblc frr\n");
+	log <<  "mblc frr\n" << std::endl;
 	log.setFile();
-	log.write("coucou toa sava?\n");
-	log.write(NULL);
+	log <<  "coucou toa sava?\n" << std::endl;
+	log.setStream(std::cout);
+	log << NULL << std::endl;
+
+	// log.write("coucou bande de nouilles!\n");
+	// log.setFile("res.txt");
+	// log.write("mblc frr\n");
+	// log.setFile();
+	// log.write("coucou toa sava?\n");
+	// log.setStream(std::cout);
+	// log.write(NULL);
 
 	return EXIT_SUCCESS;
 }
