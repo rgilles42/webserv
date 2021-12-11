@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 16:49:54 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/11 19:51:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@
 # include "./utils/Parser.hpp"
 # include "./utils/MimeTypes.hpp"
 # include "./utils/Address.hpp"
+# include "./utils/OutStream.hpp"
 
-# include "./Logger.hpp"
 # include "./Config.hpp"
 # include "./Core.hpp"
 

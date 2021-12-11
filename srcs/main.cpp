@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/11 19:44:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/11 19:51:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void handleSignals(sig_atomic_t signum) {
 // }
 
 int main(void) {
-	Webserv::Logger log(std::cout);
+	Webserv::Utils::OutStream log(std::cout);
 
 	log <<  "coucou bande de nouilles!\n" << std::endl;
 	log.setFile("res.txt");
