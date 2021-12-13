@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:50:57 by rgilles           #+#    #+#             */
-/*   Updated: 2021/11/22 19:22:06 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:02:16 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,19 @@
 # include <stdint.h>
 # include <stdio.h>
 # include <errno.h>
+# include <fcntl.h>
 
 class Socket {
 public:
 	Socket(void);
-	Socket(const char* addr, unsigned short port);
+	Socket(const char* addr, unsigned short port, int blocking = 0);
 	Socket(const Socket& src);
 	Socket& operator=(const Socket& src);
 	~Socket();
 
 	int					bind(void);
 	int					listen(void);
-	Socket				accept(void);
+	Socket				accept(int blocking = 0);
 	ssize_t				read(void *buf, size_t count);
 	ssize_t				write(const void *buf, size_t count);
 	int					close(void);
@@ -51,6 +52,13 @@ public:
 		virtual const char* what() const throw()
 		{
 			return("Unable to set socket options");
+		}
+	};
+	struct SetNonBlockFailedException : public std::exception
+	{
+		virtual const char* what() const throw()
+		{
+			return("Unable to set socket to non-blocking");
 		}
 	};
 	struct BindFailedException : public std::exception
