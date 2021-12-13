@@ -30,13 +30,13 @@ public:
 	Socket& operator=(const Socket& src);
 	~Socket();
 
-	int				bind(void);
-	int				listen(void);
-	Socket			accept(void);
-	ssize_t			read(void *buf, size_t count);
-	ssize_t			write(const void *buf, size_t count);
-	int				close(void);
-	int&			fd(void);
+	int					bind(void);
+	int					listen(void);
+	Socket				accept(void);
+	ssize_t				read(void *buf, size_t count);
+	ssize_t				write(const void *buf, size_t count);
+	int					close(void);
+	int&				fd(void);
 	struct sockaddr&	addr(void);
 
 	struct SocketNotCreatedException : public std::exception
@@ -71,7 +71,7 @@ public:
 	{
 		virtual const char* what() const throw()
 		{
-			return("Unable to listen");
+			return("Unable to accept");
 		}
 	};
 private:
