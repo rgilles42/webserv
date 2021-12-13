@@ -6,14 +6,14 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:51:02 by rgilles           #+#    #+#             */
-/*   Updated: 2021/12/11 15:09:54 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:01:54 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../includes/Socket.hpp"
 
 Socket::Socket() : _fd(-1), _len(sizeof(struct sockaddr)) {}
 
-Socket::Socket(const char* addr, unsigned short port) : _fd(socket(AF_INET, SOCK_STREAM, 0)), _len(sizeof(struct sockaddr))
+Socket::Socket(const char* addr, unsigned short port, int blocking) : _fd(socket(AF_INET, SOCK_STREAM, 0)), _len(sizeof(struct sockaddr))
 {
 	int					optval = 1;
 	struct sockaddr_in&	address = reinterpret_cast<struct sockaddr_in&>(this->_addr);
@@ -25,6 +25,9 @@ Socket::Socket(const char* addr, unsigned short port) : _fd(socket(AF_INET, SOCK
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = inet_addr(addr);
 	address.sin_port = htons(port);
+	if (!blocking)
+		if (fcntl(this->_fd, F_SETFL, O_NONBLOCK) != 0)
+			throw SetNonBlockFailedException();
 }
 
 Socket::Socket(const Socket& src) {*this = src;}
@@ -67,13 +70,16 @@ int	Socket::listen()
 	return (listenret);
 }
 
-Socket	Socket::accept()
+Socket	Socket::accept(int blocking)
 {
 	Socket		newSocket;
 
 	newSocket._fd = ::accept(this->_fd, &newSocket._addr, &newSocket._len);
 	if (newSocket._fd < 0)
 		throw AcceptFailedException();
+	if (!blocking)
+		if (fcntl(newSocket._fd, F_SETFL, O_NONBLOCK) != 0)
+			throw SetNonBlockFailedException();
 	return (newSocket);
 }
 
