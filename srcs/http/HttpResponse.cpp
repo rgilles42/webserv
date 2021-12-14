@@ -20,7 +20,7 @@ namespace Webserv {
 			this->initDefaultHeaders();
 		}
 
-		HttpResponse::HttpResponse(const Resource& resource) {
+		HttpResponse::HttpResponse(const Resource &resource) {
 			this->initDefaultHeaders();
 
 			this->headers.set("Content-Type", resource.getContentType());

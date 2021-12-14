@@ -48,9 +48,9 @@ namespace Webserv {
 
 			public:
 				HttpResponse(void);
-				HttpResponse(const Resource& ressource);
-				HttpResponse(const HttpResponse& x);
-				HttpResponse(const std::string& response);
+				HttpResponse(const Resource &ressource);
+				HttpResponse(const HttpResponse &x);
+				HttpResponse(const std::string &response);
 
 				// response Methods
 				void				append(const std::string& key, const std::string& value);
