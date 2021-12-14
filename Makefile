@@ -22,7 +22,7 @@ CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/Core.hpp \
-				$(HEADER_DIR)/Ressource.hpp \
+				$(HEADER_DIR)/Resource.hpp \
 				$(HEADER_DIR)/Socket.hpp \
 				$(HEADER_DIR)/utils.hpp \
 				$(HEADER_DIR)/utils/ci_less.hpp \
@@ -44,7 +44,7 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/Core.cpp \
-				${SRC_DIR}/Ressource.cpp \
+				${SRC_DIR}/Resource.cpp \
 				$(SRC_DIR)/Socket.cpp \
 				${SRC_DIR}/utils.cpp \
 				$(SRC_DIR)/utils/Byte.cpp \

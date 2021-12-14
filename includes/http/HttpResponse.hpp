@@ -16,7 +16,7 @@
 #include <string>
 #include <stdint.h>
 
-#include "../Ressource.hpp"
+#include "../Resource.hpp"
 #include "HttpHeaders.hpp"
 #include "../utils.hpp"
 
@@ -44,7 +44,7 @@ namespace Webserv {
 
 			public:
 				HttpResponse(void);
-				HttpResponse(const Ressource &ressource);
+				HttpResponse(const Resource &ressource);
 				HttpResponse(const HttpResponse &x);
 				HttpResponse(const std::string &response);
 

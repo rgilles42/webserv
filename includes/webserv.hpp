@@ -40,7 +40,7 @@
 # define BUFFER_SIZE 4096
 # define MAX_CONNECTION 50
 
-# include "./Ressource.hpp"
+# include "./Resource.hpp"
 # include "./utils.hpp"
 # include "./Socket.hpp"
 

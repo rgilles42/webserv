@@ -22,7 +22,7 @@ void handleSignals(sig_atomic_t signum) {
 
 int main(void) {
 
-	Socket	ServerSocket("0.0.0.0", 8000);
+	Socket	ServerSocket("0.0.0.0", 80);
 	Socket	ClientSocket;
 	ssize_t	size_read = 0;
 	char	buffer[BUFFER_SIZE + 1];
@@ -62,10 +62,8 @@ int main(void) {
 		printf("Chaine reçue : %s\n", message.c_str());
 
 		Webserv::Http::HttpRequest request(message);
-		Ressource currentRessource("./default_pages/index.html");
-		currentRessource.setContent(getFileContents(currentRessource.getUri()));
-		currentRessource.setContentType(Webserv::Utils::getContentTypeByFile(currentRessource.getUri(), "text/plain"));
-		Webserv::Http::HttpResponse response(currentRessource);
+		Webserv::Resource currentRessource("./default_pages/index.html");
+		Webserv::Http::HttpResponse response(currentRessource.getContent());
 		ClientSocket.write(response.toString().c_str(), response.toString().length());
 		printf("Chaine envoyée : %s\n", response.toString().c_str());
 		shutdown(ClientSocket.fd(), 2);

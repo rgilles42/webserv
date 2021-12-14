@@ -20,12 +20,12 @@ namespace Webserv {
 			this->initDefaultHeaders();
 		}
 
-		HttpResponse::HttpResponse(const Ressource &ressource) {
+		HttpResponse::HttpResponse(const Resource &resource) {
 			this->initDefaultHeaders();
 
-			this->headers.set("Content-Type", ressource.getContentType());
-			this->headers.set("Content-Length", SSTR(ressource.getContent().length()));
-			this->body = ressource.getContent();
+			this->headers.set("Content-Type", resource.getContentType());
+			this->headers.set("Content-Length", SSTR(resource.getContent().length()));
+			this->body = resource.getContent();
 		}
 
 		HttpResponse::HttpResponse(const HttpResponse &x) {
