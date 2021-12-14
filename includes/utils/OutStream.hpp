@@ -22,6 +22,7 @@ namespace Webserv {
 		class OutStream {
 			public:
 				enum mode_type {
+					UNKNOWN = 0,
 					STREAM,
 					FILE,
 					STDOUT,
@@ -41,6 +42,7 @@ namespace Webserv {
 				void				setBuf(const out_type& stream, const mode_type& mode);
 
 			public:
+				OutStream(void);
 				OutStream(const out_type& stream);
 				OutStream(const char *file);
 				~OutStream(void);

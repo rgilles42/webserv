@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 19:49:49 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/11 19:50:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/14 15:11:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ namespace Webserv {
 
 	namespace Utils {
 
-		OutStream::OutStream(const out_type& stream) : out(NULL) {
-			this->mode = OutStream::STREAM;
+		OutStream::OutStream(void) : out(NULL), mode(OutStream::UNKNOWN) {
+		}
+
+		OutStream::OutStream(const out_type& stream) : out(NULL), mode(OutStream::UNKNOWN) {
 			this->setStream(stream);
 		}
 
-		OutStream::OutStream(const char *file) : out(NULL) {
-			this->mode = OutStream::STREAM;
+		OutStream::OutStream(const char *file) : out(NULL), mode(OutStream::UNKNOWN) {
 			this->setFile(file);
 		}
 
@@ -62,8 +63,8 @@ namespace Webserv {
 		}
 
 		void	OutStream::setFile(const char *file) {
+			this->closeFile();
 			if (file != NULL) {
-				this->closeFile();
 				this->of.open(file);
 				this->setBuf(this->of, OutStream::FILE);
 			}
