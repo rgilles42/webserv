@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/11 19:51:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:35:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,15 +97,20 @@ void handleSignals(sig_atomic_t signum) {
 // }
 
 int main(void) {
-	Webserv::Utils::OutStream log(std::cout);
 
-	log <<  "coucou bande de nouilles!\n" << std::endl;
-	log.setFile("res.txt");
-	log <<  "mblc frr\n" << std::endl;
-	log.setFile();
-	log <<  "coucou toa sava?\n" << std::endl;
-	log.setStream(std::cout);
-	log << NULL << std::endl;
+	Webserv::Logger log("\x1b[33m[Webserv]\x1b[0m");
+
+	log << std::make_pair(log.INFO, "salut") << std::endl;
+
+	// Webserv::Utils::OutStream log(std::cout);
+
+	// log <<  "coucou bande de nouilles!\n" << std::endl;
+	// log.setFile("res.txt");
+	// log <<  "mblc frr\n" << std::endl;
+	// log.setFile();
+	// log <<  "coucou toa sava?\n" << std::endl;
+	// log.setStream(std::cout);
+	// log << NULL << std::endl;
 
 	// log.write("coucou bande de nouilles!\n");
 	// log.setFile("res.txt");

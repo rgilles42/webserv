@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 19:49:49 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 15:11:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/14 16:14:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,20 @@ namespace Webserv {
 			this->setFile(file);
 		}
 
+		OutStream::OutStream(const OutStream& src) : out(NULL), mode(OutStream::UNKNOWN) {
+			this->setBuf(src.getOut(), src.getMode());
+		}
+
 		OutStream::~OutStream(void) {
 			this->closeFile();
+		}
+
+		OutStream&					OutStream::operator=(const OutStream& src) {
+			if (this != &src) {
+				this->closeFile();
+				this->setBuf(src.getOut(), src.getMode());
+			}
+			return (*this);
 		}
 
 		const OutStream::mode_type&	OutStream::getMode(void) const {

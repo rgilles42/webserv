@@ -34,10 +34,10 @@ namespace Webserv {
 				typedef std::streambuf	buff_type;
 				typedef std::ofstream	of_type;
 
-				mode_type	mode;
 				buff_type	*buf;
 				of_type		of;
 				out_type	out;
+				mode_type	mode;
 
 				void				setBuf(const out_type& stream, const mode_type& mode);
 
@@ -45,7 +45,10 @@ namespace Webserv {
 				OutStream(void);
 				OutStream(const out_type& stream);
 				OutStream(const char *file);
+				OutStream(const OutStream& src);
 				~OutStream(void);
+
+				OutStream&			operator=(const OutStream& src);
 
 				const mode_type&	getMode(void) const;
 				const out_type&		getOut(void) const;
