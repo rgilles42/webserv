@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 16:52:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:50:20 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@
 # include "./Config.hpp"
 # include "./Core.hpp"
 
-namespace Webserv {
+// namespace Webserv {
 
-	Webserv::Core &mainCore = Webserv::Utils::Singleton<Webserv::Core>::getInstance();
+// 	Webserv::Core &mainCore = Webserv::Utils::Singleton<Webserv::Core>::getInstance();
 
-} // namespace Webserv
+// } // namespace Webserv
 
 #endif

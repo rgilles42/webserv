@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:35:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:47:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,47 +78,20 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-// int main(int argc, char *argv[], char *envp[]) {
+int main(int argc, char *argv[], char *envp[]) {
 
-	// Webserv::Core webserv;
+	Webserv::Core webserv;
 
-	// if (!webserv.preInit(argc, argv, envp)) {
-	// 	std::cout << "Fail 1" << std::endl;
-	// 	return EXIT_FAILURE;
-	// }
+	if (!webserv.preInit(argc, argv, envp)) {
+		std::cout << "Fail 1" << std::endl;
+		return EXIT_FAILURE;
+	}
 
-	// if (!webserv.init()) {
-	// 	std::cout << "Fail 2" << std::endl;
-	// 	return EXIT_FAILURE;
-	// }
+	if (!webserv.init()) {
+		std::cout << "Fail 2" << std::endl;
+		return EXIT_FAILURE;
+	}
 
-	// std::cout << "Success" << std::endl;
-// 	return EXIT_SUCCESS;
-// }
-
-int main(void) {
-
-	Webserv::Logger log("\x1b[33m[Webserv]\x1b[0m");
-
-	log << std::make_pair(log.INFO, "salut") << std::endl;
-
-	// Webserv::Utils::OutStream log(std::cout);
-
-	// log <<  "coucou bande de nouilles!\n" << std::endl;
-	// log.setFile("res.txt");
-	// log <<  "mblc frr\n" << std::endl;
-	// log.setFile();
-	// log <<  "coucou toa sava?\n" << std::endl;
-	// log.setStream(std::cout);
-	// log << NULL << std::endl;
-
-	// log.write("coucou bande de nouilles!\n");
-	// log.setFile("res.txt");
-	// log.write("mblc frr\n");
-	// log.setFile();
-	// log.write("coucou toa sava?\n");
-	// log.setStream(std::cout);
-	// log.write(NULL);
-
+	std::cout << "Success" << std::endl;
 	return EXIT_SUCCESS;
 }

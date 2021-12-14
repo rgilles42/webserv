@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:51:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:49:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ namespace Webserv {
 
 	Core::Core(void) {
 		this->isInit = false;
+		this->logger.setPrefix("\x1b[33m[Webserv]\x1b[0m");
 	}
 
 	Core::~Core(void) {}
+
+	const Core::logger_type&	Core::getLogger(void) const {
+		return this->logger;
+	}
 
 	void		Core::setCustomConfigFile(const std::string& configFile) {
 		this->customConfigFile = configFile;
@@ -35,15 +40,15 @@ namespace Webserv {
 		while (it != this->args.getArgs().end()) {
 			if (it->first == "-c") {
 				if (it->second.empty()) {
-					std::cout << args_type::BadFormatException(it->first).what() << std::endl;
+					this->logger << std::make_pair(this->logger.ERROR, args_type::BadFormatException(it->first).what()) << std::endl;
 					exit(EXIT_FAILURE);
 				}
 				this->setCustomConfigFile(it->second);
 			} else if (it->first == "-?" || it->first == "-h") {
-				std::cout << this->getHelp() << std::endl;
+				std::cout << this->getHelp()  << std::endl;
 				exit(EXIT_SUCCESS);
 			} else {
-				std::cout << args_type::UnknownArgException(it->first).what() << std::endl;
+				this->logger << std::make_pair(this->logger.ERROR, args_type::UnknownArgException(it->first).what())  << std::endl;
 				exit(EXIT_FAILURE);
 			}
 			it++;
