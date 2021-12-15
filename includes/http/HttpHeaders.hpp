@@ -6,22 +6,21 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:41:48 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:32:03 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPHEADERS_HPP
 # define HTTPHEADERS_HPP
 
-# include <cctype>
-# include <string>
-# include <map>
-# include <functional>
-# include <stdexcept>
+# include <cctype>					// For isalpha, isdigit, etc..
+# include <string>					// For string
+# include <map>						// For map
+# include <stdexcept>				// For runtime_error, out_of_range
+# include <sstream>					// For stringstream
 
-# include "../utils.hpp"
-
-# include "../utils/ci_less.hpp"
+# include "../utils/common.hpp"		// For trim
+# include "../utils/ci_less.hpp"	// For ci_less
 
 # define CR						std::string("\r")
 # define LF						std::string("\n")
@@ -36,22 +35,26 @@ namespace Webserv {
 	namespace Http {
 
 		class HttpHeaders {
+			public:
+				typedef std::string										key_type;
+				typedef std::string										value_type;
+
+				typedef std::multimap<key_type, value_type, Webserv::Utils::ci_less>	headerType;
 
 			protected:
-				typedef std::multimap<std::string, std::string, ci_less>	headerType;
 				headerType	headers;
 
 			public:
 				// Headers Methods
-				bool		isKeyValid(const std::string &key);
-				void		set(const std::string &key, const std::string &value);
-				void		append(const std::string &key, const std::string &value);
-				const std::string	get(const std::string &key) const;
-				bool		has(const std::string &key) const;
+				bool				isKeyValid(const key_type& key);
+				void				set(const key_type& key, const value_type& value);
+				void				append(const key_type& key, const value_type& value);
+				const value_type&	get(const key_type& key) const;
+				bool				has(const key_type& key) const;
 
 				// Utils Methods
-				std::string	toString(void) const;
-				void		fromString(const std::string &request);
+				const std::string	toString(void) const;
+				void				fromString(const std::string& request);
 		};
 
 	} // namespace Utils

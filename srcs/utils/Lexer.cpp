@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:10:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:35:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ namespace Webserv {
 			this->tokens.clear();
 		}
 
-		const Lexer::token_vector	&Lexer::getTokens(void) const {
+		const Lexer::token_vector&	Lexer::getTokens(void) const {
 			return this->tokens;
 		}
 
-		const Lexer::token_vector	&Lexer::tokenize(const std::string &str) {
+		const Lexer::token_vector&	Lexer::tokenize(const std::string &str) {
 			token_type::token_value value;
 			token_type::token_type type;
 			size_t i = 0;

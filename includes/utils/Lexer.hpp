@@ -6,20 +6,22 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:10:18 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:35:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_HPP
 # define LEXER_HPP
 
-# include <string>
-# include <vector>
-# include <exception>
-# include <sstream>
-# include <sys/types.h>
+# include <string>			// For string
+# include <vector>			// For vector
+# include <exception>		// For exception
+# include <sstream>			// For stringstream
+# include <sys/types.h>		// For ssize_t
 
-# include "Token.hpp"
+# include <iostream>		// For cout, endl TODO: Remove
+
+# include "Token.hpp"		// For Token
 
 namespace Webserv {
 
@@ -36,12 +38,12 @@ namespace Webserv {
 						token_type	token;
 
 					public:
-						LexerException(const token_type &token = token_type(), const std::string &msg = "") : std::exception() {
+						LexerException(const token_type& token = token_type(), const std::string& msg = "") : std::exception() {
 							this->msg = msg;
 							this->token = token;
 						}
 						virtual ~LexerException() throw() {}
-						const token_type &getToken() const {
+						const token_type& getToken() const {
 							return this->token;
 						}
 						virtual const char	*what() const throw() {
@@ -51,7 +53,7 @@ namespace Webserv {
 
 				class missingEndOfDirectiveException : public LexerException {
 					public:
-						missingEndOfDirectiveException(const token_type &token = token_type()) : LexerException(token) {
+						missingEndOfDirectiveException(const token_type& token = token_type()) : LexerException(token) {
 							std::ostringstream ss;
 
 							ss << "directive \"" << token.getValue() << "\" is not terminated by \";\" at " << token.getLine();
@@ -62,7 +64,7 @@ namespace Webserv {
 
 				class unexpectedEndOfStrException : public LexerException {
 					public:
-						unexpectedEndOfStrException(const token_type &token = token_type()) : LexerException(token) {
+						unexpectedEndOfStrException(const token_type& token = token_type()) : LexerException(token) {
 							std::ostringstream ss;
 
 							ss << "Unexpected end of string, expecting \"}\"";
@@ -73,7 +75,7 @@ namespace Webserv {
 
 				class UnexpectedTokenException : public LexerException {
 					public:
-						UnexpectedTokenException(const token_type &token = token_type()) : LexerException(token) {
+						UnexpectedTokenException(const token_type& token = token_type()) : LexerException(token) {
 							std::ostringstream ss;
 
 							ss << "Unexpected \"" << token.getValue() << "\" at " << token.getLine();
@@ -84,7 +86,7 @@ namespace Webserv {
 
 				class UnknownTokenException : public LexerException {
 					public:
-						UnknownTokenException(const token_type &token = token_type()) : LexerException(token) {
+						UnknownTokenException(const token_type& token = token_type()) : LexerException(token) {
 							std::ostringstream ss;
 
 							ss << "Unknown token \"" << token.getValue() << "\" at " << token.getLine();
@@ -110,9 +112,9 @@ namespace Webserv {
 
 			public:
 				Lexer(void);
-				Lexer(const std::string &str);
+				Lexer(const std::string& str);
 
-				const token_vector	&tokenize(const std::string &str);
+				const token_vector	&tokenize(const std::string& str);
 
 				void				resetLexer(void);
 
@@ -122,7 +124,7 @@ namespace Webserv {
 
 				bool				checkTokens(void) const;
 
-				static void			drawTokens(const token_vector &tokens);
+				static void			drawTokens(const token_vector& tokens);
 
 		};
 

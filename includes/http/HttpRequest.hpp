@@ -6,19 +6,19 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:47:27 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:40:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPREQUEST_HPP
 # define HTTPREQUEST_HPP
 
-#include <string>
-#include <map>
-#include <vector>
+#include <string>				// For string
+#include <map>					// For map
+#include <vector>				// For vector
 
-#include "HttpHeaders.hpp"
-#include "../utils.hpp"
+#include "HttpHeaders.hpp"		// For HttpHeaders
+#include "../utils/common.hpp"	// For trim
 
 # define HTTP_PROTOCOL			std::string("HTTP/1.1")
 
@@ -33,23 +33,28 @@ namespace Webserv {
 	namespace Http {
 
 		class HttpRequest {
-
 			public:
+				typedef std::string method_type;
+				typedef std::string path_type;
+				typedef std::string protocol_type;
+				typedef Webserv::Http::HttpHeaders	headers_type;
+				typedef std::string body_type;
+
 				typedef	std::vector<std::string>			ListedValues;
 				typedef std::map<std::string, std::string>	MappedValues;
 				typedef std::pair<bool, MappedValues >		MappedValuesValid;
 
 			protected:
-				std::string					method;
-				std::string					fullPath;
-				std::string					protocol;
-				Webserv::Http::HttpHeaders	headers;
-				std::string					body;
+				method_type		method;
+				path_type		fullPath;
+				protocol_type	protocol;
+				headers_type	headers;
+				body_type		body;
 
 			public:
 				HttpRequest(void);
-				HttpRequest(const HttpRequest &x);
-				HttpRequest(const std::string &request);
+				HttpRequest(const HttpRequest& x);
+				HttpRequest(const std::string& request);
 
 				// Request Properties
 				const std::string	getBaseUrl(void) const;
@@ -78,15 +83,15 @@ namespace Webserv {
 				bool				acceptsCharsets(const std::string);
 				bool				acceptsEncodings(const std::string);
 				bool				acceptsLanguages(const std::string);
-				const std::string	get(const std::string &key) const;
+				const std::string	get(const std::string& key) const;
 				bool				is(const std::string);
-				const std::string	param(const std::string &key, const std::string &defaultValue = "") const;
+				const std::string	param(const std::string& key, const std::string& defaultValue = "") const;
 
 
 
 				// Utils Methods
-				void		fromString(const std::string &request);
-				std::string	toString(void) const;
+				void				fromString(const std::string& request);
+				const std::string	toString(void) const;
 
 		};
 

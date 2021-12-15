@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/12/03 14:10:12 by ppaglier         ###   ########.fr        #
+#    Updated: 2021/12/14 16:51:22 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,10 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/Core.hpp \
 				$(HEADER_DIR)/Ressource.hpp \
 				$(HEADER_DIR)/Socket.hpp \
-				$(HEADER_DIR)/utils.hpp \
+				$(HEADER_DIR)/Logger.hpp \
+				$(HEADER_DIR)/utils/common.hpp \
 				$(HEADER_DIR)/utils/ci_less.hpp \
+				$(HEADER_DIR)/utils/OutStream.hpp \
 				$(HEADER_DIR)/utils/Byte.hpp \
 				$(HEADER_DIR)/utils/Token.hpp \
 				$(HEADER_DIR)/utils/Lexer.hpp \
@@ -33,6 +35,10 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Parser.hpp \
 				$(HEADER_DIR)/utils/MimeTypes.hpp \
 				$(HEADER_DIR)/utils/Address.hpp \
+				$(HEADER_DIR)/utils/Directive.hpp \
+				$(HEADER_DIR)/utils/Env.hpp \
+				$(HEADER_DIR)/utils/Args.hpp \
+				$(HEADER_DIR)/utils/Singleton.hpp \
 				$(HEADER_DIR)/Config.hpp \
 				$(HEADER_DIR)/http/Server.hpp \
 				$(HEADER_DIR)/http/Route.hpp \
@@ -46,7 +52,9 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/Core.cpp \
 				${SRC_DIR}/Ressource.cpp \
 				$(SRC_DIR)/Socket.cpp \
-				${SRC_DIR}/utils.cpp \
+				$(SRC_DIR)/Logger.cpp \
+				$(SRC_DIR)/utils/common.cpp \
+				$(SRC_DIR)/utils/OutStream.cpp \
 				$(SRC_DIR)/utils/Byte.cpp \
 				$(SRC_DIR)/utils/Token.cpp \
 				$(SRC_DIR)/utils/Lexer.cpp \
@@ -54,6 +62,9 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Parser.cpp \
 				$(SRC_DIR)/utils/MimeTypes.cpp \
 				$(SRC_DIR)/utils/Address.cpp \
+				$(SRC_DIR)/utils/Directive.cpp \
+				$(SRC_DIR)/utils/Env.cpp \
+				$(SRC_DIR)/utils/Args.cpp \
 				$(SRC_DIR)/Config.cpp \
 				$(SRC_DIR)/http/Server.cpp \
 				$(SRC_DIR)/http/Route.cpp \

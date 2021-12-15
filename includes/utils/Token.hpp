@@ -6,18 +6,18 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 17:19:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:47:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_HPP
 # define TOKEN_HPP
 
-# include <string>
-# include <map>
-# include <vector>
+# include <string>		// For string
+# include <map>			// For map
+# include <vector>		// For vector
 
-# include <iostream>
+# include <iostream>	// For cout, endl TODO: remove
 
 namespace Webserv {
 
@@ -51,17 +51,17 @@ namespace Webserv {
 
 			public:
 				// Non-static Methods
-				Token(const token_value &value = token_value(), const token_type &type = Token::T_TEXT, const token_line &line = token_line(), const token_pos &position = token_pos());
+				Token(const token_value& value = token_value(), const token_type& type = Token::T_TEXT, const token_line& line = token_line(), const token_pos& position = token_pos());
 
-				const token_value		&getValue(void) const;
+				const token_value&		getValue(void) const;
 
-				const token_type		&getType(void) const;
+				const token_type&		getType(void) const;
 
-				const token_line		&getLine(void) const;
+				const token_line&		getLine(void) const;
 
-				const token_pos			&getPosition(void) const;
+				const token_pos&		getPosition(void) const;
 
-				bool					is(token_type &type) const;
+				bool					is(token_type& type) const;
 				bool					isText(void) const;
 				bool					isSimpleEnd(void) const;
 				bool					isComplexStart(void) const;
@@ -73,19 +73,19 @@ namespace Webserv {
 
 				// Static Methods
 
-				static bool				is(const token_type &type, const token_type &type2);
-				static bool				isText(const token_type &type);
-				static bool				isSimpleEnd(const token_type &type);
-				static bool				isComplexStart(const token_type &type);
-				static bool				isComplexEnd(const token_type &type);
-				static bool				isComment(const token_type &type);
-				static bool				isNewLine(const token_type &type);
-				static bool				isEnd(const token_type &type);
-				static bool				isComplex(const token_type &type);
+				static bool				is(const token_type& type, const token_type& type2);
+				static bool				isText(const token_type& type);
+				static bool				isSimpleEnd(const token_type& type);
+				static bool				isComplexStart(const token_type& type);
+				static bool				isComplexEnd(const token_type& type);
+				static bool				isComment(const token_type& type);
+				static bool				isNewLine(const token_type& type);
+				static bool				isEnd(const token_type& type);
+				static bool				isComplex(const token_type& type);
 
 				static const token_map	fillMap(void);
 
-				static token_type		getTokenTypeByStr(const std::string &str, size_t start);
+				static token_type		getTokenTypeByStr(const std::string& str, size_t start);
 
 				static token_value		getTokenValueByType(token_type type);
 		};

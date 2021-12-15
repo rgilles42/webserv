@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 22:55:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:45:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,30 @@ namespace Webserv {
 
 	namespace Http {
 
-		Route::Route(void) {}
+		Route::Route(void) {
+			this->init();
+		}
 
 		Route::~Route() {}
 
-		void	Route::fromBlocks(const block_vector &blocks) {
+		void	Route::init(void) {
+			this->mimesTypes.clear();
+
+			this->error_pages.clear();
+			this->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
+			this->upload_store = DEFAULT_UPLOAD_STORE;
+
+			this->_return = DEFAULT_RETURN;
+			this->autoindex = DEFAULT_AUTOINDEX;
+			this->root = DEFAULT_ROOT;
+			this->index.clear();
+
+			this->limit_except.clear();
+
+			this->routes.clear();
+		}
+
+		bool	Route::fromBlocks(const block_vector& blocks) {
 			block_vector::const_iterator	blockIt = blocks.begin();
 			while (blockIt != blocks.end()) {
 				if (!blockIt->isComment()) {
@@ -29,56 +48,78 @@ namespace Webserv {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
 						if (directive == "location") {
 							route_type newRoute;
-							newRoute.fromBlocks(blockIt->getChilds());
-							this->routes["/"] = newRoute;
+							newRoute.setMimesTypes(this->mimesTypes);
+							if (!newRoute.fromBlocks(blockIt->getChilds())) {
+								return false;
+							}
+							routes_map::key_type key = "/";
+							if (values.size() >= 2) {
+								key = values[1].getValue();
+							}
+							this->routes[key] = newRoute;
 						} else if (directive == "types") {
 							this->mimesTypes.clear();
-							this->mimesTypes.fromBlocks(blockIt->getChilds());
+							if (!this->mimesTypes.fromBlocks(blockIt->getChilds())) {
+								return false;
+							}
+						} else if (directive == "error_page") {
+							error_pages_pair errorPage;
+							if (!directive_type::parseErrorPage(values, errorPage)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+							this->error_pages.insert(errorPage);
+						} else if (directive == "limit_except") {
+							if (!directive_type::parseLimitExcept(values, this->limit_except)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+						} else if (directive == "client_max_body_size") {
+							if (!directive_type::parseClientMaxBodySize(values, this->client_max_body_size, DEFAULT_CLIENT_MAX_BODY_SIZE)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+						} else if (directive == "return") {
+							if (!directive_type::parseReturn(values, this->_return, DEFAULT_RETURN)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+						} else if (directive == "autoindex") {
+							if (!directive_type::parseAutoIndex(values, this->autoindex, DEFAULT_AUTOINDEX)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+						} else if (directive == "root") {
+							if (!directive_type::parseRoot(values, this->root, DEFAULT_ROOT)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+						} else if (directive == "index") {
+							if (!directive_type::parseIndex(values, this->index)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+						} else if (directive == "upload_store") {
+							if (!directive_type::parseUploadStore(values, this->upload_store, DEFAULT_UPLOAD_STORE)) {
+								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								return false;
+							}
+						} else {
+							std::cerr << directive_type::UnknownDirectiveException(directive).what() << std::endl;
+							return false;
 						}
 					}
 				}
 				blockIt++;
 			}
+			return true;
 		}
 
-		void	Route::setMimesTypes(const mimes_types_type &mimesTypes) {
+		void	Route::setMimesTypes(const mimes_types_type& mimesTypes) {
 			this->mimesTypes = mimesTypes;
 		}
 
-		void 	Route::setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page) {
-			this->error_pages[errorCode] = page;
-		}
-
-		void 	Route::setClientMaxBodySize(const client_max_body_size_type &client_max_body_size) {
-			this->client_max_body_size = client_max_body_size;
-		}
-
-		void 	Route::setUploadStore(const upload_store_type &upload_store) {
-			this->upload_store = upload_store;
-		}
-
-		void 	Route::setReturn(const return_type &_return) {
-			this->_return = _return;
-		}
-
-
-		void 	Route::setAutoindex(const autoindex_type &autoindex) {
-			this->autoindex = autoindex;
-		}
-
-		void 	Route::setRoot(const root_type &root) {
-			this->root = root;
-		}
-
-		void 	Route::setIndex(const index_type &index) {
-			this->index = index;
-		}
-
-		void 	Route::setLimitExcept(const limit_except_type &limit_except) {
-			this->limit_except = limit_except;
-		}
-
-		void 	Route::addRoute(const routes_map::key_type &path, const routes_map::mapped_type &route) {
+		void 	Route::addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route) {
 			this->routes[path] = route;
 		}
 

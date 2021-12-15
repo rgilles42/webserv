@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:53:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 01:32:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:58:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,34 +18,35 @@ namespace Webserv {
 
 		Address::Address(void) {}
 
-		Address::Address(const std:: string &address) {
+		Address::Address(const std:: string& address) {
 			this->fromString(address);
 		}
 
 		Address::~Address() {}
 
-		uint16_t			Address::my_htons(uint16_t hostshort) const {
-			return ((hostshort & 0xff) << 8) | (hostshort >> 8);
+		uint16_t					Address::my_htons(uint16_t hostshort) const {
+			return ((hostshort&  0xff) << 8) | (hostshort >> 8);
 		}
-		uint16_t			Address::my_ntohs(uint16_t netshort) const {
-			return ((netshort & 0xff) << 8) | (netshort >> 8);
+		uint16_t					Address::my_ntohs(uint16_t netshort) const {
+			return ((netshort&  0xff) << 8) | (netshort >> 8);
 		}
 
-		void				Address::reset(void) {
+		void						Address::reset(void) {
 			this->port = 0;
 			this->type = Address::unknown;
 			std::memset(this->address, 0, ADDRESS_BITS);
+			this->addressIsValid = false;
 		}
 
-		const Address::value_type	&Address::getAddress(void) const {
+		const Address::value_type&	Address::getAddress(void) const {
 			return this->address;
 		}
 
-		const Address::address_type	&Address::getType(void) const {
+		const Address::address_type&	Address::getType(void) const {
 			return this->type;
 		}
 
-		const Address::port_type	&Address::getPort(void) const {
+		const Address::port_type&	Address::getPort(void) const {
 			return this->port;
 		}
 
@@ -66,7 +67,7 @@ namespace Webserv {
 			return this->my_ntohs(this->port);
 		}
 
-		bool						Address::is(const address_type &type) const {
+		bool						Address::is(const address_type& type) const {
 			return this->type == type;
 		}
 
@@ -78,7 +79,11 @@ namespace Webserv {
 			return this->is(Address::ipv6);
 		}
 
-		bool				Address::setPort(const int &number) {
+		const bool&					Address::isAddressValid(void) const {
+			return this->addressIsValid;
+		}
+
+		bool						Address::setPort(const int& number) {
 			if (number < 0 || number > 65535) {
 				return false;
 			}
@@ -86,7 +91,13 @@ namespace Webserv {
 			return true;
 		}
 
-		bool						Address::fromString(const  std::string &str) {
+		bool						Address::setAddress(const value_type& address) {
+			std::memcpy(this->address, address, ADDRESS_BITS);
+			this->addressIsValid = true;
+			return true;
+		}
+
+		bool						Address::fromString(const  std::string& str) {
 			bool success = true;
 			std::string line = str;
 			size_t pchColon = line.find(':');
@@ -161,7 +172,10 @@ namespace Webserv {
 					i = j;
 				}
 			} else if (this->isIpv6()) {
-				std::cout << "je suis une IPV6 non traiter" << std::endl;
+				// "je suis une IPV6 non traiter"
+			}
+			if (success) {
+				this->addressIsValid = true;
 			}
 			return success;
 		}

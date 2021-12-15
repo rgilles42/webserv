@@ -6,13 +6,13 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 15:13:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/11/03 19:00:52 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:56:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Ressource.hpp"
 
-Ressource::Ressource(const std::string &uri, const std::string &statusCode) {
+Ressource::Ressource(const std::string& uri, const std::string& statusCode) {
 	this->uri = uri;
 	this->content = "";
 	this->contentType = "text/plain";
@@ -20,44 +20,44 @@ Ressource::Ressource(const std::string &uri, const std::string &statusCode) {
 	this->hash = 1;
 }
 
-void		Ressource::setUri(const std::string &uri) {
+void		Ressource::setUri(const std::string& uri) {
 	this->uri = uri;
 }
 
-void		Ressource::setContent(const std::string &content) {
+void		Ressource::setContent(const std::string& content) {
 	this->content = content;
 	this->hash = this->createHash();
 }
 
-void		Ressource::setContentType(const std::string &contentType) {
+void		Ressource::setContentType(const std::string& contentType) {
 	this->contentType = contentType;
 }
 
-void		Ressource::setStatusCode(const std::string &statusCode) {
+void		Ressource::setStatusCode(const std::string& statusCode) {
 	this->statusCode = statusCode;
 }
 
-uint32_t	Ressource::createHash(void) {
+Ressource::hash_type	Ressource::createHash(void) {
 	return 1;
 }
 
-std::string	Ressource::getUri(void) const {
+const Ressource::uri_type&			Ressource::getUri(void) const {
 	return this->uri;
 }
 
-std::string	Ressource::getContent(void) const {
+const Ressource::content_type&		Ressource::getContent(void) const {
 	return this->content;
 }
 
-std::string	Ressource::getContentType(void) const {
+const Ressource::content_t_type&	Ressource::getContentType(void) const {
 	return this->contentType;
 }
 
-std::string	Ressource::getStatusCode(void) const {
+const Ressource::status_code_type&	Ressource::getStatusCode(void) const {
 	return this->statusCode;
 }
 
-uint32_t	Ressource::getHash(void) const {
+Ressource::hash_type				Ressource::getHash(void) const {
 	return this->hash;
 }
 

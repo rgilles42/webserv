@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 12:51:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:44:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 namespace Webserv {
 
 	namespace Http {
+
 		HttpRequest::HttpRequest(void) {}
 
-		HttpRequest::HttpRequest(const HttpRequest &x) {
+		HttpRequest::HttpRequest(const HttpRequest& x) {
 			this->method = x.method;
 			this->fullPath = x.fullPath;
 			this->protocol = x.protocol;
@@ -25,7 +26,7 @@ namespace Webserv {
 			this->body = x.body;
 		}
 
-		HttpRequest::HttpRequest(const std::string &response) {
+		HttpRequest::HttpRequest(const std::string& response) {
 			this->fromString(response);
 		}
 
@@ -77,7 +78,7 @@ namespace Webserv {
 					ip = this->headers.get("X-Forwarded-For");
 				}
 			} else {
-				ip = "To do";
+				ip = "TODO";
 			}
 			return ip;
 		}
@@ -90,8 +91,8 @@ namespace Webserv {
 					ips.push_back(this->headers.get("X-Forwarded-For"));
 				}
 			} else {
-				ips.push_back("To do");
-				ips.push_back("To do");
+				ips.push_back("TODO");
+				ips.push_back("TODO");
 			}
 			return ips;
 		}
@@ -135,13 +136,13 @@ namespace Webserv {
 		const HttpRequest::MappedValues	HttpRequest::getQuery(void) const {
 			// Return empty object if no query parser
 			MappedValues values;
-			values.insert(std::make_pair("To do", "To do"));
+			values.insert(std::make_pair("TODO", "TODO"));
 			return values;
 		}
 
 		const std::string	HttpRequest::getRoute(void) const {
 			// Return route that contains information on current route (path, method, stack)
-			return std::string("To do");
+			return std::string("TODO");
 		}
 
 		bool				HttpRequest::isSecure(void) const {
@@ -156,19 +157,19 @@ namespace Webserv {
 
 		bool				HttpRequest::isStale(void) const {
 			// Indicates whether the request is “stale,” and is the opposite of req.fresh.
-			// To do
+			// TODO
 			return false && !this->isFresh();
 		}
 
 		const HttpRequest::ListedValues	HttpRequest::getSubdomains(void) const {
 			// Return An array of subdomains in the domain name of the request.
 			ListedValues subdomains;
-			if (!isIpAddress(this->getHostname())) {
-				ListedValues splitHost = split(this->getHostname(), ".");
-				if (splitHost.size() > 2) {
-					subdomains.insert(subdomains.begin(), splitHost.begin(), splitHost.end() - 2);
-				}
-			}
+			// if (!isIpAddress(this->getHostname())) {
+			// 	ListedValues splitHost = split(this->getHostname(), ".");
+			// 	if (splitHost.size() > 2) {
+			// 		subdomains.insert(subdomains.begin(), splitHost.begin(), splitHost.end() - 2);
+			// 	}
+			// }
 			return subdomains;
 		}
 
@@ -214,7 +215,7 @@ namespace Webserv {
 		}
 
 
-		const std::string	HttpRequest::get(const std::string &key) const {
+		const std::string	HttpRequest::get(const std::string& key) const {
 				std::string value = "";
 			if (this->headers.has(key)) {
 				value = this->headers.get(key);
@@ -230,7 +231,7 @@ namespace Webserv {
 			return false;
 		}
 
-		const std::string	HttpRequest::param(const std::string &key, const std::string &defaultValue) const {
+		const std::string	HttpRequest::param(const std::string& key, const std::string& defaultValue) const {
 			MappedValues params = this->getParams();
 			if (params.count(key) > 0) {
 				MappedValues::const_iterator it = params.find(key);
@@ -242,7 +243,7 @@ namespace Webserv {
 		}
 
 		// Utils Methods
-		void	HttpRequest::fromString(const std::string &request) {
+		void	HttpRequest::fromString(const std::string& request) {
 
 			std::string			str(request);
 			std::string			find = "";
@@ -270,7 +271,7 @@ namespace Webserv {
 			this->body = str;
 		}
 
-		std::string	HttpRequest::toString(void) const {
+		const std::string	HttpRequest::toString(void) const {
 			std::string	formatedRequest = "";
 
 			formatedRequest += this->method + " " + this->fullPath + " " + this->protocol + CRLF;

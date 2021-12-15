@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 14:47:31 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:50:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 namespace Webserv {
 
-	Config::Config() {}
+	Config::Config(void) {}
 
-	Config::~Config() {}
+	Config::~Config(void) {}
 
 	void	Config::reset(void) {
 		this->files.clear();
@@ -28,7 +28,7 @@ namespace Webserv {
 		this->globalMimesTypes.clear();
 	}
 
-	bool	Config::addConfigFile(const file_type &file) {
+	bool	Config::addConfigFile(const file_type& file) {
 		if (std::find(this->files.begin(), this->files.end(), file) != this->files.end()) {
 			return false;
 		}
@@ -36,7 +36,7 @@ namespace Webserv {
 		return true;
 	}
 
-	void	Config::formatBlocks(block_vector &blocks) {
+	void	Config::formatBlocks(block_vector& blocks) {
 		if (blocks.size() <= 0) {
 			return ;
 		}
@@ -45,7 +45,7 @@ namespace Webserv {
 		block_vector typesVector;
 		block_vector otherVector;
 		block_vector::const_iterator blockIt;
-		// directives tolower
+
 		blockIt = blocks.begin();
 		while (blockIt != blocks.end()) {
 			block_type::values_type values = blockIt->getValues();
@@ -79,39 +79,103 @@ namespace Webserv {
 		}
 	}
 
+	const Config::directive_map	Config::getDirectiveMap(void) const {
+		directive_map directives;
+
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("main");
+			directives["server"] = directive_type("server", std::make_pair(0, 0), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("main");
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["types"] = directive_type("types", std::make_pair(0, 0), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			directives["listen"] = directive_type("listen", std::make_pair(1, 2), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			directives["server_name"] = directive_type("server_name", std::make_pair(0, 1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["error_page"] = directive_type("error_page", std::make_pair(2, 2), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["client_max_body_size"] = directive_type("client_max_body_size", std::make_pair(1, 1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["location"] = directive_type("location", std::make_pair(1, 2), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("location");
+			directives["limit_except"] = directive_type("limit_except", std::make_pair(0, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["return"] = directive_type("return", std::make_pair(1, 2), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["autoindex"] = directive_type("autoindex", std::make_pair(1, 1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["root"] = directive_type("root", std::make_pair(1, 1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["index"] = directive_type("index", std::make_pair(1, -1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("server");
+			contexts.push_back("location");
+			directives["upload_store"] = directive_type("upload_store", std::make_pair(1, 1), contexts);
+		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("location");
+			directives["cgi_pass"] = directive_type("cgi_pass", std::make_pair(1, 1), contexts);
+		}
+		return directives;
+	}
+
 	bool	Config::processFiles(void) {
 		file_vector::const_iterator	filesIt;
 
-		parser_type::directive_map	directives;
-
-		directives["server"].push_back("main");
-		directives["listen"].push_back("server");
-		directives["server_name"].push_back("server");
-		directives["error_page"].push_back("server");
-		directives["error_page"].push_back("location");
-		directives["client_max_body_size"].push_back("server");
-		directives["client_max_body_size"].push_back("location");
-		directives["location"].push_back("server");
-		directives["location"].push_back("location");
-		directives["limit_except"].push_back("location");
-		directives["return"].push_back("server");
-		directives["return"].push_back("location");
-		directives["autoindex"].push_back("server");
-		directives["autoindex"].push_back("location");
-		directives["root"].push_back("server");
-		directives["root"].push_back("location");
-		directives["index"].push_back("server");
-		directives["index"].push_back("location");
-		directives["upload_store"].push_back("server");
-		directives["upload_store"].push_back("location");
-		directives["cgi_pass"].push_back("location");
+		directive_map	directives = this->getDirectiveMap();
 
 		// Get all files contents
 		filesIt = this->files.begin();
 		while (filesIt != this->files.end()) {
 
 			try {
-				this->filesMap[(*filesIt)] = getFileContents((*filesIt));
+				this->filesMap[(*filesIt)] = Webserv::Utils::getFileContents((*filesIt));
 			}
 			catch (const std::exception& e) {
 				std::cerr << e.what() << " in " << (*filesIt) << std::endl;
@@ -166,24 +230,25 @@ namespace Webserv {
 
 		this->formatBlocks(this->blocks);
 
-		// Todo remive this
-		// parser_type::drawBlocks(this->blocks);
-
 		block_vector::const_iterator it = this->blocks.begin();
 		while (it != this->blocks.end()) {
 			block_type::values_type values = it->getValues();
 			if (values.size() > 0) {
-				block_type::values_type::value_type::token_value value(values.at(0).getValue());
-				if (value == "server") {
+				block_type::values_type::value_type::token_value directive(values.at(0).getValue());
+				if (directive == "server") {
 					server_type newServer;
 					newServer.setMimesTypes(this->globalMimesTypes);
-					newServer.fromBlocks(it->getChilds());
+					if (!newServer.fromBlocks(it->getChilds())) {
+						return false;
+					}
 					this->servers.push_back(newServer);
-				} else if (value == "types") {
+				} else if (directive == "types") {
 					this->globalMimesTypes.clear();
-					this->globalMimesTypes.fromBlocks(it->getChilds());
+					if (!this->globalMimesTypes.fromBlocks(it->getChilds())) {
+						return false;
+					}
 				} else {
-					std::cerr << "Unknown context: \"" << value << "\"" << std::endl;
+					std::cerr << directive_type::UnknownDirectiveException(directive).what() << std::endl;
 					return false;
 				}
 			}

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 14:32:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:50:20 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 # define MAX_CONNECTION 50
 
 # include "./Ressource.hpp"
-# include "./utils.hpp"
+# include "./utils/common.hpp"
 # include "./Socket.hpp"
 
 # include "./http/HttpVersion.hpp"
@@ -56,8 +56,17 @@
 # include "./utils/Parser.hpp"
 # include "./utils/MimeTypes.hpp"
 # include "./utils/Address.hpp"
+# include "./utils/OutStream.hpp"
+# include "./utils/Singleton.hpp"
 
+# include "./Logger.hpp"
 # include "./Config.hpp"
 # include "./Core.hpp"
+
+// namespace Webserv {
+
+// 	Webserv::Core &mainCore = Webserv::Utils::Singleton<Webserv::Core>::getInstance();
+
+// } // namespace Webserv
 
 #endif

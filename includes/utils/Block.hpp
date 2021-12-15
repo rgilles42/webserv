@@ -6,16 +6,16 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:32:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 18:02:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:05:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BLOCK_HPP
 # define BLOCK_HPP
 
-# include <vector>
+# include <vector>		// For vector
 
-# include "Token.hpp"
+# include "Token.hpp"	// For Token
 
 namespace Webserv {
 
@@ -39,30 +39,30 @@ namespace Webserv {
 				childs_type		childs;
 
 			public:
-				Block(const block_type &type= Block::T_SIMPLE);
+				Block(const block_type& type= Block::T_SIMPLE);
 
-				const block_type	&getType(void) const;
-				const values_type	&getValues(void) const;
-				const childs_type	&getChilds(void) const;
+				const block_type&	getType(void) const;
+				const values_type&	getValues(void) const;
+				const childs_type&	getChilds(void) const;
 
-				void				setType(const block_type &type = Block::T_SIMPLE);
+				void				setType(const block_type& type = Block::T_SIMPLE);
 
-				void				addValue(const token_type &token);
+				void				addValue(const token_type& token);
 
-				void				setChilds(const childs_type &childs);
-				void				addChild(const Block &child);
+				void				setChilds(const childs_type& childs);
+				void				addChild(const Block& child);
 
-				bool				is(block_type &type) const;
+				bool				is(block_type& type) const;
 				bool				isSimple(void) const;
 				bool				isComplex(void) const;
 				bool				isComment(void) const;
 
 				// Static Methods
 
-				static bool			is(const block_type &type, const block_type &type2);
-				static bool			isSimple(const block_type &type);
-				static bool			isComplex(const block_type &type);
-				static bool			isComment(const block_type &type);
+				static bool			is(const block_type& type, const block_type& type2);
+				static bool			isSimple(const block_type& type);
+				static bool			isComplex(const block_type& type);
+				static bool			isComment(const block_type& type);
 
 		};
 

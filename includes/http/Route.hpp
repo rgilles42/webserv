@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/01 19:16:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:44:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <vector>
 # include <map>
 
-# include "../utils/Byte.hpp"
+# include "../utils/Directive.hpp"
 # include "../utils/Block.hpp"
 # include "../utils/MimeTypes.hpp"
 
@@ -28,22 +28,26 @@ namespace Webserv {
 
 		class Route {
 			public:
-				typedef	Webserv::Utils::Byte		byte_type;
 				typedef	Webserv::Utils::Block		block_type;
 				typedef std::vector<block_type>		block_vector;
 
 				typedef Webserv::Utils::MimeTypes	mimes_types_type;
 
-				typedef std::map<std::string, std::string>	error_pages_type;
-				typedef	byte_type					client_max_body_size_type;
-				typedef std::string					upload_store_type;
+				typedef Webserv::Utils::Directive				directive_type;
+				typedef directive_type::http_status_code_type	http_status_code_type;
 
-				typedef std::string					return_type;
-				typedef bool						autoindex_type;
-				typedef std::string					root_type;
-				typedef std::vector<std::string>	index_type;
+				typedef directive_type::dir_error_page_type		error_pages_pair;
 
-				typedef std::vector<std::string>	limit_except_type;
+				typedef std::map<error_pages_pair::first_type, error_pages_pair::second_type>	error_pages_type;
+				typedef directive_type::dir_client_max_body_size_type	client_max_body_size_type;
+				typedef directive_type::dir_upload_store_type	upload_store_type;
+
+				typedef directive_type::dir_return_type			return_type;
+				typedef directive_type::dir_autoindex_type		autoindex_type;
+				typedef directive_type::dir_root_type			root_type;
+				typedef directive_type::dir_index_type			index_type;
+
+				typedef directive_type::dir_limit_except_type	limit_except_type;
 
 				typedef Route						route_type;
 				typedef std::map<std::string, route_type>	routes_map;
@@ -68,22 +72,13 @@ namespace Webserv {
 				Route(void);
 				~Route();
 
-				void	fromBlocks(const block_vector &blocks);
+				void	init(void);
 
-				void	setMimesTypes(const mimes_types_type &mimesTypes);
+				bool	fromBlocks(const block_vector& blocks);
 
-				void	setErrorPage(const error_pages_type::key_type &errorCode, const error_pages_type::mapped_type &page);
-				void	setClientMaxBodySize(const client_max_body_size_type &size = client_max_body_size_type(1, client_max_body_size_type::U_MB));
-				void	setUploadStore(const upload_store_type &upload_store = "/");
+				void	setMimesTypes(const mimes_types_type& mimesTypes);
 
-				void	setReturn(const return_type &_return);
-				void	setAutoindex(const autoindex_type &autoindex);
-				void	setRoot(const root_type &root);
-				void	setIndex(const index_type &index);
-
-				void	setLimitExcept(const limit_except_type &limit_except);
-
-				void	addRoute(const routes_map::key_type &path, const routes_map::mapped_type &route);
+				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 
 		};
 

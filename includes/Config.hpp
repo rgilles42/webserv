@@ -6,25 +6,23 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/03 14:19:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:49:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONFIG_HPP
 # define CONFIG_HPP
 
-# include <string>
-# include <vector>
-# include <map>
-# include <algorithm>
+# include <string>					// For string
+# include <vector>					// For vector
+# include <map>						// For map
+# include <algorithm>				// For
 
-# include "./utils/Lexer.hpp"
-# include "./utils/Parser.hpp"
-# include "./utils/Block.hpp"
-
-# include "./http/Server.hpp"
-
-# include "./utils/MimeTypes.hpp"
+# include "./utils/Lexer.hpp"		// For Lexer
+# include "./utils/Parser.hpp"		// For Parser
+# include "./utils/Block.hpp"		// For Block
+# include "./http/Server.hpp"		// For Server
+# include "./utils/MimeTypes.hpp"	// For MimeTypes
 
 namespace Webserv {
 
@@ -37,6 +35,8 @@ namespace Webserv {
 			typedef	Webserv::Utils::Parser			parser_type;
 			typedef	parser_type::block_vector		block_vector;
 			typedef	parser_type::block_type			block_type;
+			typedef parser_type::directive_type		directive_type;
+			typedef parser_type::directive_map		directive_map;
 
 			typedef Webserv::Http::Server			server_type;
 			typedef std::vector<server_type>		server_vector;
@@ -55,14 +55,16 @@ namespace Webserv {
 			server_vector						servers;
 			mimes_types_type					globalMimesTypes;
 
-			void	formatBlocks(block_vector &blocks);
+			void	formatBlocks(block_vector& blocks);
+
+			const directive_map	getDirectiveMap(void) const;
 		public:
 			Config(void);
 			~Config();
 
 			void	reset(void);
 
-			bool	addConfigFile(const file_type &file);
+			bool	addConfigFile(const file_type& file);
 
 			bool	processFiles(void);
 	};
