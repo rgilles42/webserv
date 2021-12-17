@@ -1,7 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Resource.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
+/*   Updated: 2021/12/17 16:35:13 by rgilles          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/Resource.hpp"
+#include "../includes/utils/MimeTypes.hpp"
+
 
 namespace Webserv {
-	Resource::Resource(std::string path) : _contentType("text/plain")
+	Resource::Resource(std::string path)
 	{
 		this->_fd = open(path.c_str(), O_RDONLY);
 		if (this->_fd < 0)
@@ -10,6 +24,7 @@ namespace Webserv {
 			throw SetNonBlockFailedException();
 		if (read(0, NULL, 0))
 			throw UnableToReadResourceException();
+		this->_contentType = Utils::getContentTypeByFile(path, "text/plain");
 	}
 	Resource::~Resource() {}
 	void	Resource::readContent()
@@ -20,24 +35,26 @@ namespace Webserv {
 
 		to_poll.fd = this->_fd;
 		to_poll.events = POLLIN;
-		poll(&to_poll, 1, 100);
-		while (to_poll.revents & POLLIN)
+		while (true)
 		{
-			if ((rdsize = read(this->_fd, buf, 2048)) > 0)
+			if (poll(&to_poll, 1, 100) == 1 && to_poll.revents & POLLIN)
 			{
-				buf[rdsize] = 0;
-				this->_content += buf;
-				poll(&to_poll, 1, 100);
+				if ((rdsize = read(this->_fd, buf, 500)) > 0)
+				{
+					buf[rdsize] = 0;
+					this->_content += buf;
+				}
+				else if (!rdsize)
+					break ;
+				else
+					throw UnableToReadResourceException();
 			}
-			else if (!rdsize)
-				break ;
-			else
-				throw UnableToReadResourceException();
 		}
 	}
 
-	std::string	Resource::getContent() {return (this->_content);}
-	int	Resource::getFd() {return (this->_fd);}
+	std::string	Resource::getContent() const {return (this->_content);}
+	std::string	Resource::getContentType() const {return (this->_contentType);}
+	int	Resource::getFd() const {return (this->_fd);}
 	void	Resource::setFd(int newfd) {this->_fd = newfd;}
 
 }
