@@ -1,4 +1,18 @@
-#pragma once
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Resource.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
+/*   Updated: 2021/12/17 16:00:26 by rgilles          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef RESOURCE_HPP
+# define RESOURCE_HPP
+
 # include <poll.h>
 # include <sys/types.h>
 # include <sys/stat.h>
@@ -14,10 +28,10 @@ namespace Webserv {
 		void		readContent();
 		//void		readCGIContent();
 
-		std::string	getContent();
-		std::string getContentType();
+		std::string	getContent() const;
+		std::string getContentType() const;
 
-		int			getFd();
+		int			getFd() const;
 		void		setFd(int newfd);
 
 		struct ResourceNotOpenException : public std::exception
@@ -51,3 +65,5 @@ namespace Webserv {
 		std::string	_contentType;
 	};
 }
+
+#endif

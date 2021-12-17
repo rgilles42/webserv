@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 15:00:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:22:54 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void handleSignals(sig_atomic_t signum) {
 
 // int main(void) {
 
-	Socket	ServerSocket("0.0.0.0", 80);
+	Socket	ServerSocket("0.0.0.0", 80, 1);
 	Socket	ClientSocket;
 	ssize_t	size_read = 0;
 	char	buffer[BUFFER_SIZE + 1];
@@ -47,23 +47,24 @@ void handleSignals(sig_atomic_t signum) {
 // 	while (!stop) {
 
 
-// 		ClientSocket = ServerSocket.accept();
-// 		printf("Un client se connecte avec la socket %d de %s:%d\n",
-// 			ClientSocket.fd(), inet_ntoa(((struct sockaddr_in*)&ClientSocket.addr())->sin_addr), htons(((struct sockaddr_in*)&ClientSocket.addr())->sin_port));
-// 		message.clear();
-// 		printf("Client socket fd is %d\n", ClientSocket.fd());
-// 		size_read = ClientSocket.read(buffer, BUFFER_SIZE + 1);
-// 		perror("Read status code: ");
-// 		if (size_read >= 0)
-// 		{
-// 			buffer[size_read] = '\0';
-// 			message.append(buffer);
-// 		}
-// 		printf("Chaine reçue : %s\n", message.c_str());
+		ClientSocket = ServerSocket.accept(1);
+		printf("Un client se connecte avec la socket %d de %s:%d\n",
+			ClientSocket.fd(), inet_ntoa(((struct sockaddr_in*)&ClientSocket.addr())->sin_addr), htons(((struct sockaddr_in*)&ClientSocket.addr())->sin_port));
+		message.clear();
+		printf("Client socket fd is %d\n", ClientSocket.fd());
+		size_read = ClientSocket.read(buffer, BUFFER_SIZE + 1);
+		perror("Read status code: ");
+		if (size_read >= 0)
+		{
+			buffer[size_read] = '\0';
+			message.append(buffer);
+		}
+		printf("Chaine reçue : %s\n", message.c_str());
 
 		Webserv::Http::HttpRequest request(message);
 		Webserv::Resource currentRessource("./default_pages/index.html");
-		Webserv::Http::HttpResponse response(currentRessource.getContent());
+		currentRessource.readContent();
+		Webserv::Http::HttpResponse response(currentRessource);
 		ClientSocket.write(response.toString().c_str(), response.toString().length());
 		printf("Chaine envoyée : %s\n", response.toString().c_str());
 		shutdown(ClientSocket.fd(), 2);
