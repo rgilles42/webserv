@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:47:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/20 20:41:54 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void handleSignals(sig_atomic_t signum) {
 
 // 		Webserv::Http::HttpRequest request(message);
 // 		Ressource currentRessource("./default_pages/index.html");
-// 		currentRessource.setContent(getFileContents(currentRessource.getUri()));
+// 		currentRessource.setContent(Webserv::Utils::getFileContents(currentRessource.getUri()));
 // 		currentRessource.setContentType(Webserv::Utils::getContentTypeByFile(currentRessource.getUri(), "text/plain"));
 // 		Webserv::Http::HttpResponse response(currentRessource);
 // 		ClientSocket.write(response.toString().c_str(), response.toString().length());
@@ -78,20 +78,75 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-int main(int argc, char *argv[], char *envp[]) {
+// int main(int argc, char *argv[], char *envp[]) {
 
-	Webserv::Core webserv;
+// 	Webserv::Core webserv;
 
-	if (!webserv.preInit(argc, argv, envp)) {
-		std::cout << "Fail 1" << std::endl;
-		return EXIT_FAILURE;
+// 	if (!webserv.preInit(argc, argv, envp)) {
+// 		std::cout << "Fail 1" << std::endl;
+// 		return EXIT_FAILURE;
+// 	}
+
+// 	if (!webserv.init()) {
+// 		std::cout << "Fail 2" << std::endl;
+// 		return EXIT_FAILURE;
+// 	}
+
+// 	std::cout << "Success" << std::endl;
+// 	return EXIT_SUCCESS;
+// }
+
+int main(void)
+{
+	Webserv::Http::HttpRequestBuilder builder;
+
+	std::string message = "             c'est le body sa mer     ";
+
+	builder.addMessage("                              ");
+	std::cout << "empty: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("     GET /index HTTP/1.1          \r\n");
+	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("     Host:   code.tutsplus.com      \r\n");
+	std::cout << "1header: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("	    Connection:     keep-alive      \r\n");
+	std::cout << "2header: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("        Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+	std::cout << "3header: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("\r\n");
+	std::cout << "start body: " << builder.checkBuffer() << std::endl;
+	builder.addMessage(message);
+	std::cout << "body: " << builder.checkBuffer() << std::endl;
+
+	builder.addMessage("                              ");
+
+	std::cout << "body: " << builder.parseRequests() << std::endl;
+
+	builder.addMessage("                              ");
+	std::cout << "empty: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("     GET /index HTTP/1.1          \r\n");
+	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("     Host:   code.tutsplus.com      \r\n");
+	std::cout << "1header: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("	    Connection:     keep-alive      \r\n");
+	std::cout << "2header: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("        Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+	std::cout << "3header: " << builder.checkBuffer() << std::endl;
+	builder.addMessage("\r\n");
+	std::cout << "start body: " << builder.checkBuffer() << std::endl;
+	builder.addMessage(message);
+	std::cout << "body: " << builder.checkBuffer() << std::endl;
+
+	std::cout << "body: " << builder.parseRequests() << std::endl;
+
+	std::cout << "body: " << builder.checkBuffer() << std::endl;
+
+	Webserv::Http::HttpRequestBuilder::request_list::const_iterator it = builder.getAllRequests().begin();
+
+	while (it != builder.getAllRequests().end()) {
+		std::cout << it->toString() << std::endl;
+		it++;
 	}
 
-	if (!webserv.init()) {
-		std::cout << "Fail 2" << std::endl;
-		return EXIT_FAILURE;
-	}
-
-	std::cout << "Success" << std::endl;
-	return EXIT_SUCCESS;
+	return 0;
 }
+
