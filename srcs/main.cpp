@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/20 20:41:54 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/22 08:53:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,13 @@ int main(void)
 
 	builder.addMessage("                              ");
 	std::cout << "empty: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("     GET /index HTTP/1.1          \r\n");
+	builder.addMessage("     GET /index HTTP/1.1\r\n");
 	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("     Host:   code.tutsplus.com      \r\n");
+	builder.addMessage("Host: code.tutsplus.com\r\n");
 	std::cout << "1header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("	    Connection:     keep-alive      \r\n");
+	builder.addMessage("Connection: keep-alive\r\n");
 	std::cout << "2header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("        Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
 	std::cout << "3header: " << builder.checkBuffer() << std::endl;
 	builder.addMessage("\r\n");
 	std::cout << "start body: " << builder.checkBuffer() << std::endl;
@@ -123,13 +123,13 @@ int main(void)
 
 	builder.addMessage("                              ");
 	std::cout << "empty: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("     GET /index HTTP/1.1          \r\n");
+	builder.addMessage("     GET /index HTTP/1.1\r\n");
 	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("     Host:   code.tutsplus.com      \r\n");
+	builder.addMessage("Host: code.tutsplus.com\r\n");
 	std::cout << "1header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("	    Connection:     keep-alive      \r\n");
+	builder.addMessage("Connection: kip-alive\r\n");
 	std::cout << "2header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("        Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
 	std::cout << "3header: " << builder.checkBuffer() << std::endl;
 	builder.addMessage("\r\n");
 	std::cout << "start body: " << builder.checkBuffer() << std::endl;

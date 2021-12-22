@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/20 20:41:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/22 08:51:25 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,7 +333,6 @@ namespace Webserv {
 			size_t		pos = 0;
 			buffer_type::iterator it_find;
 			size_t		find = 0;
-			request_type::headers_type headers;
 
 			while (pos <= tmpBuff.length()) {
 				request_type request;
@@ -363,10 +362,11 @@ namespace Webserv {
 					return lastPos;
 				}
 				request.setPath(tmpBuff.substr(pos, find - pos));
-				pos = find + 1;
+				pos = find;
 
 				// For simple request, there's not protocol.. think about it TODO: check this out
 				if (true) {
+					pos++;
 					// Position of protocol (between pos & find)
 					it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(std::isspace));
 					find = it_find - tmpBuff.begin();
@@ -374,33 +374,29 @@ namespace Webserv {
 						return lastPos;
 					}
 					request.setProtocol(tmpBuff.substr(pos, find - pos));
-					pos = find + 1;
+					pos = find;
 				}
 
 				// Position of CRLF (end of Start-Line)
 				find = tmpBuff.find(CRLF, pos);
-				if (find == tmpBuff.npos) {
+				if (find == tmpBuff.npos || find != pos) {
 					return lastPos;
 				}
 				pos = find + 2;
 
 				// Headers
 
-				// Position of the end of Headers if exist
-				find = tmpBuff.find(CRLF + CRLF, pos);
-				if (find != tmpBuff.npos) {
-					headers.fromString(tmpBuff.substr(pos, find - pos));
-					request.setHeaders(headers);
-					pos = find + 4;
-				} else {
+				headers_builder_type	headerBuilder;
+
+				headerBuilder.addMessage(tmpBuff.substr(pos));
+				find = headerBuilder.checkBuffer();
+				if (find == tmpBuff.npos) {
 					return lastPos;
-					// // Position of CRLF (start of Message-Body)
-					// find = tmpBuff.find(CRLF, pos);
-					// if (find == tmpBuff.npos) {
-					// 	return lastPos;
-					// }
-					// pos = find + 1;
 				}
+				headerBuilder.parseHeaders();
+				headers_type	headers = headerBuilder.getHeaders();
+				request.setHeaders(headers);
+				pos += find;
 
 				// Message-Body
 				if (headers.has("Content-Lenght")) {

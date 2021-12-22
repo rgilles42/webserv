@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/20 20:33:36 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/22 08:13:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ namespace Webserv {
 		class HttpRequestBuilder {
 			public:
 				typedef HttpRequest					request_type;
+				typedef request_type::headers_type	headers_type;
+				typedef Webserv::Http::HttpHeadersBuilder	headers_builder_type;
 				typedef std::vector<request_type>	request_list;
 				typedef std::string					buffer_type;
 				typedef std::string					message_type;
