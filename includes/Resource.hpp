@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2021/12/17 16:00:26 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/23 19:14:06 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,17 @@ namespace Webserv {
 		std::string getContentType() const;
 
 		int			getFd() const;
+		long long	getSize() const;
+		bool		isDir();
 		void		setFd(int newfd);
 
+		struct UnableToStatPathException : public std::exception
+		{
+			virtual const char* what() const throw()
+			{
+				return("Unable to stat path");
+			}
+		};
 		struct ResourceNotOpenException : public std::exception
 		{
 			virtual const char* what() const throw()
@@ -60,7 +69,9 @@ namespace Webserv {
 		Resource();
 		Resource(const Resource& src);
 
+		bool		_isDir;
 		int			_fd;
+		long long	_size;
 		std::string	_content;
 		std::string	_contentType;
 	};
