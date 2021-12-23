@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/17 16:22:54 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/23 19:27:26 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int main(void) {
 
 		Webserv::Http::HttpRequest request(message);
 		Webserv::Resource currentRessource("./default_pages/index.html");
-		currentRessource.readContent();
 		Webserv::Http::HttpResponse response(currentRessource);
 		ClientSocket.write(response.toString().c_str(), response.toString().length());
 		printf("Chaine envoyée : %s\n", response.toString().c_str());
