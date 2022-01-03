@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2021/12/23 19:28:21 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/24 16:29:20 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ namespace Webserv {
 		else if (S_ISDIR(s.st_mode))
 		{
 			this->_isDir = true;
-			//std::string += generateAutoindex();
+			//this->generateAutoindex();
 
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2021/12/23 19:14:06 by rgilles          ###   ########.fr       */
+/*   Updated: 2021/12/24 16:29:43 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ namespace Webserv {
 	public:
 		Resource(std::string path);
 		~Resource();
-		void		readContent();
 		//void		readCGIContent();
 
 		std::string	getContent() const;
@@ -68,6 +67,8 @@ namespace Webserv {
 	private:
 		Resource();
 		Resource(const Resource& src);
+		void		readContent();
+		//void		generateAutoIndex();
 
 		bool		_isDir;
 		int			_fd;
