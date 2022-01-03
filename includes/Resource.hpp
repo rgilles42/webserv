@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2021/12/24 16:29:43 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/03 17:20:18 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@
 # include <fcntl.h>
 # include <string>
 # include <unistd.h>
+# include "utils/MimeTypes.hpp"
+//#include "CGI.hpp"
 
 namespace Webserv {
 	class Resource {
 	public:
-		Resource(std::string path);
+		Resource(const std::string& path);
 		~Resource();
 		//void		readCGIContent();
 
@@ -32,7 +34,8 @@ namespace Webserv {
 
 		int			getFd() const;
 		long long	getSize() const;
-		bool		isDir();
+		bool		isDir() const;
+		bool		isCGI() const;
 		void		setFd(int newfd);
 
 		struct UnableToStatPathException : public std::exception
@@ -67,14 +70,26 @@ namespace Webserv {
 	private:
 		Resource();
 		Resource(const Resource& src);
-		void		readContent();
+
+		bool		isCGIContent();
+
+		void		populateContentFile();
+		//void		populateContentCGI();
+		void		populateContentFolder();
+
 		//void		generateAutoIndex();
 
-		bool		_isDir;
-		int			_fd;
-		long long	_size;
-		std::string	_content;
-		std::string	_contentType;
+		void		readContent();
+
+		const std::string	_path;
+		struct stat			_s;
+		bool				_isDir;
+		bool				_isCGI;
+		int					_fd;
+		long long			_size;
+		std::string			_content;
+		std::string			_contentType;
+		//Webserv::CGI*		_CGI;
 	};
 }
 
