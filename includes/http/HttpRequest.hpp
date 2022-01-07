@@ -6,19 +6,21 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:40:27 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/22 08:13:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPREQUEST_HPP
 # define HTTPREQUEST_HPP
 
-#include <string>				// For string
-#include <map>					// For map
-#include <vector>				// For vector
+# include <iostream>
 
-#include "HttpHeaders.hpp"		// For HttpHeaders
-#include "../utils/common.hpp"	// For trim
+# include <string>				// For string
+# include <map>					// For map
+# include <vector>				// For vector
+
+# include "HttpHeaders.hpp"		// For HttpHeaders
+# include "../utils/common.hpp"	// For trim
 
 # define HTTP_PROTOCOL			std::string("HTTP/1.1")
 
@@ -56,6 +58,12 @@ namespace Webserv {
 				HttpRequest(const HttpRequest& x);
 				HttpRequest(const std::string& request);
 
+				void				setMethod(const method_type& method);
+				void				setPath(const path_type& path);
+				void				setProtocol(const protocol_type& protocol);
+				void				setHeaders(const headers_type& headers);
+				void				setBody(const body_type& body);
+
 				// Request Properties
 				const std::string	getBaseUrl(void) const;
 				const MappedValuesValid	getBody(void) const;
@@ -92,6 +100,36 @@ namespace Webserv {
 				// Utils Methods
 				void				fromString(const std::string& request);
 				const std::string	toString(void) const;
+
+		};
+
+
+		class HttpRequestBuilder {
+			public:
+				typedef HttpRequest					request_type;
+				typedef request_type::headers_type	headers_type;
+				typedef Webserv::Http::HttpHeadersBuilder	headers_builder_type;
+				typedef std::vector<request_type>	request_list;
+				typedef std::string					buffer_type;
+				typedef std::string					message_type;
+
+			protected:
+				buffer_type		buffer;
+				request_list	requests;
+
+			public:
+				HttpRequestBuilder(void);
+				HttpRequestBuilder(const HttpRequestBuilder& x);
+
+				const buffer_type&	getBuffer(void) const;
+				const request_list&	getAllRequests(void) const;
+
+				void				addMessage(const message_type& message);
+
+				size_t				checkBuffer(void) const;
+				size_t				checkBuffer(request_list& requests) const;
+
+				bool				parseRequests(void);
 
 		};
 

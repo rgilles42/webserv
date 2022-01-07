@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:44:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/22 08:51:25 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,29 @@ namespace Webserv {
 		HttpRequest::HttpRequest(const std::string& response) {
 			this->fromString(response);
 		}
+
+
+
+		void				HttpRequest::setMethod(const method_type& method) {
+			this->method = method;
+		}
+
+		void				HttpRequest::setPath(const path_type& path) {
+			this->fullPath = path;
+		}
+
+		void				HttpRequest::setProtocol(const protocol_type& protocol) {
+			this->protocol = protocol;
+		}
+
+		void				HttpRequest::setHeaders(const headers_type& headers) {
+			this->headers = headers;
+		}
+
+		void				HttpRequest::setBody(const body_type& body) {
+			this->body = body;
+		}
+
 
 		// Request Properties
 		const std::string	HttpRequest::getBaseUrl(void) const {
@@ -278,6 +301,136 @@ namespace Webserv {
 			formatedRequest += this->headers.toString() + CRLF;
 			formatedRequest += this->body;
 			return formatedRequest;
+		}
+
+
+		HttpRequestBuilder::HttpRequestBuilder(void) {}
+		HttpRequestBuilder::HttpRequestBuilder(const HttpRequestBuilder& x) {
+			this->buffer = x.buffer;
+			this->requests = x.requests;
+		}
+
+		const HttpRequestBuilder::buffer_type&	HttpRequestBuilder::getBuffer(void) const {
+			return this->buffer;
+		}
+
+		const HttpRequestBuilder::request_list&	HttpRequestBuilder::getAllRequests(void) const {
+			return this->requests;
+		}
+
+		void									HttpRequestBuilder::addMessage(const message_type& message) {
+			this->buffer.append(message);
+		}
+
+		size_t									HttpRequestBuilder::checkBuffer(void) const {
+			request_list list;
+			return this->checkBuffer(list);
+		}
+
+		size_t									HttpRequestBuilder::checkBuffer(request_list& requests) const {
+			size_t		lastPos = 0;
+			buffer_type tmpBuff = this->buffer;
+			size_t		pos = 0;
+			buffer_type::iterator it_find;
+			size_t		find = 0;
+
+			while (pos <= tmpBuff.length()) {
+				request_type request;
+
+				// skip whitespace
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
+				pos = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= pos) {
+					return lastPos;
+				}
+
+				// Start-line
+
+				// Position of method (between pos & find)
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(std::isspace));
+				find = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= find || pos == find) {
+					return lastPos;
+				}
+				request.setMethod(tmpBuff.substr(pos, find - pos));
+				pos = find + 1;
+
+				// Position of uri (between pos & find)
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(std::isspace));
+				find = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= find || pos == find) {
+					return lastPos;
+				}
+				request.setPath(tmpBuff.substr(pos, find - pos));
+				pos = find;
+
+				// For simple request, there's not protocol.. think about it TODO: check this out
+				if (true) {
+					pos++;
+					// Position of protocol (between pos & find)
+					it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(std::isspace));
+					find = it_find - tmpBuff.begin();
+					if (tmpBuff.length() <= find || pos == find) {
+						return lastPos;
+					}
+					request.setProtocol(tmpBuff.substr(pos, find - pos));
+					pos = find;
+				}
+
+				// Position of CRLF (end of Start-Line)
+				find = tmpBuff.find(CRLF, pos);
+				if (find == tmpBuff.npos || find != pos) {
+					return lastPos;
+				}
+				pos = find + 2;
+
+				// Headers
+
+				headers_builder_type	headerBuilder;
+
+				headerBuilder.addMessage(tmpBuff.substr(pos));
+				find = headerBuilder.checkBuffer();
+				if (find == tmpBuff.npos) {
+					return lastPos;
+				}
+				headerBuilder.parseHeaders();
+				headers_type	headers = headerBuilder.getHeaders();
+				request.setHeaders(headers);
+				pos += find;
+
+				// Message-Body
+				if (headers.has("Content-Lenght")) {
+					std::stringstream	ss;
+					size_t contentLen = 0;
+					ss << headers.get("Content-Lenght");
+					ss >> contentLen;
+					if (tmpBuff.substr(pos).length() < contentLen) {
+						return lastPos;
+					}
+					request.setBody(tmpBuff.substr(pos, contentLen));
+					requests.push_back(request);
+					pos += contentLen;
+					lastPos = pos;
+					break ;
+				} else if (headers.has("Transfer-Encoding")) {
+					if (headers.get("Transfer-Encoding") != "chunked") {
+						return lastPos;
+					}
+					// Need to process chunked
+				}
+			}
+			return lastPos;
+		}
+
+		bool									HttpRequestBuilder::parseRequests(void) {
+			request_list list;
+			size_t lastPos = this->checkBuffer(list);
+			if (lastPos <= 0) {
+				return false;
+			}
+			this->requests.insert(this->requests.begin(), list.begin(), list.end());
+			this->buffer.erase(0, lastPos);
+			return true;
 		}
 
 	} // namespace Http

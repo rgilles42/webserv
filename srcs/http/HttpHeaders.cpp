@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:32:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2021/12/22 08:52:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@ namespace Webserv {
 
 	namespace Http {
 		// can have multiple identique key but not same value
+
+		const HttpHeaders::header_type&	HttpHeaders::getHeaders(void) const {
+			return this->headers;
+		}
 
 		// Headers Methods
 		bool	HttpHeaders::isKeyValid(const key_type& key) {
@@ -51,7 +55,7 @@ namespace Webserv {
 			if (!this->has(key)) {
 				throw std::out_of_range("HttpHeaders::get(" + key + ")");
 			}
-			headerType::const_iterator it = this->headers.lower_bound(key);
+			header_type::const_iterator it = this->headers.lower_bound(key);
 			return it->second;
 		}
 
@@ -60,8 +64,8 @@ namespace Webserv {
 		}
 
 		const std::string				HttpHeaders::toString(void) const {
-			headerType::const_iterator it = this->headers.begin();
-			headerType::const_iterator end = this->headers.end();
+			header_type::const_iterator it = this->headers.begin();
+			header_type::const_iterator end = this->headers.end();
 			std::string	formatedHeaders = "";
 
 			while (it != end) {
@@ -82,6 +86,111 @@ namespace Webserv {
 				std::string value = line;
 				this->set(Webserv::Utils::trim(key), Webserv::Utils::trim(value));
 			}
+		}
+
+
+		HttpHeadersBuilder::HttpHeadersBuilder(void) {}
+		HttpHeadersBuilder::HttpHeadersBuilder(const HttpHeadersBuilder& x) {
+			this->buffer = x.buffer;
+			this->headers = x.headers;
+		}
+
+		const HttpHeadersBuilder::buffer_type&	HttpHeadersBuilder::getBuffer(void) const {
+			return this->buffer;
+		}
+
+		const HttpHeadersBuilder::headers_type&	HttpHeadersBuilder::getHeaders(void) const {
+			return this->headers;
+		}
+
+		void									HttpHeadersBuilder::addMessage(const message_type& message) {
+			this->buffer.append(message);
+		}
+
+		size_t									HttpHeadersBuilder::checkBuffer(void) const {
+			headers_type list;
+			return this->checkBuffer(list);
+		}
+
+		int										HttpHeadersBuilder::isKey(int c) {
+			if (c == ':' || std::isspace(c)) {
+				return 1;
+			}
+			return 0;
+		}
+
+		size_t									HttpHeadersBuilder::checkBuffer(headers_type& headers) const {
+			buffer_type tmpBuff = this->buffer;
+			size_t		pos = 0;
+			buffer_type::iterator it_find;
+			size_t		find = 0;
+			size_t		endOfHeaders = tmpBuff.find(CRLF + CRLF);
+
+			if (endOfHeaders == tmpBuff.npos) {
+				return tmpBuff.npos;
+			}
+
+			while (pos <= tmpBuff.length() && pos < endOfHeaders) {
+				headers_type::key_type key;
+				headers_type::key_type value;
+
+				// skip whitespace
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
+				pos = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= pos) {
+					return tmpBuff.npos;
+				}
+
+				// Position of key (between pos & find)
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(this->isKey));
+				find = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= find || pos == find) {
+					return tmpBuff.npos;
+				}
+				key = tmpBuff.substr(pos, find - pos);
+				pos = find;
+
+				if (tmpBuff[pos] != ':') {
+					return tmpBuff.npos;
+				}
+				pos += 1;
+
+				// Skip SP
+				pos += 1;
+
+				// Position of value (between pos & find)
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(std::isspace));
+				find = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= find || pos == find) {
+					return tmpBuff.npos;
+				}
+				value = tmpBuff.substr(pos, find - pos);
+				pos = find;
+
+				// Position of CRLF
+				find = tmpBuff.find(CRLF, pos);
+				if (find == tmpBuff.npos || pos != find) {
+					return tmpBuff.npos;
+				}
+				pos = find + CRLF.length();
+				headers.set(key, value);
+			}
+			return endOfHeaders + (CRLF + CRLF).length();
+		}
+
+		bool									HttpHeadersBuilder::parseHeaders(void) {
+			headers_type list;
+			size_t lastPos = this->checkBuffer(list);
+			if (lastPos <= 0 && lastPos != this->buffer.npos) {
+				return false;
+			}
+			headers_type::header_type::const_iterator it = list.getHeaders().begin();
+			while (it != list.getHeaders().end()) {
+				this->headers.set(it->first, it->second);
+				it++;
+			}
+			this->buffer.erase(0, lastPos);
+			return true;
 		}
 
 	} // namespace Http
