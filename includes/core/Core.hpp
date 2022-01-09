@@ -13,19 +13,28 @@
 #ifndef CORE_HPP
 # define CORE_HPP
 
-# include <sstream>				// For ostringstream
+# include <sstream>					// For ostringstream
 
-# include "./utils/Env.hpp"		// For Env
-# include "./utils/Args.hpp"	// For Args
-# include "Config.hpp"			// For Config
-# include "Logger.hpp"			// For Logger
+# include "../utils/Env.hpp"		// For Env
+# include "../utils/Args.hpp"		// For Args
+# include "../Config.hpp"			// For Config
+# include "../Logger.hpp"			// For Logger
+# include "./Singleton.hpp"			// For Singleton
+
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"
 
 namespace Webserv {
+	/* Inherit Singletons to instanciate 1 time and use in other class */
+	class Core : public Singleton<Core> {
 
-	class Core {
+		private:
+			Poll			*poll_events;
+			EventsManager	*events_manager;
+
+			void			setup_events(void);
+
 		public:
 			typedef Webserv::Config		config_type;
 			typedef Webserv::Logger		logger_type;
@@ -52,10 +61,33 @@ namespace Webserv {
 
 			bool		preInit(int argc = 0, char *argv[] = NULL, char *envp[] = NULL);
 			bool		init(void);
+			void		exec(void);
+
+			void		add_server_event(Socket &sock);
+			void		add_client_event(int fd, ClientEvent &client_e);
+			void		add_cgi_event(CGI const &new_cgi);
+
+			void		remove_event(int fd);
 
 			const bool&	isReady(void) const;
 
 			std::string	getHelp(void) const;
+
+			struct coreInitFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Core: initialisation failed");
+				}
+			};
+
+			struct coreExecFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Core: initialisation failed");
+				}
+			};
 	};
 
 } // namespace Webserv
