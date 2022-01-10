@@ -14,7 +14,7 @@ namespace Webserv
 	class ServerEvent : public IEvents
 	{
 		private:
-			Socket			&sock;	//just for test
+			Socket			sock;	//just for test
 //			Http::Server	&srv;	TO DO - Need classe with dedicated sock
 			short			events_flags;
 

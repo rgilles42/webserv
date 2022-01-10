@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 14:56:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 15:00:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,57 +96,68 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-int main(void)
+// int main(void)
+// {
+// 	Webserv::Http::HttpRequestBuilder builder;
+
+// 	std::string message = "             c'est le body sa mer     ";
+
+// 	builder.addMessage("                              ");
+// 	std::cout << "empty: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("     GET /index HTTP/1.1\r\n");
+// 	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("Host: code.tutsplus.com\r\n");
+// 	std::cout << "1header: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("Connection: keep-alive\r\n");
+// 	std::cout << "2header: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+// 	std::cout << "3header: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("\r\n");
+// 	std::cout << "start body: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage(message);
+// 	std::cout << "body: " << builder.checkBuffer() << std::endl;
+
+// 	builder.addMessage("                              ");
+
+// 	std::cout << "body: " << builder.parseRequests() << std::endl;
+
+// 	builder.addMessage("                              ");
+// 	std::cout << "empty: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("     GET /index HTTP/1.1\r\n");
+// 	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("Host: code.tutsplus.com\r\n");
+// 	std::cout << "1header: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("Connection: kip-alive\r\n");
+// 	std::cout << "2header: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+// 	std::cout << "3header: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage("\r\n");
+// 	std::cout << "start body: " << builder.checkBuffer() << std::endl;
+// 	builder.addMessage(message);
+// 	std::cout << "body: " << builder.checkBuffer() << std::endl;
+
+// 	std::cout << "body: " << builder.parseRequests() << std::endl;
+
+// 	std::cout << "body: " << builder.checkBuffer() << std::endl;
+
+// 	Webserv::Http::HttpRequestBuilder::request_list::const_iterator it = builder.getAllRequests().begin();
+
+// 	while (it != builder.getAllRequests().end()) {
+// 		std::cout << it->toString() << std::endl;
+// 		it++;
+// 	}
+
+// 	return 0;
+// }
+
+int	main(void)
 {
-	Webserv::Http::HttpRequestBuilder builder;
-
-	std::string message = "             c'est le body sa mer     ";
-
-	builder.addMessage("                              ");
-	std::cout << "empty: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("     GET /index HTTP/1.1\r\n");
-	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("Host: code.tutsplus.com\r\n");
-	std::cout << "1header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("Connection: keep-alive\r\n");
-	std::cout << "2header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
-	std::cout << "3header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("\r\n");
-	std::cout << "start body: " << builder.checkBuffer() << std::endl;
-	builder.addMessage(message);
-	std::cout << "body: " << builder.checkBuffer() << std::endl;
-
-	builder.addMessage("                              ");
-
-	std::cout << "body: " << builder.parseRequests() << std::endl;
-
-	builder.addMessage("                              ");
-	std::cout << "empty: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("     GET /index HTTP/1.1\r\n");
-	std::cout << "start-line: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("Host: code.tutsplus.com\r\n");
-	std::cout << "1header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("Connection: kip-alive\r\n");
-	std::cout << "2header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
-	std::cout << "3header: " << builder.checkBuffer() << std::endl;
-	builder.addMessage("\r\n");
-	std::cout << "start body: " << builder.checkBuffer() << std::endl;
-	builder.addMessage(message);
-	std::cout << "body: " << builder.checkBuffer() << std::endl;
-
-	std::cout << "body: " << builder.parseRequests() << std::endl;
-
-	std::cout << "body: " << builder.checkBuffer() << std::endl;
-
-	Webserv::Http::HttpRequestBuilder::request_list::const_iterator it = builder.getAllRequests().begin();
-
-	while (it != builder.getAllRequests().end()) {
-		std::cout << it->toString() << std::endl;
-		it++;
+	try {
+		Webserv::Core::getInstance().exec();
 	}
-
+	catch (const std::exception &e)
+	{
+		std::cout<<e.what()<<std::endl;
+	}
 	return 0;
 }
-

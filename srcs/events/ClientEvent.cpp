@@ -36,11 +36,8 @@ namespace Webserv
 //		if (this->rcs.complete())
 //		{
 				std::cout<<"Client write event"<<std::endl;
-                // Resource currentResource("./default_pages/index.html");
-                // currentResource.setContent(getFileContents(currentResource.getUri()));
-                // currentResource.setContentType(Webserv::Utils::getContentTypeByFile(currentResource.getUri(), "text/plain"));
-                // Webserv::Http::HttpResponse response(currentResource);
-                Webserv::Http::HttpResponse response;
+                Resource currentResource("./default_pages/index.html");
+                Webserv::Http::HttpResponse response(currentResource);
 
 				this->sock.write(response.toString().c_str(), response.toString().length());
 //				::write(this->sock.fd(), response.toString().c_str(), response.toString().length());
