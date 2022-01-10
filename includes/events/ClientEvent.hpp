@@ -4,6 +4,8 @@
 #include "../Socket.hpp"
 #include "../Resource.hpp"
 #include "../http/HttpResponse.hpp"
+#include"../http/Server.hpp"
+#include "../http/HttpRequest.hpp"
 #include "../utils/common.hpp"
 #include "IEvents.hpp"
 #include <string>
@@ -15,8 +17,10 @@ namespace Webserv
 	{
 
 		private:
-			Socket					sock;
-			short					events_flags;
+			Webserv::Http::Server						m_srv;
+			Webserv::Http::HttpRequest	m_req;
+			Socket						sock;
+			short						events_flags;
 //			Methods::MethodsManager	*m_methods;
 
 			std::string		request_string;
@@ -25,8 +29,7 @@ namespace Webserv
 
 		public:
 
-			ClientEvent(Socket &new_sock);
-//			ClientEvent(Http::Client &ref);
+			ClientEvent(Socket &new_sock, Webserv::Http::Server &srv);
 			virtual ~ClientEvent();
 
 			void	write_event(void);
