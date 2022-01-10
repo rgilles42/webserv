@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpResponse.hpp                                    :+:      :+:    :+:   */
+/*   HttpResponse.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/27 18:57:45 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/09 15:37:41 by yun              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <string>				// For string
 
-#include "../Ressource.hpp"		// For Ressource
+#include "../Resource.hpp"		// For Ressource
 #include "HttpHeaders.hpp"		// For HttpHeaders
 #include "../utils/common.hpp"	// For trim
 
@@ -48,7 +48,7 @@ namespace Webserv {
 
 			public:
 				HttpResponse(void);
-				HttpResponse(const Ressource& ressource);
+				HttpResponse(const Resource& ressource);
 				HttpResponse(const HttpResponse& x);
 				HttpResponse(const std::string& response);
 

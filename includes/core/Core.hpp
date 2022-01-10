@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:49:15 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/09 15:36:21 by yun              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "../Config.hpp"			// For Config
 # include "../Logger.hpp"			// For Logger
 # include "./Singleton.hpp"			// For Singleton
+# include "../events/events.hpp"		// For All Events class
 
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
@@ -65,7 +66,7 @@ namespace Webserv {
 
 			void		add_server_event(Socket &sock);
 			void		add_client_event(int fd, ClientEvent &client_e);
-			void		add_cgi_event(CGI const &new_cgi);
+			void		add_cgi_event(CGIEvent const &new_cgi);
 
 			void		remove_event(int fd);
 

@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2021/12/14 16:51:22 by ppaglier         ###   ########.fr        #
+#    Updated: 2022/01/09 15:45:05 by yun              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,9 @@ CXX			=	g++
 CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
-				$(HEADER_DIR)/Core.hpp \
-				$(HEADER_DIR)/Ressource.hpp \
+				$(HEADER_DIR)/core/Core.hpp \
+				$(HEADER_DIR)/core/Singleton.hpp \
+				$(HEADER_DIR)/Resource.hpp \
 				$(HEADER_DIR)/Socket.hpp \
 				$(HEADER_DIR)/Logger.hpp \
 				$(HEADER_DIR)/utils/common.hpp \
@@ -46,11 +47,18 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/http/HttpStatusCode.hpp \
 				$(HEADER_DIR)/http/HttpHeaders.hpp \
 				$(HEADER_DIR)/http/HttpRequest.hpp \
-				$(HEADER_DIR)/http/HttpResponse.hpp
+				$(HEADER_DIR)/http/HttpResponse.hpp \
+				$(HEADER_DIR)/events/events.hpp \
+				$(HEADER_DIR)/events/IEvents.hpp \
+				$(HEADER_DIR)/events/ClientEvent.hpp \
+				$(HEADER_DIR)/events/ServerEvent.hpp \
+				$(HEADER_DIR)/events/Poll.hpp \
+				$(HEADER_DIR)/events/EventsManager.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
-				${SRC_DIR}/Core.cpp \
-				${SRC_DIR}/Ressource.cpp \
+				${SRC_DIR}/core/Core.cpp \
+				$(SRC_DIR)/core/Singleton.cpp \
+				${SRC_DIR}/Resource.cpp \
 				$(SRC_DIR)/Socket.cpp \
 				$(SRC_DIR)/Logger.cpp \
 				$(SRC_DIR)/utils/common.cpp \
@@ -72,7 +80,12 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/http/HttpStatusCode.cpp \
 				$(SRC_DIR)/http/HttpHeaders.cpp \
 				$(SRC_DIR)/http/HttpRequest.cpp \
-				$(SRC_DIR)/http/HttpResponse.cpp
+				$(SRC_DIR)/http/HttpResponse.cpp \
+				$(SRC_DIR)/events/ClientEvent.cpp \
+				$(SRC_DIR)/events/ServerEvent.cpp \
+				$(SRC_DIR)/events/Poll.cpp \
+				$(SRC_DIR)/events/EventsManager.cpp
+
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
 OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)

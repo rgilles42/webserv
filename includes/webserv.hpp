@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:50:20 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/09 15:37:12 by yun              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define BUFFER_SIZE 4096
 # define MAX_CONNECTION 50
 
-# include "./Ressource.hpp"
+# include "./Resource.hpp"
 # include "./utils/common.hpp"
 # include "./Socket.hpp"
 
