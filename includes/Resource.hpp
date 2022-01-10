@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/03 17:20:18 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/10 18:10:29 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ namespace Webserv {
 	public:
 		Resource(const std::string& path);
 		~Resource();
-		//void		readCGIContent();
+		
+
+		bool		loadResource();
+		bool		readCGIChunk();
 
 		std::string	getContent() const;
 		std::string getContentType() const;
@@ -36,6 +39,7 @@ namespace Webserv {
 		long long	getSize() const;
 		bool		isDir() const;
 		bool		isCGI() const;
+		bool		isFullyRead() const;
 		void		setFd(int newfd);
 
 		struct UnableToStatPathException : public std::exception
@@ -72,14 +76,8 @@ namespace Webserv {
 		Resource(const Resource& src);
 
 		bool		isCGIContent();
-
-		void		populateContentFile();
-		//void		populateContentCGI();
-		void		populateContentFolder();
-
+		bool		readFileChunk();
 		//void		generateAutoIndex();
-
-		void		readContent();
 
 		const std::string	_path;
 		struct stat			_s;
@@ -89,6 +87,7 @@ namespace Webserv {
 		long long			_size;
 		std::string			_content;
 		std::string			_contentType;
+		bool				_isFullyRead;
 		//Webserv::CGI*		_CGI;
 	};
 }
