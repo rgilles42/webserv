@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/22 08:13:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 18:50:24 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,8 @@ namespace Webserv {
 				HttpRequestBuilder(void);
 				HttpRequestBuilder(const HttpRequestBuilder& x);
 
-				const buffer_type&	getBuffer(void) const;
-				const request_list&	getAllRequests(void) const;
+				buffer_type&	getBuffer(void);
+				request_list&	getAllRequests(void);
 
 				void				addMessage(const message_type& message);
 

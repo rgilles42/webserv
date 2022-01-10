@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/22 08:51:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 18:50:19 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,11 +310,11 @@ namespace Webserv {
 			this->requests = x.requests;
 		}
 
-		const HttpRequestBuilder::buffer_type&	HttpRequestBuilder::getBuffer(void) const {
+		HttpRequestBuilder::buffer_type&	HttpRequestBuilder::getBuffer(void) {
 			return this->buffer;
 		}
 
-		const HttpRequestBuilder::request_list&	HttpRequestBuilder::getAllRequests(void) const {
+		HttpRequestBuilder::request_list&	HttpRequestBuilder::getAllRequests(void) {
 			return this->requests;
 		}
 
@@ -399,7 +399,51 @@ namespace Webserv {
 				pos += find;
 
 				// Message-Body
-				if (headers.has("Content-Lenght")) {
+				if (headers.has("Transfer-Encoding")) {
+					if (headers.get("Transfer-Encoding") != "chunked") {
+						return lastPos;
+					}
+					std::string parsedBody = "";
+
+					while (pos < tmpBuff.length()) {
+						size_t chunkLen = 0;
+						std::stringstream ss;
+						ss << std::hex << tmpBuff.substr(pos);
+						ss >> chunkLen;
+
+						// Find the len of chunk
+						// Find the CRLF of len
+						// Get the chunk by the content
+						// Find the CRLF of chunk
+						// If chunkLen <= 0 then chunk is ended
+
+						// Position of CRLF (end current chunk len)
+						find = tmpBuff.find(CRLF, pos);
+						if (find == tmpBuff.npos) {
+							return lastPos;
+						}
+						pos = find + 2;
+						if (tmpBuff.substr(pos).length() < chunkLen) {
+							return lastPos;
+						}
+						parsedBody += tmpBuff.substr(pos, chunkLen);
+						pos += chunkLen;
+
+						// Position of CRLF (end current chunk content)
+						find = tmpBuff.find(CRLF, pos);
+						if (find == tmpBuff.npos) {
+							return lastPos;
+						}
+						pos = find + 2;
+						if (chunkLen <= 0) {
+							request.setBody(parsedBody);
+							requests.push_back(request);
+							pos += chunkLen;
+							lastPos = pos;
+							break ;
+						}
+					}
+				} else if (headers.has("Content-Lenght")) {
 					std::stringstream	ss;
 					size_t contentLen = 0;
 					ss << headers.get("Content-Lenght");
@@ -412,11 +456,6 @@ namespace Webserv {
 					pos += contentLen;
 					lastPos = pos;
 					break ;
-				} else if (headers.has("Transfer-Encoding")) {
-					if (headers.get("Transfer-Encoding") != "chunked") {
-						return lastPos;
-					}
-					// Need to process chunked
 				}
 			}
 			return lastPos;
