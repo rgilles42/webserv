@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 14:49:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 15:46:59 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ namespace Webserv {
 	class Core : public Webserv::Utils::Singleton<Core> {
 
 		private:
-			Poll			*poll_events;
-			EventsManager	*events_manager;
+			Poll			poll_events;
+			EventsManager	events_manager;
 
 			void			setup_events(void);
 
