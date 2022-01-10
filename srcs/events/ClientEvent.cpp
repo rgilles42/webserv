@@ -2,14 +2,10 @@
 
 namespace Webserv
 {
-	ClientEvent::ClientEvent(Socket &new_sock, Webserv::Http::Server &srv): sock(new_sock), m_srv(srv)
+	ClientEvent::ClientEvent(Socket &new_sock/*, Webserv::Http::Server &srv*/): sock(new_sock)/*, m_srv(srv)*/
 	{
 		this->events_flags = POLLIN;
 	}
-/*	ClientEvent::ClientEvent(Http::Client &ref): c(ref)
-	{
-		this->events_flags = POLLIN;
-	}*/
 
 	ClientEvent::~ClientEvent(void)
 	{
@@ -24,25 +20,25 @@ namespace Webserv
 		size_t	size;
 
 		size = this->sock.read(buffer, 2048);
-		// if (size < 0)
-		// 	throw clientEventReadFailed();
 		buffer[size] = '\0';
 		request_string += buffer;
-		this->events_flags = POLLOUT;
+		this->m_req.addMessage(buffer);
+		if (this->create_req.parseRequests() == true)
+		{
+			this->req = this->create_req.getAllRequests();
+			this->events_flags = POLLOUT;
+		}
 	}
 
 	void	ClientEvent::write_event(void)	//TO DO replace
 	{
-//		if (this->rcs.complete())
-//		{
-				std::cout<<"Client write event"<<std::endl;
-                Resource currentResource("./default_pages/index.html");
-                Webserv::Http::HttpResponse response(currentResource);
+		std::cout<<"Client write event"<<std::endl;
+		Resource currentResource("./default_pages/index.html");
+		Webserv::Http::HttpResponse response(currentResource);
 
-				this->sock.write(response.toString().c_str(), response.toString().length());
-//				::write(this->sock.fd(), response.toString().c_str(), response.toString().length());
-				this->events_flags = POLLIN;
-//		}
+		this->sock.write(response.toString().c_str(), response.toString().length());
+		this->events_flags = POLLIN;
+
 	}
 
 	short	ClientEvent::getEventsFlags(void)

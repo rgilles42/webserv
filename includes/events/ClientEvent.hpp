@@ -17,8 +17,9 @@ namespace Webserv
 	{
 
 		private:
-			Webserv::Http::Server						m_srv;
-			Webserv::Http::HttpRequest	m_req;
+//			Webserv::Http::Server		m_srv;
+			Webserv::Http::HttpRequestBuilder	create_req;
+			Webserv::Http::HttpRequest			req;
 			Socket						sock;
 			short						events_flags;
 //			Methods::MethodsManager	*m_methods;
@@ -29,7 +30,7 @@ namespace Webserv
 
 		public:
 
-			ClientEvent(Socket &new_sock, Webserv::Http::Server &srv);
+			ClientEvent(Socket &new_sock/*, Webserv::Http::Server &srv*/);
 			virtual ~ClientEvent();
 
 			void	write_event(void);
