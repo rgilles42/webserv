@@ -29,6 +29,7 @@ namespace Webserv
 		buffer[size] = '\0';
 		request_string += buffer;
 		this->events_flags = POLLOUT;
+		this->currentResource = Resource("./default_pages/index.html");
 	}
 
 	void	ClientEvent::write_event(void)	//TO DO replace
@@ -36,12 +37,15 @@ namespace Webserv
 //		if (this->rcs.complete())
 //		{
 				std::cout<<"Client write event"<<std::endl;
-                Resource currentResource("./default_pages/index.html");
-                Webserv::Http::HttpResponse response(currentResource);
-
-				this->sock.write(response.toString().c_str(), response.toString().length());
-//				::write(this->sock.fd(), response.toString().c_str(), response.toString().length());
-				this->events_flags = POLLIN;
+                printf("Preparing to read resource with size %lld\n", currentResource.getSize());
+                if (currentResource.loadResource() == true)
+                {
+                	currentResource.closeResource();
+	                Webserv::Http::HttpResponse response(currentResource);
+					this->sock.write(response.toString().c_str(), response.toString().length());
+	//				::write(this->sock.fd(), response.toString().c_str(), response.toString().length());
+					this->events_flags = POLLIN;
+				}
 //		}
 	}
 

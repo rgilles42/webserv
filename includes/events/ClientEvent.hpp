@@ -19,7 +19,8 @@ namespace Webserv
 			short					events_flags;
 //			Methods::MethodsManager	*m_methods;
 
-			std::string		request_string;
+			std::string				request_string;
+			Webserv::Resource		currentResource;
 
 			ClientEvent(void);
 

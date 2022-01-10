@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/10 18:10:29 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/10 19:01:44 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,16 @@
 namespace Webserv {
 	class Resource {
 	public:
+		Resource();
 		Resource(const std::string& path);
 		~Resource();
+		Resource&	operator=(const Resource& lhs);
 		
 
 		bool		loadResource();
 		bool		readCGIChunk();
+
+		void		closeResource();
 
 		std::string	getContent() const;
 		std::string getContentType() const;
@@ -72,19 +76,19 @@ namespace Webserv {
 		};
 		
 	private:
-		Resource();
 		Resource(const Resource& src);
 
 		bool		isCGIContent();
 		bool		readFileChunk();
 		//void		generateAutoIndex();
 
-		const std::string	_path;
+		std::string	_path;
 		struct stat			_s;
 		bool				_isDir;
 		bool				_isCGI;
 		int					_fd;
 		long long			_size;
+		long long			_readBytes;
 		std::string			_content;
 		std::string			_contentType;
 		bool				_isFullyRead;

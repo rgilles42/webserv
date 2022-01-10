@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/10 18:11:49 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/10 19:02:05 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 namespace Webserv {
-	Resource::Resource(const std::string& path) : _path(path), _size(-1), _isFullyRead(false)
+	Resource::Resource(const std::string& path) : _path(path), _size(-1), _readBytes(0),_isFullyRead(false)
 	{
 		if (lstat(this->_path.c_str(), &this->_s) < 0)
 			throw UnableToStatPathException();
@@ -50,13 +50,28 @@ namespace Webserv {
 			this->_isDir = true;
 		}
 	}
+	
+	Resource::Resource() {}
 
-	Resource::~Resource()
+	Resource::~Resource() { }
+
+	Resource&	Resource::operator=(const Resource& rhs)
 	{
-		if (!this->_isDir)
-			close(this->_fd);
-		/*if (!this->_isDir && this->_isCGI)
-			delete this->_CGI*/
+		if (this != &rhs)
+		{
+			this->_path = rhs._path;
+			this->_s = rhs._s;
+			this->_isDir = rhs._isDir;
+			this->_isCGI = rhs._isCGI;
+			this->_fd = rhs._fd;
+			this->_size = rhs._size;
+			this->_readBytes = rhs._readBytes;
+			this->_content = rhs._content;
+			this->_contentType = rhs._contentType;
+			this->_isFullyRead = rhs._isFullyRead;
+			//this->_CGI = rhs._CGI;
+		}
+		return (*this);
 	}
 
 	bool	Resource::loadResource()
@@ -91,6 +106,16 @@ namespace Webserv {
 		else
 			throw UnableToReadResourceException();
 		return (this->_isFullyRead);
+	}
+
+	void	Resource::closeResource()
+	{
+		if (!this->_isDir)
+		{
+			close(this->_fd);
+			/*if (this->_isCGI)
+				delete this->_CGI;*/
+		}
 	}
 
 	std::string	Resource::getContent() const
@@ -145,9 +170,8 @@ namespace Webserv {
 	bool	Resource::readFileChunk()
 	{
 		struct		pollfd to_poll;
-		char		buf[2048];
-		int			rdsize;
-		long long	totalReadBytes = 0;
+		char		buf[501];
+		int			rdsize = 0;
 
 		to_poll.fd = this->_fd;
 		to_poll.events = POLLIN;
@@ -155,12 +179,17 @@ namespace Webserv {
 		{
 			if ((rdsize = read(this->_fd, buf, 500)) > 0)
 			{
+				printf("Just read %d bytes, ", rdsize);
 				buf[rdsize] = 0;
 				this->_content += buf;
-				totalReadBytes += rdsize;
+				this->_readBytes += rdsize;
+				printf(" %lld bytes in total\n", this->_readBytes);
 			}
-			else if (totalReadBytes >= this->_size)
+			else if (this->_readBytes >= this->_size)
+			{
+				printf("\n%s\n", "UWU");
 				this->_isFullyRead = true;
+			}
 			else
 				throw UnableToReadResourceException();
 		}
