@@ -6,26 +6,35 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:49:15 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 15:46:59 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CORE_HPP
 # define CORE_HPP
 
-# include <sstream>				// For ostringstream
+# include <sstream>					// For ostringstream
 
-# include "./utils/Env.hpp"		// For Env
-# include "./utils/Args.hpp"	// For Args
-# include "Config.hpp"			// For Config
-# include "Logger.hpp"			// For Logger
+# include "../utils/Env.hpp"		// For Env
+# include "../utils/Args.hpp"		// For Args
+# include "../Config.hpp"			// For Config
+# include "../Logger.hpp"			// For Logger
+# include "../events/events.hpp"	// For All Events class
+# include "../utils/Singleton.hpp"
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"
 
 namespace Webserv {
 
-	class Core {
+	class Core : public Webserv::Utils::Singleton<Core> {
+
+		private:
+			Poll			poll_events;
+			EventsManager	events_manager;
+
+			void			setup_events(void);
+
 		public:
 			typedef Webserv::Config		config_type;
 			typedef Webserv::Logger		logger_type;
@@ -52,10 +61,33 @@ namespace Webserv {
 
 			bool		preInit(int argc = 0, char *argv[] = NULL, char *envp[] = NULL);
 			bool		init(void);
+			void		exec(void);
+
+			void		add_server_event(Socket &sock);
+			void		add_client_event(int fd, ClientEvent &client_e);
+			void		add_cgi_event(CGIEvent const &new_cgi);
+
+			void		remove_event(int fd);
 
 			const bool&	isReady(void) const;
 
 			std::string	getHelp(void) const;
+
+			struct coreInitFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Core: initialisation failed");
+				}
+			};
+
+			struct coreExecFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Core: initialisation failed");
+				}
+			};
 	};
 
 } // namespace Webserv

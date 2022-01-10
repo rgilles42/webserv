@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:50:20 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:48:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define BUFFER_SIZE 4096
 # define MAX_CONNECTION 50
 
-# include "./Ressource.hpp"
+# include "./Resource.hpp"
 # include "./utils/common.hpp"
 # include "./Socket.hpp"
 
@@ -61,7 +61,7 @@
 
 # include "./Logger.hpp"
 # include "./Config.hpp"
-# include "./Core.hpp"
+# include "./core/Core.hpp"
 
 // namespace Webserv {
 
