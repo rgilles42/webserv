@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:49:55 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:52:50 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace Webserv {
 
-	Core::Core(void) {
+	Core::Core(void) : Singleton<Core>() {
 		this->isInit = false;
 		this->logger.setPrefix("\x1b[33m[Webserv]\x1b[0m");
 	}

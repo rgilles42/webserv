@@ -23,7 +23,7 @@ namespace Webserv
 //		ClientEvent *new_clientEvent = new Http::ClientEvent(&new_client);
 		ClientEvent *new_clientEvent = new ClientEvent(client_sock);
 
-		Core::getInstance().add_client_event(new_clientEvent->getFD(), *new_clientEvent);
+		Webserv::Core::getInstance().add_client_event(new_clientEvent->getFD(), *new_clientEvent);
 	}
 
 	void	ServerEvent::write_event(void) {}

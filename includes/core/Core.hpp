@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/09 15:36:21 by yun              ###   ########.fr       */
+/*   Updated: 2022/01/10 14:49:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,15 @@
 # include "../utils/Args.hpp"		// For Args
 # include "../Config.hpp"			// For Config
 # include "../Logger.hpp"			// For Logger
-# include "./Singleton.hpp"			// For Singleton
-# include "../events/events.hpp"		// For All Events class
-
+# include "../events/events.hpp"	// For All Events class
+# include "../utils/Singleton.hpp"
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"
 
 namespace Webserv {
-	/* Inherit Singletons to instanciate 1 time and use in other class */
-	class Core : public Singleton<Core> {
+
+	class Core : public Webserv::Utils::Singleton<Core> {
 
 		private:
 			Poll			*poll_events;

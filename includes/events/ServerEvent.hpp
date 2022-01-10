@@ -1,7 +1,13 @@
 #ifndef SERVEREVENT_HPP
 # define SERVEREVENT_HPP
 
-#include "../webserv.hpp"
+# include <poll.h>
+# include <iostream>
+
+# include "./IEvents.hpp"
+# include "../Socket.hpp"
+# include "./ClientEvent.hpp"
+# include "../core/Core.hpp"
 
 namespace Webserv
 {

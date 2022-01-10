@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2022/01/09 15:45:05 by yun              ###   ########.fr        #
+#    Updated: 2022/01/10 14:54:34 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/core/Core.hpp \
-				$(HEADER_DIR)/core/Singleton.hpp \
 				$(HEADER_DIR)/Resource.hpp \
 				$(HEADER_DIR)/Socket.hpp \
 				$(HEADER_DIR)/Logger.hpp \
@@ -57,7 +56,6 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/core/Core.cpp \
-				$(SRC_DIR)/core/Singleton.cpp \
 				${SRC_DIR}/Resource.cpp \
 				$(SRC_DIR)/Socket.cpp \
 				$(SRC_DIR)/Logger.cpp \

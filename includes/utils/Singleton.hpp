@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:25:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 15:34:59 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:53:44 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace Webserv {
 					static T instance;
 					return (instance);
 				}
-			private:
+			protected:
 				Singleton(void) {};
 				Singleton(const Singleton &) {};
 				Singleton&	operator=(const Singleton &) {};
