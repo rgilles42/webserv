@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(Ressource &ressource, Http::HttpRequest &request, Http::Server &server,int fd_pipe): rcs(ressource), m_request(request), srv(server), fd_in(fd_pipe)
+	CGIEvent::CGIEvent(Ressource &ressource, Http::HttpRequest &request, Http::Server &server,int fd_pipe): rcs(ressource), req(request), srv(server), fd_in(fd_pipe)
 	{
 		this->flags_event = POLLOUT;
 		this->wr_size = 0;
