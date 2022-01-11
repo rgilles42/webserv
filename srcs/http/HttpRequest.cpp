@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 18:50:19 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/11 19:14:30 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,7 +337,7 @@ namespace Webserv {
 			while (pos <= tmpBuff.length()) {
 				request_type request;
 
-				// skip whitespace
+				// skip whitespace (i'm not sure)
 				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
 				pos = it_find - tmpBuff.begin();
 				if (tmpBuff.length() <= pos) {
@@ -454,6 +454,10 @@ namespace Webserv {
 					request.setBody(tmpBuff.substr(pos, contentLen));
 					requests.push_back(request);
 					pos += contentLen;
+					lastPos = pos;
+					break ;
+				} else {
+					requests.push_back(request);
 					lastPos = pos;
 					break ;
 				}

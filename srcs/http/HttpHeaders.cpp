@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/22 08:52:49 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/11 19:14:10 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ namespace Webserv {
 				headers_type::key_type key;
 				headers_type::key_type value;
 
-				// skip whitespace
+				// skip whitespace (i'm not sure)
 				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
 				pos = it_find - tmpBuff.begin();
 				if (tmpBuff.length() <= pos) {
@@ -142,36 +142,17 @@ namespace Webserv {
 				}
 
 				// Position of key (between pos & find)
-				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(this->isKey));
-				find = it_find - tmpBuff.begin();
-				if (tmpBuff.length() <= find || pos == find) {
+				// it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(this->isKey));
+				// find = it_find - tmpBuff.begin();
+				// if (tmpBuff.length() <= find || pos == find) {
+				// 	return tmpBuff.npos;
+				// }
+				// pos = find;
+				find = tmpBuff.find(CRLF, pos);
+				if (find == tmpBuff.npos) {
 					return tmpBuff.npos;
 				}
 				key = tmpBuff.substr(pos, find - pos);
-				pos = find;
-
-				if (tmpBuff[pos] != ':') {
-					return tmpBuff.npos;
-				}
-				pos += 1;
-
-				// Skip SP
-				pos += 1;
-
-				// Position of value (between pos & find)
-				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(std::isspace));
-				find = it_find - tmpBuff.begin();
-				if (tmpBuff.length() <= find || pos == find) {
-					return tmpBuff.npos;
-				}
-				value = tmpBuff.substr(pos, find - pos);
-				pos = find;
-
-				// Position of CRLF
-				find = tmpBuff.find(CRLF, pos);
-				if (find == tmpBuff.npos || pos != find) {
-					return tmpBuff.npos;
-				}
 				pos = find + CRLF.length();
 				headers.set(key, value);
 			}
