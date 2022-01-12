@@ -11,6 +11,7 @@ namespace Webserv
 	{
 		if (this->sock.fd())
 			close(sock.fd());
+		delete this->rcs;
 	}
 
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
@@ -22,22 +23,29 @@ namespace Webserv
 		size = this->sock.read(buffer, 2048);
 		buffer[size] = '\0';
 		request_string += buffer;
-		this->m_req.addMessage(buffer);
+		this->create_req.addMessage(buffer);
 		if (this->create_req.parseRequests() == true)
 		{
-			this->req = this->create_req.getAllRequests();
+//			this->req = this->create_req.getAllRequests();
+			this->rcs = new Resource("./default_pages/index.html");
 			this->events_flags = POLLOUT;
+		}
+		else
+		{
+			std::cout<<"|START|"<<request_string<<"|END|"<<std::endl;
 		}
 	}
 
 	void	ClientEvent::write_event(void)	//TO DO replace
 	{
 		std::cout<<"Client write event"<<std::endl;
-		Resource currentResource("./default_pages/index.html");
-		Webserv::Http::HttpResponse response(currentResource);
-
-		this->sock.write(response.toString().c_str(), response.toString().length());
-		this->events_flags = POLLIN;
+//		Resource currentResource("./default_pages/index.html");
+		if (this->rcs->loadResource())
+		{
+			Webserv::Http::HttpResponse response(*this->rcs);
+			this->sock.write(response.toString().c_str(), response.toString().length());
+			this->events_flags = POLLIN;
+		}
 
 	}
 

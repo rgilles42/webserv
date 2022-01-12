@@ -20,6 +20,7 @@ namespace Webserv
 //			Webserv::Http::Server		m_srv;
 			Webserv::Http::HttpRequestBuilder	create_req;
 			Webserv::Http::HttpRequest			req;
+			Resource							*rcs;
 			Socket						sock;
 			short						events_flags;
 //			Methods::MethodsManager	*m_methods;
