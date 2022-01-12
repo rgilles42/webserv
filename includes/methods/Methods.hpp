@@ -17,7 +17,7 @@ namespace Webserv
 		public:
 			Methods(void);
 			~Methods(void);
-			void    exec_method(std::string method, Webserv::Http::HttpRequest req, Webserv::Resource rcs/* Webserv::Http::Server srv*/);
+			void    exec_method(Webserv::Http::HttpRequest req, Webserv::Resource rcs/* Webserv::Http::Server srv*/);
 
 			struct	methodsBadName: public std::exception
 			{

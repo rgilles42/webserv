@@ -5,13 +5,13 @@ namespace Webserv {
 
     Methods::~Methods(void) {}
 
-    void    Methods::exec_method(std::string method, Webserv::Http::HttpRequest req, Webserv::Resource rcs/*, Webserv::Http::Server srv*/)
+    void    Methods::exec_method(Webserv::Http::HttpRequest req, Webserv::Resource rcs/*, Webserv::Http::Server srv*/)
     {
-        if (method == "GET")
+        if (req.getMethod() == "GET")
             getMethod(req, rcs);
-        else if (method == "POST")
+        else if (req.getMethod() == "POST")
             postMethod(req, rcs);
-        else if (method == "DELETE")
+        else if (req.getMethod == "DELETE")
             deleteMethod(req, rcs);
         else
             throw methodsBadName();
@@ -29,7 +29,7 @@ namespace Webserv {
 
     void    Methods::deleteMethod(Webserv::Http::HttpRequest req, Webserv::Resource rcs)
     {
-        
+
     }
 
 }   // namespace Webserv
