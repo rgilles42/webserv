@@ -30,16 +30,11 @@ namespace Webserv
 			this->rcs = new Resource("./default_pages/index.html");
 			this->events_flags = POLLOUT;
 		}
-		else
-		{
-			std::cout<<"|START|"<<request_string<<"|END|"<<std::endl;
-		}
 	}
 
 	void	ClientEvent::write_event(void)	//TO DO replace
 	{
 		std::cout<<"Client write event"<<std::endl;
-//		Resource currentResource("./default_pages/index.html");
 		if (this->rcs->loadResource())
 		{
 			Webserv::Http::HttpResponse response(*this->rcs);

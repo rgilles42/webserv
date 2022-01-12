@@ -17,7 +17,7 @@ namespace Webserv
 	{
 
 		private:
-//			Webserv::Http::Server		m_srv;
+//			Webserv::Http::Server				m_srv;
 			Webserv::Http::HttpRequestBuilder	create_req;
 			Webserv::Http::HttpRequest			req;
 			Resource							*rcs;
