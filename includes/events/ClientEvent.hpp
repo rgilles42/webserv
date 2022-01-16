@@ -7,6 +7,8 @@
 #include"../http/Server.hpp"
 #include "../http/HttpRequest.hpp"
 #include "../utils/common.hpp"
+//#include "../methods/Methods.hpp"
+#include "./CGIEvent.hpp"
 #include "IEvents.hpp"
 #include <string>
 #include <poll.h>
@@ -21,8 +23,9 @@ namespace Webserv
 			Webserv::Http::HttpRequestBuilder	create_req;
 			Webserv::Http::HttpRequest			req;
 			Resource							*rcs;
-			Socket						sock;
-			short						events_flags;
+			Socket								sock;
+			CGIEvent							*cgi;
+			short								events_flags;
 //			Methods::MethodsManager	*m_methods;
 
 			std::string		request_string;

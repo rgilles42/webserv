@@ -24,24 +24,56 @@ namespace Webserv
 		buffer[size] = '\0';
 		request_string += buffer;
 		this->create_req.addMessage(buffer);
-		if (this->create_req.parseRequests() == true)
+		if (this->create_req.checkBuffer() >= 1)
 		{
-//			this->req = this->create_req.getAllRequests();
-			this->rcs = new Resource("./default_pages/index.html");
-			this->events_flags = POLLOUT;
+			if (this->create_req.parseRequests() == true)
+			{
+				this->req = this->create_req.getAllRequests()[0];
+				this->rcs = new Resource("./default_pages/index.php");
+				this->rcs->setBoolCGI(true);
+				if (this->rcs->isCGI())
+				{
+					this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
+					this->rcs->setFd(this->cgi->getReadFD());
+				}
+	//			Webserv::Methods::Methods::getInstance().exec_method(this->req, this->rcs/*, this->srv**/);
+				this->events_flags = POLLOUT;
+			}
 		}
 	}
 
 	void	ClientEvent::write_event(void)	//TO DO replace
 	{
 		std::cout<<"Client write event"<<std::endl;
+		if (this->rcs->isCGI())
+		{
+			std::cout<<"is cgi"<<std::endl;
+			if (this->cgi->writeIsEnd())
+			{
+				std::cout<<"cgi exec"<<std::endl;
+				this->cgi->exec();	//peut etre recup le ret
+				this->rcs->setBoolCGI(false);
+			}
+			else
+			{
+				std::cout<<"Write cgi body"<<std::endl;
+				this->cgi->write_event();
+			}
+			return;
+		}
 		if (this->rcs->loadResource())
 		{
+			std::cout<<"load ressoyrce"<<std::endl;
 			Webserv::Http::HttpResponse response(*this->rcs);
 			this->sock.write(response.toString().c_str(), response.toString().length());
+			delete this->rcs;
+			delete this->cgi;
 			this->events_flags = POLLIN;
 		}
-
+		else
+		{
+			std::cout<<"hmm"<<std::endl;
+		}
 	}
 
 	short	ClientEvent::getEventsFlags(void)

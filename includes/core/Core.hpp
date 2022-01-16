@@ -19,8 +19,11 @@
 # include "../utils/Args.hpp"		// For Args
 # include "../Config.hpp"			// For Config
 # include "../Logger.hpp"			// For Logger
-# include "../events/events.hpp"	// For All Events class
-# include "../utils/Singleton.hpp"
+# include "../events/ClientEvent.hpp"	// For All Events class
+# include "../events/ServerEvent.hpp"	//
+# include "../events/Poll.hpp"			//
+# include "../events/EventsManager.hpp"
+# include "../utils/Singleton.hpp"	// For Singleton
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"
@@ -64,8 +67,8 @@ namespace Webserv {
 			void		exec(void);
 
 			void		add_server_event(Socket &sock);
-			void		add_client_event(int fd, ClientEvent &client_e);
-			void		add_cgi_event(CGIEvent const &new_cgi);
+			void		add_client_event(int fd, Webserv::ClientEvent &client_e);
+//			void		add_cgi_event(int fd, CGIEvent &cgi_e);
 
 			void		remove_event(int fd);
 

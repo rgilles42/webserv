@@ -1,39 +1,45 @@
 #ifndef CGIEVENT_HPP
 # define CGIEVENT_HPP
 
-#include "IEvents.hpp"
-#include "../Resource.hpp"
 #include "../http/HttpRequest.hpp"
 #include "../http/Server.hpp"
 #include "../utils/Env.hpp"
+#include <poll.h>
+#include <iostream>
+#include <unistd.h>
 
 namespace Webserv
 {
 
-	class CGIEvent : public IEvents
+	class CGIEvent
 	{
 		private:
-			Resource			rcs;
 			int					fd_in[2];   //use to write request body
 			Http::HttpRequest	req;
 			Http::Server		srv;
 			int					fd_out[2];  //use to redirect cgi output
-			short				flags_events;
 			Webserv::Utils::Env	env;
+			pid_t				pid;
+			bool				writeEnd;
+			char				**args;
 
 			int					wr_size;
 
 			void	close_pipefd(void);
 			void	init_env();
-			void	exec(void);
+			void	init_args();
 
 		public:
-			CGIEvent(Resource &ressource, std::string req_method,int fd_pipe[2]);
-			virtual ~CGIEvent();
+			CGIEvent(Webserv::Http::HttpRequest &request);
+			~CGIEvent();
+
+			void	exec(void);
 
 			void	write_event(void);
-			void	read_event();
-			short	getEventsFlags(void);
+
+			int		getReadFD(void);
+
+			bool	writeIsEnd();
 	};
 
 }

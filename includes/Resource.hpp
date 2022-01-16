@@ -45,6 +45,7 @@ namespace Webserv {
 		bool		isCGI() const;
 		bool		isFullyRead() const;
 		void		setFd(int newfd);
+		void		setBoolCGI(bool new_value);
 
 		struct UnableToStatPathException : public std::exception
 		{

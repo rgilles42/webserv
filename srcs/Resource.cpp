@@ -158,6 +158,11 @@ namespace Webserv {
 		this->_fd = newfd;
 	}
 
+	void	Resource::setBoolCGI(bool new_val)
+	{
+		this->_isCGI = new_val;
+	}
+
 /******************************************/
 
 	bool	Resource::isCGIContent()
