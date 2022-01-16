@@ -198,6 +198,10 @@ namespace Webserv {
 			else
 				throw UnableToReadResourceException();
 		}
+		else
+		{
+			std::cout<<"logique"<<std::endl;
+		}
 		return (this->_isFullyRead);
 	}
 }

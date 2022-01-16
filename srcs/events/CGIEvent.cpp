@@ -5,6 +5,13 @@ namespace Webserv
 
 	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request)
 	{
+		pipe(this->fd_in);
+		pipe(this->fd_out);
+
+		if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
+			std::cout<<"error fnctl"<<std::endl;
+		if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
+			std::cout<<"error fnctl"<<std::endl;
 		this->wr_size = 0;
 	}
 
