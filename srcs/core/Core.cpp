@@ -135,15 +135,15 @@ namespace Webserv {
 				ite = poll_events.end();
 				for (std::vector<struct pollfd>::iterator it = this->poll_events.begin(); it != ite; it++)
 				{
-					if ((it->revents & POLLIN) == POLLIN)
-					{
-						std::cout<<"POLLIN Event on fd: "<<it->fd<<std::endl;
-						this->events_manager.get_event(it->fd)->read_event();
-					}
-					else if ((it->revents & (POLLHUP | POLLERR)) > 0)
+					if ((it->revents & (POLLHUP | POLLERR)) > 0)
 					{
 						std::cout<<"POLLHUP | POLLER Event on fd: "<<it->fd<<std::endl;
 						this->events_manager.remove_event(it->fd);
+					}
+					else if ((it->revents & POLLIN) == POLLIN)
+					{
+						std::cout<<"POLLIN Event on fd: "<<it->fd<<std::endl;
+						this->events_manager.get_event(it->fd)->read_event();
 					}
 					else if ((it->revents & POLLOUT) == POLLOUT)
 					{
