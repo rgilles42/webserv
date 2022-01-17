@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/17 15:38:04 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/17 16:17:26 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ namespace Webserv {
 					throw ResourceNotOpenException();
 				if (fcntl(this->_fd, F_SETFL, O_NONBLOCK) < 0)
 					throw SetNonBlockFailedException();
-				if (read(0, NULL, 0))
+				if (read(this->_fd, NULL, 0))
 					throw UnableToReadResourceException();
 				this->_size = this->_s.st_size;
 				this->_contentType = Utils::getContentTypeByFile(this->_path, "text/plain");
@@ -77,9 +77,6 @@ namespace Webserv {
 	{
 		if (!this->_isDir && !this->_isCGI)
 			close(this->_fd);
-			/*if (this->_isCGI)
-				delete this->_CGI;*/
-		}
 	}
 
 	std::string	Resource::getContent() const
@@ -119,22 +116,13 @@ namespace Webserv {
 
 	void	Resource::setFd(int newfd)
 	{
+		if (read(newfd, NULL, 0))
+			throw UnableToReadResourceException();
 		this->_fd = newfd;
 	}
 
-	void	Resource::setBoolCGI(bool new_val)
-	{
-		this->_isCGI = new_val;
-	}
 
 /******************************************/
-
-	bool	Resource::isCGIContent()
-	{
-		if (this->_path.substr(this->_path.find_last_of(".") + 1) == "php") //temporary
-			return (true);
-		return (false);
-	}
 
 	bool	Resource::readFileChunk()
 	{
@@ -145,9 +133,9 @@ namespace Webserv {
 
 		to_poll.fd = this->_fd;
 		to_poll.events = POLLIN;
-		if (poll(&to_poll, 1, 100) == 1 && to_poll.revents & POLLIN)
+		if (poll(&to_poll, 1, 100) == 1)
 		{
-			if ((rdsize = read(this->_fd, buf, 500)) > 0)
+			if ((to_poll.revents & POLLIN) && (rdsize = read(this->_fd, buf, 500)) > 0)
 			{
 				printf("Just read %d bytes, ", rdsize);
 				buf[rdsize] = 0;
@@ -161,7 +149,7 @@ namespace Webserv {
 				this->_size = totalReadBytes;
 				this->_isFullyRead = true;
 			}
-			else
+			else if (rdsize < 0)
 				throw UnableToReadResourceException();
 		}
 		return (this->_isFullyRead);

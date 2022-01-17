@@ -29,8 +29,7 @@ namespace Webserv
 			if (this->create_req.parseRequests() == true)
 			{
 				this->req = this->create_req.getAllRequests()[0];
-				this->rcs = new Resource("./default_pages/index.php");
-				this->rcs->setBoolCGI(true);
+				this->rcs = new Resource("./default_pages/index.php", true);
 				if (this->rcs->isCGI())
 				{
 					this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
@@ -45,14 +44,13 @@ namespace Webserv
 	void	ClientEvent::write_event(void)	//TO DO replace
 	{
 		std::cout<<"Client write event"<<std::endl;
-		if (this->rcs->isCGI())
+		if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
 		{
 			std::cout<<"is cgi"<<std::endl;
 			if (this->cgi->writeIsEnd())
 			{
 				std::cout<<"cgi exec"<<std::endl;
 				this->cgi->exec();	//peut etre recup le ret
-				this->rcs->setBoolCGI(false);
 			}
 			else
 			{

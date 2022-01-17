@@ -3,15 +3,21 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request)
+	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request), CGIEnd(false)
 	{
 		pipe(this->fd_in);
 		pipe(this->fd_out);
 
 		if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
+		{
 			std::cout<<"error fnctl"<<std::endl;
+			exit(-1);
+		}
 		if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
+		{
 			std::cout<<"error fnctl"<<std::endl;
+			exit(-1);
+		}
 		this->wr_size = 0;
 	}
 
@@ -95,11 +101,11 @@ namespace Webserv
 		int ret;
 		char	**envp;
 		char	**args = new char *[3];
-//		char	*args[3];
+//		char*	args[3];
 		this->init_env();
 		envp = this->env.toEnvp();
 
-		std::string		path_cgi = "/usr/local/bin/php-cgi";	//need change
+		std::string		path_cgi = "/usr/bin/php-cgi";	//need change
 		std::string		file_path = "../default_pages/index.php";	//need changes
 		args[0] = new char[path_cgi.size() + 1];
  		args[0] = std::strcpy(args[0], path_cgi.c_str());	//cgi-path
@@ -148,6 +154,7 @@ namespace Webserv
 			fd_out[0] = -1;
 			this->env.freeEnvp(envp);
 			waitpid(this->pid, &ret, 0);
+			this->CGIEnd = true;
  		}
 	}
 
@@ -171,6 +178,11 @@ namespace Webserv
 	bool	CGIEvent::writeIsEnd()
 	{
 		return this->writeEnd;
+	}
+
+	bool	CGIEvent::CGIIsEnd()
+	{
+		return this->CGIEnd;
 	}
 
 }   //namespace Webserv

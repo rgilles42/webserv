@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/17 15:37:01 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/17 16:18:59 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,13 @@ namespace Webserv {
 	private:
 		Resource(const Resource& src);
 
-		bool		isCGIContent();
 		bool		readFileChunk();
 		//void		generateAutoIndex();
 
 		std::string	_path;
 		struct stat			_s;
 		bool				_isDir;
-		bool				_isCGI;
+		bool			_isCGI;
 		int					_fd;
 		long long			_size;
 		long long			_readBytes;

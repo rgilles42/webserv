@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 namespace Webserv
 {
@@ -23,6 +25,7 @@ namespace Webserv
 			pid_t				pid;
 			bool				writeEnd;
 			char				**args;
+			bool				CGIEnd;
 
 			int					wr_size;
 
@@ -41,6 +44,7 @@ namespace Webserv
 			int		getReadFD(void);
 
 			bool	writeIsEnd();
+			bool	CGIIsEnd();
 	};
 
 }

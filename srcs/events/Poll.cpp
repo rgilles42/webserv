@@ -76,10 +76,10 @@ void	Poll::exec(void)
 	int ret = 0;
 
 	poll_fds = this->vect_pollfd.data();
-	ret = poll(poll_fds, this->vect_pollfd.size(), 10000);
+	ret = poll(poll_fds, this->vect_pollfd.size(), -1);
 	if (ret < 0)
 		throw pollFailed();
-	std::cout<<"ret: "<<ret<<std::endl;
+	std::cout<<"poll ret: "<<ret<<std::endl;
 }
 
 std::vector<struct pollfd>::iterator	Poll::begin()
