@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/10 19:01:44 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/17 15:37:01 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,17 @@
 # include <string>
 # include <unistd.h>
 # include "utils/MimeTypes.hpp"
-//#include "CGI.hpp"
 
 namespace Webserv {
 	class Resource {
 	public:
 		Resource();
-		Resource(const std::string& path);
+		Resource(const std::string& path, const bool isCGI = false);
 		~Resource();
 		Resource&	operator=(const Resource& lhs);
 		
 
 		bool		loadResource();
-		bool		readCGIChunk();
 
 		void		closeResource();
 
@@ -92,7 +90,6 @@ namespace Webserv {
 		std::string			_content;
 		std::string			_contentType;
 		bool				_isFullyRead;
-		//Webserv::CGI*		_CGI;
 	};
 }
 

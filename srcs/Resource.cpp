@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/10 19:02:05 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/17 15:38:04 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,15 @@
 
 
 namespace Webserv {
-	Resource::Resource(const std::string& path) : _path(path), _size(-1), _readBytes(0),_isFullyRead(false)
+	Resource::Resource(const std::string& path, const bool isCGI/*, const MimeTypes mime*/) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
 	{
 		if (lstat(this->_path.c_str(), &this->_s) < 0)
 			throw UnableToStatPathException();
 		if (S_ISREG(this->_s.st_mode))
 		{
 			this->_isDir = false;
-			if (!isCGIContent())
+			if (!isCGI)
 			{
-				this->_isCGI = false;
 				this->_fd = open(this->_path.c_str(), O_RDONLY);
 				if (this->_fd < 0)
 					throw ResourceNotOpenException();
@@ -34,16 +33,8 @@ namespace Webserv {
 				this->_size = this->_s.st_size;
 				this->_contentType = Utils::getContentTypeByFile(this->_path, "text/plain");
 			}
-			/*else
-			{
-				this->_isCGI = true;
+			else
 				this->_contentType = "text/html";
-				this->_CGI = new CGI("/usr/bin/php-cgi", this->_path);
-				this->_CGI->init_env_var();
-				this->_fd = this->_CGI->getReadFD();
-				this->_CGI->exec();
-				
-			}*/
 		}
 		else if (S_ISDIR(this->_s.st_mode))
 		{
@@ -53,7 +44,7 @@ namespace Webserv {
 	
 	Resource::Resource() {}
 
-	Resource::~Resource() { }
+	Resource::~Resource() {}
 
 	Resource&	Resource::operator=(const Resource& rhs)
 	{
@@ -69,53 +60,23 @@ namespace Webserv {
 			this->_content = rhs._content;
 			this->_contentType = rhs._contentType;
 			this->_isFullyRead = rhs._isFullyRead;
-			//this->_CGI = rhs._CGI;
 		}
 		return (*this);
 	}
 
 	bool	Resource::loadResource()
 	{
-		if (!this->_isCGI)
-		{
-			if (!this->_isDir)
-				return (readFileChunk());
-			/*else
-				return (generateAutoIndex());*/
-		}
-		return (this->_isFullyRead);
-	}
-
-	bool	Resource::readCGIChunk()
-	{
-		char		buf[2048];
-		int			rdsize;
-		long long	totalReadBytes = 0;
-
-		if ((rdsize = read(this->_fd, buf, 500)) > 0)
-		{
-			buf[rdsize] = 0;
-			this->_content += buf;
-			totalReadBytes += rdsize;
-		}
-		else if (!rdsize)
-		{
-			this->_size = totalReadBytes;
-			this->_isFullyRead = true;
-		}
-		else
-			throw UnableToReadResourceException();
+		if (!this->_isDir)
+			return (readFileChunk());
+		/*else
+			return (generateAutoIndex());*/
 		return (this->_isFullyRead);
 	}
 
 	void	Resource::closeResource()
 	{
-		if (!this->_isDir)
-		{
+		if (!this->_isDir && !this->_isCGI)
 			close(this->_fd);
-			/*if (this->_isCGI)
-				delete this->_CGI;*/
-		}
 	}
 
 	std::string	Resource::getContent() const
@@ -172,6 +133,7 @@ namespace Webserv {
 		struct		pollfd to_poll;
 		char		buf[501];
 		int			rdsize = 0;
+		long long	totalReadBytes = 0;
 
 		to_poll.fd = this->_fd;
 		to_poll.events = POLLIN;
@@ -185,9 +147,10 @@ namespace Webserv {
 				this->_readBytes += rdsize;
 				printf(" %lld bytes in total\n", this->_readBytes);
 			}
-			else if (this->_readBytes >= this->_size)
+			else if ((!this->_isCGI && this->_readBytes >= this->_size) || (this->_isCGI && !rdsize))
 			{
 				printf("\n%s\n", "UWU");
+				this->_size = totalReadBytes;
 				this->_isFullyRead = true;
 			}
 			else
