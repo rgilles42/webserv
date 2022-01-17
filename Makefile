@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2022/01/10 15:03:12 by ppaglier         ###   ########.fr        #
+#    Updated: 2022/01/16 22:16:24 by yun              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,11 +47,11 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/http/HttpHeaders.hpp \
 				$(HEADER_DIR)/http/HttpRequest.hpp \
 				$(HEADER_DIR)/http/HttpResponse.hpp \
-				$(HEADER_DIR)/events/events.hpp \
 				$(HEADER_DIR)/events/IEvents.hpp \
 				$(HEADER_DIR)/events/ClientEvent.hpp \
 				$(HEADER_DIR)/events/ServerEvent.hpp \
 				$(HEADER_DIR)/events/Poll.hpp \
+				$(HEADER_DIR)/events/CGIEvent.hpp \
 				$(HEADER_DIR)/events/EventsManager.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
@@ -82,6 +82,7 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/events/ClientEvent.cpp \
 				$(SRC_DIR)/events/ServerEvent.cpp \
 				$(SRC_DIR)/events/Poll.cpp \
+				$(SRC_DIR)/events/CGIEvent.cpp \
 				$(SRC_DIR)/events/EventsManager.cpp
 
 

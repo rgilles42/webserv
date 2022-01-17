@@ -77,6 +77,9 @@ namespace Webserv {
 	{
 		if (!this->_isDir && !this->_isCGI)
 			close(this->_fd);
+			/*if (this->_isCGI)
+				delete this->_CGI;*/
+		}
 	}
 
 	std::string	Resource::getContent() const
@@ -117,6 +120,11 @@ namespace Webserv {
 	void	Resource::setFd(int newfd)
 	{
 		this->_fd = newfd;
+	}
+
+	void	Resource::setBoolCGI(bool new_val)
+	{
+		this->_isCGI = new_val;
 	}
 
 /******************************************/

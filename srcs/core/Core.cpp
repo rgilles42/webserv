@@ -176,10 +176,9 @@ namespace Webserv {
 		this->events_manager.add_event(fd, client_e);
 	}
 
-/*	void		Core::add_cgi_event(Ressource &rcs, int fd_in[2], std::string methods)	// Add CGI Event in EventsManager
+/*	void		Core::add_cgi_event(int fd, CGIEvent &cgi_e)	// Add CGI Event in EventsManager
 	{
-		CGI	*cgi = new CGI(rcs, fd_in, methods);
-		this->events_manager.add_event(cgi->getWriteFD() ,cgi);
+		this->events_manager.add_event(fd, cgi_e);
 	}*/
 
 	void		Core::remove_event(int fd)	// Remove Event in EventsManager
