@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:18:20 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:58:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 16:22:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ namespace Webserv {
 
 				bool				fromString(const std::string& address);
 				const std::string	toString(void) const;
+
+				bool				operator==(const Address &other) const;
 		};
 
 	} // namespace Utils

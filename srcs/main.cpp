@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/11 18:46:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 17:41:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,31 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-// int main(int argc, char *argv[], char *envp[]) {
+int main(int argc, char *argv[], char *envp[]) {
 
-// 	Webserv::Core webserv;
+	Webserv::Core &webserv = Webserv::Core::getInstance();
 
-// 	if (!webserv.preInit(argc, argv, envp)) {
-// 		std::cout << "Fail 1" << std::endl;
-// 		return EXIT_FAILURE;
-// 	}
+	if (!webserv.preInit(argc, argv, envp)) {
+		std::cout << "Fail 1" << std::endl;
+		return EXIT_FAILURE;
+	}
 
-// 	if (!webserv.init()) {
-// 		std::cout << "Fail 2" << std::endl;
-// 		return EXIT_FAILURE;
-// 	}
+	if (!webserv.init()) {
+		std::cout << "Fail 2" << std::endl;
+		return EXIT_FAILURE;
+	}
 
-// 	std::cout << "Success" << std::endl;
-// 	return EXIT_SUCCESS;
-// }
+	try {
+		webserv.exec();
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	std::cout << "Success" << std::endl;
+	return EXIT_SUCCESS;
+}
 
 std::string	intToHex(int i) {
 	std::stringstream stream;
@@ -102,9 +110,9 @@ std::string	intToHex(int i) {
 	return stream.str();
 }
 
-int main(void)
-{
-	Webserv::Http::HttpRequestBuilder builder;
+// int main(void)
+// {
+// 	Webserv::Http::HttpRequestBuilder builder;
 
 	// {
 	// 	std::string message = "             c'est le body sa mer     ";
@@ -179,28 +187,28 @@ int main(void)
 
 	// 	std::cout << "body: " << builder.checkBuffer() << std::endl;
 	// }
-	{
-		std::string message = "GET / HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nConnection: keep-alive\r\nCache-Control: max-age=0\r\nsec-ch-ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"\r\nsec-ch-ua-mobile: ?0\r\nsec-ch-ua-platform: \"macOS\"\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nSec-Fetch-Site: none\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7\r\n\r\n";
-		builder.addMessage(message);
+// 	{
+// 		std::string message = "GET / HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nConnection: keep-alive\r\nCache-Control: max-age=0\r\nsec-ch-ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"\r\nsec-ch-ua-mobile: ?0\r\nsec-ch-ua-platform: \"macOS\"\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nSec-Fetch-Site: none\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7\r\n\r\n";
+// 		builder.addMessage(message);
 
-		std::cout << "body: " << builder.checkBuffer() << std::endl;
+// 		std::cout << "body: " << builder.checkBuffer() << std::endl;
 
-		std::cout << "body: " << builder.parseRequests() << std::endl;
+// 		std::cout << "body: " << builder.parseRequests() << std::endl;
 
-		std::cout << "body: " << builder.checkBuffer() << std::endl;
-	}
+// 		std::cout << "body: " << builder.checkBuffer() << std::endl;
+// 	}
 
-	Webserv::Http::HttpRequestBuilder::request_list::const_iterator it = builder.getAllRequests().begin();
+// 	Webserv::Http::HttpRequestBuilder::request_list::const_iterator it = builder.getAllRequests().begin();
 
-	while (it != builder.getAllRequests().end()) {
-		std::cout << "----------------" << std::endl;
-		std::cout << it->toString() << std::endl;
-		std::cout << "----------------" << std::endl;
-		it++;
-	}
+// 	while (it != builder.getAllRequests().end()) {
+// 		std::cout << "----------------" << std::endl;
+// 		std::cout << it->toString() << std::endl;
+// 		std::cout << "----------------" << std::endl;
+// 		it++;
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }
 
 // int	main(void)
 // {

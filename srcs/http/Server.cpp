@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:46:06 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 15:55:21 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,14 @@ namespace Webserv {
 
 		void 	Server::addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route) {
 			this->routes[path] = route;
+		}
+
+		const Server::name_type	&Server::getServerName(void) const {
+			return this->serverName;
+		}
+
+		const Server::listen_type	&Server::getListen(void) const {
+			return this->listen;
 		}
 
 	} // namespace Http

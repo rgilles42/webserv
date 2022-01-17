@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:50:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 15:47:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,10 @@ namespace Webserv {
 		}
 
 		return true;
+	}
+
+	Config::server_vector	&Config::getServers(void) {
+		return this->servers;
 	}
 
 } // namespace Webserv
