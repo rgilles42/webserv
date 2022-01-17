@@ -7,7 +7,7 @@ namespace Webserv
 		this->events_flags = POLLIN;
 	}*/
 
-	ServerEvent::ServerEvent(Socket &new_sock): sock(new_sock)
+	ServerEvent::ServerEvent(const Socket &new_sock): sock(new_sock)
 	{
 		this->events_flags= POLLIN;
 	}

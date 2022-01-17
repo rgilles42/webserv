@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 15:46:59 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 17:32:00 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ namespace Webserv {
 			bool		init(void);
 			void		exec(void);
 
-			void		add_server_event(Socket &sock);
+			void		add_server_event(const Socket &sock);
 			void		add_client_event(int fd, ClientEvent &client_e);
 			void		add_cgi_event(CGIEvent const &new_cgi);
 

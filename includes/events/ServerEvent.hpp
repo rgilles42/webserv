@@ -19,7 +19,7 @@ namespace Webserv
 			short			events_flags;
 
 		public:
-			ServerEvent(Socket &new_sock);	//TO DO replace after test
+			ServerEvent(const Socket &new_sock);	//TO DO replace after test
 //			ServerEvent(Http::Server &ref);
 			~ServerEvent();
 
