@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 17:31:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 17:41:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,31 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-// int main(int argc, char *argv[], char *envp[]) {
+int main(int argc, char *argv[], char *envp[]) {
 
-// 	Webserv::Core webserv;
+	Webserv::Core &webserv = Webserv::Core::getInstance();
 
-// 	if (!webserv.preInit(argc, argv, envp)) {
-// 		std::cout << "Fail 1" << std::endl;
-// 		return EXIT_FAILURE;
-// 	}
+	if (!webserv.preInit(argc, argv, envp)) {
+		std::cout << "Fail 1" << std::endl;
+		return EXIT_FAILURE;
+	}
 
-// 	if (!webserv.init()) {
-// 		std::cout << "Fail 2" << std::endl;
-// 		return EXIT_FAILURE;
-// 	}
+	if (!webserv.init()) {
+		std::cout << "Fail 2" << std::endl;
+		return EXIT_FAILURE;
+	}
 
-// 	std::cout << "Success" << std::endl;
-// 	return EXIT_SUCCESS;
-// }
+	try {
+		webserv.exec();
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	std::cout << "Success" << std::endl;
+	return EXIT_SUCCESS;
+}
 
 std::string	intToHex(int i) {
 	std::stringstream stream;
@@ -202,14 +210,14 @@ std::string	intToHex(int i) {
 // 	return 0;
 // }
 
-int	main(void)
-{
-	try {
-		Webserv::Core::getInstance().exec();
-	}
-	catch (const std::exception &e)
-	{
-		std::cout<<e.what()<<std::endl;
-	}
-	return 0;
-}
+// int	main(void)
+// {
+// 	try {
+// 		Webserv::Core::getInstance().exec();
+// 	}
+// 	catch (const std::exception &e)
+// 	{
+// 		std::cout<<e.what()<<std::endl;
+// 	}
+// 	return 0;
+// }

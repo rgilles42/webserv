@@ -14,13 +14,15 @@
 # define CORE_HPP
 
 # include <sstream>					// For ostringstream
+# include <vector>					// For vector
 
 # include "../utils/Env.hpp"		// For Env
 # include "../utils/Args.hpp"		// For Args
 # include "../Config.hpp"			// For Config
 # include "../Logger.hpp"			// For Logger
 # include "../events/events.hpp"	// For All Events class
-# include "../utils/Singleton.hpp"
+# include "../utils/Singleton.hpp"	// For Singleton
+# include "../Socket.hpp"			// For Socket
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"
@@ -36,10 +38,15 @@ namespace Webserv {
 			void			setup_events(void);
 
 		public:
-			typedef Webserv::Config		config_type;
-			typedef Webserv::Logger		logger_type;
-			typedef Webserv::Utils::Env	env_type;
-			typedef Webserv::Utils::Args	args_type;
+			typedef Webserv::Config				config_type;
+			typedef Webserv::Logger				logger_type;
+			typedef Webserv::Utils::Env			env_type;
+			typedef Webserv::Utils::Args		args_type;
+
+			typedef config_type::server_type	server_type;
+			typedef std::vector<server_type>	server_vector;
+			typedef Socket						socket_type;
+			typedef std::vector<socket_type>	socket_vector;
 
 		protected:
 			std::string	customConfigFile;
@@ -49,6 +56,8 @@ namespace Webserv {
 			env_type	env;
 			args_type	args;
 			logger_type	logger;
+			server_vector	servers;
+			socket_vector	serversSockets;
 
 		public:
 			Core(void);

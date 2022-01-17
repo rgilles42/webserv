@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 17:32:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 17:43:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,26 @@ namespace Webserv {
 		if (!this->config.processFiles()) {
 			return false;
 		}
+		this->servers = this->config.getServers();
+		server_vector::const_iterator it = this->servers.begin();
+		std::vector<std::string> listens;
+		while (it != this->servers.end()) {
+			std::ostringstream ss;
+			ss << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort();
+			std::string listen = ss.str();
+			if (std::find(listens.begin(), listens.end(), listen) == listens.end()) {
+				listens.push_back(listen);
+				socket_type newSocket(it->getListen().getStrAddress().c_str(), it->getListen().getIntPort());
+				this->serversSockets.push_back(newSocket);
+				this->logger << listen << std::endl;
+			}
+			it++;
+		}
+		socket_vector::const_iterator it2 = this->serversSockets.begin();
+		while (it2 != this->serversSockets.end()) {
+			this->add_server_event(*it2);
+			it2++;
+		}
 		this->isInit = true;
 		return true;
 	}
@@ -96,26 +116,24 @@ namespace Webserv {
 	void		Core::exec(void)
 	{
 		std::vector<struct pollfd>::iterator ite;
-		/* TO DO RM - only for test */
-		Socket  ServerSocket1("0.0.0.0", 8080);
-		Socket  ServerSocket2("0.0.0.0", 9000);
 
-        if (ServerSocket1.bind() < 0) {
-                perror("socket bind ");
-        }
-        if (ServerSocket1.listen() < 0) {
-                perror("socket listen ");
-        }
+		socket_vector::iterator it;
 
-        if (ServerSocket2.bind() < 0) {
-                perror("socket bind ");
-        }
-        if (ServerSocket2.listen() < 0) {
-                perror("socket listen ");
-        }
+		it = this->serversSockets.begin();
+		while (it != this->serversSockets.end()) {
+			if (it->bind() < 0) {
+				perror("socket bind");
+			}
+			it++;
+		}
 
-		add_server_event(ServerSocket1);
-		add_server_event(ServerSocket2);
+		it = this->serversSockets.begin();
+		while (it != this->serversSockets.end()) {
+			if (it->listen() < 0) {
+				perror("socket listen");
+			}
+			it++;
+		}
 
 		std::cout<<"Start POLL Event"<<std::endl;
 		/* END RM */
