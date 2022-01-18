@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 15:28:45 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/18 15:36:21 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,13 @@ namespace Webserv {
 			itRoutes++;
 		}
 		if (max < paths.size()) {
-			route = getRoute(std::string(paths.begin() + max, paths.end()), route.getRoutes(), route);
+			std::vector<std::string>::const_iterator it = paths.begin() + max;
+			std::string newUrl;
+			while (it != paths.end()) {
+				newUrl += "/" + *it;
+				it++;
+			}
+			route = getRoute(newUrl, route.getRoutes(), route);
 		}
 
 		return route;
@@ -159,43 +165,43 @@ namespace Webserv {
 		this->isInit = true;
 
 
-		Webserv::Http::HttpRequestBuilder builder;
-		{
-			std::string message = "             c'est le body sa mer     ";
+		// Webserv::Http::HttpRequestBuilder builder;
+		// {
+		// 	std::string message = "             c'est le body sa mer     ";
 
-			// builder.addMessage("GET /index HTTP/1.1\r\n");
-			// builder.addMessage("Host: code.tutsplus.com\r\n");
-			// builder.addMessage("Connection: keep-alive\r\n");
-			// builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
-			// builder.addMessage("\r\n");
-			// builder.addMessage(message);
+		// 	builder.addMessage("GET /index HTTP/1.1\r\n");
+		// 	builder.addMessage("Host: code.tutsplus.com\r\n");
+		// 	builder.addMessage("Connection: keep-alive\r\n");
+		// 	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+		// 	builder.addMessage("\r\n");
+		// 	builder.addMessage(message);
 
-			// builder.addMessage("GET / HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nConnection: keep-alive\r\nCache-Control: max-age=0\r\nsec-ch-ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"\r\nsec-ch-ua-mobile: ?0\r\nsec-ch-ua-platform: \"macOS\"\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nSec-Fetch-Site: none\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7\r\n\r\n");
+		// 	builder.addMessage("GET / HTTP/1.1\r\nHost: 127.0.0.1:8080\r\nConnection: keep-alive\r\nCache-Control: max-age=0\r\nsec-ch-ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"\r\nsec-ch-ua-mobile: ?0\r\nsec-ch-ua-platform: \"macOS\"\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nSec-Fetch-Site: none\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7\r\n\r\n");
 
-			builder.addMessage("GET /oui/test/non HTTP/1.1\r\n");
-			builder.addMessage("Host: localhost2.com\r\n");
-			builder.addMessage("Connection: keep-alive\r\n");
-			builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
-			builder.addMessage("\r\n");
-			builder.addMessage(message);
+		// 	builder.addMessage("GET /oui/test/non HTTP/1.1\r\n");
+		// 	builder.addMessage("Host: localhost2.com\r\n");
+		// 	builder.addMessage("Connection: keep-alive\r\n");
+		// 	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+		// 	builder.addMessage("\r\n");
+		// 	builder.addMessage(message);
 
-			if (builder.checkBuffer() > 0) {
-				if (builder.parseRequests()) {
-					Webserv::Http::HttpRequestBuilder::request_list &requests = builder.getAllRequests();
-					Webserv::Http::HttpRequestBuilder::request_list::const_iterator it = requests.begin();
-					while (it != requests.end()) {
-						Socket currentSocket("127.0.0.1", 8080);
-						std::cout << "For:" << it->get("Host") << std::endl;
-						server_type server = getServer(currentSocket, *it, this->servers);
-						std::cout << "server:" << server.getServerName() << "|" << server.getListen().getStrAddress() << ":" << server.getListen().getIntPort() << std::endl;
-						server_type::route_type route = getRoute(it->getBaseUrl(), server.getRoutes(), server.getRoutes().begin()->second);
-						std::cout << "route:" << &route << std::endl;
+		// 	if (builder.checkBuffer() > 0) {
+		// 		if (builder.parseRequests()) {
+		// 			Webserv::Http::HttpRequestBuilder::request_list &requests = builder.getAllRequests();
+		// 			Webserv::Http::HttpRequestBuilder::request_list::const_iterator it = requests.begin();
+		// 			while (it != requests.end()) {
+		// 				Socket currentSocket("127.0.0.1", 8080);
+		// 				std::cout << "For:" << it->get("Host") << std::endl;
+		// 				server_type server = getServer(currentSocket, *it, this->servers);
+		// 				std::cout << "server:" << server.getServerName() << "|" << server.getListen().getStrAddress() << ":" << server.getListen().getIntPort() << std::endl;
+		// 				// server_type::route_type route = getRoute(it->getBaseUrl(), server.getRoutes(), server.getRoutes().begin()->second);
+		// 				// std::cout << "route:" << &route << std::endl;
 
-						it++;
-					}
-				}
-			}
-		}
+		// 				it++;
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		return true;
 	}

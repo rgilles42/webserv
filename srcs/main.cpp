@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 10:25:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/18 15:36:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ int main(int argc, char *argv[], char *envp[]) {
 		return EXIT_FAILURE;
 	}
 
-	// try {
-	// 	webserv.exec();
-	// }
-	// catch (const std::exception &e)
-	// {
-	// 	std::cout << e.what() << std::endl;
-	// }
+	try {
+		webserv.exec();
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 
 	std::cout << "Success" << std::endl;
 	return EXIT_SUCCESS;
