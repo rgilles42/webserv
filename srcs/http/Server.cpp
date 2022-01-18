@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 15:55:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/18 11:50:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,10 @@ namespace Webserv {
 
 		const Server::listen_type	&Server::getListen(void) const {
 			return this->listen;
+		}
+
+		const Server::routes_map	&Server::getRoutes(void) const {
+			return this->routes;
 		}
 
 	} // namespace Http
