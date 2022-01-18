@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:50:57 by rgilles           #+#    #+#             */
-/*   Updated: 2021/11/22 19:22:06 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/18 10:49:59 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,12 @@
 # include <stdio.h>
 # include <errno.h>
 
+# include "./utils/Address.hpp"
+
 class Socket {
 public:
+	typedef Webserv::Utils::Address address_type;
+
 	Socket(void);
 	Socket(const char* addr, unsigned short port);
 	Socket(const Socket& src);
@@ -37,7 +41,8 @@ public:
 	ssize_t			write(const void *buf, size_t count);
 	int				close(void);
 	int&			fd(void);
-	struct sockaddr&	addr(void);
+	struct sockaddr&	saddr(void);
+	const address_type	address(void) const;
 
 	struct SocketNotCreatedException : public std::exception
 	{
@@ -76,8 +81,10 @@ public:
 	};
 private:
 	int					_fd;
-	struct sockaddr		_addr;
+	struct sockaddr		_saddr;
 	socklen_t			_len;
+	address_type		_address;
+
 };
 
 #endif
