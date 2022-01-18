@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/11 19:14:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/18 10:20:20 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ namespace Webserv {
 
 			while (pos <= tmpBuff.length() && pos < endOfHeaders) {
 				headers_type::key_type key;
-				headers_type::key_type value;
+				headers_type::value_type value;
 
 				// skip whitespace (i'm not sure)
 				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
@@ -142,17 +142,26 @@ namespace Webserv {
 				}
 
 				// Position of key (between pos & find)
-				// it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(this->isKey));
-				// find = it_find - tmpBuff.begin();
-				// if (tmpBuff.length() <= find || pos == find) {
-				// 	return tmpBuff.npos;
-				// }
-				// pos = find;
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(this->isKey));
+				find = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= find || pos == find) {
+					return tmpBuff.npos;
+				}
+				key = tmpBuff.substr(pos, find - pos);
+				pos = find + 1;
+
+				// skip whitespace (i'm not sure)
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
+				pos = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= pos) {
+					return tmpBuff.npos;
+				}
+
 				find = tmpBuff.find(CRLF, pos);
 				if (find == tmpBuff.npos) {
 					return tmpBuff.npos;
 				}
-				key = tmpBuff.substr(pos, find - pos);
+				value = tmpBuff.substr(pos, find - pos);
 				pos = find + CRLF.length();
 				headers.set(key, value);
 			}
