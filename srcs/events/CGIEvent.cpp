@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request), CGIEnd(false)
+	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request), writeEnd(false), CGIEnd(false)
 	{
 		pipe(this->fd_in);
 		pipe(this->fd_out);
@@ -105,7 +105,7 @@ namespace Webserv
 		this->init_env();
 		envp = this->env.toEnvp();
 
-		std::string		path_cgi = "/usr/bin/php-cgi";	//need change
+		std::string		path_cgi = "/usr/local/bin/php-cgi";	//need change
 		std::string		file_path = "../default_pages/index.php";	//need changes
 		args[0] = new char[path_cgi.size() + 1];
  		args[0] = std::strcpy(args[0], path_cgi.c_str());	//cgi-path

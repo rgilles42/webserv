@@ -12,7 +12,11 @@ namespace Webserv
 		this->events_flags= POLLIN;
 	}
 
-	ServerEvent::~ServerEvent(void) {}
+	ServerEvent::~ServerEvent(void)
+	{
+		if (this->sock.fd())
+			this->sock.close();
+	}
 
 	void	ServerEvent::read_event(void)
 	{

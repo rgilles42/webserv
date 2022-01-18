@@ -4,14 +4,16 @@ namespace Webserv
 {
 	ClientEvent::ClientEvent(Socket &new_sock/*, Webserv::Http::Server &srv*/): sock(new_sock)/*, m_srv(srv)*/
 	{
+		this->cgi = NULL;
 		this->events_flags = POLLIN;
 	}
 
 	ClientEvent::~ClientEvent(void)
 	{
 		if (this->sock.fd())
-			close(sock.fd());
-		delete this->rcs;
+			this->sock.close();
+		if (this->rcs)
+			delete this->rcs;
 	}
 
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
@@ -61,11 +63,14 @@ namespace Webserv
 		}
 		if (this->rcs->loadResource())
 		{
-			std::cout<<"load ressoyrce"<<std::endl;
+			std::cout<<"load ressource"<<std::endl;
 			Webserv::Http::HttpResponse response(*this->rcs);
 			this->sock.write(response.toString().c_str(), response.toString().length());
-			delete this->rcs;
-			delete this->cgi;
+			if (this->rcs)
+				delete this->rcs;
+			this->rcs = NULL;
+			if (this->cgi)
+				delete this->cgi;
 			this->events_flags = POLLIN;
 		}
 		else
