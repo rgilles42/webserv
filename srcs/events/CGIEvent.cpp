@@ -160,13 +160,13 @@ namespace Webserv
 
 	void    CGIEvent::close_pipefd(void)
 	{
-		if (this->fd_in[0])
+		if (this->fd_in[0] > 0)
 			close(this->fd_in[0]);
-		if (this->fd_in[1])
+		if (this->fd_in[1] > 0)
 			close(this->fd_in[1]);
-		if (this->fd_out[0])
+		if (this->fd_out[0] > 0)
 			close(this->fd_out[0]);
-		if (this->fd_out[1])
+		if (this->fd_out[1] > 0)
 			close(fd_out[1]);
 	}
 

@@ -66,9 +66,11 @@ namespace Webserv
 			std::cout<<"load ressource"<<std::endl;
 			Webserv::Http::HttpResponse response(*this->rcs);
 			this->sock.write(response.toString().c_str(), response.toString().length());
+			std::cout<<"delete rcs"<<std::endl;
 			if (this->rcs)
 				delete this->rcs;
 			this->rcs = NULL;
+			std::cout<<"delete cgi"<<std::endl;
 			if (this->cgi)
 				delete this->cgi;
 			this->events_flags = POLLIN;
