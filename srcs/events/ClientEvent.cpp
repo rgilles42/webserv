@@ -29,7 +29,7 @@ namespace Webserv
 			if (this->create_req.parseRequests() == true)
 			{
 				this->req = this->create_req.getAllRequests()[0];
-				this->rcs = new Resource("./default_pages/index.php", true);
+				this->rcs = new Resource("./default_pages", false);
 				if (this->rcs->isCGI())
 				{
 					this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);

@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/17 16:18:59 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/19 21:48:03 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <fcntl.h>
 # include <string>
 # include <unistd.h>
+# include <dirent.h>
+# include <cerrno>
+# include <ctime>
 # include "utils/MimeTypes.hpp"
 
 namespace Webserv {
@@ -44,6 +47,20 @@ namespace Webserv {
 		bool		isFullyRead() const;
 		void		setFd(int newfd);
 
+		struct PathDoesNotExistException : public std::exception
+		{
+			virtual const char* what() const throw()
+			{
+				return("No such file or directory");
+			}
+		};
+		struct AccessForbiddenException : public std::exception
+		{
+			virtual const char* what() const throw()
+			{
+				return("Access Forbidden");
+			}
+		};
 		struct UnableToStatPathException : public std::exception
 		{
 			virtual const char* what() const throw()
@@ -72,23 +89,29 @@ namespace Webserv {
 				return("Unable to read resource");
 			}
 		};
+		struct NotFileOrDirException : public std::exception
+		{
+			virtual const char* what() const throw()
+			{
+				return("Specified resource is neither a regular file nor a directory.");
+			}
+		};
 		
 	private:
 		Resource(const Resource& src);
 
 		bool		readFileChunk();
-		//void		generateAutoIndex();
+		void		generateAutoIndex();
 
 		std::string	_path;
-		struct stat			_s;
-		bool				_isDir;
-		bool			_isCGI;
-		int					_fd;
-		long long			_size;
-		long long			_readBytes;
-		std::string			_content;
-		std::string			_contentType;
-		bool				_isFullyRead;
+		bool		_isDir;
+		bool		_isCGI;
+		int			_fd;
+		long long	_size;
+		long long	_readBytes;
+		std::string	_content;
+		std::string	_contentType;
+		bool		_isFullyRead;
 	};
 }
 
