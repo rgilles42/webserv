@@ -195,7 +195,7 @@ namespace Webserv {
 						content << "/\">" << ent->d_name << "/";
 					else
 					 	content << "\">" << ent->d_name;
-					content << "</a></td><td>" << s.st_mtime << "</td><td>";
+					content << "</a></td><td>" << ctime(&s.st_mtime) << "</td><td>";
 					if (S_ISDIR(s.st_mode))
 						content << "  - ";
 					else
