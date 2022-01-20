@@ -74,7 +74,7 @@ namespace Webserv {
 			bool		init(void);
 			void		exec(void);
 
-			void		add_server_event(Socket &sock);
+			void		add_server_event(const Socket &sock);
 			void		add_client_event(int fd, Webserv::ClientEvent &client_e);
 //			void		add_cgi_event(int fd, CGIEvent &cgi_e);
 

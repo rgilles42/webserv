@@ -136,7 +136,7 @@ namespace Webserv
 		if (this->pid < 0)
 		{
 			std::cout<<"Error fork"<<std::endl;	//need change
-			return;
+			return(1);
 		}
 		else if (this->pid == 0)
 		{
@@ -176,6 +176,7 @@ namespace Webserv
 			waitpid(this->pid, &ret, 0);
 			this->CGIEnd = true;
  		}
+		 return (0);
 	}
 
 	void    CGIEvent::close_pipefd(void)

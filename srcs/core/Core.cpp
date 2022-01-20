@@ -225,6 +225,7 @@ namespace Webserv {
 
 	void		Core::exec(void)
 	{
+		std::cout<<"Exec"<<std::endl;
 		std::vector<struct pollfd>::iterator ite;
 
 		socket_vector::iterator it;
