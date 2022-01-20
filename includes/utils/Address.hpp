@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/01 22:53:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 16:37:28 by ppaglier         ###   ########.fr       */
+/*   Created: 2021/12/01 22:18:20 by ppaglier          #+#    #+#             */
+/*   Updated: 2022/01/17 16:22:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,15 +105,11 @@ namespace Webserv {
 			size_t pchOpenBracket = line.find('[');
 			size_t pchCloseBracket = line.npos;
 
-			size_t i = 0;
-			while (i < line.length()) {
-				if (!::isblank(line[i])) {
-					break ;
-				}
-				i++;
-			}
-			line = line.substr(i, line.length() - i);
-			i = 0;
+				bool				fromString(const std::string& address);
+				const std::string	toString(void) const;
+
+				bool				operator==(const Address &other) const;
+		};
 
 			this->reset();
 

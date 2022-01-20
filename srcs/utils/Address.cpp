@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:53:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:58:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 16:37:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,21 @@ namespace Webserv {
 				this->addressIsValid = true;
 			}
 			return success;
+		}
+		bool				Address::operator==(const Address &other) const {
+			if (this->type != other.type) {
+				return false;
+			}
+			if (this->addressIsValid != other.addressIsValid) {
+				return false;
+			}
+			if (this->addressIsValid && this->address != other.address) {
+				return false;
+			}
+			if (this->port != other.port) {
+				return false;
+			}
+			return true;
 		}
 
 	} // namespace Utils

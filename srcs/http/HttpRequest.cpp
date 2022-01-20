@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/11 19:14:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/18 10:21:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,7 +440,7 @@ namespace Webserv {
 							requests.push_back(request);
 							pos += chunkLen;
 							lastPos = pos;
-							break ;
+							continue ;
 						}
 					}
 				} else if (headers.has("Content-Lenght")) {
@@ -455,11 +455,11 @@ namespace Webserv {
 					requests.push_back(request);
 					pos += contentLen;
 					lastPos = pos;
-					break ;
+					continue ;
 				} else {
 					requests.push_back(request);
 					lastPos = pos;
-					break ;
+					continue ;
 				}
 			}
 			return lastPos;

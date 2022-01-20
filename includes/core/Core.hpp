@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 15:46:59 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/17 17:32:00 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CORE_HPP
 
 # include <sstream>					// For ostringstream
+# include <vector>					// For vector
 
 # include "../utils/Env.hpp"		// For Env
 # include "../utils/Args.hpp"		// For Args
@@ -39,10 +40,15 @@ namespace Webserv {
 			void			setup_events(void);
 
 		public:
-			typedef Webserv::Config		config_type;
-			typedef Webserv::Logger		logger_type;
-			typedef Webserv::Utils::Env	env_type;
-			typedef Webserv::Utils::Args	args_type;
+			typedef Webserv::Config				config_type;
+			typedef Webserv::Logger				logger_type;
+			typedef Webserv::Utils::Env			env_type;
+			typedef Webserv::Utils::Args		args_type;
+
+			typedef config_type::server_type	server_type;
+			typedef std::vector<server_type>	server_vector;
+			typedef Socket						socket_type;
+			typedef std::vector<socket_type>	socket_vector;
 
 		protected:
 			std::string	customConfigFile;
@@ -52,6 +58,8 @@ namespace Webserv {
 			env_type	env;
 			args_type	args;
 			logger_type	logger;
+			server_vector	servers;
+			socket_vector	serversSockets;
 
 		public:
 			Core(void);
