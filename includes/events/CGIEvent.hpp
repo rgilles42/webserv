@@ -26,6 +26,7 @@ namespace Webserv
 			bool				writeEnd;
 			char				**args;
 			bool				CGIEnd;
+			int					status;
 
 			int					wr_size;
 
@@ -45,6 +46,35 @@ namespace Webserv
 
 			bool	writeIsEnd();
 			bool	CGIIsEnd();
+
+			struct CGIPipeFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: pipe failed");
+				}
+			};
+			struct CGINonBlockingFailed: public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Fcntl failed");
+				}
+			};
+			struct CGIOpenFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Can't acces to file");
+				}
+			};
+			struct CGIDupFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Dup failed");
+				}
+			};
 	};
 
 }

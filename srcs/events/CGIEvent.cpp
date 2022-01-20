@@ -5,20 +5,17 @@ namespace Webserv
 
 	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request), writeEnd(false), args(NULL), CGIEnd(false)
 	{
-		pipe(this->fd_in);
-		pipe(this->fd_out);
+		if (pipe(this->fd_in) < 0)
+			throw CGIPipeFailed();
+		if (pipe(this->fd_out) < 0)
+			throw CGIPipeFailed();
 
 		if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
-		{
-			std::cout<<"error fnctl"<<std::endl;
-			exit(-1);
-		}
+			throw CGINonBlockingFailed();
 		if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
-		{
-			std::cout<<"error fnctl"<<std::endl;
-			exit(-1);
-		}
+			throw CGINonBlockingFailed();
 		this->wr_size = 0;
+		status = 0;
 	}
 
 	CGIEvent::~CGIEvent()
@@ -70,6 +67,8 @@ namespace Webserv
 
 			std::string		path_cgi = "/usr/local/bin/php-cgi";	//need change
 			std::string		file_path = "../default_pages/index.php";	//need changes
+			if (open(file_path.c_str(), EACCES) < 0 && errno == EACCES)
+				throw CGIOpenFailed();
 			args[0] = new char[path_cgi.size() + 1];
  			args[0] = std::strcpy(args[0], path_cgi.c_str());	//cgi-path
 			args[1] = new char[file_path.size() + 1];
@@ -176,7 +175,7 @@ namespace Webserv
 			waitpid(this->pid, &ret, 0);
 			this->CGIEnd = true;
  		}
-		 return (0);
+		 return (status);
 	}
 
 	void    CGIEvent::close_pipefd(void)
