@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request), writeEnd(false), CGIEnd(false)
+	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request), writeEnd(false), args(NULL), CGIEnd(false)
 	{
 		pipe(this->fd_in);
 		pipe(this->fd_out);
@@ -24,6 +24,14 @@ namespace Webserv
 	CGIEvent::~CGIEvent()
 	{
 		this->close_pipefd();
+		if (this->args)
+		{
+			if (this->args[1])
+				delete this->args[1];
+			if (this->args[0])
+				delete this->args[0];
+			delete[] this->args;
+		}
 	}
 
 	void    CGIEvent::write_event()
@@ -53,6 +61,25 @@ namespace Webserv
 		{*/
 			this->writeEnd = true;
 //		}
+	}
+
+	void	CGIEvent::init_args()
+	{
+		try {
+			this->args = new char*[3];
+
+			std::string		path_cgi = "/usr/local/bin/php-cgi";	//need change
+			std::string		file_path = "../default_pages/index.php";	//need changes
+			args[0] = new char[path_cgi.size() + 1];
+ 			args[0] = std::strcpy(args[0], path_cgi.c_str());	//cgi-path
+			args[1] = new char[file_path.size() + 1];
+			args[1] = std::strcpy(args[1] ,file_path.c_str());	// file path
+			args[2] = 0;
+		}
+		catch (const std::exception &e) {
+			std::cout<<e.what()<<std::endl;
+		}
+
 	}
 
 	void    CGIEvent::init_env()
@@ -100,18 +127,11 @@ namespace Webserv
 	{
 		int ret;
 		char	**envp;
-		char	**args = new char *[3];
-//		char*	args[3];
+
 		this->init_env();
+		this->init_args();
 		envp = this->env.toEnvp();
 
-		std::string		path_cgi = "/usr/local/bin/php-cgi";	//need change
-		std::string		file_path = "../default_pages/index.php";	//need changes
-		args[0] = new char[path_cgi.size() + 1];
- 		args[0] = std::strcpy(args[0], path_cgi.c_str());	//cgi-path
-		args[1] = new char[file_path.size() + 1];
-		args[1] = std::strcpy(args[1] ,file_path.c_str());	// file path
-		args[2] = 0;
 		this->pid = fork();
 		if (this->pid < 0)
 		{
@@ -141,7 +161,7 @@ namespace Webserv
 			}
 			close(fd_out[1]);
 			/* Execve CGI */
-			ret = execve(args[0], args, envp);
+			ret = execve(this->args[0], this->args, envp);
 			if(ret < 0)
 				exit(ret);
 			exit(0);			
