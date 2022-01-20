@@ -63,6 +63,8 @@ namespace Methods {
 
 	void    Methods::deleteMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs)
 	{
+		int ret;
+
 		if (rcs.isCGI())
 		{
 			int         fd_pipe[2];
@@ -80,6 +82,7 @@ namespace Methods {
 			std::cout<<"Error 403"<<std::endl;
 			return;	//change throw
 		}
+//		ret = remove(/*path*/);	// Delete file
 	}
 }	// namespace Methods
 }   // namespace Webserv

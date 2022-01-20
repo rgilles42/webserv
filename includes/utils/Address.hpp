@@ -1,85 +1,200 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Address.hpp                                        :+:      :+:    :+:   */
+/*   Address.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/01 22:18:20 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:58:00 by ppaglier         ###   ########.fr       */
+/*   Created: 2021/12/01 22:53:05 by ppaglier          #+#    #+#             */
+/*   Updated: 2022/01/17 16:37:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ADDRESS_HPP
-# define ADDRESS_HPP
-
-# include <string>				// For string
-# include <cstring>				// For memcpy
-# include <cctype>				// For isblank
-
-# include <stdint.h>			// For int8_t, uint16_t
-
-# include "../utils/common.hpp"	// For SSTR
-
-# define ADDRESS_BITS 16
+#include "../../includes/utils/Address.hpp"
 
 namespace Webserv {
 
 	namespace Utils {
 
-		// IPV6 not supported for the moment
-		class Address {
-			public:
-				typedef int8_t			uchar_t;
-				typedef uchar_t			value_type[ADDRESS_BITS];
-				typedef uint16_t		port_type;
+		Address::Address(void) {}
 
-				enum address_type {
-					unknown,
-					ipv4,
-					ipv6,
-				};
+		Address::Address(const std:: string& address) {
+			this->fromString(address);
+		}
 
-			protected:
-				value_type		address;
-				address_type	type;
-				port_type		port;
-				bool			addressIsValid;
+		Address::~Address() {}
 
-				uint16_t	my_htons(uint16_t netshort) const;
-				uint16_t	my_ntohs(uint16_t netshort) const;
+		uint16_t					Address::my_htons(uint16_t hostshort) const {
+			return ((hostshort&  0xff) << 8) | (hostshort >> 8);
+		}
+		uint16_t					Address::my_ntohs(uint16_t netshort) const {
+			return ((netshort&  0xff) << 8) | (netshort >> 8);
+		}
 
-			public:
-				Address(void);
-				Address(const std::string& address);
+		void						Address::reset(void) {
+			this->port = 0;
+			this->type = Address::unknown;
+			std::memset(this->address, 0, ADDRESS_BITS);
+			this->addressIsValid = false;
+		}
 
-				~Address();
+		const Address::value_type&	Address::getAddress(void) const {
+			return this->address;
+		}
 
-				void				reset(void);
+		const Address::address_type&	Address::getType(void) const {
+			return this->type;
+		}
 
-				const value_type&	getAddress(void) const;
-				const address_type&	getType(void) const;
-				const port_type&	getPort(void) const;
+		const Address::port_type&	Address::getPort(void) const {
+			return this->port;
+		}
 
-				std::string			getStrAddress(void) const;
+		std::string					Address::getStrAddress(void) const {
+			std::string address;
+			if (this->isIpv4()) {
+				address += SSTR((int)this->address[0]) + ".";
+				address += SSTR((int)this->address[1]) + ".";
+				address += SSTR((int)this->address[2]) + ".";
+				address += SSTR((int)this->address[3]);
+			} else if (this->isIpv6()) {
+				address += ":::";
+			}
+			return address;
+		}
 
-				int					getIntPort(void) const;
+		int							Address::getIntPort(void) const {
+			return this->my_ntohs(this->port);
+		}
 
-				bool				is(const address_type& type) const;
-				bool				isIpv4(void) const;
-				bool				isIpv6(void) const;
+		bool						Address::is(const address_type& type) const {
+			return this->type == type;
+		}
 
-				const bool&			isAddressValid(void) const;
+		bool						Address::isIpv4(void) const {
+			return this->is(Address::ipv4);
+		}
 
-				bool				setPort(const int& port);
-				bool				setAddress(const value_type& address);
+		bool						Address::isIpv6(void) const {
+			return this->is(Address::ipv6);
+		}
 
-				bool				fromString(const std::string& address);
-				const std::string	toString(void) const;
-		};
+		const bool&					Address::isAddressValid(void) const {
+			return this->addressIsValid;
+		}
+
+		bool						Address::setPort(const int& number) {
+			if (number < 0 || number > 65535) {
+				return false;
+			}
+			this->port = this->my_htons(number);
+			return true;
+		}
+
+		bool						Address::setAddress(const value_type& address) {
+			std::memcpy(this->address, address, ADDRESS_BITS);
+			this->addressIsValid = true;
+			return true;
+		}
+
+		bool						Address::fromString(const  std::string& str) {
+			bool success = true;
+			std::string line = str;
+			size_t pchColon = line.find(':');
+			size_t pchDot = line.find('.');
+			size_t pchOpenBracket = line.find('[');
+			size_t pchCloseBracket = line.npos;
+
+			size_t i = 0;
+			while (i < line.length()) {
+				if (!::isblank(line[i])) {
+					break ;
+				}
+				i++;
+			}
+			line = line.substr(i, line.length() - i);
+			i = 0;
+
+			this->reset();
+
+			this->type = Address::unknown;
+			if (pchOpenBracket != line.npos || (pchColon != line.npos && (pchDot == line.npos || pchColon < pchDot))) {
+				pchCloseBracket = line.find(']');
+				if (pchOpenBracket != line.npos && (pchOpenBracket == line.npos || pchCloseBracket < pchOpenBracket)) {
+					return false;
+				}
+				this->type = Address::ipv6;
+			} else {
+				if (pchColon != line.npos && pchColon < pchDot) {
+					return false;
+				}
+				this->type = Address::ipv4;
+			}
+
+			if (this->isIpv4()) {
+				if (pchDot == line.npos && pchColon == line.npos) {
+					return this->setPort(std::atoi(line.c_str()));
+				}
+				size_t count = 0;
+				size_t j = 0;
+				while (i < line.length()) {
+					j = i + 1;
+					while (j < line.length()) {
+						if (line[j] == '.' || line[j] == ':') {
+							break ;
+						}
+						j++;
+					}
+					if (i != j) {
+						std::string value = line.substr(i, j - i);
+						if (count < 4) {
+							if (count < 3 && line[j] != '.') {
+								success = false;
+							}
+							if (success && value.find_first_not_of("0123456789") != value.npos) {
+								success = false;
+							}
+							if (success) {
+								int number = std::atoi(value.c_str());
+								if (number < 0 || number > 255) {
+									return false;
+								}
+								this->address[count] = number;
+							}
+							count++;
+							j++;
+						} else {
+							if (!this->setPort(std::atoi(value.c_str()))) {
+								return success;
+							}
+						}
+					}
+					i = j;
+				}
+			} else if (this->isIpv6()) {
+				// "je suis une IPV6 non traiter"
+			}
+			if (success) {
+				this->addressIsValid = true;
+			}
+			return success;
+		}
+		bool				Address::operator==(const Address &other) const {
+			if (this->type != other.type) {
+				return false;
+			}
+			if (this->addressIsValid != other.addressIsValid) {
+				return false;
+			}
+			if (this->addressIsValid && this->address != other.address) {
+				return false;
+			}
+			if (this->port != other.port) {
+				return false;
+			}
+			return true;
+		}
 
 	} // namespace Utils
 
 } // namespace Webserv
-
-#endif

@@ -123,7 +123,7 @@ namespace Webserv
 	}
 
 
-	void	CGIEvent::exec()
+	int	CGIEvent::exec()
 	{
 		int ret;
 		char	**envp;

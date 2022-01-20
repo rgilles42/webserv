@@ -37,7 +37,7 @@ namespace Webserv
 			CGIEvent(Webserv::Http::HttpRequest &request);
 			~CGIEvent();
 
-			void	exec(void);
+			int		exec(void);
 
 			void	write_event(void);
 
