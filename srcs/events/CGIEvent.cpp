@@ -15,7 +15,7 @@ namespace Webserv
 		if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
 			throw CGINonBlockingFailed();
 		this->wr_size = 0;
-		status = 0;
+		this->status = 0;
 	}
 
 	CGIEvent::~CGIEvent()
@@ -173,9 +173,13 @@ namespace Webserv
 			fd_out[0] = -1;
 			this->env.freeEnvp(envp);
 			waitpid(this->pid, &ret, 0);
+			if (WIFEXITED(ret))
+			{
+				this->status = WEXITSTATUS(ret);
+			}
 			this->CGIEnd = true;
  		}
-		 return (status);
+		 return (this->status);
 	}
 
 	void    CGIEvent::close_pipefd(void)

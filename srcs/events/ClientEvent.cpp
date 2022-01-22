@@ -45,25 +45,22 @@ namespace Webserv
 
 	void	ClientEvent::write_event(void)	//TO DO replace
 	{
+		int status = 0;
 		std::cout<<"Client write event"<<std::endl;
 		if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
 		{
-			std::cout<<"is cgi"<<std::endl;
 			if (this->cgi->writeIsEnd())
 			{
-				std::cout<<"cgi exec"<<std::endl;
-				this->cgi->exec();	//peut etre recup le ret
+				status = this->cgi->exec();	//peut etre recup le ret
+				std::cout<<"status: "<<status<<std::endl;
 			}
 			else
-			{
-				std::cout<<"Write cgi body"<<std::endl;
 				this->cgi->write_event();
-			}
 			return;
 		}
 		if (this->rcs->loadResource())
 		{
-			std::cout<<"load ressource"<<std::endl;
+			std::cout<<"status: "<<status<<std::endl;
 			Webserv::Http::HttpResponse response(*this->rcs);
 			this->sock.write(response.toString().c_str(), response.toString().length());
 			std::cout<<"delete rcs"<<std::endl;
