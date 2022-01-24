@@ -52,6 +52,7 @@ namespace Webserv
 			if (this->cgi->writeIsEnd())
 			{
 				status = this->cgi->exec();	//peut etre recup le ret
+				perror(strerror(status));
 				std::cout<<"status: "<<status<<std::endl;
 			}
 			else

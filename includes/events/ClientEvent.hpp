@@ -1,17 +1,18 @@
 #ifndef CLIENTEVENT_HPP
 # define CLIENTEVENT_HPP
 
-#include "../Socket.hpp"
-#include "../Resource.hpp"
-#include "../http/HttpResponse.hpp"
-#include"../http/Server.hpp"
-#include "../http/HttpRequest.hpp"
-#include "../utils/common.hpp"
+# include "../Socket.hpp"
+# include "../Resource.hpp"
+# include "../http/HttpResponse.hpp"
+# include"../http/Server.hpp"
+# include "../http/HttpRequest.hpp"
+# include "../utils/common.hpp"
 //#include "../methods/Methods.hpp"
-#include "./CGIEvent.hpp"
-#include "IEvents.hpp"
-#include <string>
-#include <poll.h>
+# include "../Config.hpp"
+# include "./CGIEvent.hpp"
+# include "IEvents.hpp"
+# include <string>
+# include <poll.h>
 
 namespace Webserv
 {
@@ -19,14 +20,14 @@ namespace Webserv
 	{
 
 		private:
-//			Webserv::Http::Server				m_srv;
+			Webserv::Config						&config;
 			Webserv::Http::HttpRequestBuilder	create_req;
 			Webserv::Http::HttpRequest			req;
 			Resource							*rcs;
 			Socket								sock;
+			Socket								srv_sock;
 			CGIEvent							*cgi;
 			short								events_flags;
-//			Methods::MethodsManager	*m_methods;
 
 			std::string				request_string;
 			Webserv::Resource		currentResource;
@@ -35,7 +36,7 @@ namespace Webserv
 
 		public:
 
-			ClientEvent(Socket &new_sock/*, Webserv::Http::Server &srv*/);
+			ClientEvent(Socket &client_sock, Socket &server_sock , Webserv::Config	&_config);
 			virtual ~ClientEvent();
 
 			void	write_event(void);

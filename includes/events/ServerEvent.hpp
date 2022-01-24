@@ -8,19 +8,19 @@
 # include "../Socket.hpp"
 # include "./ClientEvent.hpp"
 # include "../core/Core.hpp"
+# include "../Config.hpp"
 
 namespace Webserv
 {
 	class ServerEvent : public IEvents
 	{
 		private:
-			Socket			sock;	//just for test
-//			Http::Server	&srv;	TO DO - Need classe with dedicated sock
+			Socket			sock;
+			Webserv::Config	&config;
 			short			events_flags;
 
 		public:
-			ServerEvent(const Socket &new_sock);	//TO DO replace after test
-//			ServerEvent(Http::Server &ref);
+			ServerEvent(const Socket &new_socket, Webserv::Config &_config);
 			~ServerEvent();
 
 			void	write_event(void);
