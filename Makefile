@@ -52,7 +52,8 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/events/ServerEvent.hpp \
 				$(HEADER_DIR)/events/Poll.hpp \
 				$(HEADER_DIR)/events/CGIEvent.hpp \
-				$(HEADER_DIR)/events/EventsManager.hpp
+				$(HEADER_DIR)/events/EventsManager.hpp \
+				$(HEADER_DIR)/methods/Methods.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/core/Core.cpp \
@@ -83,7 +84,8 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/events/ServerEvent.cpp \
 				$(SRC_DIR)/events/Poll.cpp \
 				$(SRC_DIR)/events/CGIEvent.cpp \
-				$(SRC_DIR)/events/EventsManager.cpp
+				$(SRC_DIR)/events/EventsManager.cpp \
+				$(SRC_DIR)/methods/Methods.cpp
 
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)

@@ -6,83 +6,63 @@ namespace Methods {
 
 	Methods::~Methods(void) {}
 
-	void    Methods::exec_method(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/*, Webserv::Http::Server srv*/)
+	int    Methods::exec_method(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/*, Webserv::Http::Server srv*/)
 	{
 		if (req.getMethod() == "GET")
-			getMethod(req, rcs);
+			return getMethod(req, rcs);
 		else if (req.getMethod() == "POST")
-			postMethod(req, rcs);
-		else if (req.getMethod == "DELETE")
-			deleteMethod(req, rcs);
-		else
-			throw methodsBadName();
+			return postMethod(req, rcs);
+		else if (req.getMethod() == "DELETE")
+			return deleteMethod(req, rcs);
+		return -1;
 	}
 /*--------------------------------------------------------------------------------------------------------------*/
-	void    Methods::getMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/*, Webserv::Http::Server srv*/)
+	int   Methods::getMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/*, Webserv::Http::Server srv*/)
 	{
-		if (rcs.isCGI())
+		(void)req;
+		if (rcs->isCGI())
 		{
-			int         fd_pipe[2];
-			if (pipe(fd_pipe) < 0)
-			{
-				std::cout<<"Error pipe"<<std::endl;
-				return; //need change by exceptions
-			}
-			CGIEvent    *new_cgi( = new CGI(rcs, req, fd_pipe/*, *srv*/);
-			Webserv::Core::getInstance().add_cgi_event(fd_pipe[0], *new_cgi);
-			return;
+			return 0;
 		}
-		if (rcs.isDir())
+		if (rcs->isDir())
 		{
 			std::cout<<"Error 403"<<std::endl;
-			return;	//change throw
+			return -2;	//change throw
 		}
-
+		return 0;
 	}
 
-	void    Methods::postMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs)
+	int    Methods::postMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs)
 	{
-		if (rcs.isCGI())
+		(void)req;
+		if (rcs->isCGI())
 		{
-			int         fd_pipe[2];
-			if (pipe(fd_pipe) < 0)
-			{
-				std::cout<<"Error pipe"<<std::endl;
-				return; //need change by exceptions
-			}
-			CGIEvent    *new_cgi( = new CGI(rcs, req, fd_pipe/*, *srv*/);
-			Webserv::Core::getInstance().add_cgi_event(fd_pipe[0], *new_cgi);
-			return;
+			return 0;
 		}
-		if (rcs.isDir())
+		if (rcs->isDir())
 		{
 			std::cout<<"Error 403"<<std::endl;
-			return;	//change throw
+			return -2;	//change throw
 		}
+		return 0;
 	}
 
-	void    Methods::deleteMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs)
+	int   Methods::deleteMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs)
 	{
-		int ret;
+		(void)req;
+		//int ret;
 
-		if (rcs.isCGI())
+		if (rcs->isCGI())
 		{
-			int         fd_pipe[2];
-			if (pipe(fd_pipe) < 0)
-			{
-				std::cout<<"Error pipe"<<std::endl;
-				return; //need change by exceptions
-			}
-			CGIEvent    *new_cgi( = new CGI(rcs, req, fd_pipe/*, *srv*/);
-			Webserv::Core::getInstance().add_cgi_event(fd_pipe[0], *new_cgi);
-			return;
+			return 0;
 		}
-		if (rcs.isDir())
+		if (rcs->isDir())
 		{
 			std::cout<<"Error 403"<<std::endl;
-			return;	//change throw
+			return -2;	//change throw
 		}
 //		ret = remove(/*path*/);	// Delete file
+		return 0;
 	}
 }	// namespace Methods
 }   // namespace Webserv

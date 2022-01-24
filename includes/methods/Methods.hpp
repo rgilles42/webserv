@@ -4,21 +4,22 @@
 # include "../utils/Singleton.hpp"
 # include "../http/HttpRequest.hpp"
 # include "../Resource.hpp"
-# include "../core/Core.hpp"
+# include "../Config.hpp"
 
 namespace Webserv
 {
 namespace Methods {
 	class Methods : public Webserv::Utils::Singleton<Methods> {
 		private:
-			void	getMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs);
-			void	postMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs);
-			void	deleteMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs);
+			int	getMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs);
+			int	postMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs);
+			int	deleteMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs);
 
 		public:
 			Methods(void);
 			~Methods(void);
-			void    exec_method(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/* Webserv::Http::Server srv*/);
+
+			int    exec_method(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/* Webserv::Http::Server srv*/);
 
 			struct	methodsBadName: public std::exception
 			{

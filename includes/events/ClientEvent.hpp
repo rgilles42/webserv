@@ -7,7 +7,7 @@
 # include"../http/Server.hpp"
 # include "../http/HttpRequest.hpp"
 # include "../utils/common.hpp"
-//#include "../methods/Methods.hpp"
+# include "../methods/Methods.hpp"
 # include "../Config.hpp"
 # include "./CGIEvent.hpp"
 # include "IEvents.hpp"
