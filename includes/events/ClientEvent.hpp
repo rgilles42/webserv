@@ -20,12 +20,12 @@ namespace Webserv
 	{
 
 		private:
-			Webserv::Config						&config;
 			Webserv::Http::HttpRequestBuilder	create_req;
 			Webserv::Http::HttpRequest			req;
 			Resource							*rcs;
 			Socket								sock;
 			Socket								srv_sock;
+			Webserv::Config						&config;
 			CGIEvent							*cgi;
 			short								events_flags;
 

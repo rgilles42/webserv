@@ -2,12 +2,8 @@
 
 namespace Webserv
 {
-/*	ServerEvent::ServerEvent(Http::Server &ref): srv(ref)
-	{
-		this->events_flags = POLLIN;
-	}*/
 
-	ServerEvent::ServerEvent(const Socket &new_sock): sock(new_sock)
+	ServerEvent::ServerEvent(const Socket &new_sock, Webserv::Config &_config): sock(new_sock), config(_config)
 	{
 		this->events_flags= POLLIN;
 	}
@@ -23,9 +19,7 @@ namespace Webserv
 		std::cout<<"Server read event"<<std::endl;
 		Socket	client_sock = this->sock.accept();
 
-//		Http::Client *new_client = new Http::Client(&client_sock);
-//		ClientEvent *new_clientEvent = new Http::ClientEvent(&new_client);
-		ClientEvent *new_clientEvent = new ClientEvent(client_sock/*, this->srv*/);
+		ClientEvent *new_clientEvent = new ClientEvent(client_sock, this->sock, this->config);
 
 		Webserv::Core::getInstance().add_client_event(new_clientEvent->getFD(), *new_clientEvent);
 	}

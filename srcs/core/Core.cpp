@@ -295,7 +295,7 @@ namespace Webserv {
 
 	void		Core::add_server_event(const Socket &sock)	// Add Server Event in EventsManager
 	{
-		ServerEvent	*srv = new ServerEvent(sock);
+		ServerEvent	*srv = new ServerEvent(sock, this->config);
 
 		this->events_manager.add_event(srv->getFD(), *srv);
 	}
