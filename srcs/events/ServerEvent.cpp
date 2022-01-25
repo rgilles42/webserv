@@ -18,6 +18,7 @@ namespace Webserv
 	{
 		std::cout<<"Server read event"<<std::endl;
 		Socket	client_sock = this->sock.accept();
+		std::cout<<this->sock.address().getIntPort()<<std::endl;
 
 		ClientEvent *new_clientEvent = new ClientEvent(client_sock, this->sock, this->config);
 

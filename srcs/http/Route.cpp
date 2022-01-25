@@ -20,6 +20,22 @@ namespace Webserv {
 			this->init();
 		}
 
+		Route	&Route::operator = (const Route &old)
+		{
+			this->mimesTypes = old.mimesTypes;
+			this->error_pages = old.error_pages;
+			this->client_max_body_size = old.client_max_body_size;
+			this->upload_store = old.upload_store;
+			this->_return = old._return;
+			this->autoindex = old.autoindex;
+			this->root = old.root;
+			this->index = old.index;
+			this->limit_except = old.limit_except;
+			this->routes = old.routes;
+
+			return *this;
+		}
+
 		Route::~Route() {}
 
 		void	Route::init(void) {
@@ -125,6 +141,9 @@ namespace Webserv {
 
 		const Route::routes_map	&Route::getRoutes(void) const {
 			return this->routes;
+		}
+		const Route::root_type	&Route::getRoot(void) const {
+			return this->root;
 		}
 
 	} // namespace Http

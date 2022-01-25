@@ -72,6 +72,7 @@ namespace Webserv {
 				Route(void);
 				~Route();
 
+				Route &operator = (const Route &old);
 				void	init(void);
 
 				bool	fromBlocks(const block_vector& blocks);
@@ -81,6 +82,7 @@ namespace Webserv {
 				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 
 				const routes_map	&getRoutes(void) const;
+				const root_type	&getRoot(void) const;
 		};
 
 	} // namespace Http

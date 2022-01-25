@@ -19,6 +19,7 @@ namespace Webserv
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
 		std::cout<<"Client read_event"<<std::endl;
+		std::string path;
 		char buffer[2048];
 		size_t	size;
 
@@ -31,7 +32,14 @@ namespace Webserv
 			if (this->create_req.parseRequests() == true)
 			{
 				this->req = this->create_req.getAllRequests()[0];
-				this->rcs = new Resource("./default_pages/index.php", true);
+				std::cout<<"Request create"<<std::endl;
+				this->srv = getServer(this->srv_sock, this->req, this->config.getServers());
+				std::cout<<"Server was choice"<<std::endl;
+				this->route = getRoute(this->req.getBaseUrl(), this->srv.getRoutes(), this->srv.getRoutes().begin()->second);
+				std::cout<<"Route was create"<<std::endl;
+				path = this->route.getRoot();
+				std::cout<<"path: "<<path<<std::endl;
+				this->rcs = new Resource(path, false);
 				if (this->rcs->isCGI())
 				{
 					this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
@@ -61,7 +69,6 @@ namespace Webserv
 		}
 		if (this->rcs->loadResource())
 		{
-			std::cout<<"status: "<<status<<std::endl;
 			Webserv::Http::HttpResponse response(*this->rcs);
 			this->sock.write(response.toString().c_str(), response.toString().length());
 			std::cout<<"delete rcs"<<std::endl;
@@ -87,6 +94,94 @@ namespace Webserv
 	int		ClientEvent::getFD(void)
 	{
 		return this->sock.fd();	//TO DO replace
+	}
+
+	////////////////////////
+
+		Webserv::Config::server_type	ClientEvent::getServer(const Socket& sr_sock, const Webserv::Http::HttpRequest& request, Webserv::Config::server_vector& servers) {
+
+		Webserv::Config::server_vector serversTmp = servers;
+		Webserv::Config::server_vector::iterator it = serversTmp.begin();
+		(void)request;
+		std::cout<<"Start GetServer"<<std::endl;
+		std::cout<<sr_sock.address().getIntPort()<<std::endl;
+		if (it == serversTmp.end())
+		{
+			std::cout<<"vector is NULL"<<std::endl;
+		}
+		while (it != serversTmp.end()) {
+			std::cout<<"vector here"<<std::endl;
+			if (sr_sock.address().getIntPort() != it->getListen().getIntPort()) {
+				it = serversTmp.erase(it);
+				continue ;
+			}
+			std::cout<<"Check Port ok"<<std::endl;
+			// TODO: care of 0.0.0.0 with this (for now it's safe)
+			if (sr_sock.address().getStrAddress() != it->getListen().getStrAddress()) {
+				it = serversTmp.erase(it);
+				continue ;
+			}
+			std::cout<<"Check Addres ok"<<std::endl;
+			if (request.get("Host") == it->getServerName()) {
+				return *it;
+			}
+			std::cout<<"Check host ok"<<std::endl;
+			// std::cout << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() << std::endl;
+			it++;
+		}
+		std::cout<<"End GetServer"<<std::endl;
+		it = serversTmp.begin();
+		if (it == serversTmp.end())
+		{
+			std::cout<<"vector vide"<<std::endl;
+		}
+		std::cout<<"AH"<<std::endl;
+		return serversTmp.front();
+		}
+
+		Webserv::Config::server_type::route_type	ClientEvent::getRoute(const std::string& url, const Webserv::Config::server_type::routes_map& routes, const Webserv::Config::server_type::route_type& defaultRoute) {
+		std::vector<std::string> paths = split(url, '/');
+		Webserv::Config::server_type::route_type route = defaultRoute;
+
+		size_t max = 0;
+		Webserv::Config::server_type::routes_map::const_iterator itRoutes = routes.begin();
+		while (itRoutes != routes.end()) {
+			std::vector<std::string> routePaths = split(itRoutes->first, '/');
+			size_t i = 0;
+			while (i < routePaths.size() && i < paths.size()) {
+				if (routePaths[i] != paths[i]) {
+					break ;
+				}
+				if (max <= i) {
+					route = itRoutes->second;
+					max = i + 1;
+				}
+				i++;
+			}
+			itRoutes++;
+		}
+		if (max < paths.size()) {
+			std::vector<std::string>::const_iterator it = paths.begin() + max;
+			std::string newUrl;
+			while (it != paths.end()) {
+				newUrl += "/" + *it;
+				it++;
+			}
+			route = getRoute(newUrl, route.getRoutes(), route);
+		}
+
+		return route;
+	}
+
+		std::vector<std::string>	ClientEvent::split(const std::string& str, char delim) {
+		std::vector<std::string> strings;
+		size_t start;
+		size_t end = 0;
+		while ((start = str.find_first_not_of(delim, end)) != std::string::npos) {
+			end = str.find(delim, start);
+			strings.push_back(str.substr(start, end - start));
+		}
+		return strings;
 	}
 
 }	// namespace Webserv

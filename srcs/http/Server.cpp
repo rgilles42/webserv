@@ -20,6 +20,23 @@ namespace Webserv {
 			this->init();
 		}
 
+		Server	&Server::operator = (const Server &old)
+		{
+			this->serverName = old.serverName;
+			this->listen = old.listen;
+			this->mimesTypes = old.mimesTypes;
+			this->error_pages = old.error_pages;
+			this->client_max_body_size = old.client_max_body_size;
+			this->upload_store = old.upload_store;
+			this->_return = old._return;
+			this->autoindex = old.autoindex;
+			this->root = old.root;
+			this->index = old.index;
+			this->routes = old.routes;
+
+			return *this;
+		}
+
 		Server::~Server() {}
 
 		void	Server::init(void) {

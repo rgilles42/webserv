@@ -79,6 +79,8 @@ namespace Webserv {
 				Server(void);
 				~Server();
 
+				Server &operator = (const Server &old);
+
 				void	init(void);
 
 				bool	fromBlocks(const block_vector& blocks);
