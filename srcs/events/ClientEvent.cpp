@@ -39,6 +39,7 @@ namespace Webserv
 				std::cout<<"Route was create"<<std::endl;
 				path = this->route.getRoot();
 				std::cout<<"path: "<<path<<std::endl;
+				exit(1);
 				this->rcs = new Resource(path, false);
 				if (this->rcs->isCGI())
 				{

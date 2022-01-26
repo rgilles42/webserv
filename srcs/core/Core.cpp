@@ -148,6 +148,7 @@ namespace Webserv {
 		while (it != this->servers.end()) {
 			std::ostringstream ss;
 			ss << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort();
+			std::cout<<"Port getListen: "<<it->getListen().getIntPort()<<std::endl;
 			std::string listen = ss.str();
 			if (std::find(listens.begin(), listens.end(), listen) == listens.end()) {
 				listens.push_back(listen);
@@ -232,6 +233,7 @@ namespace Webserv {
 
 		it = this->serversSockets.begin();
 		while (it != this->serversSockets.end()) {
+			std::cout<<"Portserv: "<<it->address().getIntPort()<<" fd:"<<it->fd()<<std::endl;
 			if (it->bind() < 0) {
 				perror("socket bind");
 			}

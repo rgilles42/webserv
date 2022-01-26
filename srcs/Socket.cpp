@@ -49,6 +49,7 @@ Socket&	Socket::operator=(const Socket& src)
 		local = reinterpret_cast<char*>(temp);
 		temp = reinterpret_cast<uintptr_t>(&src._addr);
 		source = reinterpret_cast<char*>(temp);
+		_address = src._address;
 		for (socklen_t i = 0; i < this->_len; i++)
 			local[i] = source[i];
 	}
