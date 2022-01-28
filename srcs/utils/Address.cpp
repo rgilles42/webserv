@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:53:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 16:37:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 21:03:25 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,18 @@ namespace Webserv {
 
 		Address::Address(const std:: string& address) {
 			this->fromString(address);
+		}
+
+		Address::Address(const Address& other) {
+			*this = other;
+		}
+
+		Address& Address::operator=(const Address& other) {
+			this->port = other.port;
+			this->type = other.type;
+			std::memcpy(this->address, other.address, ADDRESS_BITS);
+			this->addressIsValid = other.addressIsValid;
+			return *this;
 		}
 
 		Address::~Address() {}

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:18:20 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 16:22:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 21:02:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ namespace Webserv {
 			public:
 				Address(void);
 				Address(const std::string& address);
+				Address(const Address& other);
+
+				Address&			operator=(const Address& other);
 
 				~Address();
 
