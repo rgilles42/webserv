@@ -33,7 +33,7 @@ namespace Webserv
 			{
 				this->req = this->create_req.getAllRequests()[0];
 				std::cout<<"Request create"<<std::endl;
-				this->srv = getServer(this->srv_sock, this->req, this->config.getServers());
+				this->srv = this->config.getServer(this->srv_sock.address().getStrAddress(), this->srv_sock.address().getIntPort(), this->req.get("Host"));
 				std::cout << "Server was choice:"<< this->srv.getServerName() << std::endl;
 				this->route = getRoute(this->req.getBaseUrl(), this->srv.getRoutes(), this->srv.getDefaultRoute());
 				std::cout << "Route was choice:"<< this->route.getRoot() << std::endl;
@@ -98,30 +98,6 @@ namespace Webserv
 	}
 
 	////////////////////////
-
-		Webserv::Config::server_type	ClientEvent::getServer(const Socket& sr_sock, const Webserv::Http::HttpRequest& request, Webserv::Config::server_vector& servers) {
-
-		Webserv::Config::server_vector serversTmp = servers;
-		Webserv::Config::server_vector::iterator it = serversTmp.begin();
-
-		while (it != serversTmp.end()) {
-			if (sr_sock.address().getIntPort() != it->getListen().getIntPort()) {
-				it = serversTmp.erase(it);
-				continue ;
-			}
-			// TODO: care of 0.0.0.0 with this (for now it's safe)
-			if (sr_sock.address().getStrAddress() != it->getListen().getStrAddress()) {
-				it = serversTmp.erase(it);
-				continue ;
-			}
-			if (request.get("Host") == it->getServerName()) {
-				return *it;
-			}
-			// std::cout << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() << std::endl;
-			it++;
-		}
-		return serversTmp.front();
-		}
 
 		Webserv::Config::server_type::route_type	ClientEvent::getRoute(const std::string& url, const Webserv::Config::server_type::routes_map& routes, const Webserv::Config::server_type::route_type& defaultRoute) {
 		std::vector<std::string> paths = split(url, '/');

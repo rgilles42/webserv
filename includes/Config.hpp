@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 15:46:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 19:25:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "./utils/Block.hpp"		// For Block
 # include "./http/Server.hpp"		// For Server
 # include "./utils/MimeTypes.hpp"	// For MimeTypes
+# include "./Socket.hpp"			// For Socket
 
 namespace Webserv {
 
@@ -69,6 +70,8 @@ namespace Webserv {
 			bool	processFiles(void);
 
 			server_vector	&getServers(void);
+
+			const server_type&	getServer(const std::string& address, const int& port, const std::string& host) const;
 	};
 
 } // namespace Webserv

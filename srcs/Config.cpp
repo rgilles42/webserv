@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 15:47:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 19:25:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,32 @@ namespace Webserv {
 
 	Config::server_vector	&Config::getServers(void) {
 		return this->servers;
+	}
+
+	const Config::server_type&	Config::getServer(const std::string& address, const int& port, const std::string& host) const {
+		server_vector	serversTmp = this->servers;
+		server_vector::iterator it = serversTmp.begin();
+
+		while (it != serversTmp.end()) {
+			if (port != it->getListen().getIntPort()) {
+				it = serversTmp.erase(it);
+				continue ;
+			}
+			// TODO: care of 0.0.0.0 with this (for now it's safe)
+			if (address != it->getListen().getStrAddress()) {
+				it = serversTmp.erase(it);
+				continue ;
+			}
+			if (host == it->getServerName()) {
+				return *it;
+			}
+			// std::cout << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() << std::endl;
+			it++;
+		}
+		if (!serversTmp.empty()) {
+			return serversTmp.front();
+		}
+		return this->servers.front();
 	}
 
 } // namespace Webserv

@@ -49,7 +49,6 @@ namespace Webserv
 			short	getEventsFlags(void);
 			int		getFD(void);
 
-			Webserv::Config::server_type				getServer(const Socket& sock, const Webserv::Http::HttpRequest& request, Webserv::Config::server_vector& servers);
 			Webserv::Config::server_type::route_type	getRoute(const std::string& url, const Webserv::Config::server_type::routes_map& routes, const Webserv::Config::server_type::route_type& defaultRoute);
 			std::vector<std::string>	split(const std::string& str, char delim);
 
