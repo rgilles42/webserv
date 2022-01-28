@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 14:45:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:31:30 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ namespace Webserv {
 
 		Route::Route(void) {
 			this->init();
+		}
+
+		Route::Route(const Route& other) {
+			*this = other;
 		}
 
 		Route	&Route::operator = (const Route &old)
@@ -32,11 +36,11 @@ namespace Webserv {
 			this->index = old.index;
 			this->limit_except = old.limit_except;
 			this->routes = old.routes;
-
 			return *this;
 		}
 
-		Route::~Route() {}
+		Route::~Route(void) {}
+
 
 		void	Route::init(void) {
 			this->mimesTypes.clear();
@@ -55,6 +59,18 @@ namespace Webserv {
 			this->routes.clear();
 		}
 
+		void	Route::fromParent(const Route& parent) {
+			this->mimesTypes = parent.mimesTypes;
+			this->error_pages = parent.error_pages;
+			this->client_max_body_size = parent.client_max_body_size;
+			this->upload_store = parent.upload_store;
+			this->_return = parent._return;
+			this->autoindex = parent.autoindex;
+			this->root = parent.root; // maybe don't do that
+			this->index = parent.index;
+			this->limit_except = parent.limit_except;
+		}
+
 		bool	Route::fromBlocks(const block_vector& blocks) {
 			block_vector::const_iterator	blockIt = blocks.begin();
 			while (blockIt != blocks.end()) {
@@ -64,7 +80,7 @@ namespace Webserv {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
 						if (directive == "location") {
 							route_type newRoute;
-							newRoute.setMimesTypes(this->mimesTypes);
+							newRoute.fromParent(*this);
 							if (!newRoute.fromBlocks(blockIt->getChilds())) {
 								return false;
 							}
@@ -133,6 +149,32 @@ namespace Webserv {
 
 		void	Route::setMimesTypes(const mimes_types_type& mimesTypes) {
 			this->mimesTypes = mimesTypes;
+		}
+
+		void	Route::setErrorPages(const error_pages_type& errorPages) {
+			this->error_pages = errorPages;
+		}
+
+		void	Route::setClientMaxBodySize(const client_max_body_size_type& clientMaxBodySize) {
+			this->client_max_body_size = clientMaxBodySize;
+		}
+		void	Route::setUploadStore(const upload_store_type& uploadStore) {
+			this->upload_store = uploadStore;
+		}
+		void	Route::setReturn(const return_type& _return) {
+			this->_return = _return;
+		}
+		void	Route::setAutoindex(const autoindex_type& autoindex) {
+			this->autoindex = autoindex;
+		}
+		void	Route::setRoot(const root_type& root) {
+			this->root = root;
+		}
+		void	Route::setIndex(const index_type& index) {
+			this->index = index;
+		}
+		void	Route::setLimitExcept(const limit_except_type& limitExcept) {
+			this->limit_except = limitExcept;
 		}
 
 		void 	Route::addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route) {

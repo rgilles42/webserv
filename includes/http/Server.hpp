@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 11:51:07 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:34:33 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ namespace Webserv {
 				root_type			root;
 				index_type			index;
 
+				route_type			defaultRoute;
 				routes_map			routes;
 
 			public:
@@ -91,6 +92,7 @@ namespace Webserv {
 
 				const name_type	&getServerName(void) const;
 				const listen_type	&getListen(void) const;
+				const route_type	&getDefaultRoute(void) const;
 				const routes_map	&getRoutes(void) const;
 		};
 

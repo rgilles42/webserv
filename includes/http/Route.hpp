@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 14:45:43 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 17:30:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,25 @@ namespace Webserv {
 
 			public:
 				Route(void);
+				Route(const Route& other);
 				~Route();
 
 				Route &operator = (const Route &old);
 				void	init(void);
 
+				void	fromParent(const Route& parent);
 				bool	fromBlocks(const block_vector& blocks);
 
 				void	setMimesTypes(const mimes_types_type& mimesTypes);
+
+				void	setErrorPages(const error_pages_type& errorPages);
+				void	setClientMaxBodySize(const client_max_body_size_type& clientMaxBodySize);
+				void	setUploadStore(const upload_store_type& uploadStore);
+				void	setReturn(const return_type& _return);
+				void	setAutoindex(const autoindex_type& autoindex);
+				void	setRoot(const root_type& root);
+				void	setIndex(const index_type& index);
+				void	setLimitExcept(const limit_except_type& limitExcept);
 
 				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 
