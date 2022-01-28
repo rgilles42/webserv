@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 17:34:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 20:02:04 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ namespace Webserv {
 
 		Server::Server(void) {
 			this->init();
+		}
+		Server::Server(const Server& other) {
+			*this = other;
 		}
 
 		Server	&Server::operator = (const Server &old)

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 17:34:33 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 20:02:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ namespace Webserv {
 
 			public:
 				Server(void);
+				Server(const Server& other);
 				~Server();
 
 				Server &operator = (const Server &old);
