@@ -40,11 +40,15 @@ namespace Webserv
 				path = this->route.getRoot() + this->req.getBaseUrl();
 				std::cout << "path: " << path << std::endl;
 				// exit(0);
-				this->rcs = new Resource(path, false);
-				if (this->rcs->isCGI())
-				{
-					this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
-					this->rcs->setFd(this->cgi->getReadFD());
+				try {
+					this->rcs = new Resource(path, false);
+					if (this->rcs->isCGI())
+					{
+						this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
+						this->rcs->setFd(this->cgi->getReadFD());
+					}
+				} catch (const std::exception& e) {
+					std::cout << e.what() << std::endl;
 				}
 	//			Webserv::Methods::Methods::getInstance().exec_method(this->req, this->rcs/*, this->srv**/);
 				this->events_flags = POLLOUT;
@@ -56,6 +60,8 @@ namespace Webserv
 	{
 		int status = 0;
 		std::cout<<"Client write event"<<std::endl;
+		if (!this->rcs)
+			return ;
 		if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
 		{
 			if (this->cgi->writeIsEnd())
