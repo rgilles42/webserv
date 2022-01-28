@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 15:36:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 18:13:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ namespace Webserv {
 		while (it != this->servers.end()) {
 			std::ostringstream ss;
 			ss << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort();
-			std::cout<<"Port getListen: "<<it->getListen().getIntPort()<<std::endl;
+			std::cout << "Port getListen: " << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() <<std::endl;
 			std::string listen = ss.str();
 			if (std::find(listens.begin(), listens.end(), listen) == listens.end()) {
 				listens.push_back(listen);
@@ -233,7 +233,6 @@ namespace Webserv {
 
 		it = this->serversSockets.begin();
 		while (it != this->serversSockets.end()) {
-			std::cout<<"Portserv: "<<it->address().getIntPort()<<" fd:"<<it->fd()<<std::endl;
 			if (it->bind() < 0) {
 				perror("socket bind");
 			}
