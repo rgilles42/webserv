@@ -88,10 +88,6 @@ namespace Webserv {
 			return std::make_pair(newBlock, valid);
 		}
 
-		void			Parser::drawBlocks(void) const {
-			Parser::drawBlocks(this->blocks);
-		}
-
 		bool			Parser::checkBlocks(const directive_map& directives) const {
 			block_vector::const_iterator it = this->blocks.begin();
 			while (it != this->blocks.end()) {
@@ -142,29 +138,33 @@ namespace Webserv {
 			return true;
 		}
 
-		// Static methods
+		// TODO: Remove
 
-		void			Parser::drawBlocks(const block_vector& blocks) {
-			block_vector::const_iterator it = blocks.begin();
-			while (it != blocks.end()) {
-				block_type block = (*it);
-				block_type::values_type values = block.getValues();
-				block_type::values_type::const_iterator it2 = values.begin();
-				while (it2 != values.end()) {
-					block_type::token_type token = (*it2);
-					std::cout << "|" << token.getValue() << "|" << std::endl;
-					it2++;
-				}
-				if (block.isSimple()) {
-					std::cout << ";" << std::endl;
-				} else if (!block.isComment()) {
-					std::cout << "{" << std::endl;
-					Parser::drawBlocks(block.getChilds());
-					std::cout << "}" << std::endl;
-				}
-				it++;
-			}
-		}
+		// void			Parser::drawBlocks(void) const {
+		// 	Parser::drawBlocks(this->blocks);
+		// }
+
+		// void			Parser::drawBlocks(const block_vector& blocks) {
+		// 	block_vector::const_iterator it = blocks.begin();
+		// 	while (it != blocks.end()) {
+		// 		block_type block = (*it);
+		// 		block_type::values_type values = block.getValues();
+		// 		block_type::values_type::const_iterator it2 = values.begin();
+		// 		while (it2 != values.end()) {
+		// 			block_type::token_type token = (*it2);
+		// 			std::cout << "|" << token.getValue() << "|" << std::endl;
+		// 			it2++;
+		// 		}
+		// 		if (block.isSimple()) {
+		// 			std::cout << ";" << std::endl;
+		// 		} else if (!block.isComment()) {
+		// 			std::cout << "{" << std::endl;
+		// 			Parser::drawBlocks(block.getChilds());
+		// 			std::cout << "}" << std::endl;
+		// 		}
+		// 		it++;
+		// 	}
+		// }
 
 	} // namespace Utils
 

@@ -6,21 +6,22 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 17:30:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 01:55:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ROUTE_HPP
 # define ROUTE_HPP
 
-# include <cstddef>
-# include <string>
-# include <vector>
-# include <map>
+# include <iostream>
 
-# include "../utils/Directive.hpp"
-# include "../utils/Block.hpp"
-# include "../utils/MimeTypes.hpp"
+# include <string>						// For string
+# include <vector>						// For vector
+# include <map>							// For map
+
+# include "../utils/Directive.hpp"		// For Directive
+# include "../utils/Block.hpp"			// For Block
+# include "../utils/MimeTypes.hpp"		// For MimeTypes
 
 namespace Webserv {
 

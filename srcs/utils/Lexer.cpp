@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:35:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 21:13:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,6 @@ namespace Webserv {
 				i = j;
 			}
 			return this->tokens;
-		}
-
-		void			Lexer::drawTokens(void) const {
-			Lexer::drawTokens(this->tokens);
 		}
 
 		bool			Lexer::checkTokens(void) const {
@@ -173,15 +169,19 @@ namespace Webserv {
 		}
 
 
-		// Static methods
+		// TODO: Remove
 
-		void			Lexer::drawTokens(const token_vector &tokens) {
-			token_vector::const_iterator it = tokens.begin();
-			while (it != tokens.end()) {
-				std::cout << "|" << (*it).getValue() << ":" << (*it).getType() << "|" << std::endl;
-				it++;
-			}
-		}
+		// void			Lexer::drawTokens(void) const {
+		// 	Lexer::drawTokens(this->tokens);
+		// }
+
+		// void			Lexer::drawTokens(const token_vector &tokens) {
+		// 	token_vector::const_iterator it = tokens.begin();
+		// 	while (it != tokens.end()) {
+		// 		std::cout << "|" << (*it).getValue() << ":" << (*it).getType() << "|" << std::endl;
+		// 		it++;
+		// 	}
+		// }
 
 	} // namespace Utils
 

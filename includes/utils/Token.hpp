@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:47:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 21:11:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include <string>		// For string
 # include <map>			// For map
 # include <vector>		// For vector
-
-# include <iostream>	// For cout, endl TODO: remove
 
 namespace Webserv {
 

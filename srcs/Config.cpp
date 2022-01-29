@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 19:25:45 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 01:53:18 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ namespace Webserv {
 				this->filesMap[(*filesIt)] = Webserv::Utils::getFileContents((*filesIt));
 			}
 			catch (const std::exception& e) {
-				std::cerr << e.what() << " in " << (*filesIt) << std::endl;
+				throw ConfigException((*filesIt), e.what());
 				return false;
 			}
 
@@ -197,11 +197,7 @@ namespace Webserv {
 				}
 			}
 			catch (const lexer_type::LexerException& e) {
-				std::cerr << e.what() << " in " << (*filesIt);
-				if (e.getToken().getLine() > 0) {
-					std::cerr << ":" << e.getToken().getLine();
-				}
-				std::cerr << std::endl;
+				throw LexerException(e, (*filesIt));
 				return false;
 			}
 
@@ -214,11 +210,7 @@ namespace Webserv {
 				}
 			}
 			catch (const parser_type::ParserException& e) {
-				std::cerr << e.what() << " in " << (*filesIt);
-				if (e.getToken().getLine() > 0) {
-					std::cerr << ":" << e.getToken().getLine();
-				}
-				std::cerr << std::endl;
+				throw ParserException(e, (*filesIt));
 				return false;
 			}
 
@@ -248,7 +240,7 @@ namespace Webserv {
 						return false;
 					}
 				} else {
-					std::cerr << directive_type::UnknownDirectiveException(directive).what() << std::endl;
+					throw ConfigException("", directive_type::UnknownDirectiveException(directive).what());
 					return false;
 				}
 			}

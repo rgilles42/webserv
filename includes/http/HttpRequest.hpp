@@ -6,14 +6,12 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 18:50:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/28 21:06:31 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPREQUEST_HPP
 # define HTTPREQUEST_HPP
-
-# include <iostream>
 
 # include <string>				// For string
 # include <map>					// For map
