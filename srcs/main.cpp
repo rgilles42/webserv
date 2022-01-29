@@ -6,27 +6,51 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 03:06:19 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:28:00 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/webserv.hpp"
 
-volatile sig_atomic_t stop;
+int main(int argc, char *argv[], char *envp[]) {
 
-void handleSignals(sig_atomic_t signum) {
-	(void)signum;
-	std::cout << signum << std::endl;
-	stop = 1;
+	Webserv::Core &webserv = Webserv::Core::getInstance();
+
+	if (!webserv.preInit(argc, argv, envp)) {
+		return EXIT_FAILURE;
+	}
+
+	if (!webserv.init()) {
+		return EXIT_FAILURE;
+	}
+
+	try {
+		webserv.exec();
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	std::cout << "Success" << std::endl;
+	return EXIT_SUCCESS;
 }
+
+// volatile sig_atomic_t stop;
+
+// void handleSignals(sig_atomic_t signum) {
+// 	(void)signum;
+// 	std::cout << signum << std::endl;
+// 	stop = 1;
+// }
 
 // int main(void) {
 
-	Socket	ServerSocket("0.0.0.0", 80, 1);
-	Socket	ClientSocket;
-	ssize_t	size_read = 0;
-	char	buffer[BUFFER_SIZE + 1];
-	std::string	message;
+// 	Socket	ServerSocket("0.0.0.0", 80, 1);
+// 	Socket	ClientSocket;
+// 	ssize_t	size_read = 0;
+// 	char	buffer[BUFFER_SIZE + 1];
+// 	std::string	message;
 
 
 // 	if (ServerSocket.bind() < 0) {
@@ -76,35 +100,11 @@ void handleSignals(sig_atomic_t signum) {
 // 	return EXIT_SUCCESS;
 // }
 
-int main(int argc, char *argv[], char *envp[]) {
-
-	Webserv::Core &webserv = Webserv::Core::getInstance();
-
-	if (!webserv.preInit(argc, argv, envp)) {
-		return EXIT_FAILURE;
-	}
-
-	if (!webserv.init()) {
-		return EXIT_FAILURE;
-	}
-
-	try {
-		webserv.exec();
-	}
-	catch (const std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-
-	std::cout << "Success" << std::endl;
-	return EXIT_SUCCESS;
-}
-
-std::string	intToHex(int i) {
-	std::stringstream stream;
-	stream << std::hex << i;
-	return stream.str();
-}
+// std::string	intToHex(int i) {
+// 	std::stringstream stream;
+// 	stream << std::hex << i;
+// 	return stream.str();
+// }
 
 // int main(void)
 // {
