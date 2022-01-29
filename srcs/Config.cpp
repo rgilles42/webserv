@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 01:53:18 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 02:35:59 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,13 @@ namespace Webserv {
 				if (directive == "server") {
 					server_type newServer;
 					newServer.setMimesTypes(this->globalMimesTypes);
-					if (!newServer.fromBlocks(it->getChilds())) {
+					try {
+						if (!newServer.fromBlocks(it->getChilds())) {
+							return false;
+						}
+					}
+					catch (const std::exception& e) {
+						throw e;
 						return false;
 					}
 					this->servers.push_back(newServer);

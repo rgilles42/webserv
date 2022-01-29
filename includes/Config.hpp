@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 01:55:05 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 02:34:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ namespace Webserv {
 						typedef lexer_type::LexerException	base_type;
 
 					protected:
-						const base_type&	base;
+						const base_type	base;
 
 					public:
 						LexerException(const base_type& base, const file_type& file = file_type()) : ConfigException(file), base(base) {
@@ -81,7 +81,6 @@ namespace Webserv {
 							if (this->base.getToken().getLine() > 0) {
 								ss << ":" << this->base.getToken().getLine();
 							}
-							ss << std::endl;
 
 							this->msg = ss.str();
 						}
@@ -95,7 +94,7 @@ namespace Webserv {
 						typedef parser_type::ParserException	base_type;
 
 					protected:
-						const base_type&	base;
+						const base_type	base;
 
 					public:
 						ParserException(const parser_type::ParserException& base, const file_type& file = file_type()) : ConfigException(file), base(base) {
@@ -105,7 +104,6 @@ namespace Webserv {
 							if (this->base.getToken().getLine() > 0) {
 								ss << ":" << this->base.getToken().getLine();
 							}
-							ss << std::endl;
 
 							this->msg = ss.str();
 						}

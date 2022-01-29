@@ -67,7 +67,7 @@ namespace Webserv {
 
 				class UnknownDirectiveException : public ParserException {
 					public:
-						UnknownDirectiveException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block) {
+						UnknownDirectiveException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block, token) {
 							std::ostringstream ss;
 
 							ss << "Unknown directive \"" << token.getValue() << "\" at " << token.getLine();
@@ -78,7 +78,7 @@ namespace Webserv {
 
 				class DirectiveNotAllowedHereException : public ParserException {
 					public:
-						DirectiveNotAllowedHereException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block) {
+						DirectiveNotAllowedHereException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block, token) {
 							std::ostringstream ss;
 
 							ss << "Directive \"" << token.getValue() << "\" is not allowed here at " << token.getLine();
@@ -89,7 +89,7 @@ namespace Webserv {
 
 				class InvalidArgumentsDirectiveException : public ParserException {
 					public:
-						InvalidArgumentsDirectiveException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block) {
+						InvalidArgumentsDirectiveException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block, token) {
 							std::ostringstream ss;
 
 							ss << "Invalid number of arguments in \"" << token.getValue() << "\" directive at " << token.getLine();
@@ -100,7 +100,7 @@ namespace Webserv {
 
 				class UnknownException : public ParserException {
 					public:
-						UnknownException(const block_type& block = block_type()) : ParserException(block) {
+						UnknownException(const block_type& block = block_type(), const token_type& token = token_type()) : ParserException(block) {
 							std::ostringstream ss;
 
 							ss << "Unknown error at " << token.getLine();

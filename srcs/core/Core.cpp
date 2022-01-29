@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 02:10:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 02:42:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ namespace Webserv {
 				return false;
 			}
 		} catch (const Config::ConfigException& e) {
-			this->logger.error(e.what());
+			this->logger << std::make_pair(logger_type::ERROR, e.what()) << std::endl;
 			return false;
 		}
 		this->servers = this->config.getServers();

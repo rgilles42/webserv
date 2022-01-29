@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 17:31:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 02:16:06 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,47 +97,47 @@ namespace Webserv {
 						} else if (directive == "error_page") {
 							error_pages_pair errorPage;
 							if (!directive_type::parseErrorPage(values, errorPage)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 							this->error_pages.insert(errorPage);
 						} else if (directive == "limit_except") {
 							if (!directive_type::parseLimitExcept(values, this->limit_except)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 						} else if (directive == "client_max_body_size") {
 							if (!directive_type::parseClientMaxBodySize(values, this->client_max_body_size, DEFAULT_CLIENT_MAX_BODY_SIZE)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 						} else if (directive == "return") {
 							if (!directive_type::parseReturn(values, this->_return, DEFAULT_RETURN)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 						} else if (directive == "autoindex") {
 							if (!directive_type::parseAutoIndex(values, this->autoindex, DEFAULT_AUTOINDEX)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 						} else if (directive == "root") {
 							if (!directive_type::parseRoot(values, this->root, DEFAULT_ROOT)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 						} else if (directive == "index") {
 							if (!directive_type::parseIndex(values, this->index)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 						} else if (directive == "upload_store") {
 							if (!directive_type::parseUploadStore(values, this->upload_store, DEFAULT_UPLOAD_STORE)) {
-								std::cerr << directive_type::InvalidValueDirectiveException(directive).what() << std::endl;
+								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
 						} else {
-							std::cerr << directive_type::UnknownDirectiveException(directive).what() << std::endl;
+							throw directive_type::UnknownDirectiveException(directive);
 							return false;
 						}
 					}
