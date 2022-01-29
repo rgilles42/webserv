@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 15:36:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 03:06:19 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,10 @@ int main(int argc, char *argv[], char *envp[]) {
 	Webserv::Core &webserv = Webserv::Core::getInstance();
 
 	if (!webserv.preInit(argc, argv, envp)) {
-		std::cout << "Fail 1" << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	if (!webserv.init()) {
-		std::cout << "Fail 2" << std::endl;
 		return EXIT_FAILURE;
 	}
 

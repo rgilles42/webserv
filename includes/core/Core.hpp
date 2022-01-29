@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 17:32:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 02:58:15 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,57 @@ namespace Webserv {
 			typedef Socket						socket_type;
 			typedef std::vector<socket_type>	socket_vector;
 
+			class CoreException : public std::exception {
+				protected:
+					std::string	msg;
+
+				public:
+					CoreException(const std::string& msg = "") : std::exception() {
+						this->msg = msg;
+					}
+					virtual ~CoreException() throw() {}
+					virtual const char	*what() const throw() {
+						return this->msg.c_str();
+					}
+			};
+
+			class InitException : public CoreException {
+				public:
+					InitException() : CoreException() {
+						std::ostringstream ss;
+
+						ss << "Init core failed";
+
+						this->msg = ss.str();
+					}
+			};
+
+			class ExecException : public CoreException {
+				public:
+					ExecException(const std::string& reason = std::string()) : CoreException() {
+						std::ostringstream ss;
+
+						ss << "Exec core failed";
+
+						if (!reason.empty()) {
+							ss << ": " << reason;
+						}
+
+						this->msg = ss.str();
+					}
+			};
+
+			class UnknownException : public CoreException {
+				public:
+					UnknownException() : CoreException() {
+						std::ostringstream ss;
+
+						ss << "Unknown core error";
+
+						this->msg = ss.str();
+					}
+			};
+
 		protected:
 			std::string	customConfigFile;
 			std::string	customMimeTypesFile;
@@ -83,22 +134,6 @@ namespace Webserv {
 			const bool&	isReady(void) const;
 
 			std::string	getHelp(void) const;
-
-			struct coreInitFailed : public std::exception
-			{
-				virtual const char* what() const throw()
-				{
-					return ("Core: initialisation failed");
-				}
-			};
-
-			struct coreExecFailed : public std::exception
-			{
-				virtual const char* what() const throw()
-				{
-					return ("Core: initialisation failed");
-				}
-			};
 	};
 
 } // namespace Webserv

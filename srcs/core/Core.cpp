@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 02:42:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 03:28:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ namespace Webserv {
 	Core::Core(void) : Singleton<Core>() {
 		this->isInit = false;
 		this->logger.setPrefix("\x1b[33m[Webserv]\x1b[0m");
+		// TODO: if we want to disable DEBUG logs, just uncomment or make a flag use this code
+		// this->logger.setLogMap(logger_type::DEBUG, NULL);
 	}
 
 	Core::~Core(void) {}
@@ -34,6 +36,7 @@ namespace Webserv {
 	}
 
 	bool		Core::preInit(int argc, char *argv[], char *envp[]) {
+		this->logger << std::make_pair(logger_type::DEBUG, "PreInit: starting..") << std::endl;
 		this->args.fromArg(argc, argv);
 
 		args_type::map_type::const_iterator it = this->args.getArgs().begin();
@@ -54,32 +57,8 @@ namespace Webserv {
 			it++;
 		}
 		this->env.fromEnvp(envp);
+		this->logger << std::make_pair(logger_type::DEBUG, "PreInit: done!") << std::endl;
 		return true;
-	}
-
-	Webserv::Config::server_type	getServer(const Socket& sock, const Webserv::Http::HttpRequest& request, Webserv::Config::server_vector& servers) {
-
-		Webserv::Config::server_vector serversTmp = servers;
-		Webserv::Config::server_vector::iterator it = serversTmp.begin();
-		(void)request;
-
-		while (it != serversTmp.end()) {
-			if (sock.address().getIntPort() != it->getListen().getIntPort()) {
-				it = serversTmp.erase(it);
-				continue ;
-			}
-			// TODO: care of 0.0.0.0 with this (for now it's safe)
-			if (sock.address().getStrAddress() != it->getListen().getStrAddress()) {
-				it = serversTmp.erase(it);
-				continue ;
-			}
-			if (request.get("Host") == it->getServerName()) {
-				return *it;
-			}
-			// std::cout << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() << std::endl;
-			it++;
-		}
-		return serversTmp.front();
 	}
 
 	std::vector<std::string>	split(const std::string& str, char delim) {
@@ -128,6 +107,7 @@ namespace Webserv {
 	}
 
 	bool		Core::init(void) {
+		this->logger << std::make_pair(logger_type::DEBUG, "Init: starting..") << std::endl;
 		std::string configFile = DEFAULT_CONFIG_LOCATION;
 		std::string mimeTypesFile = DEFAULT_MIME_TYPES_LOCATION;
 		if (!this->customConfigFile.empty()) {
@@ -153,13 +133,13 @@ namespace Webserv {
 		while (it != this->servers.end()) {
 			std::ostringstream ss;
 			ss << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort();
-			std::cout << "Port getListen: " << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() <<std::endl;
 			std::string listen = ss.str();
+			this->logger << std::make_pair(logger_type::DEBUG, "Server detected: (") << it->getServerName() << ")" << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() << std::endl;
 			if (std::find(listens.begin(), listens.end(), listen) == listens.end()) {
 				listens.push_back(listen);
 				socket_type newSocket(it->getListen().getStrAddress().c_str(), it->getListen().getIntPort());
+				this->logger << std::make_pair(logger_type::DEBUG, "Socket created: ") << newSocket.address().getStrAddress() << ":" << newSocket.address().getIntPort() << std::endl;
 				this->serversSockets.push_back(newSocket);
-				// this->logger << listen << std::endl;
 			}
 			it++;
 		}
@@ -169,6 +149,7 @@ namespace Webserv {
 			it2++;
 		}
 		this->isInit = true;
+		this->logger << std::make_pair(logger_type::DEBUG, "Init: done!") << std::endl;
 		return true;
 	}
 
@@ -191,15 +172,18 @@ namespace Webserv {
 
 	void		Core::exec(void)
 	{
-		std::cout<<"Exec"<<std::endl;
-		std::vector<struct pollfd>::iterator ite;
+		if (!this->isReady())
+			return ;
 
+		this->logger << std::make_pair(logger_type::DEBUG, "Starting servers: starting..") << std::endl;
+		std::vector<struct pollfd>::iterator ite;
 		socket_vector::iterator it;
 
 		it = this->serversSockets.begin();
 		while (it != this->serversSockets.end()) {
 			if (it->bind() < 0) {
-				perror("socket bind");
+				this->logger << std::make_pair(logger_type::ERROR, ExecException("bind error").what()) << std::endl;
+				return ;
 			}
 			it++;
 		}
@@ -207,12 +191,12 @@ namespace Webserv {
 		it = this->serversSockets.begin();
 		while (it != this->serversSockets.end()) {
 			if (it->listen() < 0) {
-				perror("socket listen");
+				this->logger << std::make_pair(logger_type::ERROR, ExecException("listen error").what()) << std::endl;
+				return ;
 			}
 			it++;
 		}
-
-		std::cout<<"Start POLL Event"<<std::endl;
+		this->logger << std::make_pair(logger_type::DEBUG, "Starting servers: done!") << std::endl;
 		/* END RM */
 		try
 		{
@@ -224,38 +208,37 @@ namespace Webserv {
 				}
 				catch (const std::exception &e)
 				{
-					std::cout<<e.what()<<std::endl;
-					throw coreExecFailed();
+					this->logger << std::make_pair(logger_type::ERROR, ExecException("poll_events exec error").what()) << std::endl;
+					continue ;
 				}
 				ite = poll_events.end();
 				for (std::vector<struct pollfd>::iterator it = this->poll_events.begin(); it != ite; it++)
 				{
 					if ((it->revents & (POLLHUP | POLLERR)) > 0)
 					{
-						std::cout<<"POLLHUP | POLLER Event on fd: "<<it->fd<<std::endl;
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLHUP | POLLER Event on fd: ") << it->fd<<std::endl;
 						this->events_manager.remove_event(it->fd);
 					}
 					else if ((it->revents & POLLIN) == POLLIN)
 					{
-						std::cout<<"POLLIN Event on fd: "<<it->fd<<std::endl;
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLIN Event on fd: ") << it->fd<<std::endl;
 						this->events_manager.get_event(it->fd)->read_event();
 					}
 					else if ((it->revents & POLLOUT) == POLLOUT)
 					{
-						std::cout<<"POLLOUT Event on fd: "<<it->fd<<std::endl;
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLOUT Event on fd: ") << it->fd<<std::endl;
 						this->events_manager.get_event(it->fd)->write_event();
 					}
 					else if (it->revents == 0)
 					{
-						std::cout<<"Other event on fd: "<<it->fd<<std::endl;
+						this->logger << std::make_pair(logger_type::DEBUG, "Other Event on fd: ") << it->fd<<std::endl;
 					}
 				}
 			}
 		}
 		catch (std::exception &e)
 		{
-			std::cout << e.what() <<std::endl;
-			throw coreExecFailed();
+			this->logger << std::make_pair(logger_type::ERROR, ExecException("exec loop error").what()) << std::endl;
 		}
 	}
 
