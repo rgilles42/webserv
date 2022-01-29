@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 21:09:18 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:21:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,14 +107,16 @@ namespace Webserv {
 
 
 			protected:
-				name_type			name;
-				argc_type			argc;
+				name_type		name;
+				argc_type		argc;
 				context_vector	contexts;
 
 			public:
 				Directive(const name_type& name = name_type(), const argc_type& argc = argc_type(-1, -1), const context_vector& contexts = context_vector());
-
+				Directive(const Directive& other);
 				virtual ~Directive();
+
+				Directive&				operator=(const Directive& other);
 
 				const name_type&		getName(void) const;
 				const context_vector&	getContexts(void) const;

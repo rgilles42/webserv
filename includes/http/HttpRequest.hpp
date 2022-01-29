@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 21:06:31 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:16:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,11 @@ namespace Webserv {
 
 			public:
 				HttpRequest(void);
-				HttpRequest(const HttpRequest& x);
+				HttpRequest(const HttpRequest& other);
 				HttpRequest(const std::string& request);
+				~HttpRequest();
+
+				HttpRequest&		operator=(const HttpRequest& other);
 
 				void				setMethod(const method_type& method);
 				void				setPath(const path_type& path);
@@ -117,10 +120,13 @@ namespace Webserv {
 
 			public:
 				HttpRequestBuilder(void);
-				HttpRequestBuilder(const HttpRequestBuilder& x);
+				HttpRequestBuilder(const HttpRequestBuilder& other);
+				~HttpRequestBuilder();
 
-				buffer_type&	getBuffer(void);
-				request_list&	getAllRequests(void);
+				HttpRequestBuilder&	operator=(const HttpRequestBuilder& other);
+
+				buffer_type&		getBuffer(void);
+				request_list&		getAllRequests(void);
 
 				void				addMessage(const message_type& message);
 

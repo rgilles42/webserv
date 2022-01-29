@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2021/12/03 14:09:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:14:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ namespace Webserv
 		public:
 			/* Constructors */
 			Poll(void);
+			Poll(const Poll& other);
 			~Poll(void);
 
-			Poll	&operator = (Poll const &old);
+			Poll	&operator=(Poll const &other);
 
 			void	add_fd(int fd, short events);
 			void	remove_fd(int fd);

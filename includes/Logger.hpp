@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:04:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:37:45 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:04:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ namespace Webserv {
 
 		public:
 			Logger(const prefix_type& prefix = "", const datetime_format_type& dtFormat = DEFAULT_DATETIME_FORMAT);
+			Logger(const Logger& other);
 			~Logger();
+
+			Logger&					operator=(const Logger& other);
 
 			void					setPrefix(const prefix_type& prefix = "");
 			void					setDateTimeFormat(const datetime_format_type& dtFormat = DEFAULT_DATETIME_FORMAT);

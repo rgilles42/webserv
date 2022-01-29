@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 01:55:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:18:19 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ namespace Webserv {
 				Route(const Route& other);
 				~Route();
 
-				Route &operator = (const Route &old);
+				Route&	operator=(const Route &other);
+
 				void	init(void);
 
 				void	fromParent(const Route& parent);

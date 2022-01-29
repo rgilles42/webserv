@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2021/12/03 14:09:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:14:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,18 @@ Poll::Poll(void)
 	this->nb_fds = 0;
 }
 
+Poll::Poll(const Poll& other) {
+	*this = other;
+}
+
 Poll::~Poll(void) {}
 
-Poll	&Poll::operator = (Poll const &old)
+Poll	&Poll::operator = (Poll const &other)
 {
-	this->vect_pollfd = old.vect_pollfd;
-	this->nb_fds = old.nb_fds;
-
+	if (this != &other) {
+		this->vect_pollfd = other.vect_pollfd;
+		this->nb_fds = other.nb_fds;
+	}
 	return *this;
 }
 

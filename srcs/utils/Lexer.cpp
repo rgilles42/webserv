@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 21:13:49 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:08:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,21 @@ namespace Webserv {
 
 		Lexer::Lexer(void) {}
 
+		Lexer::Lexer(const Lexer& other) {
+			*this = other;
+		}
+
 		Lexer::Lexer(const std::string &str) {
 			this->tokenize(str);
+		}
+
+		Lexer::~Lexer() {}
+
+		Lexer&						Lexer::operator=(const Lexer& other) {
+			if (this != &other) {
+				this->tokens = other.tokens;
+			}
+			return *this;
 		}
 
 		void						Lexer::resetLexer(void) {

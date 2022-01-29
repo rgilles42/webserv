@@ -18,8 +18,21 @@ namespace Webserv {
 
 		Parser::Parser(void) {}
 
+		Parser::Parser(const Parser& other) {
+			*this = other;
+		}
+
 		Parser::Parser(const token_vector& tokens) {
 			this->blockenize(tokens);
+		}
+
+		Parser::~Parser(void) {}
+
+		Parser&						Parser::operator=(const Parser& other) {
+			if (this != &other) {
+				this->blocks = other.blocks;
+			}
+			return *this;
 		}
 
 		const Parser::block_vector&	Parser::getBlocks(void) const {

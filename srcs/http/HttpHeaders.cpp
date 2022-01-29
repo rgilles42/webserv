@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 10:20:20 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:10:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,20 @@
 namespace Webserv {
 
 	namespace Http {
-		// can have multiple identique key but not same value
+		HttpHeaders::HttpHeaders(void) {}
+
+		HttpHeaders::HttpHeaders(const HttpHeaders& other) {
+			*this = other;
+		}
+
+		HttpHeaders::~HttpHeaders() {}
+
+		HttpHeaders&					HttpHeaders::operator=(const HttpHeaders& other) {
+			if (this != &other) {
+				this->headers = other.headers;
+			}
+			return *this;
+		}
 
 		const HttpHeaders::header_type&	HttpHeaders::getHeaders(void) const {
 			return this->headers;
@@ -88,11 +101,20 @@ namespace Webserv {
 			}
 		}
 
-
 		HttpHeadersBuilder::HttpHeadersBuilder(void) {}
-		HttpHeadersBuilder::HttpHeadersBuilder(const HttpHeadersBuilder& x) {
-			this->buffer = x.buffer;
-			this->headers = x.headers;
+
+		HttpHeadersBuilder::HttpHeadersBuilder(const HttpHeadersBuilder& other) {
+			*this = other;
+		}
+
+		HttpHeadersBuilder::~HttpHeadersBuilder() {}
+
+		HttpHeadersBuilder&						HttpHeadersBuilder::operator=(const HttpHeadersBuilder& other) {
+			if (this != &other) {
+				this->buffer = other.buffer;
+				this->headers = other.headers;
+			}
+			return *this;
 		}
 
 		const HttpHeadersBuilder::buffer_type&	HttpHeadersBuilder::getBuffer(void) const {

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 02:15:51 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:06:06 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,31 @@ namespace Webserv {
 		Server::Server(void) {
 			this->init();
 		}
+
 		Server::Server(const Server& other) {
 			*this = other;
 		}
 
-		Server	&Server::operator = (const Server &old)
+		Server::~Server() {}
+
+		Server&	Server::operator=(const Server &other)
 		{
-			this->serverName = old.serverName;
-			this->listen = old.listen;
-			this->mimesTypes = old.mimesTypes;
-			this->error_pages = old.error_pages;
-			this->client_max_body_size = old.client_max_body_size;
-			this->upload_store = old.upload_store;
-			this->_return = old._return;
-			this->autoindex = old.autoindex;
-			this->root = old.root;
-			this->index = old.index;
-			this->defaultRoute = old.defaultRoute;
-			this->routes = old.routes;
+			if (this != &other) {
+				this->serverName = other.serverName;
+				this->listen = other.listen;
+				this->mimesTypes = other.mimesTypes;
+				this->error_pages = other.error_pages;
+				this->client_max_body_size = other.client_max_body_size;
+				this->upload_store = other.upload_store;
+				this->_return = other._return;
+				this->autoindex = other.autoindex;
+				this->root = other.root;
+				this->index = other.index;
+				this->defaultRoute = other.defaultRoute;
+				this->routes = other.routes;
+			}
 			return *this;
 		}
-
-		Server::~Server() {}
 
 		void	Server::init(void) {
 			this->mimesTypes.clear();

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 02:16:06 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:06:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,24 @@ namespace Webserv {
 			*this = other;
 		}
 
-		Route	&Route::operator = (const Route &old)
-		{
-			this->mimesTypes = old.mimesTypes;
-			this->error_pages = old.error_pages;
-			this->client_max_body_size = old.client_max_body_size;
-			this->upload_store = old.upload_store;
-			this->_return = old._return;
-			this->autoindex = old.autoindex;
-			this->root = old.root;
-			this->index = old.index;
-			this->limit_except = old.limit_except;
-			this->routes = old.routes;
-			return *this;
-		}
-
 		Route::~Route(void) {}
 
+		Route&	Route::operator=(const Route &other)
+		{
+			if (this != &other) {
+				this->mimesTypes = other.mimesTypes;
+				this->error_pages = other.error_pages;
+				this->client_max_body_size = other.client_max_body_size;
+				this->upload_store = other.upload_store;
+				this->_return = other._return;
+				this->autoindex = other.autoindex;
+				this->root = other.root;
+				this->index = other.index;
+				this->limit_except = other.limit_except;
+				this->routes = other.routes;
+			}
+			return *this;
+		}
 
 		void	Route::init(void) {
 			this->mimesTypes.clear();

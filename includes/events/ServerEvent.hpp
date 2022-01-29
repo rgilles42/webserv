@@ -15,9 +15,9 @@ namespace Webserv
 	class ServerEvent : public IEvents
 	{
 		private:
-			Socket			sock;
-			Webserv::Config	&config;
-			short			events_flags;
+			Socket				sock;
+			Webserv::Config&	config;
+			short				events_flags;
 
 		public:
 			ServerEvent(const Socket &new_socket, Webserv::Config &_config);

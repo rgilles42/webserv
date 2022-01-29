@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/28 21:06:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:17:50 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,12 @@ namespace Webserv {
 
 			public:
 				HttpResponse(void);
+				HttpResponse(const HttpResponse& other);
 				HttpResponse(const Resource &ressource);
-				HttpResponse(const HttpResponse &x);
 				HttpResponse(const std::string &response);
+				~HttpResponse();
+
+				HttpResponse&		operator=(const HttpResponse& other);
 
 				// response Methods
 				void				append(const std::string& key, const std::string& value);

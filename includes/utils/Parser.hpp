@@ -120,7 +120,11 @@ namespace Webserv {
 
 			public:
 				Parser(void);
+				Parser(const Parser& other);
 				Parser(const token_vector& tokens);
+				~Parser();
+
+				Parser&				operator=(const Parser& other);
 
 				const block_vector&	blockenize(const token_vector& tokens);
 

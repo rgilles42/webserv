@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 02:34:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:04:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,10 @@ namespace Webserv {
 			const directive_map	getDirectiveMap(void) const;
 		public:
 			Config(void);
+			Config(const Config& other);
 			~Config();
+
+			Config&	operator=(const Config& other);
 
 			void	reset(void);
 

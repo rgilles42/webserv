@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 20:02:43 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:08:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ namespace Webserv {
 		Token::Token(const Token& other) {
 			*this = other;
 		}
+
+		Token::~Token() {}
 
 		Token&						Token::operator=(const Token& other) {
 			if (this != &other)

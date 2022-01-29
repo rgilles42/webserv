@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/18 10:21:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:11:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,26 @@ namespace Webserv {
 
 		HttpRequest::HttpRequest(void) {}
 
-		HttpRequest::HttpRequest(const HttpRequest& x) {
-			this->method = x.method;
-			this->fullPath = x.fullPath;
-			this->protocol = x.protocol;
-			this->headers = x.headers;
-			this->body = x.body;
+		HttpRequest::HttpRequest(const HttpRequest& other) {
+			*this = other;
 		}
 
 		HttpRequest::HttpRequest(const std::string& response) {
 			this->fromString(response);
 		}
 
+		HttpRequest::~HttpRequest() {}
 
+		HttpRequest&		HttpRequest::operator=(const HttpRequest& other) {
+			if (this != &other) {
+				this->method = other.method;
+				this->fullPath = other.fullPath;
+				this->protocol = other.protocol;
+				this->headers = other.headers;
+				this->body = other.body;
+			}
+			return *this;
+		}
 
 		void				HttpRequest::setMethod(const method_type& method) {
 			this->method = method;
@@ -305,10 +312,21 @@ namespace Webserv {
 
 
 		HttpRequestBuilder::HttpRequestBuilder(void) {}
-		HttpRequestBuilder::HttpRequestBuilder(const HttpRequestBuilder& x) {
-			this->buffer = x.buffer;
-			this->requests = x.requests;
+
+		HttpRequestBuilder::HttpRequestBuilder(const HttpRequestBuilder& other) {
+			*this = other;
 		}
+
+		HttpRequestBuilder::~HttpRequestBuilder() {}
+
+		HttpRequestBuilder&					HttpRequestBuilder::operator=(const HttpRequestBuilder& other) {
+			if (this != &other) {
+				this->buffer = other.buffer;
+				this->requests = other.requests;
+			}
+			return *this;
+		}
+
 
 		HttpRequestBuilder::buffer_type&	HttpRequestBuilder::getBuffer(void) {
 			return this->buffer;

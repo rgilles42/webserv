@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 02:35:59 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:08:25 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,24 @@ namespace Webserv {
 
 	Config::Config(void) {}
 
+	Config::Config(const Config& other) {
+		*this = other;
+	}
+
 	Config::~Config(void) {}
+
+	Config&	Config::operator=(const Config& other) {
+		if (this != &other) {
+			this->files = other.files;
+			this->filesMap = other.filesMap;
+			this->lexerMap = other.lexerMap;
+			this->parserMap = other.parserMap;
+			this->blocks = other.blocks;
+			this->servers = other.servers;
+			this->globalMimesTypes = other.globalMimesTypes;
+		}
+		return *this;
+	}
 
 	void	Config::reset(void) {
 		this->files.clear();
