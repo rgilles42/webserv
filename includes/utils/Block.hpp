@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:32:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:05:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 02:32:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ namespace Webserv {
 
 			public:
 				Block(const block_type& type= Block::T_SIMPLE);
+				Block(const Block& other);
+				Block&					operator=(const Block& other);
 
 				const block_type&	getType(void) const;
 				const values_type&	getValues(void) const;
