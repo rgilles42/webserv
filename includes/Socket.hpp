@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:50:57 by rgilles           #+#    #+#             */
-/*   Updated: 2021/12/13 11:02:16 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/29 19:59:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,16 @@ public:
 
 	int					bind(void);
 	int					listen(void);
+	int					setsockopt(int level, int optname);
+	int					fcntl(int cmd);
+	int					fcntl(int cmd, long arg);
+	int					fcntl(int cmd, struct flock *lock);
 	Socket				accept(int blocking = 0);
 	ssize_t				read(void *buf, size_t count);
 	ssize_t				write(const void *buf, size_t count);
 	int					close(void);
 	int&				fd(void);
-	struct sockaddr&	addr(void);
+	const sockaddr&		addr(void) const;
 	const address_type	address(void) const;
 
 	struct SocketNotCreatedException : public std::exception

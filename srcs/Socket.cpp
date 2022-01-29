@@ -3,32 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:51:02 by rgilles           #+#    #+#             */
-/*   Updated: 2021/12/13 11:01:54 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/01/29 20:01:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../includes/Socket.hpp"
 
 Socket::Socket() : _fd(-1), _len(sizeof(struct sockaddr)) {}
 
 Socket::Socket(const char* addr, unsigned short port, int blocking) : _fd(socket(AF_INET, SOCK_STREAM, 0)), _len(sizeof(struct sockaddr))
 {
-	int					optval = 1;
 	struct sockaddr_in&	address = reinterpret_cast<struct sockaddr_in&>(this->_addr);
 
 	if (this->_fd < 0)
 		throw SocketNotCreatedException();
-	if (setsockopt(this->_fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
-		throw SocketSetOptFailedException();
+	this->setsockopt(SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT);
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = inet_addr(addr);
 	address.sin_port = htons(port);
-	if (!blocking)
-		if (fcntl(this->_fd, F_SETFL, O_NONBLOCK) != 0)
-			throw SetNonBlockFailedException();
-
+	if (!blocking) {
+		this->fcntl(F_SETFL, O_NONBLOCK);
+	}
 	this->_address.fromString(addr);
 	this->_address.setPort(port);
 }
@@ -37,21 +35,12 @@ Socket::Socket(const Socket& src) {*this = src;}
 
 Socket&	Socket::operator=(const Socket& src)
 {
-	char*		local;
-	uintptr_t	temp;
-	char*		source;
-
 	if (this != &src)
 	{
 		this->_fd = src._fd;
 		this->_len = src._len;
-		temp = reinterpret_cast<uintptr_t>(&this->_addr);
-		local = reinterpret_cast<char*>(temp);
-		temp = reinterpret_cast<uintptr_t>(&src._addr);
-		source = reinterpret_cast<char*>(temp);
-		_address = src._address;
-		for (socklen_t i = 0; i < this->_len; i++)
-			local[i] = source[i];
+		std::memcpy(&this->_addr, &src._addr, this->_len);
+		this->_address = src._address;
 	}
 	return (*this);
 }
@@ -74,6 +63,40 @@ int	Socket::listen()
 	return (listenret);
 }
 
+int	Socket::setsockopt(int level, int optname)
+{
+	int	optval = 1;
+	int	setsockoptret = ::setsockopt(this->_fd, level, optname, &optval, sizeof(optval));
+	if (setsockoptret)
+		throw Socket::SocketSetOptFailedException();
+	return (setsockoptret);
+}
+
+
+int	Socket::fcntl(int cmd)
+{
+	int fcntlret = ::fcntl(this->_fd, cmd);
+	if (fcntlret)
+		throw Socket::SetNonBlockFailedException();
+	return (fcntlret);
+}
+
+int	Socket::fcntl(int cmd, long arg)
+{
+	int fcntlret = ::fcntl(this->_fd, cmd, arg);
+	if (fcntlret)
+		throw Socket::SetNonBlockFailedException();
+	return (fcntlret);
+}
+
+int	Socket::fcntl(int cmd, struct flock *lock)
+{
+	int fcntlret = ::fcntl(this->_fd, cmd, lock);
+	if (fcntlret)
+		throw Socket::SetNonBlockFailedException();
+	return (fcntlret);
+}
+
 Socket	Socket::accept(int blocking)
 {
 	Socket		newSocket;
@@ -81,17 +104,15 @@ Socket	Socket::accept(int blocking)
 	newSocket._fd = ::accept(this->_fd, &newSocket._addr, &newSocket._len);
 	if (newSocket._fd < 0)
 		throw AcceptFailedException();
-	if (!blocking)
-		if (fcntl(newSocket._fd, F_SETFL, O_NONBLOCK) != 0)
-			throw SetNonBlockFailedException();
+	if (!blocking) {
+		newSocket.fcntl(F_SETFL, O_NONBLOCK);
+	}
 	return (newSocket);
 }
 
 ssize_t	Socket::read(void* buf, size_t count)
 {
-	int ret;
-	ret = ::read(this->_fd, buf, count);
-	return (ret);
+	return (::read(this->_fd, buf, count));
 }
 
 ssize_t	Socket::write(const void* buf, size_t count)
@@ -99,7 +120,7 @@ ssize_t	Socket::write(const void* buf, size_t count)
 	return (::write(this->_fd, buf, count));
 }
 
-int	Socket::close(void) 
+int	Socket::close(void)
 {
 	return (::close(this->_fd));
 }
@@ -109,7 +130,7 @@ int& Socket::fd(void)
 	return (this->_fd);
 }
 
-struct sockaddr& Socket::addr(void)
+const sockaddr& Socket::addr(void) const
 {
 	return(this->_addr);
 }

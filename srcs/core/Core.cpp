@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 03:28:56 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 17:56:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,8 +181,16 @@ namespace Webserv {
 
 		it = this->serversSockets.begin();
 		while (it != this->serversSockets.end()) {
-			if (it->bind() < 0) {
-				this->logger << std::make_pair(logger_type::ERROR, ExecException("bind error").what()) << std::endl;
+			try
+			{
+				if (it->bind() < 0) {
+					this->logger << std::make_pair(logger_type::ERROR, ExecException(strerror(errno)).what()) << std::endl;
+					return ;
+				}
+			}
+			catch (const std::exception& e)
+			{
+				this->logger << std::make_pair(logger_type::ERROR, ExecException(strerror(errno)).what()) << std::endl;
 				return ;
 			}
 			it++;
@@ -190,8 +198,16 @@ namespace Webserv {
 
 		it = this->serversSockets.begin();
 		while (it != this->serversSockets.end()) {
-			if (it->listen() < 0) {
-				this->logger << std::make_pair(logger_type::ERROR, ExecException("listen error").what()) << std::endl;
+			try
+			{
+				if (it->listen() < 0) {
+					this->logger << std::make_pair(logger_type::ERROR, ExecException(strerror(errno)).what()) << std::endl;
+					return ;
+				}
+			}
+			catch (const std::exception& e)
+			{
+				this->logger << std::make_pair(logger_type::ERROR, ExecException(strerror(errno)).what()) << std::endl;
 				return ;
 			}
 			it++;
