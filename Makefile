@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2022/01/30 02:48:50 by ppaglier         ###   ########.fr        #
+#    Updated: 2022/01/30 02:58:21 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98 -g3
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/core/Core.hpp \
-				$(HEADER_DIR)/Logger.hpp \
+				$(HEADER_DIR)/core/Config.hpp \
+				$(HEADER_DIR)/core/Logger.hpp \
 				$(HEADER_DIR)/utils/common.hpp \
 				$(HEADER_DIR)/utils/Socket.hpp \
 				$(HEADER_DIR)/utils/Resource.hpp \
@@ -39,7 +40,6 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Env.hpp \
 				$(HEADER_DIR)/utils/Args.hpp \
 				$(HEADER_DIR)/utils/Singleton.hpp \
-				$(HEADER_DIR)/Config.hpp \
 				$(HEADER_DIR)/http/Server.hpp \
 				$(HEADER_DIR)/http/Route.hpp \
 				$(HEADER_DIR)/http/HttpVersion.hpp \
@@ -57,7 +57,8 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/core/Core.cpp \
-				$(SRC_DIR)/Logger.cpp \
+				$(SRC_DIR)/core/Config.cpp \
+				$(SRC_DIR)/core/Logger.cpp \
 				$(SRC_DIR)/utils/common.cpp \
 				$(SRC_DIR)/utils/Socket.cpp \
 				${SRC_DIR}/utils/Resource.cpp \
@@ -72,7 +73,6 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Directive.cpp \
 				$(SRC_DIR)/utils/Env.cpp \
 				$(SRC_DIR)/utils/Args.cpp \
-				$(SRC_DIR)/Config.cpp \
 				$(SRC_DIR)/http/Server.cpp \
 				$(SRC_DIR)/http/Route.cpp \
 				$(SRC_DIR)/http/HttpVersion.cpp \

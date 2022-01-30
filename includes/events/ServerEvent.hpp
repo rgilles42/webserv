@@ -8,7 +8,7 @@
 # include "../utils/Socket.hpp"
 # include "./ClientEvent.hpp"
 # include "../core/Core.hpp"
-# include "../Config.hpp"
+# include "../core/Config.hpp"
 
 namespace Webserv
 {

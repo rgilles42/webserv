@@ -6,11 +6,11 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 16:50:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:08:33 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:58:50 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Logger.hpp"
+#include "../../includes/core/Logger.hpp"
 
 namespace Webserv {
 

@@ -4,7 +4,7 @@
 # include "../utils/Singleton.hpp"
 # include "../http/HttpRequest.hpp"
 # include "../utils/Resource.hpp"
-# include "../Config.hpp"
+# include "../core/Config.hpp"
 
 namespace Webserv
 {

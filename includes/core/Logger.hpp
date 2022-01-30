@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:04:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:04:16 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 03:00:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <utility>					// For pair
 # include <ctime>					// For time, localtime, strftime
 
-# include "./utils/OutStream.hpp"	// For OutStream
+# include "../utils/OutStream.hpp"	// For OutStream
 
 # define DEFAULT_DATETIME_FORMAT std::string("%d %b %Y %H:%M:%S %z")
 

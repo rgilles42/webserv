@@ -6,25 +6,25 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 02:39:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:59:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CORE_HPP
 # define CORE_HPP
 
-# include <sstream>					// For ostringstream
-# include <vector>					// For vector
+# include <sstream>						// For ostringstream
+# include <vector>						// For vector
 
-# include "../utils/Env.hpp"		// For Env
-# include "../utils/Args.hpp"		// For Args
-# include "../Config.hpp"			// For Config
-# include "../Logger.hpp"			// For Logger
+# include "Config.hpp"					// For Config
+# include "Logger.hpp"					// For Logger
+# include "../utils/Env.hpp"			// For Env
+# include "../utils/Args.hpp"			// For Args
 # include "../events/ClientEvent.hpp"	// For All Events class
 # include "../events/ServerEvent.hpp"	//
 # include "../events/Poll.hpp"			//
 # include "../events/EventsManager.hpp"
-# include "../utils/Singleton.hpp"	// For Singleton
+# include "../utils/Singleton.hpp"		// For Singleton
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"

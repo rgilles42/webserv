@@ -6,11 +6,11 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:08:25 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:58:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Config.hpp"
+#include "../../includes/core/Config.hpp"
 
 namespace Webserv {
 
