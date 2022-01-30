@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 14:48:52 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:37:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 
 # include "./Resource.hpp"
 # include "./utils/common.hpp"
-# include "./Socket.hpp"
+# include "./utils/Socket.hpp"
 
 # include "./http/HttpVersion.hpp"
 # include "./http/HttpStatusCode.hpp"

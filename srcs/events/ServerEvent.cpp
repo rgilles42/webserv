@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	ServerEvent::ServerEvent(const Socket &new_sock, Webserv::Config &_config): sock(new_sock), config(_config)
+	ServerEvent::ServerEvent(const socket_type &new_sock, config_type& _config): sock(new_sock), config(_config)
 	{
 		this->events_flags= POLLIN;
 	}
@@ -16,7 +16,7 @@ namespace Webserv
 
 	void	ServerEvent::read_event(void)
 	{
-		Socket	client_sock = this->sock.accept();
+		socket_type	client_sock = this->sock.accept();
 		std::cout << "Server read event: " << this->sock.getAddress().getStrAddress() << ":" << this->sock.getAddress().getIntPort() <<std::endl;
 
 		ClientEvent *new_clientEvent = new ClientEvent(client_sock, this->sock, this->config);

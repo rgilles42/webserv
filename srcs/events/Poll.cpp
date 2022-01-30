@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2022/01/30 00:49:23 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:45:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	Poll::modif_event(int fd, short new_event)
 	this->vect_pollfd.push_back(new_elem);
 }
 
-void Poll::init(std::vector<Socket> sockets_servers)
+void Poll::init(std::vector<socket_type> sockets_servers)
 {
 	size_t	size = sockets_servers.size();
 

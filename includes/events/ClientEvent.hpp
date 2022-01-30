@@ -1,7 +1,7 @@
 #ifndef CLIENTEVENT_HPP
 # define CLIENTEVENT_HPP
 
-# include "../Socket.hpp"
+# include "../utils/Socket.hpp"
 # include "../Resource.hpp"
 # include "../http/HttpResponse.hpp"
 # include"../http/Server.hpp"
@@ -17,30 +17,37 @@
 
 namespace Webserv
 {
-	class ClientEvent : public IEvents
-	{
+	class ClientEvent : public IEvents {
+		public:
+			typedef Webserv::Utils::Socket				socket_type;
+			typedef Webserv::Config						config_type;
+			typedef Webserv::Http::HttpRequestBuilder	http_request_builder_type;
+			typedef Webserv::Http::HttpRequest			http_request_type;
+			typedef Resource							resource_type;
+			typedef CGIEvent							cgi_event_type;
+			typedef Webserv::Http::Server				http_server_type;
+			typedef Webserv::Http::Route				http_route_type;
 
 		private:
-			Webserv::Http::HttpRequestBuilder	create_req;
-			Webserv::Http::HttpRequest			req;
-			Resource							*rcs;
-			Socket								sock;
-			Socket								&srv_sock;
-			Webserv::Config						&config;
-			CGIEvent							*cgi;
-//			std::vector<Webserv::Http::Server>	srv;
-			Webserv::Http::Server				srv;
-			short								events_flags;
-			Webserv::Http::Route				route;
+			http_request_builder_type	create_req;
+			http_request_type			req;
+			resource_type				*rcs;
+			socket_type					sock;
+			socket_type					&srv_sock;
+			config_type					&config;
+			cgi_event_type				*cgi;
+			http_server_type			srv;
+			short						events_flags;
+			http_route_type				route;
 
-			std::string				request_string;
-			Webserv::Resource		currentResource;
+			std::string					request_string;
+			resource_type				currentResource;
 
 			ClientEvent(void);
 
 		public:
 
-			ClientEvent(Socket &client_sock, Socket &server_sock , Webserv::Config	&_config);
+			ClientEvent(socket_type &client_sock, socket_type &server_sock , config_type& _config);
 			virtual ~ClientEvent();
 
 			void	write_event(void);

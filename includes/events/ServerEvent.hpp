@@ -5,22 +5,25 @@
 # include <iostream>
 
 # include "./IEvents.hpp"
-# include "../Socket.hpp"
+# include "../utils/Socket.hpp"
 # include "./ClientEvent.hpp"
 # include "../core/Core.hpp"
 # include "../Config.hpp"
 
 namespace Webserv
 {
-	class ServerEvent : public IEvents
-	{
+	class ServerEvent : public IEvents {
+		public:
+			typedef Webserv::Utils::Socket	socket_type;
+			typedef Webserv::Config			config_type;
+
 		private:
-			Socket				sock;
-			Webserv::Config&	config;
+			socket_type				sock;
+			config_type&	config;
 			short				events_flags;
 
 		public:
-			ServerEvent(const Socket &new_socket, Webserv::Config &_config);
+			ServerEvent(const socket_type &new_socket, config_type &_config);
 			~ServerEvent();
 
 			void	write_event(void);

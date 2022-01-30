@@ -2,7 +2,7 @@
 
 namespace Webserv
 {
-	ClientEvent::ClientEvent(Socket &client_sock, Socket &server_sock, Webserv::Config &_config): sock(client_sock), srv_sock(server_sock), config(_config)
+	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config): sock(client_sock), srv_sock(server_sock), config(_config)
 	{
 		this->cgi = NULL;
 		this->events_flags = POLLIN;

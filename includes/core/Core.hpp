@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 02:58:15 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:39:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ namespace Webserv {
 			typedef Webserv::Logger				logger_type;
 			typedef Webserv::Utils::Env			env_type;
 			typedef Webserv::Utils::Args		args_type;
+			typedef Webserv::Utils::Socket		socket_type;
 
 			typedef config_type::server_type	server_type;
 			typedef std::vector<server_type>	server_vector;
-			typedef Socket						socket_type;
 			typedef std::vector<socket_type>	socket_vector;
 
 			class CoreException : public std::exception {
@@ -125,7 +125,7 @@ namespace Webserv {
 			bool		init(void);
 			void		exec(void);
 
-			void		add_server_event(const Socket &sock);
+			void		add_server_event(const socket_type &sock);
 			void		add_client_event(int fd, Webserv::ClientEvent &client_e);
 //			void		add_cgi_event(int fd, CGIEvent &cgi_e);
 

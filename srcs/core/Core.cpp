@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 00:49:55 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:39:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ namespace Webserv {
 		}
 	}
 
-	void		Core::add_server_event(const Socket &sock)	// Add Server Event in EventsManager
+	void		Core::add_server_event(const socket_type &sock)	// Add Server Event in EventsManager
 	{
 		ServerEvent	*srv = new ServerEvent(sock, this->config);
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:04:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:37:36 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include "./utils/Block.hpp"		// For Block
 # include "./http/Server.hpp"		// For Server
 # include "./utils/MimeTypes.hpp"	// For MimeTypes
-# include "./Socket.hpp"			// For Socket
+# include "./utils/Socket.hpp"		// For Socket
 
 namespace Webserv {
 
