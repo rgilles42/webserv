@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 17:56:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 00:49:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ namespace Webserv {
 			if (std::find(listens.begin(), listens.end(), listen) == listens.end()) {
 				listens.push_back(listen);
 				socket_type newSocket(it->getListen().getStrAddress().c_str(), it->getListen().getIntPort());
-				this->logger << std::make_pair(logger_type::DEBUG, "Socket created: ") << newSocket.address().getStrAddress() << ":" << newSocket.address().getIntPort() << std::endl;
+				this->logger << std::make_pair(logger_type::DEBUG, "Socket created: ") << newSocket.getAddress().getStrAddress() << ":" << newSocket.getAddress().getIntPort() << std::endl;
 				this->serversSockets.push_back(newSocket);
 			}
 			it++;

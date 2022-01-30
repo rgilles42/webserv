@@ -10,14 +10,14 @@ namespace Webserv
 
 	ServerEvent::~ServerEvent(void)
 	{
-		if (this->sock.fd())
+		if (this->sock.getFd())
 			this->sock.close();
 	}
 
 	void	ServerEvent::read_event(void)
 	{
 		Socket	client_sock = this->sock.accept();
-		std::cout << "Server read event: " << this->sock.address().getStrAddress() << ":" << this->sock.address().getIntPort() <<std::endl;
+		std::cout << "Server read event: " << this->sock.getAddress().getStrAddress() << ":" << this->sock.getAddress().getIntPort() <<std::endl;
 
 		ClientEvent *new_clientEvent = new ClientEvent(client_sock, this->sock, this->config);
 
@@ -33,6 +33,6 @@ namespace Webserv
 
 	int		ServerEvent::getFD(void)
 	{
-		return this->sock.fd();
+		return this->sock.getFd();
 	}
 }

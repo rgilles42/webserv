@@ -10,7 +10,7 @@ namespace Webserv
 
 	ClientEvent::~ClientEvent(void)
 	{
-		if (this->sock.fd())
+		if (this->sock.getFd())
 			this->sock.close();
 		if (this->rcs)
 			delete this->rcs;
@@ -18,7 +18,7 @@ namespace Webserv
 
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
-		std::cout << "Client read event: " << this->srv_sock.address().getStrAddress() << ":" << this->srv_sock.address().getIntPort() <<std::endl;
+		std::cout << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
 		std::string path;
 		char buffer[2048];
 		size_t	size;
@@ -33,7 +33,7 @@ namespace Webserv
 			{
 				this->req = this->create_req.getAllRequests()[0];
 				std::cout<<"Request create"<<std::endl;
-				this->srv = this->config.getServer(this->srv_sock.address().getStrAddress(), this->srv_sock.address().getIntPort(), this->req.get("Host"));
+				this->srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), this->req.get("Host"));
 				std::cout << "Server was choice:"<< this->srv.getServerName() << std::endl;
 				this->route = getRoute(this->req.getBaseUrl(), this->srv.getRoutes(), this->srv.getDefaultRoute());
 				std::cout << "Route was choice:"<< this->route.getRoot() << std::endl;
@@ -100,7 +100,7 @@ namespace Webserv
 
 	int		ClientEvent::getFD(void)
 	{
-		return this->sock.fd();	//TO DO replace
+		return this->sock.getFd();	//TO DO replace
 	}
 
 	////////////////////////

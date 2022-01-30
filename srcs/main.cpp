@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:28:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 01:06:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,20 @@ int main(int argc, char *argv[], char *envp[]) {
 // 		return EXIT_FAILURE;
 // 	}
 // 	printf("La socket %d est maintenant ouverte en mode TCP/IP (%d:%d)\n",
-// 		ServerSocket.fd(), ntohl(((struct sockaddr_in*)&ServerSocket.addr())->sin_addr.s_addr),
-// 		ntohs(((struct sockaddr_in*)&ServerSocket.addr())->sin_port));
-// 	printf("Listage du port %d...\n", ntohs(((struct sockaddr_in*)&ServerSocket.addr())->sin_port));
+// 		ServerSocket.getFd(), ntohl(((struct sockaddr_in*)&ServerSocket.getSockAddr())->sin_addr.s_addr),
+// 		ntohs(((struct sockaddr_in*)&ServerSocket.getSockAddr())->sin_port));
+// 	printf("Listage du port %d...\n", ntohs(((struct sockaddr_in*)&ServerSocket.getSockAddr())->sin_port));
 // 	printf("Patientez pendant que le client se connecte sur le port %d...\n",
-// 		ntohs(((struct sockaddr_in*)&ServerSocket.addr())->sin_port));
+// 		ntohs(((struct sockaddr_in*)&ServerSocket.getSockAddr())->sin_port));
 // 	signal(SIGINT, handleSignals);
 // 	while (!stop) {
 
 
 	// 	ClientSocket = ServerSocket.accept(1);
 	// 	printf("Un client se connecte avec la socket %d de %s:%d\n",
-	// 		ClientSocket.fd(), inet_ntoa(((struct sockaddr_in*)&ClientSocket.addr())->sin_addr), htons(((struct sockaddr_in*)&ClientSocket.addr())->sin_port));
+	// 		ClientSocket.getFd(), inet_ntoa(((struct sockaddr_in*)&ClientSocket.getSockAddr())->sin_addr), htons(((struct sockaddr_in*)&ClientSocket.getSockAddr())->sin_port));
 	// 	message.clear();
-	// 	printf("Client socket fd is %d\n", ClientSocket.fd());
+	// 	printf("Client socket fd is %d\n", ClientSocket.getFd());
 	// 	size_read = ClientSocket.read(buffer, BUFFER_SIZE + 1);
 	// 	perror("Read status code: ");
 	// 	if (size_read >= 0)
@@ -90,7 +90,7 @@ int main(int argc, char *argv[], char *envp[]) {
 	// 	Webserv::Http::HttpResponse response(currentRessource);
 	// 	ClientSocket.write(response.toString().c_str(), response.toString().length());
 	// 	printf("Chaine envoyée : %s\n", response.toString().c_str());
-	// 	shutdown(ClientSocket.fd(), 2);
+	// 	shutdown(ClientSocket.getFd(), 2);
 	// 	ClientSocket.close();
 	// }
 	// printf("Fermeture de la socket...\n");
