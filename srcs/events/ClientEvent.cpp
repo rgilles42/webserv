@@ -41,7 +41,7 @@ namespace Webserv
 				std::cout << "path: " << path << std::endl;
 				// exit(0);
 				try {
-					this->rcs = new Resource(path, false);
+					this->rcs = new resource_type(path, false);
 					if (this->rcs->isCGI())
 					{
 						this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);

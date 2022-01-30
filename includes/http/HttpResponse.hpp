@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 21:17:50 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:52:15 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <string>				// For string
 
-# include "../Resource.hpp"		// For Ressource
+# include "../utils/Resource.hpp"		// For Resource
 # include "HttpHeaders.hpp"		// For HttpHeaders
 # include "../utils/common.hpp"	// For trim
 
@@ -36,6 +36,7 @@ namespace Webserv {
 				typedef std::string					protocol_type;
 				typedef std::string					status_code_type;
 				typedef Webserv::Http::HttpHeaders	headers_type;
+				typedef Webserv::Utils::Resource	resource_type;
 				typedef std::string					body_type;
 
 			protected:
@@ -49,7 +50,7 @@ namespace Webserv {
 			public:
 				HttpResponse(void);
 				HttpResponse(const HttpResponse& other);
-				HttpResponse(const Resource &ressource);
+				HttpResponse(const resource_type &resource);
 				HttpResponse(const std::string &response);
 				~HttpResponse();
 

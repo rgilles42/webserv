@@ -24,7 +24,7 @@ namespace Webserv {
 			*this = other;
 		}
 
-		HttpResponse::HttpResponse(const Resource &resource) {
+		HttpResponse::HttpResponse(const resource_type& resource) {
 			this->initDefaultHeaders();
 
 			this->headers.set("Content-Type", resource.getContentType());

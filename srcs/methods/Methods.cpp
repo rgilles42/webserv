@@ -6,7 +6,7 @@ namespace Methods {
 
 	Methods::~Methods(void) {}
 
-	int    Methods::exec_method(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/*, Webserv::Http::Server srv*/)
+	int    Methods::exec_method(http_request_type req, resource_type* rcs/*, Webserv::Http::Server srv*/)
 	{
 		if (req.getMethod() == "GET")
 			return getMethod(req, rcs);
@@ -17,7 +17,7 @@ namespace Methods {
 		return -1;
 	}
 /*--------------------------------------------------------------------------------------------------------------*/
-	int   Methods::getMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs/*, Webserv::Http::Server srv*/)
+	int   Methods::getMethod(http_request_type req, resource_type* rcs/*, Webserv::Http::Server srv*/)
 	{
 		(void)req;
 		if (rcs->isCGI())
@@ -32,7 +32,7 @@ namespace Methods {
 		return 0;
 	}
 
-	int    Methods::postMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs)
+	int    Methods::postMethod(http_request_type req, resource_type* rcs)
 	{
 		(void)req;
 		if (rcs->isCGI())
@@ -47,7 +47,7 @@ namespace Methods {
 		return 0;
 	}
 
-	int   Methods::deleteMethod(Webserv::Http::HttpRequest req, Webserv::Resource *rcs)
+	int   Methods::deleteMethod(http_request_type req, resource_type* rcs)
 	{
 		(void)req;
 		//int ret;

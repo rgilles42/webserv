@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 01:06:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:49:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int main(int argc, char *argv[], char *envp[]) {
 	// 	printf("Chaine reçue : %s\n", message.c_str());
 
 	// 	Webserv::Http::HttpRequest request(message);
-	// 	Webserv::Resource currentRessource("./default_pages/index.html");
-	// 	Webserv::Http::HttpResponse response(currentRessource);
+	// 	Webserv::Resource currentResource("./default_pages/index.html");
+	// 	Webserv::Http::HttpResponse response(currentResource);
 	// 	ClientSocket.write(response.toString().c_str(), response.toString().length());
 	// 	printf("Chaine envoyée : %s\n", response.toString().c_str());
 	// 	shutdown(ClientSocket.getFd(), 2);

@@ -2,7 +2,7 @@
 # define CLIENTEVENT_HPP
 
 # include "../utils/Socket.hpp"
-# include "../Resource.hpp"
+# include "../utils/Resource.hpp"
 # include "../http/HttpResponse.hpp"
 # include"../http/Server.hpp"
 # include "../http/HttpRequest.hpp"
@@ -23,7 +23,7 @@ namespace Webserv
 			typedef Webserv::Config						config_type;
 			typedef Webserv::Http::HttpRequestBuilder	http_request_builder_type;
 			typedef Webserv::Http::HttpRequest			http_request_type;
-			typedef Resource							resource_type;
+			typedef Webserv::Utils::Resource			resource_type;
 			typedef CGIEvent							cgi_event_type;
 			typedef Webserv::Http::Server				http_server_type;
 			typedef Webserv::Http::Route				http_route_type;
