@@ -6,20 +6,21 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/30 02:50:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 03:09:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESOURCE_HPP
 # define RESOURCE_HPP
 
-# include <poll.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <string>
-# include <unistd.h>
-# include "MimeTypes.hpp"
+# include <poll.h>			// For poll, pollfd, etc..
+# include <sys/types.h>		// For ??
+# include <sys/stat.h>		// For stat
+# include <fcntl.h>			// For fcntl
+# include <string>			// For std::string
+# include <unistd.h>		// For read, write, close
+
+# include "MimeTypes.hpp"	// For Mimetypes not used for the moment aparently
 
 namespace Webserv {
 

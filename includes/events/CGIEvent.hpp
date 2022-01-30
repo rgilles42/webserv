@@ -1,16 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CGIEvent.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
+/*   Updated: 2022/01/30 03:13:10 by ppaglier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CGIEVENT_HPP
 # define CGIEVENT_HPP
 
-#include "../http/HttpRequest.hpp"
-#include "../http/Server.hpp"
-#include "../utils/Env.hpp"
-#include <poll.h>
-#include <iostream>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
+# include <poll.h>
+# include <iostream>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <errno.h>
+
+# include "../utils/Env.hpp"
+# include "../http/HttpRequest.hpp"
+# include "../http/Server.hpp"
 
 namespace Webserv
 {

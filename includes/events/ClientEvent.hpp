@@ -1,19 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ClientEvent.hpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
+/*   Updated: 2022/01/30 03:12:55 by ppaglier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CLIENTEVENT_HPP
 # define CLIENTEVENT_HPP
 
-# include "../utils/Socket.hpp"
-# include "../utils/Resource.hpp"
-# include "../http/HttpResponse.hpp"
-# include"../http/Server.hpp"
-# include "../http/HttpRequest.hpp"
-# include "../utils/common.hpp"
-# include "../methods/Methods.hpp"
-# include "../core/Config.hpp"
-# include "./CGIEvent.hpp"
-# include "../http/Server.hpp"
-# include "IEvents.hpp"
 # include <string>
 # include <poll.h>
+
+# include "CGIEvent.hpp"
+# include "IEvents.hpp"
+# include "../core/Config.hpp"
+# include "../utils/common.hpp"
+# include "../utils/Socket.hpp"
+# include "../utils/Resource.hpp"
+# include "../http/Server.hpp"
+# include "../http/HttpResponse.hpp"
+# include "../http/HttpRequest.hpp"
+# include "../methods/Methods.hpp"
 
 namespace Webserv
 {

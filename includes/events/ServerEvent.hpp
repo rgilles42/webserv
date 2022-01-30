@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ServerEvent.hpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
+/*   Updated: 2022/01/30 03:13:43 by ppaglier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SERVEREVENT_HPP
 # define SERVEREVENT_HPP
 
 # include <poll.h>
 # include <iostream>
 
-# include "./IEvents.hpp"
-# include "../utils/Socket.hpp"
-# include "./ClientEvent.hpp"
+# include "IEvents.hpp"
+# include "ClientEvent.hpp"
 # include "../core/Core.hpp"
 # include "../core/Config.hpp"
+# include "../utils/Socket.hpp"
 
 namespace Webserv
 {

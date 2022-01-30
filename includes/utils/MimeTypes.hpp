@@ -6,24 +6,24 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 21:09:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 03:05:19 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MIMETYPES_HPP
 # define MIMETYPES_HPP
 
-# include <string>					// For string
-# include <map>						// For map
-# include <vector>					// For vector
-# include <algorithm>				// For find_if, ptr_fun
-# include <cctype>					// For isspace
-# include <iterator>				// For distance
-# include <sstream>					// For stringstream
+# include <string>			// For string
+# include <map>				// For map
+# include <vector>			// For vector
+# include <algorithm>		// For find_if, ptr_fun
+# include <cctype>			// For isspace
+# include <iterator>		// For distance
+# include <sstream>			// For stringstream
 
-# include "../utils/common.hpp"		// For trim
-# include "Block.hpp"				// For Block
-# include "ci_less.hpp"				// For ci_less
+# include "common.hpp"		// For trim
+# include "Block.hpp"		// For Block
+# include "ci_less.hpp"		// For ci_less
 
 # define DEFAULT_MIME_TYPE std::string("application/octet-stream")
 
