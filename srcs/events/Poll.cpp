@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2021/12/03 14:09:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:45:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,18 @@ Poll::Poll(void)
 	this->nb_fds = 0;
 }
 
+Poll::Poll(const Poll& other) {
+	*this = other;
+}
+
 Poll::~Poll(void) {}
 
-Poll	&Poll::operator = (Poll const &old)
+Poll	&Poll::operator = (Poll const &other)
 {
-	this->vect_pollfd = old.vect_pollfd;
-	this->nb_fds = old.nb_fds;
-
+	if (this != &other) {
+		this->vect_pollfd = other.vect_pollfd;
+		this->nb_fds = other.nb_fds;
+	}
 	return *this;
 }
 
@@ -62,12 +67,12 @@ void	Poll::modif_event(int fd, short new_event)
 	this->vect_pollfd.push_back(new_elem);
 }
 
-void Poll::init(std::vector<Socket> sockets_servers)
+void Poll::init(std::vector<socket_type> sockets_servers)
 {
 	size_t	size = sockets_servers.size();
 
 	for (size_t i = 0; i < size; i++)
-		add_fd(sockets_servers[i].fd(), POLLIN);
+		add_fd(sockets_servers[i].getFd(), POLLIN);
 }
 
 void	Poll::exec(void)

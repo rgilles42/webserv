@@ -6,17 +6,34 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:50:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:58:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Config.hpp"
+#include "../../includes/core/Config.hpp"
 
 namespace Webserv {
 
 	Config::Config(void) {}
 
+	Config::Config(const Config& other) {
+		*this = other;
+	}
+
 	Config::~Config(void) {}
+
+	Config&	Config::operator=(const Config& other) {
+		if (this != &other) {
+			this->files = other.files;
+			this->filesMap = other.filesMap;
+			this->lexerMap = other.lexerMap;
+			this->parserMap = other.parserMap;
+			this->blocks = other.blocks;
+			this->servers = other.servers;
+			this->globalMimesTypes = other.globalMimesTypes;
+		}
+		return *this;
+	}
 
 	void	Config::reset(void) {
 		this->files.clear();
@@ -178,7 +195,7 @@ namespace Webserv {
 				this->filesMap[(*filesIt)] = Webserv::Utils::getFileContents((*filesIt));
 			}
 			catch (const std::exception& e) {
-				std::cerr << e.what() << " in " << (*filesIt) << std::endl;
+				throw ConfigException((*filesIt), e.what());
 				return false;
 			}
 
@@ -197,11 +214,7 @@ namespace Webserv {
 				}
 			}
 			catch (const lexer_type::LexerException& e) {
-				std::cerr << e.what() << " in " << (*filesIt);
-				if (e.getToken().getLine() > 0) {
-					std::cerr << ":" << e.getToken().getLine();
-				}
-				std::cerr << std::endl;
+				throw LexerException(e, (*filesIt));
 				return false;
 			}
 
@@ -214,11 +227,7 @@ namespace Webserv {
 				}
 			}
 			catch (const parser_type::ParserException& e) {
-				std::cerr << e.what() << " in " << (*filesIt);
-				if (e.getToken().getLine() > 0) {
-					std::cerr << ":" << e.getToken().getLine();
-				}
-				std::cerr << std::endl;
+				throw ParserException(e, (*filesIt));
 				return false;
 			}
 
@@ -238,7 +247,13 @@ namespace Webserv {
 				if (directive == "server") {
 					server_type newServer;
 					newServer.setMimesTypes(this->globalMimesTypes);
-					if (!newServer.fromBlocks(it->getChilds())) {
+					try {
+						if (!newServer.fromBlocks(it->getChilds())) {
+							return false;
+						}
+					}
+					catch (const std::exception& e) {
+						throw e;
 						return false;
 					}
 					this->servers.push_back(newServer);
@@ -248,7 +263,7 @@ namespace Webserv {
 						return false;
 					}
 				} else {
-					std::cerr << directive_type::UnknownDirectiveException(directive).what() << std::endl;
+					throw ConfigException("", directive_type::UnknownDirectiveException(directive).what());
 					return false;
 				}
 			}
@@ -256,6 +271,36 @@ namespace Webserv {
 		}
 
 		return true;
+	}
+
+	Config::server_vector	&Config::getServers(void) {
+		return this->servers;
+	}
+
+	const Config::server_type&	Config::getServer(const std::string& address, const int& port, const std::string& host) const {
+		server_vector	serversTmp = this->servers;
+		server_vector::iterator it = serversTmp.begin();
+
+		while (it != serversTmp.end()) {
+			if (port != it->getListen().getIntPort()) {
+				it = serversTmp.erase(it);
+				continue ;
+			}
+			// TODO: care of 0.0.0.0 with this (for now it's safe)
+			if (address != it->getListen().getStrAddress()) {
+				it = serversTmp.erase(it);
+				continue ;
+			}
+			if (host == it->getServerName()) {
+				return *it;
+			}
+			// std::cout << it->getListen().getStrAddress() << ":" << it->getListen().getIntPort() << std::endl;
+			it++;
+		}
+		if (!serversTmp.empty()) {
+			return serversTmp.front();
+		}
+		return this->servers.front();
 	}
 
 } // namespace Webserv

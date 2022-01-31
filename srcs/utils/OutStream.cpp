@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 19:49:49 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 16:14:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:07:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ namespace Webserv {
 
 	namespace Utils {
 
-		OutStream::OutStream(void) : out(NULL), mode(OutStream::UNKNOWN) {
-		}
+		OutStream::OutStream(void) : out(NULL), mode(OutStream::UNKNOWN) {}
 
 		OutStream::OutStream(const out_type& stream) : out(NULL), mode(OutStream::UNKNOWN) {
 			this->setStream(stream);

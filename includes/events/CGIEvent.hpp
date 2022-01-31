@@ -1,15 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CGIEvent.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
+/*   Updated: 2022/01/30 03:13:10 by ppaglier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CGIEVENT_HPP
 # define CGIEVENT_HPP
 
-#include "../http/HttpRequest.hpp"
-#include "../http/Server.hpp"
-#include "../utils/Env.hpp"
-#include <poll.h>
-#include <iostream>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+# include <poll.h>
+# include <iostream>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <errno.h>
+
+# include "../utils/Env.hpp"
+# include "../http/HttpRequest.hpp"
+# include "../http/Server.hpp"
 
 namespace Webserv
 {
@@ -26,6 +40,7 @@ namespace Webserv
 			bool				writeEnd;
 			char				**args;
 			bool				CGIEnd;
+			int					status;
 
 			int					wr_size;
 
@@ -37,7 +52,7 @@ namespace Webserv
 			CGIEvent(Webserv::Http::HttpRequest &request);
 			~CGIEvent();
 
-			void	exec(void);
+			int		exec(void);
 
 			void	write_event(void);
 
@@ -45,6 +60,35 @@ namespace Webserv
 
 			bool	writeIsEnd();
 			bool	CGIIsEnd();
+
+			struct CGIPipeFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: pipe failed");
+				}
+			};
+			struct CGINonBlockingFailed: public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Fcntl failed");
+				}
+			};
+			struct CGIOpenFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Can't acces to file");
+				}
+			};
+			struct CGIDupFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Dup failed");
+				}
+			};
 	};
 
 }

@@ -13,8 +13,8 @@
 #ifndef OUTSTREAM_HPP
 # define OUTSTREAM_HPP
 
-# include <iostream>
-# include <fstream>
+# include <iostream>	// For streambuf, ostream
+# include <fstream>		// for ofstream
 
 namespace Webserv {
 

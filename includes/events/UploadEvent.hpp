@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IEvents.hpp                                        :+:      :+:    :+:   */
+/*   UploadEvent.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/01/30 03:11:27 by ppaglier         ###   ########.fr       */
+/*   Created: 2022/01/21 15:06:39 by yun               #+#    #+#             */
+/*   Updated: 2022/01/30 03:14:04 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IEVENTS_HPP
-# define IEVENTS_HPP
+# include <iostream>
+# include <unistd.h>
+# include <string>
 
-namespace Webserv
-{
-	/* Interface use for all events class */
-	class IEvents
+# include "IEvents.hpp"
+
+namespace Webserv {
+
+	class UploadEvent : public IEvents
 	{
 		public:
-			virtual			~IEvents() {}
-			virtual void	read_event() = 0;
-			virtual void	write_event() = 0;
-			virtual short	getEventsFlags() = 0;
-			virtual int		getFD() = 0;
-	};
-}
+			UploadEvent(std::string content, int fd);
+			~UploadEvent();
 
-#endif
+			void    write_event();
+			short getEventsFlags();
+
+		private:
+			int m_fd;
+			std::string m_content;
+			short eventFlag;
+			size_t write_size;
+
+	};
+
+}   // namespace Webserv

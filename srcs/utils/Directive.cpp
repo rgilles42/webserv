@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:17:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:22:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:06:56 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,20 @@ namespace Webserv {
 
 				Directive::Directive(const name_type& name, const argc_type& argc, const context_vector& contexts) : name(name), argc(argc), contexts(contexts) {};
 
+				Directive::Directive(const Directive& other) {
+					*this = other;
+				}
+
 				Directive::~Directive() {};
+
+				Directive&							Directive::operator=(const Directive& other) {
+					if (this != &other) {
+						this->name = other.name;
+						this->argc = other.argc;
+						this->contexts = other.contexts;
+					}
+					return *this;
+				}
 
 				const Directive::name_type&			Directive::getName(void) const {
 					return this->name;
