@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 02:59:23 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 14:34:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ namespace Webserv {
 
 			server_vector	&getServers(void);
 
-			const server_type&	getServer(const std::string& address, const int& port, const std::string& host) const;
+			const server_type	getServer(const std::string& address, const int& port, const std::string& host) const;
 	};
 
 } // namespace Webserv

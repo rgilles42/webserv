@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 02:39:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 14:31:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,8 +214,8 @@ namespace Webserv {
 		}
 		this->logger << std::make_pair(logger_type::DEBUG, "Starting servers: done!") << std::endl;
 		/* END RM */
-		try
-		{
+		// try
+		// {
 			while (true)
 			{
 				setup_events();
@@ -251,11 +251,11 @@ namespace Webserv {
 					}
 				}
 			}
-		}
-		catch (std::exception &e)
-		{
-			this->logger << std::make_pair(logger_type::ERROR, ExecException("exec loop error").what()) << std::endl;
-		}
+		// }
+		// catch (std::exception &e)
+		// {
+		// 	this->logger << std::make_pair(logger_type::ERROR, ExecException("exec loop error" + std::string(e.what())).what()) << std::endl;
+		// }
 	}
 
 	void		Core::add_server_event(const socket_type &sock)	// Add Server Event in EventsManager

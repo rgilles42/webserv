@@ -24,6 +24,10 @@ namespace Webserv
 		size_t	size;
 
 		size = this->sock.read(buffer, 2048);
+		if (size == 0) {
+			this->events_flags = POLLOUT | POLLHUP;
+			return ;
+		}
 		buffer[size] = '\0';
 		request_string += buffer;
 		this->create_req.addMessage(buffer);
@@ -64,7 +68,7 @@ namespace Webserv
 					request++;
 				}
 				requests.clear();
-				this->events_flags = POLLOUT;
+				this->events_flags = POLLOUT | POLLHUP;
 			}
 		}
 	}
@@ -83,8 +87,13 @@ namespace Webserv
 		// this->events_flags = POLLIN;
 
 		int status = 0;
-		if (!this->rcs)
+		if (!this->rcs) {
+			this->events_flags = POLLIN | POLLHUP;
+			Webserv::Http::HttpResponse response;
+			response.status("404 Not Found");
+			this->sock.write(response.toString().c_str(), response.toString().length());
 			return ;
+		}
 		if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
 		{
 			if (this->cgi->writeIsEnd())
@@ -108,7 +117,8 @@ namespace Webserv
 			std::cout<<"delete cgi"<<std::endl;
 			if (this->cgi)
 				delete this->cgi;
-			this->events_flags = POLLIN;
+			this->cgi = NULL;
+			this->events_flags = POLLIN | POLLHUP;
 		}
 		else
 		{

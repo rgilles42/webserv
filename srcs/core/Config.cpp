@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 02:58:45 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 14:34:21 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,7 @@ namespace Webserv {
 		return this->servers;
 	}
 
-	const Config::server_type&	Config::getServer(const std::string& address, const int& port, const std::string& host) const {
+	const Config::server_type	Config::getServer(const std::string& address, const int& port, const std::string& host) const {
 		server_vector	serversTmp = this->servers;
 		server_vector::iterator it = serversTmp.begin();
 
