@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:11:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 13:41:41 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,10 @@ namespace Webserv {
 			return true;
 		}
 
+
+		bool				HttpRequest::has(const std::string& key) const {
+			return this->headers.has(key);
+		}
 
 		const std::string	HttpRequest::get(const std::string& key) const {
 				std::string value = "";
