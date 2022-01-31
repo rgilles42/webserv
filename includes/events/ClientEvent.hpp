@@ -6,13 +6,14 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/01/30 03:12:55 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 13:46:33 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENTEVENT_HPP
 # define CLIENTEVENT_HPP
 
+# include <vector>
 # include <string>
 # include <poll.h>
 
@@ -35,21 +36,28 @@ namespace Webserv
 			typedef Webserv::Config						config_type;
 			typedef Webserv::Http::HttpRequestBuilder	http_request_builder_type;
 			typedef Webserv::Http::HttpRequest			http_request_type;
+			typedef http_request_builder_type::request_list		http_request_list;
 			typedef Webserv::Utils::Resource			resource_type;
 			typedef CGIEvent							cgi_event_type;
 			typedef Webserv::Http::Server				http_server_type;
 			typedef Webserv::Http::Route				http_route_type;
+			typedef Webserv::Http::HttpResponse			https_response_type;
+			typedef std::vector<https_response_type>	response_vector;
 
 		private:
 			http_request_builder_type	create_req;
-			http_request_type			req;
-			resource_type				*rcs;
 			socket_type					sock;
 			socket_type					&srv_sock;
 			config_type					&config;
-			cgi_event_type				*cgi;
-			http_server_type			srv;
 			short						events_flags;
+			response_vector				responses;
+
+
+			resource_type				*rcs;
+			cgi_event_type				*cgi;
+
+			http_request_type			req;
+			http_server_type			srv;
 			http_route_type				route;
 
 			std::string					request_string;

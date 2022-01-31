@@ -31,26 +31,39 @@ namespace Webserv
 		{
 			if (this->create_req.parseRequests() == true)
 			{
-				this->req = this->create_req.getAllRequests()[0];
 				std::cout<<"Request create"<<std::endl;
-				this->srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), this->req.get("Host"));
-				std::cout << "Server was choice:"<< this->srv.getServerName() << std::endl;
-				this->route = getRoute(this->req.getBaseUrl(), this->srv.getRoutes(), this->srv.getDefaultRoute());
-				std::cout << "Route was choice:"<< this->route.getRoot() << std::endl;
-				path = this->route.getRoot() + this->req.getBaseUrl();
-				std::cout << "path: " << path << std::endl;
-				// exit(0);
-				try {
-					this->rcs = new resource_type(path, false);
-					if (this->rcs->isCGI())
-					{
-						this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
-						this->rcs->setFd(this->cgi->getReadFD());
+				http_request_list&	requests = this->create_req.getAllRequests();
+				http_request_list::const_iterator request = requests.begin();
+
+				while (request != requests.end()) {
+					// https_response_type response;
+					// if (!request->has("Host")) {
+					// 	response.status("400 Bad Request");
+					// 	this->responses.push_back(response);
+					// 	request++;
+					// 	continue ;
+					// }
+					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->get("Host"));
+					std::cout << "Server was choice:"<< srv.getServerName() << std::endl;
+					http_route_type	route = getRoute(request->getBaseUrl(), srv.getRoutes(), srv.getDefaultRoute());
+					std::cout << "Route was choice:"<< route.getRoot() << std::endl;
+					path = route.getRoot() + request->getBaseUrl();
+					std::cout << "path: " << path << std::endl;
+					// exit(0);
+					try {
+						this->rcs = new resource_type(path, false);
+						if (this->rcs->isCGI())
+						{
+							this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
+							this->rcs->setFd(this->cgi->getReadFD());
+						}
+					} catch (const std::exception& e) {
+						std::cout << e.what() << std::endl;
 					}
-				} catch (const std::exception& e) {
-					std::cout << e.what() << std::endl;
+		//			Webserv::Methods::Methods::getInstance().exec_method(this->req, this->rcs/*, srv**/);
+					request++;
 				}
-	//			Webserv::Methods::Methods::getInstance().exec_method(this->req, this->rcs/*, this->srv**/);
+				requests.clear();
 				this->events_flags = POLLOUT;
 			}
 		}
@@ -58,8 +71,18 @@ namespace Webserv
 
 	void	ClientEvent::write_event(void)	//TO DO replace
 	{
-		int status = 0;
 		std::cout<<"Client write event"<<std::endl;
+
+		// response_vector::const_iterator response = this->responses.begin();
+
+		// while (response != responses.end()) {
+		// 	this->sock.write(response->toString().c_str(), response->toString().length());
+		// 	response++;
+		// }
+		// responses.clear();
+		// this->events_flags = POLLIN;
+
+		int status = 0;
 		if (!this->rcs)
 			return ;
 		if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())

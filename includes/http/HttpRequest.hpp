@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 21:16:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 13:41:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ namespace Webserv {
 				bool				acceptsCharsets(const std::string);
 				bool				acceptsEncodings(const std::string);
 				bool				acceptsLanguages(const std::string);
+				bool				has(const std::string& key) const;
 				const std::string	get(const std::string& key) const;
 				bool				is(const std::string);
 				const std::string	param(const std::string& key, const std::string& defaultValue = "") const;
