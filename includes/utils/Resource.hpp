@@ -79,6 +79,7 @@ namespace Webserv {
 				void		generateAutoIndex(void);
 
 				path_type		_path;
+				path_type		_cgi_path;
 				bool			_isDir;
 				bool			_isCGI;
 				fd_type			_fd;

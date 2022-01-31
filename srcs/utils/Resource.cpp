@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/30 04:02:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 15:38:31 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ namespace Webserv {
 
 		Resource::Resource(void) {}
 
-		Resource::Resource(const path_type& path, const bool& isCGI/*, const MimeTypes mime*/) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
+		Resource::Resource(const path_type& path, const bool& isCGI/*, const MimeTypes mime, const path_type& cgi_path*/) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
 		{
 			struct stat	s;
 			if (stat(this->_path.c_str(), &s) < 0)
