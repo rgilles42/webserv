@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:12:44 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:32:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 17:58:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,28 @@ namespace Webserv {
 
 		std::string		getFileExtension(const std::string& filename) {
 			return filename.substr(filename.find_last_of(".") + 1);
+		}
+
+		const std::string	getConcatURL(const std::string& url1, const std::string url2) {
+			size_t start;
+			size_t end = 0;
+			std::string newUrl;
+
+			while ((start = url1.find_first_not_of('/', end)) != std::string::npos) {
+				end = url1.find('/', start);
+				if (!newUrl.empty()) {
+					newUrl += "/";
+				}
+				newUrl += url1.substr(start, end - start);
+			}
+
+			end = 0;
+			while ((start = url2.find_first_not_of('/', end)) != std::string::npos) {
+				end = url2.find('/', start);
+				newUrl += "/" + url2.substr(start, end - start);
+			}
+
+			return newUrl;
 		}
 
 	} // namespace Utils

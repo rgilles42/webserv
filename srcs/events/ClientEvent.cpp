@@ -19,7 +19,6 @@ namespace Webserv
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
 		std::cout << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
-		std::string path;
 		char buffer[2048];
 		size_t	size;
 
@@ -50,12 +49,11 @@ namespace Webserv
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->get("Host"));
 					std::cout << "Server was choice:"<< srv.getServerName() << std::endl;
 					http_route_type	route = getRoute(request->getBaseUrl(), srv.getRoutes(), srv.getDefaultRoute());
-					std::cout << "Route was choice:"<< route.getRoot() << std::endl;
-					path = route.getRoot() + request->getBaseUrl();
-					std::cout << "path: " << path << std::endl;
+					std::cout << "Route was choice:"<< route.getRoot() << "|" << route.getCurrentPath() << std::endl;
+					std::cout << "path: " << route.getFilePath(request->getBaseUrl()) << std::endl;
 					// exit(0);
 					try {
-						this->rcs = new resource_type(path, false);
+						this->rcs = new resource_type(route.getFilePath(request->getBaseUrl()), false);
 						if (this->rcs->isCGI())
 						{
 							this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
@@ -160,15 +158,15 @@ namespace Webserv
 			itRoutes++;
 		}
 
-		if (max < paths.size() && !route.getRoutes().empty()) {
-			std::vector<std::string>::const_iterator it = paths.begin() + max;
-			std::string newUrl;
-			while (it != paths.end()) {
-				newUrl += "/" + *it;
-				it++;
-			}
-			route = getRoute(newUrl, route.getRoutes(), route);
-		}
+		// if (max < paths.size() && !route.getRoutes().empty()) {
+		// 	std::vector<std::string>::const_iterator it = paths.begin() + max;
+		// 	std::string newUrl;
+		// 	while (it != paths.end()) {
+		// 		newUrl += "/" + *it;
+		// 		it++;
+		// 	}
+		// 	route = getRoute(newUrl, route.getRoutes(), route);
+		// }
 
 		return route;
 	}

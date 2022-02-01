@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:06:06 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 17:26:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ namespace Webserv {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
 						if (directive == "location") {
 							route_type newRoute;
-							newRoute.fromParent(this->defaultRoute);
+							newRoute.setParent(&this->defaultRoute);
 							try {
 								if (!newRoute.fromBlocks(blockIt->getChilds())) {
 									return false;
@@ -87,6 +87,7 @@ namespace Webserv {
 							if (values.size() >= 2) {
 								key = values[1].getValue();
 							}
+							newRoute.setCurrentPath(key);
 							this->routes[key] = newRoute;
 						} else if (directive == "types") {
 							this->mimesTypes.clear();
