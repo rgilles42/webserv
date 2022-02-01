@@ -17,8 +17,18 @@ namespace Webserv {
 	namespace Utils {
 
 		Args::Args(void) {}
+		Args::Args(const Args& other) {
+			*this = other;
+		}
 
 		Args::~Args() {}
+
+		Args&					Args::operator=(const Args& other) {
+			if (this != &other) {
+				this->argsArray = other.argsArray;
+			}
+			return *this;
+		}
 
 		bool					Args::set(const key_type& key, const value_type& value) {
 			this->argsArray[key] = value;

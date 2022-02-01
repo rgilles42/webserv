@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:46:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:08:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,23 @@ namespace Webserv {
 			this->type = type;
 			this->line = line;
 			this->position = position;
+		}
+
+		Token::Token(const Token& other) {
+			*this = other;
+		}
+
+		Token::~Token() {}
+
+		Token&						Token::operator=(const Token& other) {
+			if (this != &other)
+			{
+				this->value = other.value;
+				this->type = other.type;
+				this->line = other.line;
+				this->position = other.position;
+			}
+			return *this;
 		}
 
 		const Token::token_value&	Token::getValue(void) const {

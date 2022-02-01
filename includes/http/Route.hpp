@@ -6,21 +6,22 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:44:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:18:19 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ROUTE_HPP
 # define ROUTE_HPP
 
-# include <cstddef>
-# include <string>
-# include <vector>
-# include <map>
+# include <iostream>
 
-# include "../utils/Directive.hpp"
-# include "../utils/Block.hpp"
-# include "../utils/MimeTypes.hpp"
+# include <string>						// For string
+# include <vector>						// For vector
+# include <map>							// For map
+
+# include "../utils/Directive.hpp"		// For Directive
+# include "../utils/Block.hpp"			// For Block
+# include "../utils/MimeTypes.hpp"		// For MimeTypes
 
 namespace Webserv {
 
@@ -70,16 +71,31 @@ namespace Webserv {
 
 			public:
 				Route(void);
+				Route(const Route& other);
 				~Route();
+
+				Route&	operator=(const Route &other);
 
 				void	init(void);
 
+				void	fromParent(const Route& parent);
 				bool	fromBlocks(const block_vector& blocks);
 
 				void	setMimesTypes(const mimes_types_type& mimesTypes);
 
+				void	setErrorPages(const error_pages_type& errorPages);
+				void	setClientMaxBodySize(const client_max_body_size_type& clientMaxBodySize);
+				void	setUploadStore(const upload_store_type& uploadStore);
+				void	setReturn(const return_type& _return);
+				void	setAutoindex(const autoindex_type& autoindex);
+				void	setRoot(const root_type& root);
+				void	setIndex(const index_type& index);
+				void	setLimitExcept(const limit_except_type& limitExcept);
+
 				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 
+				const routes_map	&getRoutes(void) const;
+				const root_type	&getRoot(void) const;
 		};
 
 	} // namespace Http

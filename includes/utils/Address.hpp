@@ -6,20 +6,20 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 22:18:20 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 16:22:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 03:06:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ADDRESS_HPP
 # define ADDRESS_HPP
 
-# include <string>				// For string
-# include <cstring>				// For memcpy
-# include <cctype>				// For isblank
+# include <string>		// For string
+# include <cstring>		// For memcpy
+# include <cctype>		// For isblank
 
-# include <stdint.h>			// For int8_t, uint16_t
+# include <stdint.h>	// For int8_t, uint16_t
 
-# include "../utils/common.hpp"	// For SSTR
+# include "common.hpp"	// For SSTR
 
 # define ADDRESS_BITS 16
 
@@ -51,9 +51,11 @@ namespace Webserv {
 
 			public:
 				Address(void);
+				Address(const Address& other);
 				Address(const std::string& address);
-
 				~Address();
+
+				Address&			operator=(const Address& other);
 
 				void				reset(void);
 

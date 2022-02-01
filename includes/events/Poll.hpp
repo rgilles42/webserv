@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2021/12/03 14:09:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 03:13:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@
 #include <poll.h>
 #include <unistd.h>
 #include <vector>
-#include "../Socket.hpp"
+
+#include "../utils/Socket.hpp"
 
 namespace Webserv
 {
-	class Poll
-	{
+	class Poll {
+		public:
+			typedef Webserv::Utils::Socket	socket_type;
+
 		private:
 			std::vector<struct pollfd>		vect_pollfd;
 			size_t							nb_fds;
@@ -33,15 +36,16 @@ namespace Webserv
 		public:
 			/* Constructors */
 			Poll(void);
+			Poll(const Poll& other);
 			~Poll(void);
 
-			Poll	&operator = (Poll const &old);
+			Poll	&operator=(Poll const &other);
 
 			void	add_fd(int fd, short events);
 			void	remove_fd(int fd);
 			void	modif_event(int fd, short new_event);
 
-			void	init(std::vector<Socket> sockets_servers);
+			void	init(std::vector<socket_type> sockets_servers);
 			void	exec(void);
 
 			void	clear(void);

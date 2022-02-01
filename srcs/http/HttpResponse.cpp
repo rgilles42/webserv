@@ -20,7 +20,11 @@ namespace Webserv {
 			this->initDefaultHeaders();
 		}
 
-		HttpResponse::HttpResponse(const Resource& resource) {
+		HttpResponse::HttpResponse(const HttpResponse& other) {
+			*this = other;
+		}
+
+		HttpResponse::HttpResponse(const resource_type& resource) {
 			this->initDefaultHeaders();
 
 			this->headers.set("Content-Type", resource.getContentType());
@@ -28,15 +32,20 @@ namespace Webserv {
 			this->body = resource.getContent();
 		}
 
-		HttpResponse::HttpResponse(const HttpResponse& x) {
-			this->protocol = x.protocol;
-			this->statusCode = x.statusCode;
-			this->headers = x.headers;
-			this->body = x.body;
-		}
-
 		HttpResponse::HttpResponse(const std::string& response) {
 			this->fromString(response);
+		}
+
+		HttpResponse::~HttpResponse() {}
+
+		HttpResponse&		HttpResponse::operator=(const HttpResponse& other) {
+			if (this != &other) {
+			this->protocol = other.protocol;
+			this->statusCode = other.statusCode;
+			this->headers = other.headers;
+			this->body = other.body;
+			}
+			return *this;
 		}
 
 		void		HttpResponse::initDefaultHeaders() {

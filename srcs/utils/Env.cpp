@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:12:59 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 15:03:55 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:07:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,18 @@ namespace Webserv {
 
 		Env::Env(void) {}
 
+		Env::Env(const Env& other) {
+			*this = other;
+		}
+
 		Env::~Env() {}
+
+		Env&		Env::operator=(const Env& other) {
+			if (this != &other) {
+				this->envArray = other.envArray;
+			}
+			return *this;
+		}
 
 		bool		Env::isKeyValid(const key_type& key) {
 			if (key.empty() || std::isdigit(key[0])) {

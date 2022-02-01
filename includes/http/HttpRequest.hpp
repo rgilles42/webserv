@@ -6,14 +6,12 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 18:50:24 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 13:41:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPREQUEST_HPP
 # define HTTPREQUEST_HPP
-
-# include <iostream>
 
 # include <string>				// For string
 # include <map>					// For map
@@ -55,8 +53,11 @@ namespace Webserv {
 
 			public:
 				HttpRequest(void);
-				HttpRequest(const HttpRequest& x);
+				HttpRequest(const HttpRequest& other);
 				HttpRequest(const std::string& request);
+				~HttpRequest();
+
+				HttpRequest&		operator=(const HttpRequest& other);
 
 				void				setMethod(const method_type& method);
 				void				setPath(const path_type& path);
@@ -91,6 +92,7 @@ namespace Webserv {
 				bool				acceptsCharsets(const std::string);
 				bool				acceptsEncodings(const std::string);
 				bool				acceptsLanguages(const std::string);
+				bool				has(const std::string& key) const;
 				const std::string	get(const std::string& key) const;
 				bool				is(const std::string);
 				const std::string	param(const std::string& key, const std::string& defaultValue = "") const;
@@ -119,10 +121,13 @@ namespace Webserv {
 
 			public:
 				HttpRequestBuilder(void);
-				HttpRequestBuilder(const HttpRequestBuilder& x);
+				HttpRequestBuilder(const HttpRequestBuilder& other);
+				~HttpRequestBuilder();
 
-				buffer_type&	getBuffer(void);
-				request_list&	getAllRequests(void);
+				HttpRequestBuilder&	operator=(const HttpRequestBuilder& other);
+
+				buffer_type&		getBuffer(void);
+				request_list&		getAllRequests(void);
 
 				void				addMessage(const message_type& message);
 

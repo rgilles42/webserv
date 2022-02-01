@@ -6,24 +6,23 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 15:55:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:18:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include <cstddef>
-# include <string>
-# include <vector>
-# include <map>
-# include <algorithm>
+# include <iostream>
 
-# include "Route.hpp"
+# include <string>						// For string
+# include <vector>						// For vector
+# include <map>							// For map
 
-# include "../utils/Directive.hpp"
-# include "../utils/Block.hpp"
-# include "../utils/MimeTypes.hpp"
+# include "Route.hpp"					// For Route
+# include "../utils/Directive.hpp"		// For Directive
+# include "../utils/Block.hpp"			// For Block
+# include "../utils/MimeTypes.hpp"		// For MimeTypes
 
 namespace Webserv {
 
@@ -73,11 +72,15 @@ namespace Webserv {
 				root_type			root;
 				index_type			index;
 
+				route_type			defaultRoute;
 				routes_map			routes;
 
 			public:
 				Server(void);
+				Server(const Server& other);
 				~Server();
+
+				Server&	operator=(const Server &other);
 
 				void	init(void);
 
@@ -89,6 +92,8 @@ namespace Webserv {
 
 				const name_type	&getServerName(void) const;
 				const listen_type	&getListen(void) const;
+				const route_type	&getDefaultRoute(void) const;
+				const routes_map	&getRoutes(void) const;
 		};
 
 	} // namespace Http

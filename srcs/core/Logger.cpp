@@ -6,11 +6,11 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 16:50:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/14 17:38:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/30 02:58:50 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Logger.hpp"
+#include "../../includes/core/Logger.hpp"
 
 namespace Webserv {
 
@@ -22,7 +22,23 @@ namespace Webserv {
 		this->fillMap();
 	}
 
+	Logger::Logger(const Logger& other) {
+		*this = other;
+	}
+
 	Logger::~Logger() {}
+
+	Logger&	Logger::operator=(const Logger& other) {
+		if (this != &other) {
+			this->prefix = other.prefix;
+			this->dtFormat = other.dtFormat;
+			this->mainProcessPid = other.mainProcessPid;
+			this->logMap = other.logMap;
+			this->cout = other.cout;
+			this->cerr = other.cerr;
+		}
+		return *this;
+	}
 
 	void							Logger::fillMap(void) {
 		this->logMap[Logger::UNKNOWN] = this->cout;

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 16:19:25 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/10 15:06:26 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:21:43 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ namespace Webserv {
 
 			public:
 				Env(void);
+				Env(const Env& other);
 				virtual ~Env();
 
+				Env&				operator=(const Env& other);
 
 				bool				isKeyValid(const key_type& key);
 				void				set(const key_type& key, const value_type& value = "");

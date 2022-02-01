@@ -1,36 +1,95 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CGIEvent.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
+/*   Updated: 2022/01/30 03:13:10 by ppaglier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CGIEVENT_HPP
 # define CGIEVENT_HPP
 
-#include "IEvents.hpp"
-#include "../Resource.hpp"
-#include "../http/HttpRequest.hpp"
-#include "../http/Server.hpp"
+# include <poll.h>
+# include <iostream>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <errno.h>
+
+# include "../utils/Env.hpp"
+# include "../http/HttpRequest.hpp"
+# include "../http/Server.hpp"
 
 namespace Webserv
 {
 
-    class CGIEvent : public IEvents
-    {
-        private:
-            Resource		&rcs;
-            int				fd_in[2];   //use to write request body
-            Http::HttpRequest   m_req;
-            Http::Server	srv;
-            int				fd_out[2];  //use to redirect cgi output
-            short			flags_events;
-			int				wr_size;
+	class CGIEvent
+	{
+		private:
+			int					fd_in[2];   //use to write request body
+			Http::HttpRequest	req;
+			Http::Server		srv;
+			int					fd_out[2];  //use to redirect cgi output
+			Webserv::Utils::Env	env;
+			pid_t				pid;
+			bool				writeEnd;
+			char				**args;
+			bool				CGIEnd;
+			int					status;
 
-            void        close_pipefd(void);
-            void        exec(void);
+			int					wr_size;
 
-        public:
-            CGIEvent(Resource &ressource, std::string req_method,int fd_pipe[2]);
-            virtual ~CGIEvent();
+			void	close_pipefd(void);
+			void	init_env();
+			void	init_args();
 
-            void    write_event(void);
-            void    read_event();
-            short   getEventsFlags(void);
-    };
+		public:
+			CGIEvent(Webserv::Http::HttpRequest &request);
+			~CGIEvent();
+
+			int		exec(void);
+
+			void	write_event(void);
+
+			int		getReadFD(void);
+
+			bool	writeIsEnd();
+			bool	CGIIsEnd();
+
+			struct CGIPipeFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: pipe failed");
+				}
+			};
+			struct CGINonBlockingFailed: public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Fcntl failed");
+				}
+			};
+			struct CGIOpenFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Can't acces to file");
+				}
+			};
+			struct CGIDupFailed : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return("CGI: Dup failed");
+				}
+			};
+	};
 
 }
 

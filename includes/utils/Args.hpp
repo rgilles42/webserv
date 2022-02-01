@@ -76,7 +76,10 @@ namespace Webserv {
 
 			public:
 				Args(void);
+				Args(const Args& other);
 				virtual ~Args();
+
+				Args&				operator=(const Args& other);
 
 				bool				set(const key_type& key, const value_type& value = "");
 				bool				append(const key_type& key, const value_type& value);

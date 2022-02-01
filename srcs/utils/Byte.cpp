@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 16:14:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:07:26 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:06:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,20 @@ namespace Webserv {
 		Byte::Byte(const value_type& value, const unit_type& unit) {
 			this->value = value;
 			this->unit = unit;
+		}
+
+		Byte::Byte(const Byte& other) {
+			*this = other;
+		}
+
+		Byte::~Byte() {}
+
+		Byte&					Byte::operator=(const Byte& other) {
+			if (this != &other) {
+				this->value = other.value;
+				this->unit = other.unit;
+			}
+			return *this;
 		}
 
 		void					Byte::setValue(const value_type& value) {

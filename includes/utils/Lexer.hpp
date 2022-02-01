@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:35:56 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 22:09:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <sstream>			// For stringstream
 # include <sys/types.h>		// For ssize_t
 
-# include <iostream>		// For cout, endl TODO: Remove
+// # include <iostream>		// For cout, endl TODO: Remove
 
 # include "Token.hpp"		// For Token
 
@@ -112,7 +112,11 @@ namespace Webserv {
 
 			public:
 				Lexer(void);
+				Lexer(const Lexer& other);
 				Lexer(const std::string& str);
+				~Lexer();
+
+				Lexer&				operator=(const Lexer& other);
 
 				const token_vector	&tokenize(const std::string& str);
 
@@ -120,11 +124,12 @@ namespace Webserv {
 
 				const token_vector	&getTokens(void) const;
 
-				void				drawTokens(void) const;
 
 				bool				checkTokens(void) const;
 
-				static void			drawTokens(const token_vector& tokens);
+				// TODO: Remove
+				// void				drawTokens(void) const;
+				// static void			drawTokens(const token_vector& tokens);
 
 		};
 

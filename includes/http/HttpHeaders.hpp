@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/22 08:30:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/29 21:15:18 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ namespace Webserv {
 				header_type	headers;
 
 			public:
+				HttpHeaders(void);
+				HttpHeaders(const HttpHeaders& other);
+				~HttpHeaders();
+
+				HttpHeaders&		operator=(const HttpHeaders& other);
+
 				const header_type&	getHeaders(void) const;
 
 				// Headers Methods
@@ -75,7 +81,10 @@ namespace Webserv {
 
 			public:
 				HttpHeadersBuilder(void);
-				HttpHeadersBuilder(const HttpHeadersBuilder& x);
+				HttpHeadersBuilder(const HttpHeadersBuilder& other);
+				~HttpHeadersBuilder();
+
+				HttpHeadersBuilder&		operator=(const HttpHeadersBuilder& other);
 
 				const buffer_type&	getBuffer(void) const;
 				const headers_type&	getHeaders(void) const;

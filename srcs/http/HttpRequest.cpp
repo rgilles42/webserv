@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/11 19:14:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/01/31 13:41:41 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,26 @@ namespace Webserv {
 
 		HttpRequest::HttpRequest(void) {}
 
-		HttpRequest::HttpRequest(const HttpRequest& x) {
-			this->method = x.method;
-			this->fullPath = x.fullPath;
-			this->protocol = x.protocol;
-			this->headers = x.headers;
-			this->body = x.body;
+		HttpRequest::HttpRequest(const HttpRequest& other) {
+			*this = other;
 		}
 
 		HttpRequest::HttpRequest(const std::string& response) {
 			this->fromString(response);
 		}
 
+		HttpRequest::~HttpRequest() {}
 
+		HttpRequest&		HttpRequest::operator=(const HttpRequest& other) {
+			if (this != &other) {
+				this->method = other.method;
+				this->fullPath = other.fullPath;
+				this->protocol = other.protocol;
+				this->headers = other.headers;
+				this->body = other.body;
+			}
+			return *this;
+		}
 
 		void				HttpRequest::setMethod(const method_type& method) {
 			this->method = method;
@@ -238,6 +245,10 @@ namespace Webserv {
 		}
 
 
+		bool				HttpRequest::has(const std::string& key) const {
+			return this->headers.has(key);
+		}
+
 		const std::string	HttpRequest::get(const std::string& key) const {
 				std::string value = "";
 			if (this->headers.has(key)) {
@@ -305,10 +316,21 @@ namespace Webserv {
 
 
 		HttpRequestBuilder::HttpRequestBuilder(void) {}
-		HttpRequestBuilder::HttpRequestBuilder(const HttpRequestBuilder& x) {
-			this->buffer = x.buffer;
-			this->requests = x.requests;
+
+		HttpRequestBuilder::HttpRequestBuilder(const HttpRequestBuilder& other) {
+			*this = other;
 		}
+
+		HttpRequestBuilder::~HttpRequestBuilder() {}
+
+		HttpRequestBuilder&					HttpRequestBuilder::operator=(const HttpRequestBuilder& other) {
+			if (this != &other) {
+				this->buffer = other.buffer;
+				this->requests = other.requests;
+			}
+			return *this;
+		}
+
 
 		HttpRequestBuilder::buffer_type&	HttpRequestBuilder::getBuffer(void) {
 			return this->buffer;
@@ -440,7 +462,7 @@ namespace Webserv {
 							requests.push_back(request);
 							pos += chunkLen;
 							lastPos = pos;
-							break ;
+							continue ;
 						}
 					}
 				} else if (headers.has("Content-Lenght")) {
@@ -455,11 +477,11 @@ namespace Webserv {
 					requests.push_back(request);
 					pos += contentLen;
 					lastPos = pos;
-					break ;
+					continue ;
 				} else {
 					requests.push_back(request);
 					lastPos = pos;
-					break ;
+					continue ;
 				}
 			}
 			return lastPos;
