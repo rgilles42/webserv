@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 17:58:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:21:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ namespace Webserv {
 		Route&	Route::operator=(const Route &other)
 		{
 			if (this != &other) {
+				this->currentPath = other.currentPath;
 				this->parent = other.parent;
 				this->mimesTypes = other.mimesTypes;
 				this->error_pages = other.error_pages;
@@ -45,6 +46,8 @@ namespace Webserv {
 		}
 
 		void	Route::init(void) {
+			this->currentPath.clear();
+
 			this->parent = NULL;
 
 			this->mimesTypes.clear();

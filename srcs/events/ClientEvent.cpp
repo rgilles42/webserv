@@ -49,7 +49,7 @@ namespace Webserv
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->get("Host"));
 					std::cout << "Server was choice:"<< srv.getServerName() << std::endl;
 					http_route_type	route = getRoute(request->getBaseUrl(), srv.getRoutes(), srv.getDefaultRoute());
-					std::cout << "Route was choice:"<< route.getRoot() << "|" << route.getCurrentPath() << std::endl;
+					std::cout << "Route was choice:"<< route.getRoot() << "|" << route.getCurrentPath() << "|" << std::endl;
 					std::cout << "path: " << route.getFilePath(request->getBaseUrl()) << std::endl;
 					// exit(0);
 					try {
@@ -158,15 +158,15 @@ namespace Webserv
 			itRoutes++;
 		}
 
-		// if (max < paths.size() && !route.getRoutes().empty()) {
-		// 	std::vector<std::string>::const_iterator it = paths.begin() + max;
-		// 	std::string newUrl;
-		// 	while (it != paths.end()) {
-		// 		newUrl += "/" + *it;
-		// 		it++;
-		// 	}
-		// 	route = getRoute(newUrl, route.getRoutes(), route);
-		// }
+		if (max != 0 && max < paths.size() && !route.getRoutes().empty()) {
+			std::vector<std::string>::const_iterator it = paths.begin() + max;
+			std::string newUrl;
+			while (it != paths.end()) {
+				newUrl += "/" + *it;
+				it++;
+			}
+			route = getRoute(newUrl, route.getRoutes(), route);
+		}
 
 		return route;
 	}
