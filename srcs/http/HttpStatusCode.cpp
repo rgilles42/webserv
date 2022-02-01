@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 01:17:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:45:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 19:00:17 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ namespace Webserv {
 
 		bool						HttpStatusCode::isError(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
-			return (HttpStatusCode::redirection_offset <= newStatusCode && newStatusCode < HttpStatusCode::misc_error_offset);
+			return (HttpStatusCode::client_error_offset <= newStatusCode && newStatusCode < HttpStatusCode::misc_error_offset);
 		}
 
 	} // namespace Http

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 18:21:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 19:06:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ namespace Webserv {
 
 			this->mimesTypes.clear();
 
-			this->error_pages.clear();
+			this->error_pages = directive_type::getDefaultErrorPages();
+
 			this->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
 			this->upload_store = DEFAULT_UPLOAD_STORE;
 
@@ -201,48 +202,65 @@ namespace Webserv {
 		}
 
 
-		const  Route::path_type&					Route::getCurrentPath(void) const {
+		const Route::path_type&					Route::getCurrentPath(void) const {
 			return this->currentPath;
 		}
 
-		const Route*								Route::getParent(void) const {
+		const Route*							Route::getParent(void) const {
 			return this->parent;
 		}
 
-		const  Route::mimes_types_type&				Route::getMimesTypes(void) const {
+		const Route::mimes_types_type&			Route::getMimesTypes(void) const {
 			return this->mimesTypes;
 		}
 
-		const  Route::error_pages_type&				Route::getErrorPages(void) const {
+		const Route::error_pages_type&			Route::getErrorPages(void) const {
 			return this->error_pages;
 		}
 
-		const  Route::client_max_body_size_type&	Route::getClientMaxBodySize(void) const {
+		const Route::client_max_body_size_type&	Route::getClientMaxBodySize(void) const {
 			return this->client_max_body_size;
 		}
 
-		const  Route::upload_store_type&			Route::getUploadStore(void) const {
+		const Route::upload_store_type&			Route::getUploadStore(void) const {
 			return this->upload_store;
 		}
 
-		const  Route::return_type&					Route::getReturn(void) const {
+		const Route::return_type&				Route::getReturn(void) const {
 			return this->_return;
 		}
 
-		const  Route::autoindex_type&				Route::getAutoindex(void) const {
+		const Route::autoindex_type&			Route::getAutoindex(void) const {
 			return this->autoindex;
 		}
 
-		const  Route::root_type&					Route::getRoot(void) const {
+		const Route::root_type&					Route::getRoot(void) const {
 			return this->root;
 		}
 
-		const  Route::index_type&					Route::getIndex(void) const {
+		const Route::index_type&				Route::getIndex(void) const {
 			return this->index;
 		}
 
-		const  Route::limit_except_type&			Route::getLimitExcept(void) const {
+		const Route::limit_except_type&			Route::getLimitExcept(void) const {
 			return this->limit_except;
+		}
+
+		const Route::error_pages_pair			Route::getErrorPage(const error_pages_type::key_type& statusCode) {
+			error_pages_pair errorPage;
+			if (this->error_pages.count(statusCode) > 0) {
+				return *(this->error_pages.find(statusCode));
+			}
+			if (directive_type::http_status_code_type::isClientError(statusCode)) {
+				if (this->error_pages.count(directive_type::http_status_code_type::client_error_bad_request) > 0) {
+					return *(this->error_pages.find(directive_type::http_status_code_type::client_error_bad_request));
+				}
+			} else if (directive_type::http_status_code_type::isServerError(statusCode)) {
+				if (this->error_pages.count(directive_type::http_status_code_type::server_error_internal_server_error) > 0) {
+					return *(this->error_pages.find(directive_type::http_status_code_type::server_error_internal_server_error));
+				}
+			}
+			return error_pages_pair(directive_type::http_status_code_type::unknown, "");
 		}
 
 		const std::string							Route::getFilePath(const std::string& url) {

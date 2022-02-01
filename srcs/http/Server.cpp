@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 17:26:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 19:05:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ namespace Webserv {
 			this->serverName = DEFAULT_SERVER_NAME;
 			this->listen = DEFAULT_LISTEN;
 
-			this->error_pages.clear();
+			this->error_pages = directive_type::getDefaultErrorPages();
 			this->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
 			this->upload_store = DEFAULT_UPLOAD_STORE;
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:17:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:06:56 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:39:20 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,21 @@ namespace Webserv {
 						return false;
 					}
 					return true;
+				}
+
+				const Directive::error_pages_type	Directive::getDefaultErrorPages(void) {
+					error_pages_type	errorPages;
+
+					errorPages[http_status_code_type::client_error_bad_request] = "./default_pages/400.html";
+					errorPages[http_status_code_type::client_error_unauthorized] = "./default_pages/401.html";
+					errorPages[http_status_code_type::client_error_forbidden] = "./default_pages/403.html";
+					errorPages[http_status_code_type::client_error_not_found] = "./default_pages/404.html";
+					errorPages[http_status_code_type::server_error_internal_server_error] = "./default_pages/500.html";
+					errorPages[http_status_code_type::server_error_not_implemented] = "./default_pages/501.html";
+					errorPages[http_status_code_type::server_error_bad_gateway] = "./default_pages/502.html";
+					errorPages[http_status_code_type::server_error_service_unavailable] = "./default_pages/503.html";
+
+					return errorPages;
 				}
 
 				// Parsing with static methods
