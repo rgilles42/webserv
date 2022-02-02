@@ -88,7 +88,7 @@ namespace Webserv
 		if (!this->rcs) {
 			this->events_flags = POLLIN | POLLHUP;
 			Webserv::Http::HttpResponse response;
-			response.status(Webserv::Http::HttpResponse::status_code_type::client_error_not_found);
+			response.setStatusCode(Webserv::Http::HttpResponse::status_code_type::client_error_not_found);
 			this->sock.write(response.toString().c_str(), response.toString().length());
 			return ;
 		}
@@ -106,7 +106,8 @@ namespace Webserv
 		}
 		if (this->rcs->loadResource())
 		{
-			Webserv::Http::HttpResponse response(*this->rcs);
+			Webserv::Http::HttpResponse response;
+			response.setResource(*this->rcs);
 			this->sock.write(response.toString().c_str(), response.toString().length());
 			std::cout<<"delete rcs"<<std::endl;
 			if (this->rcs)

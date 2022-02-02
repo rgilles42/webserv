@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 16:38:05 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:19:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,34 +52,29 @@ namespace Webserv {
 			public:
 				HttpResponse(void);
 				HttpResponse(const HttpResponse& other);
-				HttpResponse(const resource_type &resource);
-				HttpResponse(const std::string &response);
 				~HttpResponse();
 
-				HttpResponse&		operator=(const HttpResponse& other);
+				HttpResponse&	operator=(const HttpResponse& other);
 
-				// response Methods
-				void				append(const std::string& key, const std::string& value);
-				void				attachment(const std::string& filename = "");
-				void				cookie(const std::string& name, const std::string& value, const std::string& options = "");
-				void				clearCookie(const std::string& name, const std::string& options = "");
-				void				download(const std::string& path, const std::string& filename = "", const std::string& options = "");
-				const std::string	get(const std::string& key) const;
-				void				links(const std::string& next = "", const std::string& last = "");
-				void				location(const std::string& path);
-				void				redirect(const std::string& path, const status_code_type& statusCode = status_code_type::redirection_found);
-				void				send(const std::string& body = "");
-				void				sendFile(const std::string& path, const std::string& options = "");
-				void				sendStatus(const status_code_type& statusCode);
-				void				set(const std::string& key, const std::string& value);
-				void				status(const status_code_type& statusCode);
-				void				type(const std::string& contentType);
+				// Headers Methods
+				void			appendHeader(const headers_type::key_type& key, const headers_type::value_type& value);
+				void			setHeader(const headers_type::key_type& key, const headers_type::value_type& value);
+				const headers_type::value_type	getHeader(const headers_type::key_type& key) const;
 
+				// Response Methods
+
+				void			setStatusCode(const status_code_type& statusCode);
+				void			setProtocol(const protocol_type& protocol);
+				void			setBody(const body_type& body);
+
+				void			setRedirect(const std::string& path, const status_code_type& statusCode = status_code_type::redirection_found);
+				void			setResource(const resource_type& resource, const status_code_type& statusCode = status_code_type::success_ok);
 
 				// Utils Methods
-				void		fromString(const std::string& response);
 				std::string	toString(void) const;
 
+				// TODO: Remove because of deprecated
+				void		fromString(const std::string& response);
 		};
 
 	} // namespace Utils
