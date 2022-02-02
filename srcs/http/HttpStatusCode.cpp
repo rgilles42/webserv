@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 01:17:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 16:20:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:59:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ namespace Webserv {
 			return this->statusCode;
 		}
 
-		const std::string						HttpStatusCode::getStatusCodeString(void) const {
+		const std::string						HttpStatusCode::toString(void) const {
 			return HttpStatusCode::getStatusCodeString(this->statusCode);
 		}
 
@@ -189,7 +189,7 @@ namespace Webserv {
 			return HttpStatusCode::unknown;
 		}
 
-		std::string					HttpStatusCode::getStatusCodeString(const HttpStatusCode::StatusCode& statusCode) {
+		const std::string			HttpStatusCode::getStatusCodeString(const HttpStatusCode::StatusCode& statusCode) {
 			if (HttpStatusCode::HttpStatusCodeStrings.count(statusCode) <= 0) {
 				return HttpStatusCode::HttpStatusCodeStrings.at(HttpStatusCode::unknown);
 			}

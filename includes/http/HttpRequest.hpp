@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 17:50:22 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 18:19:50 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <map>					// For map
 # include <vector>				// For vector
 
+# include "HttpMethod.hpp"		// For HttpMethod
+# include "HttpVersion.hpp"		// For HttpVersion
 # include "HttpHeaders.hpp"		// For HttpHeaders
 # include "../utils/common.hpp"	// For trim
 
@@ -34,9 +36,9 @@ namespace Webserv {
 
 		class HttpRequest {
 			public:
-				typedef std::string method_type;
+				typedef Webserv::Http::HttpMethod	method_type;
 				typedef std::string path_type;
-				typedef std::string protocol_type;
+				typedef Webserv::Http::HttpVersion	protocol_type;
 				typedef Webserv::Http::HttpHeaders	headers_type;
 				typedef std::string body_type;
 

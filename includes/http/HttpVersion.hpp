@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 00:38:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 16:31:20 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 18:16:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ namespace Webserv {
 				};
 
 			protected:
-				Version	version;
+				Version		version;
+				std::string	versionString;
 
 			public:
 				HttpVersion(void);
@@ -49,7 +50,7 @@ namespace Webserv {
 				HttpVersion&		operator=(const std::string& versionString);
 
 				const HttpVersion::Version&	getVersion(void) const;
-				const std::string			getVersionString(void) const;
+				const std::string&			toString(void) const;
 
 				void						setVersion(const int& version);
 				void						setVersion(const std::string& versionString);

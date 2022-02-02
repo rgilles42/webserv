@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 17:50:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 18:25:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ namespace Webserv {
 		const std::string	HttpRequest::toString(void) const {
 			std::string	formatedRequest = "";
 
-			formatedRequest += this->method + " " + this->fullPath + " " + this->protocol + CRLF;
+			formatedRequest += this->method.toString() + " " + this->fullPath + " " + this->protocol.toString() + CRLF;
 			formatedRequest += this->headers.toString() + CRLF;
 			formatedRequest += this->body;
 			return formatedRequest;

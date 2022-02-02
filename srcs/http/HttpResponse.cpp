@@ -125,7 +125,7 @@ namespace Webserv {
 		std::string	HttpResponse::toString(void) const {
 			std::string	formatedResponse = "";
 
-			formatedResponse += this->protocol.getVersionString() + " " + this->statusCode.getStatusCodeString() + CRLF;
+			formatedResponse += this->protocol.toString() + " " + this->statusCode.toString() + CRLF;
 			formatedResponse += this->headers.toString() + CRLF;
 			formatedResponse += this->body;
 			return formatedResponse;

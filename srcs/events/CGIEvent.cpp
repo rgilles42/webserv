@@ -97,7 +97,7 @@ namespace Webserv
 
 		this->env.set("SERVER_PROTOCOL", "HTTP/1.1");
 //        this->env.set("SERVER_PORT", srv.port());
-        this->env.set("REQUEST_METHODS",this->req.getMethod().c_str());
+        this->env.set("REQUEST_METHODS",this->req.getMethod().toString());
 //        this->env.set("PATH_INFO", this->request.path_info());
 		this->env.set("PATH_TRANSLATED", ""); //? Need more infos
 //		this->env.set("SCRIPT_NAME", this->location_cgi.c_str());
@@ -163,7 +163,7 @@ namespace Webserv
 			ret = execve(this->args[0], this->args, envp);
 			if(ret < 0)
 				exit(ret);
-			exit(0);			
+			exit(0);
 		}
 		else
 		{

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 00:38:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 16:22:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:59:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ namespace Webserv {
 				HttpStatusCode&		operator=(const std::string& statusCodeString);
 
 				const StatusCode&	getStatusCode(void) const;
-				const std::string	getStatusCodeString(void) const;
+				const std::string	toString(void) const;
 
 				void				setStatusCode(const int& statusCode);
 				void				setStatusCode(const std::string& statusCodeString);
@@ -141,7 +141,7 @@ namespace Webserv {
 				static HttpStatusCode::StatusCode	getStatusCode(const int& statusCode);
 				static HttpStatusCode::StatusCode	getStatusCode(const std::string& statusCodeString);
 
-				static std::string	getStatusCodeString(const HttpStatusCode::StatusCode& statusCode);
+				static const std::string			getStatusCodeString(const HttpStatusCode::StatusCode& statusCode);
 
 				static bool			isInformation(const HttpStatusCode::StatusCode& statusCode);
 				static bool			isSuccess(const HttpStatusCode::StatusCode& statusCode);
