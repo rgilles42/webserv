@@ -8,11 +8,11 @@ namespace Methods {
 
 	int    Methods::exec_method(http_request_type req, resource_type* rcs/*, Webserv::Http::Server srv*/)
 	{
-		if (req.getMethod() == "GET")
+		if (req.getMethod().getMethod() == http_request_type::method_type::GET)
 			return getMethod(req, rcs);
-		else if (req.getMethod() == "POST")
+		else if (req.getMethod().getMethod() == http_request_type::method_type::POST)
 			return postMethod(req, rcs);
-		else if (req.getMethod() == "DELETE")
+		else if (req.getMethod().getMethod() == http_request_type::method_type::DELETE)
 			return deleteMethod(req, rcs);
 		return -1;
 	}

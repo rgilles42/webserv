@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/01/31 13:46:33 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 20:43:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ namespace Webserv
 			typedef CGIEvent							cgi_event_type;
 			typedef Webserv::Http::Server				http_server_type;
 			typedef Webserv::Http::Route				http_route_type;
-			typedef Webserv::Http::HttpResponse			https_response_type;
-			typedef std::vector<https_response_type>	response_vector;
+			typedef Webserv::Http::HttpResponse			http_response_type;
+			typedef std::vector<http_response_type>		response_vector;
 
 		private:
 			http_request_builder_type	create_req;

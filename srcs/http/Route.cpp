@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:06:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 19:06:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ namespace Webserv {
 		Route&	Route::operator=(const Route &other)
 		{
 			if (this != &other) {
+				this->currentPath = other.currentPath;
+				this->parent = other.parent;
 				this->mimesTypes = other.mimesTypes;
 				this->error_pages = other.error_pages;
 				this->client_max_body_size = other.client_max_body_size;
@@ -44,9 +46,14 @@ namespace Webserv {
 		}
 
 		void	Route::init(void) {
+			this->currentPath.clear();
+
+			this->parent = NULL;
+
 			this->mimesTypes.clear();
 
-			this->error_pages.clear();
+			this->error_pages = directive_type::getDefaultErrorPages();
+
 			this->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
 			this->upload_store = DEFAULT_UPLOAD_STORE;
 
@@ -60,16 +67,19 @@ namespace Webserv {
 			this->routes.clear();
 		}
 
-		void	Route::fromParent(const Route& parent) {
-			this->mimesTypes = parent.mimesTypes;
-			this->error_pages = parent.error_pages;
-			this->client_max_body_size = parent.client_max_body_size;
-			this->upload_store = parent.upload_store;
-			this->_return = parent._return;
-			this->autoindex = parent.autoindex;
-			this->root = parent.root; // maybe don't do that
-			this->index = parent.index;
-			this->limit_except = parent.limit_except;
+		void	Route::setParent(Route* parent) {
+			this->parent = parent;
+			if (this->parent) {
+				this->mimesTypes = this->parent->mimesTypes;
+				this->error_pages = this->parent->error_pages;
+				this->client_max_body_size = this->parent->client_max_body_size;
+				this->upload_store = this->parent->upload_store;
+				this->_return = this->parent->_return;
+				this->autoindex = this->parent->autoindex;
+				this->root = this->parent->root;
+				this->index = this->parent->index;
+				this->limit_except = this->parent->limit_except;
+			}
 		}
 
 		bool	Route::fromBlocks(const block_vector& blocks) {
@@ -80,8 +90,8 @@ namespace Webserv {
 					if (values.size() > 0) {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
 						if (directive == "location") {
-							route_type newRoute;
-							newRoute.fromParent(*this);
+							Route	newRoute;
+							newRoute.setParent(this);
 							if (!newRoute.fromBlocks(blockIt->getChilds())) {
 								return false;
 							}
@@ -89,6 +99,7 @@ namespace Webserv {
 							if (values.size() >= 2) {
 								key = values[1].getValue();
 							}
+							newRoute.setCurrentPath(key);
 							this->routes[key] = newRoute;
 						} else if (directive == "types") {
 							this->mimesTypes.clear();
@@ -148,6 +159,10 @@ namespace Webserv {
 			return true;
 		}
 
+		void	Route::setCurrentPath(const path_type& currentPath) {
+			this->currentPath = currentPath;
+		}
+
 		void	Route::setMimesTypes(const mimes_types_type& mimesTypes) {
 			this->mimesTypes = mimesTypes;
 		}
@@ -185,9 +200,73 @@ namespace Webserv {
 		const Route::routes_map	&Route::getRoutes(void) const {
 			return this->routes;
 		}
-		const Route::root_type	&Route::getRoot(void) const {
+
+
+		const Route::path_type&					Route::getCurrentPath(void) const {
+			return this->currentPath;
+		}
+
+		const Route*							Route::getParent(void) const {
+			return this->parent;
+		}
+
+		const Route::mimes_types_type&			Route::getMimesTypes(void) const {
+			return this->mimesTypes;
+		}
+
+		const Route::error_pages_type&			Route::getErrorPages(void) const {
+			return this->error_pages;
+		}
+
+		const Route::client_max_body_size_type&	Route::getClientMaxBodySize(void) const {
+			return this->client_max_body_size;
+		}
+
+		const Route::upload_store_type&			Route::getUploadStore(void) const {
+			return this->upload_store;
+		}
+
+		const Route::return_type&				Route::getReturn(void) const {
+			return this->_return;
+		}
+
+		const Route::autoindex_type&			Route::getAutoindex(void) const {
+			return this->autoindex;
+		}
+
+		const Route::root_type&					Route::getRoot(void) const {
 			return this->root;
 		}
+
+		const Route::index_type&				Route::getIndex(void) const {
+			return this->index;
+		}
+
+		const Route::limit_except_type&			Route::getLimitExcept(void) const {
+			return this->limit_except;
+		}
+
+		const Route::error_pages_pair			Route::getErrorPage(const error_pages_type::key_type& statusCode) {
+			error_pages_pair errorPage;
+			if (this->error_pages.count(statusCode) > 0) {
+				return *(this->error_pages.find(statusCode));
+			}
+			if (directive_type::http_status_code_type::isClientError(statusCode)) {
+				if (this->error_pages.count(directive_type::http_status_code_type::client_error_bad_request) > 0) {
+					return *(this->error_pages.find(directive_type::http_status_code_type::client_error_bad_request));
+				}
+			} else if (directive_type::http_status_code_type::isServerError(statusCode)) {
+				if (this->error_pages.count(directive_type::http_status_code_type::server_error_internal_server_error) > 0) {
+					return *(this->error_pages.find(directive_type::http_status_code_type::server_error_internal_server_error));
+				}
+			}
+			return error_pages_pair(directive_type::http_status_code_type::unknown, "");
+		}
+
+		const std::string							Route::getFilePath(const std::string& url) {
+			return Webserv::Utils::getConcatURL(this->root, url);
+		}
+
 
 	} // namespace Http
 

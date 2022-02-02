@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/01/30 03:13:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 20:48:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace Webserv
 			void	init_args();
 
 		public:
-			CGIEvent(Webserv::Http::HttpRequest &request);
+			CGIEvent(const Webserv::Http::HttpRequest &request);
 			~CGIEvent();
 
 			int		exec(void);

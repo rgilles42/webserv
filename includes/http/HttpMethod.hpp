@@ -20,31 +20,54 @@ namespace Webserv {
 
 	namespace Http {
 
-		struct HttpMethod {
-			enum Method {
-				unknown = 0,
+		class HttpMethod {
+			public:
+				enum Method {
+					unknown = 0,
 
-				GET,
-				POST,
-				DELETE,
+					GET,
+					POST,
+					DELETE,
 
-				PATCH,
-				PUT,
-				HEAD,
-				OPTIONS,
-				CONNECT,
-				TRACE,
-			};
+					PATCH,
+					PUT,
+					HEAD,
+					OPTIONS,
+					CONNECT,
+					TRACE,
+				};
 
-			typedef std::map<HttpMethod::Method, std::string> MethodStringMap;
+				typedef std::map<HttpMethod::Method, std::string> MethodStringMap;
 
-			static const MethodStringMap	HttpMethodStrings;
+			protected:
+				Method		method;
+				std::string	methodString;
 
-			static const MethodStringMap	fillMap(void);
+				static const MethodStringMap	HttpMethodStrings;
 
-			static HttpMethod::Method		getMethod(const std::string& methodString);
+				static const MethodStringMap	fillMap(void);
 
-			static std::string				getMethodString(const HttpMethod::Method& method);
+			public:
+				HttpMethod(void);
+				HttpMethod(const int& method);
+				HttpMethod(const std::string& methodString);
+				HttpMethod(const HttpMethod& other);
+				~HttpMethod();
+
+				HttpMethod&		operator=(const HttpMethod& other);
+				HttpMethod&		operator=(const int& method);
+				HttpMethod&		operator=(const std::string& methodString);
+
+				const Method&		getMethod(void) const;
+				const std::string&	toString(void) const;
+
+				void				setMethod(const int& method);
+				void				setMethod(const std::string& methodString);
+
+				static HttpMethod::Method		getMethod(const int& method);
+				static HttpMethod::Method		getMethod(const std::string& methodString);
+
+				static std::string				getMethodString(const HttpMethod::Method& method);
 
 		};
 

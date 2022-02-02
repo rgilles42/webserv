@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 21:15:18 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:05:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,13 @@ namespace Webserv {
 				void				append(const key_type& key, const value_type& value);
 				const value_type&	get(const key_type& key) const;
 				bool				has(const key_type& key) const;
+				void				unset(const key_type& key);
+				void				clear(void);
 
 				// Utils Methods
 				const std::string	toString(void) const;
+
+				// TODO: Remove because of deprecated
 				void				fromString(const std::string& request);
 		};
 

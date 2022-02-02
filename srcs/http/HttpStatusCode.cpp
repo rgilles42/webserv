@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 01:17:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:45:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:59:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,81 @@ namespace Webserv {
 	namespace Http {
 
 		const HttpStatusCode::StatusCodeStringMap HttpStatusCode::HttpStatusCodeStrings =  HttpStatusCode::fillMap();
+
+		HttpStatusCode::HttpStatusCode(void) {
+			this->setStatusCode(HttpStatusCode::unknown);
+		}
+
+		HttpStatusCode::HttpStatusCode(const int& statusCode) {
+			this->setStatusCode(statusCode);
+		}
+
+		HttpStatusCode::HttpStatusCode(const std::string& statusCodeString) {
+			this->setStatusCode(statusCodeString);
+		}
+
+		HttpStatusCode::HttpStatusCode(const HttpStatusCode& other) {
+			*this = other;
+		}
+
+		HttpStatusCode::~HttpStatusCode() {}
+
+		HttpStatusCode&		HttpStatusCode::operator=(const HttpStatusCode& other) {
+			if (this != &other) {
+				this->statusCode = other.statusCode;
+			}
+			return *this;
+		}
+
+		HttpStatusCode&		HttpStatusCode::operator=(const int& statusCode) {
+			this->setStatusCode(statusCode);
+			return *this;
+		}
+
+		HttpStatusCode&		HttpStatusCode::operator=(const std::string& statusCodeString) {
+			this->setStatusCode(statusCodeString);
+			return *this;
+		}
+
+		void									HttpStatusCode::setStatusCode(const int& statusCode) {
+			this->statusCode = HttpStatusCode::getStatusCode(statusCode);
+		}
+
+		void									HttpStatusCode::setStatusCode(const std::string& statusCodeString) {
+			this->statusCode = HttpStatusCode::getStatusCode(statusCodeString);
+		}
+
+		const HttpStatusCode::StatusCode&		HttpStatusCode::getStatusCode(void) const {
+			return this->statusCode;
+		}
+
+		const std::string						HttpStatusCode::toString(void) const {
+			return HttpStatusCode::getStatusCodeString(this->statusCode);
+		}
+
+		bool									HttpStatusCode::isInformation(void) {
+			return HttpStatusCode::isInformation(this->statusCode);
+		}
+
+		bool									HttpStatusCode::isSuccess(void) {
+			return HttpStatusCode::isSuccess(this->statusCode);
+		}
+
+		bool									HttpStatusCode::isRedirect(void) {
+			return HttpStatusCode::isRedirect(this->statusCode);
+		}
+
+		bool									HttpStatusCode::isClientError(void) {
+			return HttpStatusCode::isClientError(this->statusCode);
+		}
+
+		bool									HttpStatusCode::isServerError(void) {
+			return HttpStatusCode::isServerError(this->statusCode);
+		}
+
+		bool									HttpStatusCode::isError(void) {
+			return HttpStatusCode::isError(this->statusCode);
+		}
 
 		const HttpStatusCode::StatusCodeStringMap HttpStatusCode::fillMap(void) {
 			StatusCodeStringMap map;
@@ -114,7 +189,7 @@ namespace Webserv {
 			return HttpStatusCode::unknown;
 		}
 
-		std::string					HttpStatusCode::getStatusCodeString(const HttpStatusCode::StatusCode& statusCode) {
+		const std::string			HttpStatusCode::getStatusCodeString(const HttpStatusCode::StatusCode& statusCode) {
 			if (HttpStatusCode::HttpStatusCodeStrings.count(statusCode) <= 0) {
 				return HttpStatusCode::HttpStatusCodeStrings.at(HttpStatusCode::unknown);
 			}
@@ -148,8 +223,10 @@ namespace Webserv {
 
 		bool						HttpStatusCode::isError(const HttpStatusCode::StatusCode& statusCode) {
 			int newStatusCode = static_cast<int>(statusCode);
-			return (HttpStatusCode::redirection_offset <= newStatusCode && newStatusCode < HttpStatusCode::misc_error_offset);
+			return (HttpStatusCode::client_error_offset <= newStatusCode && newStatusCode < HttpStatusCode::misc_error_offset);
 		}
+
+
 
 	} // namespace Http
 
