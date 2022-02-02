@@ -59,7 +59,7 @@ namespace Webserv {
 			// this->setHeader("Transfer-Encoding", "chunked"); // Cannot be present while Content-Lenght is present
 		}
 
-		// Request Methods
+		// Headers Methods
 		void		HttpResponse::appendHeader(const headers_type::key_type& key, const headers_type::value_type& value) {
 			this->headers.append(key, value);
 		}
@@ -74,6 +74,10 @@ namespace Webserv {
 				value = this->headers.get(key);
 			}
 			return value;
+		}
+
+		const HttpResponse::headers_type&			HttpResponse::getHeaders(void) const {
+			return this->headers;
 		}
 
 		// Response Methods
@@ -91,6 +95,18 @@ namespace Webserv {
 			this->setHeader("Content-Length", SSTR(body.length()));
 		}
 
+		const HttpResponse::status_code_type&		HttpResponse::getStatusCode(void) const {
+			return this->statusCode;
+		}
+
+		const HttpResponse::protocol_type&			HttpResponse::getProtocol(void) const {
+			return this->protocol;
+		}
+
+		const HttpResponse::body_type&				HttpResponse::getBody(void) const {
+			return this->body;
+		}
+
 		void		HttpResponse::setRedirect(const std::string& path, const status_code_type& statusCode) {
 			this->initDefaultHeaders();
 			this->setHeader("Location", path);
@@ -106,9 +122,17 @@ namespace Webserv {
 
 
 		// Utils Methods
+		std::string	HttpResponse::toString(void) const {
+			std::string	formatedResponse = "";
+
+			formatedResponse += this->protocol.getVersionString() + " " + this->statusCode.getStatusCodeString() + CRLF;
+			formatedResponse += this->headers.toString() + CRLF;
+			formatedResponse += this->body;
+			return formatedResponse;
+		}
 
 		// TODO: Remove because of deprecated
-		void	HttpResponse::fromString(const std::string& response) {
+		void		HttpResponse::fromString(const std::string& response) {
 
 			std::string			str(response);
 			std::string			find = "";
@@ -130,15 +154,6 @@ namespace Webserv {
 
 			// Parse response body
 			this->body = str;
-		}
-
-		std::string	HttpResponse::toString(void) const {
-			std::string	formatedResponse = "";
-
-			formatedResponse += this->protocol.getVersionString() + " " + this->statusCode.getStatusCodeString() + CRLF;
-			formatedResponse += this->headers.toString() + CRLF;
-			formatedResponse += this->body;
-			return formatedResponse;
 		}
 
 	} // namespace Http

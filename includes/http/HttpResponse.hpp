@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 17:19:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:35:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,17 @@ namespace Webserv {
 				void			appendHeader(const headers_type::key_type& key, const headers_type::value_type& value);
 				void			setHeader(const headers_type::key_type& key, const headers_type::value_type& value);
 				const headers_type::value_type	getHeader(const headers_type::key_type& key) const;
+				const headers_type&	getHeaders(void) const;
 
 				// Response Methods
 
 				void			setStatusCode(const status_code_type& statusCode);
 				void			setProtocol(const protocol_type& protocol);
 				void			setBody(const body_type& body);
+
+				const status_code_type&	getStatusCode(void) const;
+				const protocol_type&	getProtocol(void) const;
+				const body_type&		getBody(void) const;
 
 				void			setRedirect(const std::string& path, const status_code_type& statusCode = status_code_type::redirection_found);
 				void			setResource(const resource_type& resource, const status_code_type& statusCode = status_code_type::success_ok);

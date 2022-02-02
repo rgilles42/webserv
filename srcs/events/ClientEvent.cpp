@@ -46,14 +46,14 @@ namespace Webserv
 					// 	request++;
 					// 	continue ;
 					// }
-					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->get("Host"));
+					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
 					std::cout << "Server was choice:"<< srv.getServerName() << std::endl;
-					http_route_type	route = getRoute(request->getBaseUrl(), srv.getRoutes(), srv.getDefaultRoute());
+					http_route_type	route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
 					std::cout << "Route was choice:"<< route.getRoot() << "|" << route.getCurrentPath() << "|" << std::endl;
-					std::cout << "path: " << route.getFilePath(request->getBaseUrl()) << std::endl;
+					std::cout << "path: " << route.getFilePath(request->getBasePath()) << std::endl;
 					// exit(0);
 					try {
-						this->rcs = new resource_type(route.getFilePath(request->getBaseUrl()), false);
+						this->rcs = new resource_type(route.getFilePath(request->getBasePath()), false);
 						if (this->rcs->isCGI())
 						{
 							this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
