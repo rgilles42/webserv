@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 00:38:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 13:43:49 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 16:22:12 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,109 +20,137 @@ namespace Webserv {
 
 	namespace Http {
 
-		struct HttpStatusCode {
+		class HttpStatusCode {
+			public:
+				enum StatusCodeOffset {
+					unknown_offset = 0,
 
-			enum StatusCodeOffset {
-				unknown_offset = 0,
+					information_offset = 100,
+					success_offset = 200,
+					redirection_offset = 300,
+					client_error_offset = 400,
+					server_error_offset = 500,
+					misc_error_offset = 600,
+				};
 
-				information_offset = 100,
-				success_offset = 200,
-				redirection_offset = 300,
-				client_error_offset = 400,
-				server_error_offset = 500,
-				misc_error_offset = 600,
-			};
+				enum StatusCode {
+					unknown = 0,
 
-			enum StatusCode {
-				unknown = 0,
+					information_continue = 100,
+					information_switching_protocols,
+					information_processing,
+					information_early_hints,
 
-				information_continue = 100,
-				information_switching_protocols,
-				information_processing,
-				information_early_hints,
+					success_ok = 200,
+					success_created,
+					success_accepted,
+					success_non_authoritative_information,
+					success_no_content,
+					success_reset_content,
+					success_partial_content,
+					success_multi_status,
+					success_already_reported,
+					success_im_used = 226,
 
-				success_ok = 200,
-				success_created,
-				success_accepted,
-				success_non_authoritative_information,
-				success_no_content,
-				success_reset_content,
-				success_partial_content,
-				success_multi_status,
-				success_already_reported,
-				success_im_used = 226,
+					redirection_multiple_choices = 300,
+					redirection_moved_permanently,
+					redirection_found,
+					redirection_see_other,
+					redirection_not_modified,
+					redirection_use_proxy,
+					redirection_switch_proxy, // unused
+					redirection_temporary_redirect,
+					redirection_permanent_redirect,
 
-				redirection_multiple_choices = 300,
-				redirection_moved_permanently,
-				redirection_found,
-				redirection_see_other,
-				redirection_not_modified,
-				redirection_use_proxy,
-				redirection_switch_proxy, // unused
-				redirection_temporary_redirect,
-				redirection_permanent_redirect,
+					client_error_bad_request = 400,
+					client_error_unauthorized,
+					client_error_payment_required,
+					client_error_forbidden,
+					client_error_not_found,
+					client_error_method_not_allowed,
+					client_error_not_acceptable,
+					client_error_proxy_authentication_required,
+					client_error_request_timeout,
+					client_error_conflict,
+					client_error_gone,
+					client_error_length_required,
+					client_error_precondition_failed,
+					client_error_payload_too_large,
+					client_error_uri_too_long,
+					client_error_unsupported_media_type,
+					client_error_range_not_satisfiable,
+					client_error_expectation_failed,
+					client_error_im_a_teapot,
+					client_error_misdirection_required = 421,
+					client_error_unprocessable_entity,
+					client_error_locked,
+					client_error_failed_dependency,
+					client_error_too_early,
+					client_error_upgrade_required,
+					client_error_precondition_required = 428,
+					client_error_too_many_requests,
+					client_error_request_header_fields_too_large = 431,
+					client_error_unavailable_for_legal_reasons = 451,
 
-				client_error_bad_request = 400,
-				client_error_unauthorized,
-				client_error_payment_required,
-				client_error_forbidden,
-				client_error_not_found,
-				client_error_method_not_allowed,
-				client_error_not_acceptable,
-				client_error_proxy_authentication_required,
-				client_error_request_timeout,
-				client_error_conflict,
-				client_error_gone,
-				client_error_length_required,
-				client_error_precondition_failed,
-				client_error_payload_too_large,
-				client_error_uri_too_long,
-				client_error_unsupported_media_type,
-				client_error_range_not_satisfiable,
-				client_error_expectation_failed,
-				client_error_im_a_teapot,
-				client_error_misdirection_required = 421,
-				client_error_unprocessable_entity,
-				client_error_locked,
-				client_error_failed_dependency,
-				client_error_too_early,
-				client_error_upgrade_required,
-				client_error_precondition_required = 428,
-				client_error_too_many_requests,
-				client_error_request_header_fields_too_large = 431,
-				client_error_unavailable_for_legal_reasons = 451,
+					server_error_internal_server_error = 500,
+					server_error_not_implemented,
+					server_error_bad_gateway,
+					server_error_service_unavailable,
+					server_error_gateway_timeout,
+					server_error_http_version_not_supported,
+					server_error_variant_also_negotiates,
+					server_error_insufficient_storage,
+					server_error_loop_detected,
+					server_error_not_extended = 510,
+					server_error_network_authentication_required
+				};
+				typedef std::map<HttpStatusCode::StatusCode, std::string> StatusCodeStringMap;
 
-				server_error_internal_server_error = 500,
-				server_error_not_implemented,
-				server_error_bad_gateway,
-				server_error_service_unavailable,
-				server_error_gateway_timeout,
-				server_error_http_version_not_supported,
-				server_error_variant_also_negotiates,
-				server_error_insufficient_storage,
-				server_error_loop_detected,
-				server_error_not_extended = 510,
-				server_error_network_authentication_required
-			};
+			protected:
+				StatusCode	statusCode;
 
-			typedef std::map<HttpStatusCode::StatusCode, std::string> StatusCodeStringMap;
+				static const StatusCodeStringMap	HttpStatusCodeStrings;
 
-			static const StatusCodeStringMap	HttpStatusCodeStrings;
+				static const StatusCodeStringMap	fillMap(void);
 
-			static const StatusCodeStringMap	fillMap(void);
+			public:
+				HttpStatusCode(void);
+				HttpStatusCode(const int& statusCode);
+				HttpStatusCode(const std::string& statusCodeString);
+				HttpStatusCode(const HttpStatusCode& other);
+				~HttpStatusCode();
 
-			static HttpStatusCode::StatusCode	getStatusCode(const int& statusCode = 0);
-			static HttpStatusCode::StatusCode	getStatusCode(const std::string& statusCodeString);
+				HttpStatusCode&		operator=(const HttpStatusCode& other);
+				HttpStatusCode&		operator=(const int& statusCode);
+				HttpStatusCode&		operator=(const std::string& statusCodeString);
 
-			static std::string		getStatusCodeString(const HttpStatusCode::StatusCode& statusCode = HttpStatusCode::unknown);
+				const StatusCode&	getStatusCode(void) const;
+				const std::string	getStatusCodeString(void) const;
 
-			static bool				isInformation(const HttpStatusCode::StatusCode& statusCode);
-			static bool				isSuccess(const HttpStatusCode::StatusCode& statusCode);
-			static bool				isRedirect(const HttpStatusCode::StatusCode& statusCode);
-			static bool				isClientError(const HttpStatusCode::StatusCode& statusCode);
-			static bool				isServerError(const HttpStatusCode::StatusCode& statusCode);
+				void				setStatusCode(const int& statusCode);
+				void				setStatusCode(const std::string& statusCodeString);
 
-			static bool				isError(const HttpStatusCode::StatusCode& statusCode);
+				bool				isInformation(void);
+				bool				isSuccess(void);
+				bool				isRedirect(void);
+				bool				isClientError(void);
+				bool				isServerError(void);
+
+				bool				isError(void);
+
+				static HttpStatusCode::StatusCode	getStatusCode(const int& statusCode);
+				static HttpStatusCode::StatusCode	getStatusCode(const std::string& statusCodeString);
+
+				static std::string	getStatusCodeString(const HttpStatusCode::StatusCode& statusCode);
+
+				static bool			isInformation(const HttpStatusCode::StatusCode& statusCode);
+				static bool			isSuccess(const HttpStatusCode::StatusCode& statusCode);
+				static bool			isRedirect(const HttpStatusCode::StatusCode& statusCode);
+				static bool			isClientError(const HttpStatusCode::StatusCode& statusCode);
+				static bool			isServerError(const HttpStatusCode::StatusCode& statusCode);
+
+				static bool			isError(const HttpStatusCode::StatusCode& statusCode);
+
 
 		};
 

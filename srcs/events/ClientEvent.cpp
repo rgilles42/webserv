@@ -88,7 +88,7 @@ namespace Webserv
 		if (!this->rcs) {
 			this->events_flags = POLLIN | POLLHUP;
 			Webserv::Http::HttpResponse response;
-			response.status("404 Not Found");
+			response.status(Webserv::Http::HttpResponse::status_code_type::client_error_not_found);
 			this->sock.write(response.toString().c_str(), response.toString().length());
 			return ;
 		}

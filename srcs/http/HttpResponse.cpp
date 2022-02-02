@@ -51,7 +51,7 @@ namespace Webserv {
 		void		HttpResponse::initDefaultHeaders() {
 
 			this->protocol = "HTTP/1.1";
-			this->statusCode = "200 OK";
+			this->statusCode = status_code_type::success_ok;
 
 			this->headers.set("Server", DEFAULT_SERVER);
 			this->headers.set("Connection", "keep-alive");
@@ -125,7 +125,7 @@ namespace Webserv {
 			this->headers.set("Location", path);
 		}
 
-		void		HttpResponse::redirect(const std::string& path, const std::string& statusCode) {
+		void		HttpResponse::redirect(const std::string& path, const status_code_type& statusCode) {
 			(void)path;
 			(void)statusCode;
 		}
@@ -141,7 +141,7 @@ namespace Webserv {
 			(void)options;
 		}
 
-		void		HttpResponse::sendStatus(const std::string& statusCode) {
+		void		HttpResponse::sendStatus(const status_code_type& statusCode) {
 			this->status(statusCode);
 		}
 
@@ -149,7 +149,7 @@ namespace Webserv {
 			this->headers.set(key, value);
 		}
 
-		void		HttpResponse::status(const std::string& statusCode) {
+		void		HttpResponse::status(const status_code_type& statusCode) {
 			this->statusCode = statusCode;
 		}
 
@@ -185,7 +185,7 @@ namespace Webserv {
 		std::string	HttpResponse::toString(void) const {
 			std::string	formatedResponse = "";
 
-			formatedResponse += this->protocol + " " + this->statusCode + CRLF;
+			formatedResponse += this->protocol + " " + this->statusCode.getStatusCodeString() + CRLF;
 			formatedResponse += this->headers.toString() + CRLF;
 			formatedResponse += this->body;
 			return formatedResponse;
