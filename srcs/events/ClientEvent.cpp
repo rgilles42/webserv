@@ -39,32 +39,51 @@ namespace Webserv
 				http_request_list&	requests = this->create_req.getAllRequests();
 				http_request_list::const_iterator request = requests.begin();
 
-				while (request != requests.end()) {
-					// https_response_type response;
-					// if (!request->has("Host")) {
-					// 	response.status("400 Bad Request");
-					// 	this->responses.push_back(response);
-					// 	request++;
-					// 	continue ;
-					// }
+				while (request != requests.end())
+				{
+					https_response_type response;
+					if (!request->has("Host"))
+					{
+					 	response.status("400 Bad Request");
+					 	this->responses.push_back(response);
+					 	request++;
+					 	continue ;
+					}
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->get("Host"));
-					std::cout << "Server was choice:"<< srv.getServerName() << std::endl;
 					http_route_type	route = getRoute(request->getBaseUrl(), srv.getRoutes(), srv.getDefaultRoute());
-					std::cout << "Route was choice:"<< route.getRoot() << std::endl;
 					path = route.getRoot() + request->getBaseUrl();
 					std::cout << "path: " << path << std::endl;
-					// exit(0);
-					try {
-						this->rcs = new resource_type(path, false);
-						if (this->rcs->isCGI())
+					try
+					{
+						resource_type *rcs = new resource_type(path, false);
+						if (rcs->isCGI())
 						{
-							this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
-							this->rcs->setFd(this->cgi->getReadFD());
+							CGIEvent *cgi = new CGIEvent(request);
+							cgi->exec();
+							rcs->setFd(this->cgi->getReadFD());
 						}
-					} catch (const std::exception& e) {
+					}
+					catch (const std::exception& e) 
+					{
+						response.status("404 Not found");
+					 	this->responses.push_back(response);
+					 	request++;
+					 	continue ;
 						std::cout << e.what() << std::endl;
 					}
-		//			Webserv::Methods::Methods::getInstance().exec_method(this->req, this->rcs/*, srv**/);
+					try
+					{
+						rcs->loadResource();
+						response.fromString(rcs->getContent());
+						this->responses.push_back(response);
+						request++;
+						continue ;
+					}
+					catch(const std::exception& e)
+					{
+						std::cerr << e.what() << '\n';
+					}
+					
 					request++;
 				}
 				requests.clear();
