@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 16:15:17 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 16:38:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 # include <string>						// For string
 
-# include "HttpHeaders.hpp"				// For HttpHeaders
+# include "HttpVersion.hpp"				// For HttpVersion
 # include "HttpStatusCode.hpp"			// For HttpStatusCode
+# include "HttpHeaders.hpp"				// For HttpHeaders
 # include "../utils/Resource.hpp"		// For Resource
 # include "../utils/common.hpp"			// For trim
 
@@ -34,7 +35,7 @@ namespace Webserv {
 
 		class HttpResponse {
 			public:
-				typedef std::string					protocol_type;
+				typedef Webserv::Http::HttpVersion	protocol_type;
 				typedef Webserv::Http::HttpStatusCode	status_code_type;
 				typedef Webserv::Http::HttpHeaders	headers_type;
 				typedef Webserv::Utils::Resource	resource_type;

@@ -50,7 +50,7 @@ namespace Webserv {
 
 		void		HttpResponse::initDefaultHeaders() {
 
-			this->protocol = "HTTP/1.1";
+			this->protocol = protocol_type::http_1_1;
 			this->statusCode = status_code_type::success_ok;
 
 			this->headers.set("Server", DEFAULT_SERVER);
@@ -185,7 +185,7 @@ namespace Webserv {
 		std::string	HttpResponse::toString(void) const {
 			std::string	formatedResponse = "";
 
-			formatedResponse += this->protocol + " " + this->statusCode.getStatusCodeString() + CRLF;
+			formatedResponse += this->protocol.getVersionString() + " " + this->statusCode.getStatusCodeString() + CRLF;
 			formatedResponse += this->headers.toString() + CRLF;
 			formatedResponse += this->body;
 			return formatedResponse;
