@@ -35,7 +35,7 @@ namespace Webserv
 	{
 		Poll	write_poll;
 		std::vector<struct pollfd>::iterator it;
-		unsigned long	ret = 0;;
+		ssize_t	ret = 0;
 
 		write_poll.add_fd(fd_in[0], POLLOUT);
 		if (this-> req.getMethod().toString() == "POST" && this->req.getBody().size() != 0)
@@ -47,9 +47,14 @@ namespace Webserv
 				if (it->revents & POLLOUT)
 				{
 					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size], this->req.getBody().size()) - this->wr_size;
-					if (ret == 0 || ret == this->req.getBody().length() || (ret + this->wr_size) == this->req.getBody().length())
-						break;
+					if (ret < 0)
+					{
+						std::cout<<"Error cgi write"<<std::endl;
+						exit(-1);
+					}
 					this->wr_size += ret;
+					if (ret == 0 || this->wr_size == this->req.getBody().length())
+						break;
 				}
 			}
 		}

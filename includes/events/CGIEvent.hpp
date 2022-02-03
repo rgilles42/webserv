@@ -43,7 +43,7 @@ namespace Webserv
 			bool				CGIEnd;
 			int					status;
 
-			int					wr_size;
+			unsigned long		wr_size;
 
 			void	close_pipefd(void);
 			void	init_env();
