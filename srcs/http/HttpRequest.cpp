@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 18:25:52 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:48:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,19 @@ namespace Webserv {
 		}
 
 		const HttpRequest::path_type	HttpRequest::getBasePath(void) const {
-			// Return the origin from with router is provide the req
 			size_t find = this->fullPath.find('?');
 			if (find != this->fullPath.npos) {
-				return fullPath.substr(0, find);
+				return this->fullPath.substr(0, find);
 			}
 			return this->fullPath;
+		}
+
+		const HttpRequest::path_type	HttpRequest::getQuery(void) const {
+			size_t find = this->fullPath.find('?');
+			if (find != this->fullPath.npos) {
+				return this->fullPath.substr(find + 1);
+			}
+			return "";
 		}
 
 		const HttpRequest::path_type&	HttpRequest::getFullPath(void) const {
@@ -105,7 +112,7 @@ namespace Webserv {
 		}
 
 
-
+		// WIP: this is not usefull but i let it here
 		const std::string	HttpRequest::getHostname(void) const {
 			// Return the Host or if trust proxy is enable return X-Forwarded-Host
 			std::string hostname = "";
@@ -161,12 +168,6 @@ namespace Webserv {
 
 		bool				HttpRequest::isSecure(void) const {
 			return this->getBaseProtocol() == "https";
-		}
-
-		bool				HttpRequest::isStale(void) const {
-			// Indicates whether the request is “stale,” and is the opposite of req.fresh.
-			// TODO
-			return false && !this->isFresh();
 		}
 
 		bool				HttpRequest::isXhr(void) const {
