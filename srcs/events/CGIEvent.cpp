@@ -33,31 +33,27 @@ namespace Webserv
 
 	void    CGIEvent::write_event()
 	{
-/*		struct pollfd _fd;
-		int	ret;
-		int status;
+		Poll	write_poll;
+		std::vector<struct pollfd>::iterator it;
+		unsigned long	ret = 0;;
 
-		_fd.fd = fd_in[0];
-		_fd.events = POLLOUT;
-		if (this-> req.getMethod() == "POST" && this->req.getBody().length() != 0)
+		write_poll.add_fd(fd_in[0], POLLOUT);
+		if (this-> req.getMethod().toString() == "POST" && this->req.getBody().size() != 0)
 		{
-			ret = poll(&_fd, 1, 100);
-			if (ret >= 1 && _fd.revents & POLLIN)
+			while (1)
 			{
-				ret = write(fd_in[0], this->req.getBody(), this->req.getBody().length());
-				if (ret < 0)
-					return;
-				if (ret == this->req.getBody().length() || (wr_size + ret) >= this->req.getBody().length());
-				{m
-					this->writeEnd = true;
+				write_poll.exec();
+				it = write_poll.begin();
+				if (it->revents & POLLOUT)
+				{
+					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size], this->req.getBody().size()) - this->wr_size;
+					if (ret == 0 || ret == this->req.getBody().length() || (ret + this->wr_size) == this->req.getBody().length())
+						break;
+					this->wr_size += ret;
 				}
-				wr_size += ret;
 			}
 		}
-		else
-		{*/
-			this->writeEnd = true;
-//		}
+		this->writeEnd = true;
 	}
 
 	void	CGIEvent::init_args()

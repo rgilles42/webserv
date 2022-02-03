@@ -13,7 +13,7 @@
 #ifndef CGIEVENT_HPP
 # define CGIEVENT_HPP
 
-# include <poll.h>
+//# include <poll.h>
 # include <iostream>
 # include <unistd.h>
 # include <fcntl.h>
@@ -24,6 +24,7 @@
 # include "../utils/Env.hpp"
 # include "../http/HttpRequest.hpp"
 # include "../http/Server.hpp"
+# include "./Poll.hpp"
 
 namespace Webserv
 {
