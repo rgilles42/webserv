@@ -46,7 +46,7 @@ namespace Webserv
 				it = write_poll.begin();
 				if (it->revents & POLLOUT)
 				{
-					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size], this->req.getBody().size()) - this->wr_size;
+					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size - 1], this->req.getBody().size()) - this->wr_size;
 					if (ret < 0)
 					{
 						std::cout<<"Error cgi write"<<std::endl;
