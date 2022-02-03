@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 18:19:50 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:43:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,18 @@ namespace Webserv {
 				// Request Properties
 				const method_type&	getMethod(void) const;
 				const path_type		getBasePath(void) const;
+				const path_type		getQuery(void) const;
 				const path_type&	getFullPath(void) const;
 				const protocol_type&	getProtocol(void) const;
 				const body_type&	getBody(void) const;
 
-				const MappedValues	getCookies(void) const;
-				bool				isFresh(void) const;
+				// WIP: this is not usefull but i let it here
 				const std::string	getHostname(void) const;
 				const std::string	getIp(void) const;
 				const ListedValues	getIps(void) const;
 				const std::string	getBaseProtocol(void) const;
-				const MappedValues	getParams(void) const;
-				const MappedValues	getQuery(void) const;
-				const std::string	getRoute(void) const;
 				bool				isSecure(void) const;
 				const MappedValues	getSignedCookies(void) const;
-				bool				isStale(void) const;
 				const ListedValues	getSubdomains(void) const;
 				bool				isXhr(void) const;
 

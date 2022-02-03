@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 19:06:55 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:38:14 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ namespace Webserv {
 				this->root = other.root;
 				this->index = other.index;
 				this->limit_except = other.limit_except;
+				this->cgi_pass = other.cgi_pass;
+				this->cgi_ext = other.cgi_ext;
 				this->routes = other.routes;
 			}
 			return *this;
@@ -61,6 +63,8 @@ namespace Webserv {
 			this->autoindex = DEFAULT_AUTOINDEX;
 			this->root = DEFAULT_ROOT;
 			this->index.clear();
+			this->cgi_pass.clear();
+			this->cgi_ext.clear();
 
 			this->limit_except.clear();
 
@@ -79,6 +83,8 @@ namespace Webserv {
 				this->root = this->parent->root;
 				this->index = this->parent->index;
 				this->limit_except = this->parent->limit_except;
+				this->cgi_pass = this->parent->cgi_pass;
+				this->cgi_ext = this->parent->cgi_ext;
 			}
 		}
 
@@ -148,6 +154,16 @@ namespace Webserv {
 								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
+						} else if (directive == "cgi_pass") {
+							if (!directive_type::parseCgiPass(values, this->cgi_pass)) {
+								throw directive_type::InvalidValueDirectiveException(directive);
+								return false;
+							}
+						} else if (directive == "cgi_ext") {
+							if (!directive_type::parseCgiExt(values, this->cgi_ext)) {
+								throw directive_type::InvalidValueDirectiveException(directive);
+								return false;
+							}
 						} else {
 							throw directive_type::UnknownDirectiveException(directive);
 							return false;
@@ -191,6 +207,12 @@ namespace Webserv {
 		}
 		void	Route::setLimitExcept(const limit_except_type& limitExcept) {
 			this->limit_except = limitExcept;
+		}
+		void	Route::setCgiPass(const cgi_pass_type& cgiPass) {
+			this->cgi_pass = cgiPass;
+		}
+		void	Route::setCgiExt(const cgi_ext_type& cgiExt) {
+			this->cgi_ext = cgiExt;
 		}
 
 		void 	Route::addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route) {
@@ -244,6 +266,14 @@ namespace Webserv {
 
 		const Route::limit_except_type&			Route::getLimitExcept(void) const {
 			return this->limit_except;
+		}
+
+		const Route::cgi_pass_type&				Route::getCgiPass(void) const {
+			return this->cgi_pass;
+		}
+
+		const Route::cgi_ext_type&				Route::getCgiExt(void) const {
+			return this->cgi_ext;
 		}
 
 		const Route::error_pages_pair			Route::getErrorPage(const error_pages_type::key_type& statusCode) {

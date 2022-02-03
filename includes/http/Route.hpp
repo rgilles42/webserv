@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 18:47:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:17:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ namespace Webserv {
 
 				typedef directive_type::dir_limit_except_type	limit_except_type;
 
+				typedef directive_type::dir_cgi_pass_type		cgi_pass_type;
+				typedef directive_type::dir_cgi_ext_type		cgi_ext_type;
+
+
 				typedef std::map<std::string, Route>	routes_map;
 
 			protected:
@@ -70,6 +74,9 @@ namespace Webserv {
 				index_type			index;
 
 				limit_except_type	limit_except;
+
+				cgi_pass_type		cgi_pass;
+				cgi_ext_type		cgi_ext;
 
 				routes_map			routes;
 
@@ -97,6 +104,8 @@ namespace Webserv {
 				void	setRoot(const root_type& root);
 				void	setIndex(const index_type& index);
 				void	setLimitExcept(const limit_except_type& limitExcept);
+				void	setCgiPass(const cgi_pass_type& cgiPass);
+				void	setCgiExt(const cgi_ext_type& cgiExt);
 
 				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 
@@ -113,6 +122,8 @@ namespace Webserv {
 				const root_type&					getRoot(void) const;
 				const index_type&					getIndex(void) const;
 				const limit_except_type&			getLimitExcept(void) const;
+				const cgi_pass_type&				getCgiPass(void) const;
+				const cgi_ext_type&					getCgiExt(void) const;
 
 				const error_pages_pair				getErrorPage(const error_pages_type::key_type& statusCode);
 				const std::string					getFilePath(const std::string& url);

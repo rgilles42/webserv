@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/31 14:34:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:36:44 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,11 @@ namespace Webserv {
 			contexts.push_back("location");
 			directives["cgi_pass"] = directive_type("cgi_pass", std::make_pair(1, 1), contexts);
 		}
+		{
+			directive_type::context_vector contexts;
+			contexts.push_back("location");
+			directives["cgi_ext"] = directive_type("cgi_ext", std::make_pair(1, -1), contexts);
+		}
 		return directives;
 	}
 
@@ -253,7 +258,7 @@ namespace Webserv {
 						}
 					}
 					catch (const std::exception& e) {
-						throw e;
+						throw ConfigException("", e.what());
 						return false;
 					}
 					this->servers.push_back(newServer);
