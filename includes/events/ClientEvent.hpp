@@ -43,6 +43,7 @@ namespace Webserv
 			typedef Webserv::Http::Route				http_route_type;
 			typedef Webserv::Http::HttpResponse			http_response_type;
 			typedef std::vector<http_response_type>		response_vector;
+			typedef Webserv::Utils::Env					env_type;
 
 		private:
 			http_request_builder_type	create_req;
@@ -58,6 +59,7 @@ namespace Webserv
 
 			http_request_type			req;
 			http_server_type			srv;
+			env_type					env;
 			http_route_type				route;
 
 			std::string					request_string;
@@ -67,7 +69,7 @@ namespace Webserv
 
 		public:
 
-			ClientEvent(socket_type &client_sock, socket_type &server_sock , config_type& _config);
+			ClientEvent(socket_type &client_sock, socket_type &server_sock , config_type& _config, Utils::Env& environnement);
 			virtual ~ClientEvent();
 
 			void	write_event(void);

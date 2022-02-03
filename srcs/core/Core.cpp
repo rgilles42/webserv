@@ -260,7 +260,7 @@ namespace Webserv {
 
 	void		Core::add_server_event(const socket_type &sock)	// Add Server Event in EventsManager
 	{
-		ServerEvent	*srv = new ServerEvent(sock, this->config);
+		ServerEvent	*srv = new ServerEvent(sock, this->config, this->env);
 
 		this->events_manager.add_event(srv->getFD(), *srv);
 	}
@@ -283,5 +283,9 @@ namespace Webserv {
 		for (std::map<int, IEvents *>::iterator	it = this->events_manager.begin(); it != ite; it++)
 			this->poll_events.add_fd(it->first, it->second->getEventsFlags());
 	}
-
+	
+	Core::env_type	Core::getEnv()
+	{
+		return this->env;
+	}
 } // namespace Webserv

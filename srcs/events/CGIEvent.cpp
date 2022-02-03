@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest &request/*, Http::Server &server*/) : req(request), writeEnd(false), args(NULL), CGIEnd(false)
+	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest &request, const Http::Server &server, Webserv::Utils::Env& environnement) : req(request), srv(server), env(environnement), writeEnd(false), args(NULL), CGIEnd(false)
 	{
 		if (pipe(this->fd_in) < 0)
 			throw CGIPipeFailed();
@@ -101,7 +101,7 @@ namespace Webserv
         this->env.set("REQUEST_METHODS",this->req.getMethod().toString());
 //        this->env.set("PATH_INFO", this->request.path_info());
 		this->env.set("PATH_TRANSLATED", ""); //? Need more infos
-//		this->env.set("SCRIPT_NAME", this->location_cgi.c_str());
+//		this->env.set("SCRIPT_NAME", this->req.getQuery().c_str());
 //        this->env.set("QUERY_STRING", this->request.getQuery().c_str());
 //        this->env.set("REMOTE_HOTE", this->request.hote_client());
 //        this->env.set("REMOTE_ADDR", this->request.client_add());

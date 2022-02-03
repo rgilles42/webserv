@@ -127,7 +127,8 @@ namespace Webserv {
 
 			void		add_server_event(const socket_type &sock);
 			void		add_client_event(int fd, Webserv::ClientEvent &client_e);
-//			void		add_cgi_event(int fd, CGIEvent &cgi_e);
+
+			env_type	getEnv(void);
 
 			void		remove_event(int fd);
 

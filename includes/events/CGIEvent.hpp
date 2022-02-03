@@ -50,7 +50,7 @@ namespace Webserv
 			void	init_args();
 
 		public:
-			CGIEvent(const Webserv::Http::HttpRequest &request);
+			CGIEvent(const Webserv::Http::HttpRequest &request, const Webserv::Http::Server &server, Webserv::Utils::Env&	environnement);
 			~CGIEvent();
 
 			int		exec(void);

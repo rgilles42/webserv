@@ -2,7 +2,7 @@
 
 namespace Webserv
 {
-	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config): sock(client_sock), srv_sock(server_sock), config(_config)
+	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config, env_type& environnement): sock(client_sock), srv_sock(server_sock), config(_config), env(environnement)
 	{
 		this->cgi = NULL;
 		this->events_flags = POLLIN;
@@ -56,7 +56,7 @@ namespace Webserv
 						rcs = new resource_type(route.getFilePath(request->getBasePath()), false);
 						if (rcs->isCGI())
 						{
-							CGIEvent *cgi = new CGIEvent(*request);
+							CGIEvent *cgi = new CGIEvent(*request, srv, this->env);
 							cgi->exec();
 							rcs->setFd(this->cgi->getReadFD());
 						}

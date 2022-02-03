@@ -21,6 +21,7 @@
 # include "../core/Core.hpp"
 # include "../core/Config.hpp"
 # include "../utils/Socket.hpp"
+# include "../utils/Env.hpp"
 
 namespace Webserv
 {
@@ -28,14 +29,16 @@ namespace Webserv
 		public:
 			typedef Webserv::Utils::Socket	socket_type;
 			typedef Webserv::Config			config_type;
+			typedef	Webserv::Utils::Env		env_type;
 
 		private:
-			socket_type				sock;
-			config_type&	config;
+			socket_type			sock;
+			config_type&		config;
+			env_type			env;
 			short				events_flags;
 
 		public:
-			ServerEvent(const socket_type &new_socket, config_type &_config);
+			ServerEvent(const socket_type &new_socket, config_type &_config, Utils::Env& environnement);
 			~ServerEvent();
 
 			void	write_event(void);
