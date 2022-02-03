@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:38:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 19:52:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,11 +281,11 @@ namespace Webserv {
 			if (this->error_pages.count(statusCode) > 0) {
 				return *(this->error_pages.find(statusCode));
 			}
-			if (directive_type::http_status_code_type::isClientError(statusCode)) {
+			if (statusCode.isClientError()) {
 				if (this->error_pages.count(directive_type::http_status_code_type::client_error_bad_request) > 0) {
 					return *(this->error_pages.find(directive_type::http_status_code_type::client_error_bad_request));
 				}
-			} else if (directive_type::http_status_code_type::isServerError(statusCode)) {
+			} else if (statusCode.isServerError()) {
 				if (this->error_pages.count(directive_type::http_status_code_type::server_error_internal_server_error) > 0) {
 					return *(this->error_pages.find(directive_type::http_status_code_type::server_error_internal_server_error));
 				}

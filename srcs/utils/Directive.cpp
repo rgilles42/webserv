@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:17:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:03:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 19:51:03 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,8 @@ namespace Webserv {
 					if (tokValue1.find_first_not_of("0123456789") != tokValue1.npos) {
 						return false;
 					}
-					value.first = http_status_code_type::getStatusCode(std::atoi(tokValue1.c_str()));
-					if (value.first <= 0 || !http_status_code_type::isError(value.first)) {
+					value.first = std::atoi(tokValue1.c_str());
+					if (value.first <= 0 || !value.first.isError()) {
 						return false;
 					}
 					value.second = src[2].getValue();

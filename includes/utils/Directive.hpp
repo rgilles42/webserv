@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 17:58:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 19:41:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ namespace Webserv {
 
 				typedef std::string												dir_server_name_type;
 				typedef Webserv::Utils::Address									dir_listen_type;
-				typedef std::pair<http_status_code_type::StatusCode, std::string>					dir_error_page_type;
+				typedef std::pair<http_status_code_type, std::string>			dir_error_page_type;
 				typedef std::map<dir_error_page_type::first_type, dir_error_page_type::second_type>	error_pages_type;
 				typedef Webserv::Utils::Byte									dir_client_max_body_size_type;
 				typedef std::vector<std::string>								dir_limit_except_type;
-				typedef std::pair<http_status_code_type::StatusCode, std::string>	dir_return_type;
+				typedef std::pair<http_status_code_type, std::string>			dir_return_type;
 				typedef bool													dir_autoindex_type;
 				typedef std::string												dir_root_type;
 				typedef std::vector<std::string>								dir_index_type;
