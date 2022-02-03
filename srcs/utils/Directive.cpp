@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:17:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 18:39:20 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:03:46 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,19 @@ namespace Webserv {
 						return false;
 					}
 					value = src[1].getValue();
+					return true;
+				}
+
+				bool	Directive::parseCgiExt(const src_value_type& src, dir_cgi_ext_type& value, const dir_cgi_ext_type& defaultValue) {
+					value = defaultValue;
+					if (src.size() < 2) {
+						return false;
+					}
+					src_value_type::const_iterator it = src.begin() + 1;
+					while (it != src.end()) {
+						value.push_back(it->getValue());
+						it++;
+					}
 					return true;
 				}
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 18:41:41 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 17:58:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ namespace Webserv {
 				typedef std::vector<std::string>								dir_index_type;
 				typedef std::string												dir_upload_store_type;
 				typedef std::string												dir_cgi_pass_type;
+				typedef std::vector<std::string>								dir_cgi_ext_type;
 
 
 				class DirectiveException : public std::exception {
@@ -153,6 +154,7 @@ namespace Webserv {
 
 				static bool				parseCgiPass(const src_value_type& src, dir_cgi_pass_type& value, const dir_cgi_pass_type& defaultValue = dir_cgi_pass_type());
 
+				static bool				parseCgiExt(const src_value_type& src, dir_cgi_ext_type& value, const dir_cgi_ext_type& defaultValue = dir_cgi_ext_type());
 		};
 
 	} // namespace Utils

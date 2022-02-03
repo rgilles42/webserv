@@ -20,6 +20,7 @@ This readme file will tell you how to read and how to create the config file
 | index                 | index [files];                                                                       | index index.html;        | server, location |
 | upload_store          | upload_pass [directory];                                                             |                          | server, location |
 | cgi_pass              | cgi_pass [path];                                                                     | -                        | location         |
+| cgi_ext               | cgi_ext [extensions];                                                                | -                        | location         |
 
 ## Lexer & Parser
 
