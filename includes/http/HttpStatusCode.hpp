@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 00:38:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 17:59:27 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 19:55:01 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,13 +130,13 @@ namespace Webserv {
 				void				setStatusCode(const int& statusCode);
 				void				setStatusCode(const std::string& statusCodeString);
 
-				bool				isInformation(void);
-				bool				isSuccess(void);
-				bool				isRedirect(void);
-				bool				isClientError(void);
-				bool				isServerError(void);
+				bool				isInformation(void)  const;
+				bool				isSuccess(void) const;
+				bool				isRedirect(void) const;
+				bool				isClientError(void) const;
+				bool				isServerError(void) const;
 
-				bool				isError(void);
+				bool				isError(void) const;
 
 				static HttpStatusCode::StatusCode	getStatusCode(const int& statusCode);
 				static HttpStatusCode::StatusCode	getStatusCode(const std::string& statusCodeString);
@@ -151,6 +151,29 @@ namespace Webserv {
 
 				static bool			isError(const HttpStatusCode::StatusCode& statusCode);
 
+				friend bool	operator==(const HttpStatusCode& lhs, const HttpStatusCode& rhs) {
+					return (lhs.statusCode == rhs.statusCode);
+				}
+
+				friend bool	operator!=(const HttpStatusCode& lhs, const HttpStatusCode& rhs) {
+					return (!(lhs == rhs));
+				}
+
+				friend bool	operator<(const HttpStatusCode& lhs, const HttpStatusCode& rhs) {
+					return (lhs.statusCode < rhs.statusCode);
+				}
+
+				friend bool	operator<=(const HttpStatusCode& lhs, const HttpStatusCode& rhs) {
+					return (!(rhs < lhs));
+				}
+
+				friend bool	operator>(const HttpStatusCode& lhs, const HttpStatusCode& rhs) {
+					return (rhs < lhs);
+				}
+
+				friend bool	operator>=(const HttpStatusCode& lhs, const HttpStatusCode& rhs) {
+					return (!(lhs < rhs));
+				}
 
 		};
 

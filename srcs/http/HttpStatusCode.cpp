@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 01:17:46 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 17:59:38 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 19:54:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,27 +69,27 @@ namespace Webserv {
 			return HttpStatusCode::getStatusCodeString(this->statusCode);
 		}
 
-		bool									HttpStatusCode::isInformation(void) {
+		bool									HttpStatusCode::isInformation(void) const {
 			return HttpStatusCode::isInformation(this->statusCode);
 		}
 
-		bool									HttpStatusCode::isSuccess(void) {
+		bool									HttpStatusCode::isSuccess(void) const {
 			return HttpStatusCode::isSuccess(this->statusCode);
 		}
 
-		bool									HttpStatusCode::isRedirect(void) {
+		bool									HttpStatusCode::isRedirect(void) const {
 			return HttpStatusCode::isRedirect(this->statusCode);
 		}
 
-		bool									HttpStatusCode::isClientError(void) {
+		bool									HttpStatusCode::isClientError(void) const {
 			return HttpStatusCode::isClientError(this->statusCode);
 		}
 
-		bool									HttpStatusCode::isServerError(void) {
+		bool									HttpStatusCode::isServerError(void) const {
 			return HttpStatusCode::isServerError(this->statusCode);
 		}
 
-		bool									HttpStatusCode::isError(void) {
+		bool									HttpStatusCode::isError(void) const {
 			return HttpStatusCode::isError(this->statusCode);
 		}
 
