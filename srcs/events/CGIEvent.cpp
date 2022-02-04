@@ -108,7 +108,7 @@ namespace Webserv
 		this->env.set("AUTH_SCRIPT", ""); //? Need more infos
 //		this->env.set("REMOTE_USER", this->request.client_user()); //if script protect and srv allow identification
 //        this->env.set("CONTENT_TYPE", this->request.content_type());
-//		this->env.set("CONTENT_LENGHT", this->request.content_lenght());
+//		this->env.set("CONTENT_LENGTH", this->request.content_length());
 
 		/*--------*/
 		/* Client */
