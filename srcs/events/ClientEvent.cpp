@@ -21,8 +21,11 @@ namespace Webserv
 		std::cout << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
 		char buffer[2048];
 		size_t	size;
+		int	ret;
 
 		size = this->sock.read(buffer, 2048);
+		if (size < 0)
+			throw ClientEventReadFailed();
 		if (size == 0) {
 			this->events_flags = POLLOUT | POLLHUP;
 			return ;
@@ -40,6 +43,7 @@ namespace Webserv
 
 				while (request != requests.end())
 				{
+					std::cout<<"BODY REQUEST: "<<req.getBody()<<std::endl;
 					http_response_type response;
 					if (!request->hasHeader("Host"))
 					{
@@ -49,6 +53,20 @@ namespace Webserv
 					 	continue ;
 					}
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
+					ret = Webserv::Methods::Methods::exec_method(*request, response);
+					if (ret < 0)
+					{
+						response.setStatusCode(http_response_type::status_code_type::client_error_bad_request);
+						this->responses.push_back(response);
+					 	request++;
+					 	continue ;
+					}
+					if (ret > 0)
+					{
+						this->responses.push_back(response);
+					 	request++;
+					 	continue ;
+					}
 					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
 					resource_type		*rcs = NULL;
 					try
@@ -93,57 +111,19 @@ namespace Webserv
 		}
 	}
 
-	void	ClientEvent::write_event(void)	//TO DO replace
+	void	ClientEvent::write_event(void)
 	{
 		std::cout<<"Client write event"<<std::endl;
 
 		response_vector::const_iterator response = this->responses.begin();
-		while (response != responses.end()) {
+		if (response != responses.end())
+		{
 			this->sock.write(response->toString().c_str(), response->toString().length());
-			response++;
+			this->responses.erase(response);
+			return;
 		}
 		responses.clear();
-		this->events_flags = POLLIN;
-
-		// int status = 0;
-		// if (!this->rcs) {
-		// 	this->events_flags = POLLIN | POLLHUP;
-		// 	Webserv::Http::HttpResponse response;
-		// 	response.setStatusCode(Webserv::Http::HttpResponse::status_code_type::client_error_not_found);
-		// 	this->sock.write(response.toString().c_str(), response.toString().length());
-		// 	return ;
-		// }
-		// if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
-		// {
-		// 	if (this->cgi->writeIsEnd())
-		// 	{
-		// 		status = this->cgi->exec();	//peut etre recup le ret
-		// 		perror(strerror(status));
-		// 		std::cout<<"status: "<<status<<std::endl;
-		// 	}
-		// 	else
-		// 		this->cgi->write_event();
-		// 	return;
-		// }
-		// if (this->rcs->loadResource())
-		// {
-		// 	Webserv::Http::HttpResponse response;
-		// 	response.setResource(*this->rcs);
-		// 	this->sock.write(response.toString().c_str(), response.toString().length());
-		// 	std::cout<<"delete rcs"<<std::endl;
-		// 	if (this->rcs)
-		// 		delete this->rcs;
-		// 	this->rcs = NULL;
-		// 	std::cout<<"delete cgi"<<std::endl;
-		// 	if (this->cgi)
-		// 		delete this->cgi;
-		// 	this->cgi = NULL;
-		// 	this->events_flags = POLLIN | POLLHUP;
-		// }
-		// else
-		// {
-		// 	std::cout<<"hmm"<<std::endl;
-		// }
+		this->events_flags = POLLIN | POLLHUP;
 	}
 
 	short	ClientEvent::getEventsFlags(void)

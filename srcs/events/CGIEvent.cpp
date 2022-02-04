@@ -46,14 +46,14 @@ namespace Webserv
 				it = write_poll.begin();
 				if (it->revents & POLLOUT)
 				{
-					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size - 1], this->req.getBody().size()) - this->wr_size;
+					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size], this->req.getBody().size()) - this->wr_size;
 					if (ret < 0)
 					{
 						std::cout<<"Error cgi write"<<std::endl;
 						exit(-1);
 					}
-					this->wr_size += ret;
-					if (ret == 0 || this->wr_size == this->req.getBody().length())
+					this->wr_size += ret - 1;
+					if (ret == 0 || this->wr_size == this->req.getBody().length() - 1)
 						break;
 				}
 			}
@@ -108,7 +108,7 @@ namespace Webserv
 		this->env.set("AUTH_SCRIPT", ""); //? Need more infos
 //		this->env.set("REMOTE_USER", this->request.client_user()); //if script protect and srv allow identification
 //        this->env.set("CONTENT_TYPE", this->request.content_type());
-//		this->env.set("CONTENT_LENGTH", this->request.content_length());
+//		this->env.set("CONTENT_LENGHT", this->request.content_lenght());
 
 		/*--------*/
 		/* Client */

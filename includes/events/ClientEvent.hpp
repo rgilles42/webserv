@@ -81,7 +81,7 @@ namespace Webserv
 			Webserv::Config::server_type::route_type	getRoute(const std::string& url, const Webserv::Config::server_type::routes_map& routes, const Webserv::Config::server_type::route_type& defaultRoute);
 			std::vector<std::string>	split(const std::string& str, char delim);
 
-			struct	clientEventReadFailed : public std::exception
+			struct	ClientEventReadFailed : public std::exception
 			{
 				virtual const char* what() const throw()
 				{
