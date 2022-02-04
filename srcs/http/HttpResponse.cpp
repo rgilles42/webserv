@@ -56,7 +56,7 @@ namespace Webserv {
 			// this->setHeader("Content-Encoding", "gzip");
 
 
-			// this->setHeader("Transfer-Encoding", "chunked"); // Cannot be present while Content-Lenght is present
+			// this->setHeader("Transfer-Encoding", "chunked"); // Cannot be present while Content-Length is present
 		}
 
 		// Headers Methods

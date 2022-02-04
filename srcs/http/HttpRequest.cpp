@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:48:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/04 14:25:51 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,10 +409,11 @@ namespace Webserv {
 							continue ;
 						}
 					}
-				} else if (headers.has("Content-Lenght")) {
+				} else if (headers.has("Content-Length")) {
+					std::cout << "debug1:" << headers.has("Content-Length") << std::endl;
 					std::stringstream	ss;
 					size_t contentLen = 0;
-					ss << headers.get("Content-Lenght");
+					ss << headers.get("Content-Length");
 					ss >> contentLen;
 					if (tmpBuff.substr(pos).length() < contentLen) {
 						return lastPos;
