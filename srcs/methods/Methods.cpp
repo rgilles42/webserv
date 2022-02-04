@@ -34,7 +34,6 @@ namespace Methods {
 
 		std::cout<<"POST Method call"<<std::endl;
 		std::cout<<"reqBody: "<<req.getBody()<<std::endl;
-		write_poll.add_fd(fd_upload, POLLOUT);
 		if (req.getBody().size() != 0)
 		{
 			std::cout<<"Create file"<<std::endl;
@@ -43,13 +42,16 @@ namespace Methods {
 				throw MethodsFcntlError();
 			if (fcntl(fd_upload, F_SETFL, O_NONBLOCK) < 0)
 				throw MethodsFcntlError();
+			write_poll.add_fd(fd_upload, POLLOUT);
 			while (1)
 			{
+				std::cout<<"AH"<<std::endl;
 				write_poll.exec();
+				std::cout<<"Mince"<<std::endl;
 				it = write_poll.begin();
-				if (it->revents & POLLOUT)
+				if ((it->revents & POLLOUT) == POLLOUT)
 				{
-					ret = write(fd_upload, &req.getBody().c_str()[bytes_write], req.getBody().size() - bytes_write);
+					ret = write(fd_upload, &req.getBody()[bytes_write], req.getBody().size() - bytes_write);
 					if (ret < 0)
 					{
 						std::cout<<"Error cgi write"<<std::endl;
