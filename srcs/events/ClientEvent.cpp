@@ -43,7 +43,7 @@ namespace Webserv
 
 				while (request != requests.end())
 				{
-					std::cout<<"BODY REQUEST: "<<req.getBody()<<std::endl;
+					std::cout<<"BODY REQUEST: "<<request->getBody()<<std::endl;
 					http_response_type response;
 					if (!request->hasHeader("Host"))
 					{
@@ -53,7 +53,7 @@ namespace Webserv
 					 	continue ;
 					}
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
-					ret = Webserv::Methods::Methods::exec_method(*request, response);
+					ret = Webserv::Methods::Methods::exec_method(*request, response, srv);
 					if (ret < 0)
 					{
 						response.setStatusCode(http_response_type::status_code_type::client_error_bad_request);

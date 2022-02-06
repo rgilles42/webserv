@@ -6,29 +6,31 @@ namespace Methods {
 
 	Methods::~Methods(void) {}
 
-	int    Methods::exec_method(http_request_type req, http_response_type &response)
+	int    Methods::exec_method(http_request_type req, http_response_type &response, http_server_type srv)
 	{
 		if (req.getMethod().getMethod() == http_request_type::method_type::GET)
-			return getMethod(req, response);
+			return getMethod(req, response, srv);
 		else if (req.getMethod().getMethod() == http_request_type::method_type::POST)
-			return postMethod(req, response);
+			return postMethod(req, response, srv);
 		else if (req.getMethod().getMethod() == http_request_type::method_type::DELETE)
-			return deleteMethod(req, response);
+			return deleteMethod(req, response, srv);
 		return -1;
 	}
 /*--------------------------------------------------------------------------------------------------------------*/
-	int   Methods::getMethod(http_request_type req, http_response_type &response)
+	int   Methods::getMethod(http_request_type req, http_response_type &response, http_server_type srv)
 	{
 		(void)req;
 		(void)response;
+		(void)srv;
 		return 0;
 	}
 
-	int    Methods::postMethod(http_request_type req, http_response_type &response)	// TO DO Modif for check if need CGI
+	int    Methods::postMethod(http_request_type req, http_response_type &response, http_server_type srv)	// TO DO Modif for check if need CGI
 	{
 		Poll	write_poll;
 		int	fd_upload = -1;;
 		size_t	bytes_write = 0;
+		std::string	path_upload;
 		std::vector<struct pollfd>::iterator it;
 		ssize_t ret;
 
@@ -37,6 +39,8 @@ namespace Methods {
 		if (req.getBody().size() != 0)
 		{
 			std::cout<<"Create file"<<std::endl;
+			path_upload = srv.getUploadStore();
+			std::cout<<"Path upload: "<<path_upload<<std::endl;
 			fd_upload = open("./test.txt", O_WRONLY | O_CREAT | O_APPEND, 066);
 			if (fd_upload < 0)
 				throw MethodsFcntlError();
@@ -71,10 +75,14 @@ namespace Methods {
 		return 0;
 	}
 
-	int   Methods::deleteMethod(http_request_type req, http_response_type &response)
+	int   Methods::deleteMethod(http_request_type req, http_response_type &response, http_server_type srv)
 	{
+//		int ret;
 		(void)req;
 		(void)response;
+		(void)srv;
+
+//		ret = remove(path)
 		return 0;
 	}
 }	// namespace Methods

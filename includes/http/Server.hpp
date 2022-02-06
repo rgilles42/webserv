@@ -100,6 +100,7 @@ namespace Webserv {
 				const listen_type	&getListen(void) const;
 				const route_type	&getDefaultRoute(void) const;
 				const routes_map	&getRoutes(void) const;
+				const upload_store_type &getUploadStore(void) const;
 		};
 
 	} // namespace Http
