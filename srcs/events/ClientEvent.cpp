@@ -18,7 +18,7 @@ namespace Webserv
 	{
 		std::cout << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
 		char buffer[2048];
-		size_t	size;
+		ssize_t	size;
 		int	ret;
 
 		size = this->sock.read(buffer, 2048);
@@ -42,7 +42,6 @@ namespace Webserv
 
 				while (request != requests.end())
 				{
-					std::cout<<"BODY REQUEST: "<<request->getBody()<<std::endl;
 					http_response_type response;
 					if (!request->hasHeader("Host"))
 					{
@@ -52,7 +51,9 @@ namespace Webserv
 					 	continue ;
 					}
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
-					ret = Webserv::Methods::Methods::exec_method(*request, response, srv);
+					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
+					bool				isCGI = false;
+					ret = Webserv::Methods::Methods::exec_method(*request, response, srv, route);
 					if (ret < 0)
 					{
 						response.setStatusCode(http_response_type::status_code_type::client_error_bad_request);
@@ -60,18 +61,21 @@ namespace Webserv
 					 	request++;
 					 	continue ;
 					}
-					if (ret > 0)
+					else if (ret == 1)
 					{
 						this->responses.push_back(response);
 					 	request++;
 					 	continue ;
 					}
-					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
+					else if (ret == 2)
+					{
+						isCGI = true;
+					}
 					resource_type		rcs;
-					CGIEvent cgi(*request, srv, this->env);
+					CGIEvent cgi(*request, srv, this->env, this->route);
 					try
 					{
-						rcs = resource_type(route.getFilePath(request->getBasePath()), false);
+						rcs = resource_type(route.getFilePath(request->getBasePath()), isCGI);
 						if (rcs.isCGI())
 						{
 							cgi.exec();
@@ -132,7 +136,7 @@ namespace Webserv
 
 	int		ClientEvent::getFD(void)
 	{
-		return this->sock.getFd();	//TO DO replace
+		return this->sock.getFd();
 	}
 
 	////////////////////////

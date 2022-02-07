@@ -6,26 +6,23 @@ namespace Methods {
 
 	Methods::~Methods(void) {}
 
-	int    Methods::exec_method(http_request_type req, http_response_type &response, http_server_type srv)
+	int    Methods::exec_method(const http_request_type &req, http_response_type &response, const http_server_type &srv, http_route_type& route)
 	{
 		if (req.getMethod().getMethod() == http_request_type::method_type::GET)
-			return getMethod(req, response, srv);
+			return getMethod(req, route);
 		else if (req.getMethod().getMethod() == http_request_type::method_type::POST)
-			return postMethod(req, response, srv);
+			return postMethod(req, response, srv, route);
 		else if (req.getMethod().getMethod() == http_request_type::method_type::DELETE)
-			return deleteMethod(req, response, srv);
+			return deleteMethod(req, response, srv, route);
 		return -1;
 	}
 /*--------------------------------------------------------------------------------------------------------------*/
-	int   Methods::getMethod(http_request_type req, http_response_type &response, http_server_type srv)
+	int   Methods::getMethod(const http_request_type &req, http_route_type& route)
 	{
-		(void)req;
-		(void)response;
-		(void)srv;
-		return 0;
+		return isCGI(req, route);
 	}
 
-	int    Methods::postMethod(http_request_type req, http_response_type &response, http_server_type srv)	// TO DO Modif for check if need CGI
+	int    Methods::postMethod(const http_request_type &req, http_response_type &response, const http_server_type& srv, http_route_type& route)	// TO DO Modif for check if need CGI
 	{
 		Poll	write_poll;
 		int	fd_upload = -1;;
@@ -34,6 +31,8 @@ namespace Methods {
 		std::vector<struct pollfd>::iterator it;
 		ssize_t ret;
 
+		if (isCGI(req, route) == 2)
+			return 2;
 		std::cout<<"POST Method call"<<std::endl;
 		std::cout<<"reqBody: "<<req.getBody()<<std::endl;
 		if (req.getBody().size() != 0)
@@ -75,14 +74,58 @@ namespace Methods {
 		return 0;
 	}
 
-	int   Methods::deleteMethod(http_request_type req, http_response_type &response, http_server_type srv)
+	int	Methods::deleteMethod(const http_request_type &req, http_response_type &response, const http_server_type &srv, http_route_type& route)
 	{
 //		int ret;
 		(void)req;
 		(void)response;
 		(void)srv;
 
+		if (isCGI(req, route) == 2)
+			return 2;
 //		ret = remove(path)
+		return 0;
+	}
+
+	int	Methods::isCGI(const http_request_type &req, http_route_type& route)
+	{
+		size_t save_index;
+		size_t index;
+
+				std::string path = route.getFilePath(req.getBasePath());
+				index = path.find('.');
+				if (index == std::string::npos)
+					return 0;
+				while (index != std::string::npos)
+				{
+					save_index = index;
+					index = path.find('.', index + 1);
+				}
+			std::string ext = &path[save_index];
+			std::cout<<"ext: "<<ext<<std::endl;
+		if (route.getCgiPass().length() > 0)
+		{
+			if (route.getCgiExt().size() > 0)
+			{
+				std::string path = route.getFilePath(req.getBasePath());
+				index = path.find('.');
+				if (index == std::string::npos)
+					return 0;
+				while (index != std::string::npos)
+				{
+					save_index = index;
+					index = path.find('.', index + 1);
+				}
+				std::string ext = &path[save_index];
+				std::cout<<"ext: "<<ext<<std::endl;
+				std::vector<std::string> vect_ext = route.getCgiExt();
+				for (std::vector<std::string>::iterator it = vect_ext.begin(); it != vect_ext.end(); it++)
+				{
+					if (*it == ext)
+						return 2;
+				}
+			}
+		}
 		return 0;
 	}
 }	// namespace Methods

@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest &request, const Http::Server &server, Webserv::Utils::Env& environnement) : req(request), srv(server), env(environnement), writeEnd(false), args(NULL), CGIEnd(false)
+	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest& request, const Http::Server& server, const Webserv::Utils::Env& environnement, const Webserv::Http::Route& r) : req(request), srv(server), env(environnement), route(r), writeEnd(false), args(NULL), CGIEnd(false)
 	{
 		if (pipe(this->fd_in) < 0)
 			throw CGIPipeFailed();
@@ -66,8 +66,8 @@ namespace Webserv
 		try {
 			this->args = new char*[3];
 
-			std::string		path_cgi = "/usr/local/bin/php-cgi";	//need change
-			std::string		file_path = "../default_pages/index.php";	//need changes
+			std::string		path_cgi = this->route.getCgiPass();
+			std::string		file_path = route.getFilePath(this->req.getBasePath());
 			if (open(file_path.c_str(), EACCES) < 0 && errno == EACCES)
 				throw CGIOpenFailed();
 			args[0] = new char[path_cgi.size() + 1];
@@ -89,37 +89,36 @@ namespace Webserv
 		/*--------*/
 
 		this->env.set("SERVER_SOFTWARE", "Webserv/HTTP/1.1");
-//        this->env.set("SERVER_NAME", this->server.name());	// server name
+        this->env.set("SERVER_NAME", this->srv.getServerName());
 		this->env.set("GATEWAY_INTERFACE", "CGI/1.1");
+		this->env.set("SERVER_PORT", SSTR(this->srv.getListen().getIntPort()));
 
 		/*---------*/
 		/* Request */
 		/*---------*/
 
 		this->env.set("SERVER_PROTOCOL", "HTTP/1.1");
-  //      this->env.set("SERVER_PORT", this->srv,getPort());			// Port server
         this->env.set("REQUEST_METHODS",this->req.getMethod().toString());
-//        this->env.set("PATH_INFO", this->request.path_info());	// http://server.org/cgi-bin/script.cgi/path_info -> need only path_info
-		this->env.set("PATH_TRANSLATED", ""); //? Need more infos
-//		this->env.set("SCRIPT_NAME", this->req.getQuery().c_str());	//virtual path to cgi script
-//        this->env.set("QUERY_STRING", this->request.getQuery().c_str());
-//        this->env.set("REMOTE_HOST", this->request.hote_client());	// Nom hote client
-//        this->env.set("REMOTE_ADDR", this->request.client_add());		// IP Client
+        this->env.set("QUERY_STRING", this->req.getQuery());
+
+		this->env.set("SCRIPT_NAME", this->route.getCgiPass());
+
+        this->env.set("REMOTE_HOST", this->req.getHostname());	// Nom hote client
+        this->env.set("REMOTE_ADDR", this->req.getIp());		// IP Client
 		this->env.set("AUTH_SCRIPT", "");
 		this->env.set("REMOTE_USER", "");
-//        this->env.set("CONTENT_TYPE", this->request.content_type());
-//		this->env.set("CONTENT_LENGHT", this->request.content_lenght());
+   //     this->env.set("CONTENT_TYPE", "");
+		this->env.set("CONTENT_LENGHT", SSTR(this->req.getBody().length()));
 
 		/*--------*/
 		/* Client */
 		/*--------*/
 
-//        this->env.set("HTTP_ACCEPT", this->request.http_accept());
-//        this->env.set("HTTP_ACCEPT_LANGUAGE", this->request.http_accept_language());
-//        this->env.set("HTTP_USER_AGENT", this->request.navigateur());
-//        this->env.set("HTTP_COOKIE", this->request.cookie());   //BONUS
+        this->env.set("HTTP_ACCEPT", this->req.getHeader("Accept"));
+        this->env.set("HTTP_ACCEPT_LANGUAGE", this->req.getHeader("Accept-Language"));
+        this->env.set("HTTP_USER_AGENT", this->req.getHeader("User-Agent"));
 		this->env.set("HTTP_COOKIE", "");
-		this->env.set("HTTP_REFERER", ""); //? Need more infos
+		this->env.set("HTTP_REFERER", "");
 	}
 
 

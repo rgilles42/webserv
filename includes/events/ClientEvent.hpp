@@ -27,6 +27,7 @@
 # include "../http/HttpResponse.hpp"
 # include "../http/HttpRequest.hpp"
 # include "../methods/Methods.hpp"
+# include "../http/Route.hpp"
 
 namespace Webserv
 {
