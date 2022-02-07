@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 16:53:31 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/07 23:11:59 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,14 +168,14 @@ namespace Webserv {
 					this->_content += buf;
 					this->_readBytes += rdsize;
 				}
-				else if ((!this->_isCGI && this->_readBytes >= this->_size) || (this->_isCGI && !rdsize))
+				else if (rdsize < 0)
+					throw UnableToReadResourceException();
+				else
 				{
 					this->_size = totalReadBytes;
 					this->_isFullyRead = true;
 					break ;
 				}
-				else if (rdsize < 0)
-					throw UnableToReadResourceException();
 			}
 			return (this->_isFullyRead);
 		}

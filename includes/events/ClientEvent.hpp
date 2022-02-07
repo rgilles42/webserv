@@ -54,15 +54,7 @@ namespace Webserv
 			short						events_flags;
 			response_vector				responses;
 
-			cgi_event_type				*cgi;
-
-			http_request_type			req;
-			http_server_type			srv;
 			env_type					env;
-			http_route_type				route;
-
-			std::string					request_string;
-			resource_type				currentResource;
 
 			ClientEvent(void);
 

@@ -63,22 +63,16 @@ namespace Webserv
 
 	void	CGIEvent::init_args()
 	{
-		try {
-			this->args = new char*[3];
-
-			std::string		path_cgi = this->route.getCgiPass();
-			std::string		file_path = route.getFilePath(this->req.getBasePath());
-			if (open(file_path.c_str(), EACCES) < 0 && errno == EACCES)
-				throw CGIOpenFailed();
-			args[0] = new char[path_cgi.size() + 1];
- 			args[0] = std::strcpy(args[0], path_cgi.c_str());	//cgi-path
-			args[1] = new char[file_path.size() + 1];
-			args[1] = std::strcpy(args[1] ,file_path.c_str());	// file path
-			args[2] = 0;
-		}
-		catch (const std::exception &e) {
-			std::cout<<e.what()<<std::endl;
-		}
+		this->args = new char*[3];
+		std::string		path_cgi = this->route.getCgiPass();
+		std::string		file_path = route.getFilePath(this->req.getBasePath());
+		if (open(file_path.c_str(), O_RDONLY) < 0 && errno == EACCES)
+			throw CGIOpenFailed();
+		args[0] = new char[path_cgi.size() + 1];
+		std::strcpy(args[0], path_cgi.c_str());	//cgi-path
+		args[1] = new char[file_path.size() + 1];
+		std::strcpy(args[1] ,file_path.c_str());	// file path
+		args[2] = 0;
 
 	}
 
@@ -170,7 +164,7 @@ namespace Webserv
 			close(fd_in[0]);
 			fd_in[0] = -1;
 			close(fd_out[1]);
-			fd_out[0] = -1;
+			fd_out[1] = -1;
 			this->env.freeEnvp(envp);
 			waitpid(this->pid, &ret, 0);
 			if (WIFEXITED(ret))

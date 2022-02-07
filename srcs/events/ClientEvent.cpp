@@ -4,7 +4,6 @@ namespace Webserv
 {
 	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config, env_type& environnement): sock(client_sock), srv_sock(server_sock), config(_config), env(environnement)
 	{
-		this->cgi = NULL;
 		this->events_flags = POLLIN;
 	}
 
@@ -29,14 +28,12 @@ namespace Webserv
 			return ;
 		}
 		buffer[size] = '\0';
-		request_string += buffer;
 		this->create_req.addMessage(buffer);
 		if (this->create_req.checkBuffer() >= 1)
 		{
 			if (this->create_req.parseRequests() == true)
 			{
 				std::cout<<"Request create"<<std::endl;
-				std::cout<<"Request: "<<request_string<<std::endl;
 				http_request_list&	requests = this->create_req.getAllRequests();
 				http_request_list::const_iterator request = requests.begin();
 
@@ -72,14 +69,14 @@ namespace Webserv
 						isCGI = true;
 					}
 					resource_type		rcs;
-					CGIEvent cgi(*request, srv, this->env, this->route);
+					CGIEvent cgi(*request, srv, this->env, route);
 					try
 					{
 						rcs.init(route.getFilePath(request->getBasePath()), isCGI, route);
 						if (rcs.isCGI())
 						{
 							cgi.exec();
-							rcs.setFd(this->cgi->getReadFD());
+							rcs.setFd(cgi.getReadFD());
 						}
 					}
 					catch (const std::exception& e)
