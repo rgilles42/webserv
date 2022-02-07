@@ -75,7 +75,7 @@ namespace Webserv
 					CGIEvent cgi(*request, srv, this->env, this->route);
 					try
 					{
-						rcs = resource_type(route.getFilePath(request->getBasePath()), isCGI);
+						rcs.init(route.getFilePath(request->getBasePath()), isCGI, route);
 						if (rcs.isCGI())
 						{
 							cgi.exec();
@@ -118,7 +118,7 @@ namespace Webserv
 	{
 		std::cout<<"Client write event"<<std::endl;
 
-		response_vector::const_iterator response = this->responses.begin();
+		response_vector::iterator response = this->responses.begin();
 		if (response != responses.end())
 		{
 			this->sock.write(response->toString().c_str(), response->toString().length());

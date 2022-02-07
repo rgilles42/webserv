@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:51:02 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/30 02:36:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 17:52:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace Webserv {
 			this->setAddress(addr);
 			this->setPort(port);
 
-//			this->setsockopt(SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT);
+			this->setsockopt(SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT);
 
 			if (!blocking) {
 				this->fcntl(F_SETFL, O_NONBLOCK);
