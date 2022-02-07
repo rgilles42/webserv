@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:37:58 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace Webserv {
 			if (this != &other) {
 				this->serverName = other.serverName;
 				this->listen = other.listen;
-				this->mimesTypes = other.mimesTypes;
+				this->mimeTypes = other.mimeTypes;
 				this->error_pages = other.error_pages;
 				this->client_max_body_size = other.client_max_body_size;
 				this->upload_store = other.upload_store;
@@ -48,7 +48,7 @@ namespace Webserv {
 		}
 
 		void	Server::init(void) {
-			this->mimesTypes.clear();
+			this->mimeTypes.clear();
 
 			this->serverName = DEFAULT_SERVER_NAME;
 			this->listen = DEFAULT_LISTEN;
@@ -88,8 +88,8 @@ namespace Webserv {
 							newRoute.setCurrentPath(key);
 							this->routes[key] = newRoute;
 						} else if (directive == "types") {
-							this->mimesTypes.clear();
-							if (!this->mimesTypes.fromBlocks(blockIt->getChilds())) {
+							this->mimeTypes.clear();
+							if (!this->mimeTypes.fromBlocks(blockIt->getChilds())) {
 								return false;
 							}
 						} else if (directive == "server_name") {
@@ -170,8 +170,8 @@ namespace Webserv {
 		}
 
 
-		void	Server::setMimesTypes(const mimes_types_type& mimesTypes) {
-			this->mimesTypes = mimesTypes;
+		void	Server::setMimeTypes(const mime_types_type& mimeTypes) {
+			this->mimeTypes = mimeTypes;
 		}
 
 		void 	Server::addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route) {

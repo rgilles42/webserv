@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 19:52:27 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace Webserv {
 			if (this != &other) {
 				this->currentPath = other.currentPath;
 				this->parent = other.parent;
-				this->mimesTypes = other.mimesTypes;
+				this->mimeTypes = other.mimeTypes;
 				this->error_pages = other.error_pages;
 				this->client_max_body_size = other.client_max_body_size;
 				this->upload_store = other.upload_store;
@@ -52,7 +52,7 @@ namespace Webserv {
 
 			this->parent = NULL;
 
-			this->mimesTypes.clear();
+			this->mimeTypes.clear();
 
 			this->error_pages = directive_type::getDefaultErrorPages();
 
@@ -74,7 +74,7 @@ namespace Webserv {
 		void	Route::setParent(Route* parent) {
 			this->parent = parent;
 			if (this->parent) {
-				this->mimesTypes = this->parent->mimesTypes;
+				this->mimeTypes = this->parent->mimeTypes;
 				this->error_pages = this->parent->error_pages;
 				this->client_max_body_size = this->parent->client_max_body_size;
 				this->upload_store = this->parent->upload_store;
@@ -108,8 +108,8 @@ namespace Webserv {
 							newRoute.setCurrentPath(key);
 							this->routes[key] = newRoute;
 						} else if (directive == "types") {
-							this->mimesTypes.clear();
-							if (!this->mimesTypes.fromBlocks(blockIt->getChilds())) {
+							this->mimeTypes.clear();
+							if (!this->mimeTypes.fromBlocks(blockIt->getChilds())) {
 								return false;
 							}
 						} else if (directive == "error_page") {
@@ -179,8 +179,8 @@ namespace Webserv {
 			this->currentPath = currentPath;
 		}
 
-		void	Route::setMimesTypes(const mimes_types_type& mimesTypes) {
-			this->mimesTypes = mimesTypes;
+		void	Route::setMimeTypes(const mime_types_type& mimeTypes) {
+			this->mimeTypes = mimeTypes;
 		}
 
 		void	Route::setErrorPages(const error_pages_type& errorPages) {
@@ -232,8 +232,8 @@ namespace Webserv {
 			return this->parent;
 		}
 
-		const Route::mimes_types_type&			Route::getMimesTypes(void) const {
-			return this->mimesTypes;
+		const Route::mime_types_type&			Route::getMimeTypes(void) const {
+			return this->mimeTypes;
 		}
 
 		const Route::error_pages_type&			Route::getErrorPages(void) const {

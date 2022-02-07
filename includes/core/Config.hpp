@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 16:30:57 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/31 14:34:27 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ namespace Webserv {
 			typedef Webserv::Http::Server			server_type;
 			typedef std::vector<server_type>		server_vector;
 
-			typedef Webserv::Utils::MimeTypes		mimes_types_type;
+			typedef Webserv::Utils::MimeTypes		mime_types_type;
 
 
 				class ConfigException : public std::exception {
@@ -133,7 +133,7 @@ namespace Webserv {
 			block_vector						blocks;
 
 			server_vector						servers;
-			mimes_types_type					globalMimesTypes;
+			mime_types_type					globalMimeTypes;
 
 			void	formatBlocks(block_vector& blocks);
 
