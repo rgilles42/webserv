@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MimeTypes.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 21:09:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 16:03:40 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,9 @@ namespace Webserv {
 
 		const std::string&			MimeTypes::getType(const std::string& path, const std::string& fallback) const {
 			std::string fileExtension = getFileExtension(path);
-			std::cout << std::endl << fileExtension << std::endl;
 			if (path.length() <= 0 || fileExtension.length() <= 0) {
 				return fallback;
 			}
-			for (MapType::const_iterator it = this->mappedTypes.begin(); it != this->mappedTypes.end(); it++)
-				std::cout << it->first << " : " << it->second << std::endl; 
 			if (this->mappedTypes.count(fileExtension) > 0) {
 				MapType::const_iterator it = this->mappedTypes.find(fileExtension);
 				if (it != this->mappedTypes.end()) {

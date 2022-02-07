@@ -46,8 +46,7 @@ namespace Webserv {
 					if (read(this->_fd, NULL, 0))
 						throw UnableToReadResourceException();
 					this->_size = s.st_size;
-					this->_contentType = mime.getType(this->_path, "text/html");
-					std::cout << std::endl << this->_contentType << std::endl;
+					this->_contentType = mime.getType(this->_path, "text/plain");
 				}
 				else
 					this->_contentType = "text/html";
