@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 16:01:32 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ namespace Webserv {
 							if (!this->mimeTypes.fromBlocks(blockIt->getChilds())) {
 								return false;
 							}
+							this->defaultRoute.setMimeTypes(this->mimeTypes);
 						} else if (directive == "server_name") {
 							if (!directive_type::parseServerName(values, this->serverName, DEFAULT_SERVER_NAME)) {
 								throw directive_type::InvalidValueDirectiveException(directive);
@@ -172,6 +173,7 @@ namespace Webserv {
 
 		void	Server::setMimeTypes(const mime_types_type& mimeTypes) {
 			this->mimeTypes = mimeTypes;
+			this->defaultRoute.setMimeTypes(this->mimeTypes);
 		}
 
 		void 	Server::addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route) {
