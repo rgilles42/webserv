@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientEvent.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/02 20:43:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:35:01 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ namespace Webserv
 			response_vector				responses;
 
 
-			resource_type				*rcs;
 			cgi_event_type				*cgi;
 
 			http_request_type			req;

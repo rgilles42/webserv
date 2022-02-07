@@ -58,9 +58,12 @@ namespace Webserv {
 
 		const std::string&			MimeTypes::getType(const std::string& path, const std::string& fallback) const {
 			std::string fileExtension = getFileExtension(path);
+			std::cout << std::endl << fileExtension << std::endl;
 			if (path.length() <= 0 || fileExtension.length() <= 0) {
 				return fallback;
 			}
+			for (MapType::const_iterator it = this->mappedTypes.begin(); it != this->mappedTypes.end(); it++)
+				std::cout << it->first << " : " << it->second << std::endl; 
 			if (this->mappedTypes.count(fileExtension) > 0) {
 				MapType::const_iterator it = this->mappedTypes.find(fileExtension);
 				if (it != this->mappedTypes.end()) {
