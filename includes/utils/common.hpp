@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:13:22 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 03:06:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/01 17:57:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ namespace Webserv {
 
 		std::string		getFileContents(const std::string& filename);
 		std::string		getFileExtension(const std::string& filename);
+
+		const std::string	getConcatURL(const std::string& url1, const std::string url2);
 
 	} // namespace Utils
 

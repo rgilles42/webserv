@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 21:18:19 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:17:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "../utils/Directive.hpp"		// For Directive
 # include "../utils/Block.hpp"			// For Block
 # include "../utils/MimeTypes.hpp"		// For MimeTypes
+# include "../utils/common.hpp"		// For MimeTypes
 
 namespace Webserv {
 
@@ -29,6 +30,7 @@ namespace Webserv {
 
 		class Route {
 			public:
+				typedef	std::string					path_type;
 				typedef	Webserv::Utils::Block		block_type;
 				typedef std::vector<block_type>		block_vector;
 
@@ -50,10 +52,16 @@ namespace Webserv {
 
 				typedef directive_type::dir_limit_except_type	limit_except_type;
 
-				typedef Route						route_type;
-				typedef std::map<std::string, route_type>	routes_map;
+				typedef directive_type::dir_cgi_pass_type		cgi_pass_type;
+				typedef directive_type::dir_cgi_ext_type		cgi_ext_type;
+
+
+				typedef std::map<std::string, Route>	routes_map;
 
 			protected:
+				path_type			currentPath;
+				Route*				parent;
+
 				mimes_types_type	mimesTypes;
 
 				error_pages_type	error_pages;
@@ -67,6 +75,9 @@ namespace Webserv {
 
 				limit_except_type	limit_except;
 
+				cgi_pass_type		cgi_pass;
+				cgi_ext_type		cgi_ext;
+
 				routes_map			routes;
 
 			public:
@@ -78,8 +89,10 @@ namespace Webserv {
 
 				void	init(void);
 
-				void	fromParent(const Route& parent);
 				bool	fromBlocks(const block_vector& blocks);
+
+				void	setParent(Route* parent = NULL);
+				void	setCurrentPath(const path_type& currentPath);
 
 				void	setMimesTypes(const mimes_types_type& mimesTypes);
 
@@ -91,11 +104,29 @@ namespace Webserv {
 				void	setRoot(const root_type& root);
 				void	setIndex(const index_type& index);
 				void	setLimitExcept(const limit_except_type& limitExcept);
+				void	setCgiPass(const cgi_pass_type& cgiPass);
+				void	setCgiExt(const cgi_ext_type& cgiExt);
 
 				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 
-				const routes_map	&getRoutes(void) const;
-				const root_type	&getRoot(void) const;
+				const routes_map&					getRoutes(void) const;
+
+				const path_type&					getCurrentPath(void) const;
+				const Route*						getParent(void) const;
+				const mimes_types_type&				getMimesTypes(void) const;
+				const error_pages_type&				getErrorPages(void) const;
+				const client_max_body_size_type&	getClientMaxBodySize(void) const;
+				const upload_store_type&			getUploadStore(void) const;
+				const return_type&					getReturn(void) const;
+				const autoindex_type&				getAutoindex(void) const;
+				const root_type&					getRoot(void) const;
+				const index_type&					getIndex(void) const;
+				const limit_except_type&			getLimitExcept(void) const;
+				const cgi_pass_type&				getCgiPass(void) const;
+				const cgi_ext_type&					getCgiExt(void) const;
+
+				const error_pages_pair				getErrorPage(const error_pages_type::key_type& statusCode);
+				const std::string					getFilePath(const std::string& url);
 		};
 
 	} // namespace Http

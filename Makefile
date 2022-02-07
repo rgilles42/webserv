@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2022/01/30 02:58:21 by ppaglier         ###   ########.fr        #
+#    Updated: 2022/02/02 18:20:12 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/http/Server.hpp \
 				$(HEADER_DIR)/http/Route.hpp \
 				$(HEADER_DIR)/http/HttpVersion.hpp \
+				$(HEADER_DIR)/http/HttpMethod.hpp \
 				$(HEADER_DIR)/http/HttpStatusCode.hpp \
 				$(HEADER_DIR)/http/HttpHeaders.hpp \
 				$(HEADER_DIR)/http/HttpRequest.hpp \
@@ -76,6 +77,7 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/http/Server.cpp \
 				$(SRC_DIR)/http/Route.cpp \
 				$(SRC_DIR)/http/HttpVersion.cpp \
+				$(SRC_DIR)/http/HttpMethod.cpp \
 				$(SRC_DIR)/http/HttpStatusCode.cpp \
 				$(SRC_DIR)/http/HttpHeaders.cpp \
 				$(SRC_DIR)/http/HttpRequest.cpp \

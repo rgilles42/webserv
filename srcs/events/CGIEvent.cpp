@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(Webserv::Http::HttpRequest &request/*, Http::Server &server*/): req(request), writeEnd(false), args(NULL), CGIEnd(false)
+	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest &request, const Http::Server &server, Webserv::Utils::Env& environnement) : req(request), srv(server), env(environnement), writeEnd(false), args(NULL), CGIEnd(false)
 	{
 		if (pipe(this->fd_in) < 0)
 			throw CGIPipeFailed();
@@ -33,31 +33,32 @@ namespace Webserv
 
 	void    CGIEvent::write_event()
 	{
-/*		struct pollfd _fd;
-		int	ret;
-		int status;
+		Poll	write_poll;
+		std::vector<struct pollfd>::iterator it;
+		ssize_t	ret = 0;
 
-		_fd.fd = fd_in[0];
-		_fd.events = POLLOUT;
-		if (this-> req.getMethod() == "POST" && this->req.getBody().length() != 0)
+		write_poll.add_fd(fd_in[0], POLLOUT);
+		if (this-> req.getMethod().toString() == "POST" && this->req.getBody().size() != 0)
 		{
-			ret = poll(&_fd, 1, 100);
-			if (ret >= 1 && _fd.revents & POLLIN)
+			while (1)
 			{
-				ret = write(fd_in[0], this->req.getBody(), this->req.getBody().length());
-				if (ret < 0)
-					return;
-				if (ret == this->req.getBody().length() || (wr_size + ret) >= this->req.getBody().length());
-				{m
-					this->writeEnd = true;
+				write_poll.exec();
+				it = write_poll.begin();
+				if (it->revents & POLLOUT)
+				{
+					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size - 1], this->req.getBody().size()) - this->wr_size;
+					if (ret < 0)
+					{
+						std::cout<<"Error cgi write"<<std::endl;
+						exit(-1);
+					}
+					this->wr_size += ret;
+					if (ret == 0 || this->wr_size == this->req.getBody().length())
+						break;
 				}
-				wr_size += ret;
 			}
 		}
-		else
-		{*/
-			this->writeEnd = true;
-//		}
+		this->writeEnd = true;
 	}
 
 	void	CGIEvent::init_args()
@@ -97,17 +98,17 @@ namespace Webserv
 
 		this->env.set("SERVER_PROTOCOL", "HTTP/1.1");
 //        this->env.set("SERVER_PORT", srv.port());
-        this->env.set("REQUEST_METHODS",this->req.getMethod().c_str());
+        this->env.set("REQUEST_METHODS",this->req.getMethod().toString());
 //        this->env.set("PATH_INFO", this->request.path_info());
 		this->env.set("PATH_TRANSLATED", ""); //? Need more infos
-//		this->env.set("SCRIPT_NAME", this->location_cgi.c_str());
+//		this->env.set("SCRIPT_NAME", this->req.getQuery().c_str());
 //        this->env.set("QUERY_STRING", this->request.getQuery().c_str());
 //        this->env.set("REMOTE_HOTE", this->request.hote_client());
 //        this->env.set("REMOTE_ADDR", this->request.client_add());
 		this->env.set("AUTH_SCRIPT", ""); //? Need more infos
 //		this->env.set("REMOTE_USER", this->request.client_user()); //if script protect and srv allow identification
 //        this->env.set("CONTENT_TYPE", this->request.content_type());
-//		this->env.set("CONTENT_LENGHT", this->request.content_lenght());
+//		this->env.set("CONTENT_LENGTH", this->request.content_length());
 
 		/*--------*/
 		/* Client */
@@ -163,7 +164,7 @@ namespace Webserv
 			ret = execve(this->args[0], this->args, envp);
 			if(ret < 0)
 				exit(ret);
-			exit(0);			
+			exit(0);
 		}
 		else
 		{

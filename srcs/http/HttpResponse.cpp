@@ -24,87 +24,51 @@ namespace Webserv {
 			*this = other;
 		}
 
-		HttpResponse::HttpResponse(const resource_type& resource) {
-			this->initDefaultHeaders();
-
-			this->headers.set("Content-Type", resource.getContentType());
-			this->headers.set("Content-Length", SSTR(resource.getContent().length()));
-			this->body = resource.getContent();
-		}
-
-		HttpResponse::HttpResponse(const std::string& response) {
-			this->fromString(response);
-		}
-
 		HttpResponse::~HttpResponse() {}
 
 		HttpResponse&		HttpResponse::operator=(const HttpResponse& other) {
 			if (this != &other) {
-			this->protocol = other.protocol;
-			this->statusCode = other.statusCode;
-			this->headers = other.headers;
-			this->body = other.body;
+				this->protocol = other.protocol;
+				this->statusCode = other.statusCode;
+				this->headers = other.headers;
+				this->body = other.body;
 			}
 			return *this;
 		}
 
 		void		HttpResponse::initDefaultHeaders() {
 
-			this->protocol = "HTTP/1.1";
-			this->statusCode = "200 OK";
+			this->protocol = protocol_type::http_1_1;
+			this->statusCode = status_code_type::success_ok;
 
-			this->headers.set("Server", DEFAULT_SERVER);
-			this->headers.set("Connection", "keep-alive");
+			this->headers.clear();
 
-			// this->headers.set("ETag", "5e889dfb-264");
+			this->setHeader("Server", DEFAULT_SERVER);
+			this->setHeader("Date", Webserv::Utils::getFormatedDate(time(NULL)));
 
-			this->headers.set("Content-Type", "text/plain");
-			this->headers.set("Content-Length", "0");
+			// this->setHeader("Connection", "keep-alive");
 
-			// this->headers.set("Content-Encoding", "gzip");
+			// this->setHeader("ETag", "5e889dfb-264");
+
+			// this->setHeader("Content-Type", "text/plain");
+			this->setHeader("Content-Length", "0");
+
+			// this->setHeader("Content-Encoding", "gzip");
 
 
-			// this->headers.set("Transfer-Encoding", "chunked"); // Cannot be present while Content-Lenght is present
+			// this->setHeader("Transfer-Encoding", "chunked"); // Cannot be present while Content-Length is present
 		}
 
-		// Request Methods
-		void		HttpResponse::append(const std::string& key, const std::string& value) {
+		// Headers Methods
+		void		HttpResponse::appendHeader(const headers_type::key_type& key, const headers_type::value_type& value) {
 			this->headers.append(key, value);
 		}
 
-		void		HttpResponse::attachment(const std::string& file) {
-			if (file.length() <= 0) {
-				this->headers.set("Content-Disposition", "attachement");
-				return ;
-			}
-			// std::string filetype = Webserv::Utils::getContentTypeByFile(file, "");
-			// std::string filename = file.substr(file.find_last_of("/") + 1);
-
-			// this->headers.set("Content-Disposition", "attachement; filename=\"" + filename + "\"");
-			// this->type(filetype);
+		void		HttpResponse::setHeader(const headers_type::key_type& key, const headers_type::value_type& value) {
+			this->headers.set(key, value);
 		}
 
-		void		HttpResponse::cookie(const std::string& name, const std::string& value, const std::string& options) {
-			(void)name;
-			(void)value;
-			(void)options;
-		}
-
-		void		HttpResponse::clearCookie(const std::string& name, const std::string& options) {
-			(void)name;
-			(void)options;
-		}
-
-		void		HttpResponse::download(const std::string& path, const std::string& filename, const std::string& options) {
-			if (filename.length() <= 0) {
-				this->headers.set("Content-Disposition", "attachement; filename=\"" + path + "\"");
-			} else {
-				this->headers.set("Content-Disposition", "attachement; filename=\"" + filename + "\"");
-			}
-			this->sendFile(path, options);
-		}
-
-		const std::string	HttpResponse::get(const std::string& key) const {
+		const HttpResponse::headers_type::value_type	HttpResponse::getHeader(const headers_type::key_type& key) const {
 				std::string value = "";
 			if (this->headers.has(key)) {
 				value = this->headers.get(key);
@@ -112,53 +76,63 @@ namespace Webserv {
 			return value;
 		}
 
-		void		HttpResponse::links(const std::string& next, const std::string& last) {
-			if (next.length() > 0) {
-				this->headers.append("Link", "<"+ next +">; rel=\"next\"");
-			}
-			if (last.length() > 0) {
-				this->headers.append("Link", "<"+ last +">; rel=\"last\"");
-			}
+		const HttpResponse::headers_type&			HttpResponse::getHeaders(void) const {
+			return this->headers;
 		}
 
-		void		HttpResponse::location(const std::string& path) {
-			this->headers.set("Location", path);
-		}
+		// Response Methods
 
-		void		HttpResponse::redirect(const std::string& path, const std::string& statusCode) {
-			(void)path;
-			(void)statusCode;
-		}
-
-		void		HttpResponse::send(const std::string& body) {
-			(void)body;
-		}
-
-		void		HttpResponse::sendFile(const std::string& path, const std::string& options) {
-			(void)path;
-			// std::string filetype = Webserv::Utils::getContentTypeByFile(path, "");
-			// this->type(filetype);
-			(void)options;
-		}
-
-		void		HttpResponse::sendStatus(const std::string& statusCode) {
-			this->status(statusCode);
-		}
-
-		void		HttpResponse::set(const std::string& key, const std::string& value) {
-			this->headers.set(key, value);
-		}
-
-		void		HttpResponse::status(const std::string& statusCode) {
+		void		HttpResponse::setStatusCode(const status_code_type& statusCode) {
 			this->statusCode = statusCode;
 		}
 
-		void		HttpResponse::type(const std::string& type) {
-			this->headers.set("Content-Type", type);
+		void		HttpResponse::setProtocol(const protocol_type& protocol) {
+			this->protocol = protocol;
 		}
 
+		void		HttpResponse::setBody(const body_type& body) {
+			this->body = body;
+			this->setHeader("Content-Length", SSTR(body.length()));
+		}
+
+		const HttpResponse::status_code_type&		HttpResponse::getStatusCode(void) const {
+			return this->statusCode;
+		}
+
+		const HttpResponse::protocol_type&			HttpResponse::getProtocol(void) const {
+			return this->protocol;
+		}
+
+		const HttpResponse::body_type&				HttpResponse::getBody(void) const {
+			return this->body;
+		}
+
+		void		HttpResponse::setRedirect(const std::string& path, const status_code_type& statusCode) {
+			this->initDefaultHeaders();
+			this->setHeader("Location", path);
+			this->setStatusCode(statusCode);
+		}
+
+		void		HttpResponse::setResource(const resource_type& resource, const status_code_type& statusCode) {
+			this->initDefaultHeaders();
+			this->setBody(resource.getContent());
+			this->setHeader("Content-Type", resource.getContentType());
+			this->setStatusCode(statusCode);
+		}
+
+
 		// Utils Methods
-		void	HttpResponse::fromString(const std::string& response) {
+		std::string	HttpResponse::toString(void) const {
+			std::string	formatedResponse = "";
+
+			formatedResponse += this->protocol.toString() + " " + this->statusCode.toString() + CRLF;
+			formatedResponse += this->headers.toString() + CRLF;
+			formatedResponse += this->body;
+			return formatedResponse;
+		}
+
+		// TODO: Remove because of deprecated
+		void		HttpResponse::fromString(const std::string& response) {
 
 			std::string			str(response);
 			std::string			find = "";
@@ -180,15 +154,6 @@ namespace Webserv {
 
 			// Parse response body
 			this->body = str;
-		}
-
-		std::string	HttpResponse::toString(void) const {
-			std::string	formatedResponse = "";
-
-			formatedResponse += this->protocol + " " + this->statusCode + CRLF;
-			formatedResponse += this->headers.toString() + CRLF;
-			formatedResponse += this->body;
-			return formatedResponse;
 		}
 
 	} // namespace Http

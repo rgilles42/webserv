@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:06:06 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:37:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ namespace Webserv {
 				this->autoindex = other.autoindex;
 				this->root = other.root;
 				this->index = other.index;
+				this->cgi_pass = other.cgi_pass;
+				this->cgi_ext = other.cgi_ext;
 				this->defaultRoute = other.defaultRoute;
 				this->routes = other.routes;
 			}
@@ -51,7 +53,7 @@ namespace Webserv {
 			this->serverName = DEFAULT_SERVER_NAME;
 			this->listen = DEFAULT_LISTEN;
 
-			this->error_pages.clear();
+			this->error_pages = directive_type::getDefaultErrorPages();
 			this->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
 			this->upload_store = DEFAULT_UPLOAD_STORE;
 
@@ -59,6 +61,8 @@ namespace Webserv {
 			this->autoindex = DEFAULT_AUTOINDEX;
 			this->root = DEFAULT_ROOT;
 			this->index.clear();
+			this->cgi_pass.clear();
+			this->cgi_ext.clear();
 
 			this->defaultRoute.init();
 			this->routes.clear();
@@ -73,20 +77,15 @@ namespace Webserv {
 						block_type::values_type::value_type::token_value directive = values.at(0).getValue();
 						if (directive == "location") {
 							route_type newRoute;
-							newRoute.fromParent(this->defaultRoute);
-							try {
-								if (!newRoute.fromBlocks(blockIt->getChilds())) {
-									return false;
-								}
-							}
-							catch (const std::exception& e) {
-								throw e;
+							newRoute.setParent(&this->defaultRoute);
+							if (!newRoute.fromBlocks(blockIt->getChilds())) {
 								return false;
 							}
 							routes_map::key_type key = "/";
 							if (values.size() >= 2) {
 								key = values[1].getValue();
 							}
+							newRoute.setCurrentPath(key);
 							this->routes[key] = newRoute;
 						} else if (directive == "types") {
 							this->mimesTypes.clear();
@@ -147,6 +146,18 @@ namespace Webserv {
 								return false;
 							}
 							this->defaultRoute.setUploadStore(this->upload_store);
+						} else if (directive == "cgi_pass") {
+							if (!directive_type::parseCgiPass(values, this->cgi_pass)) {
+								throw directive_type::InvalidValueDirectiveException(directive);
+								return false;
+							}
+							this->defaultRoute.setCgiPass(this->cgi_pass);
+						} else if (directive == "cgi_ext") {
+							if (!directive_type::parseCgiExt(values, this->cgi_ext)) {
+								throw directive_type::InvalidValueDirectiveException(directive);
+								return false;
+							}
+							this->defaultRoute.setCgiExt(this->cgi_ext);
 						} else {
 							throw directive_type::UnknownDirectiveException(directive);
 							return false;

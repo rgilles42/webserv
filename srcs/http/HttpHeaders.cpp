@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:10:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:08:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace Webserv {
 			if (!this->isKeyValid(key)) {
 				throw std::runtime_error("HttpHeaders::set(" + key + ", " + value + ")");
 			}
-			this->headers.erase(key);
+			this->unset(key);
 			this->headers.insert(std::make_pair(key, value));
 			// this->headers[key] = value;
 		}
@@ -76,6 +76,18 @@ namespace Webserv {
 			return this->headers.count(key) > 0;
 		}
 
+
+		void	HttpHeaders::unset(const key_type& key) {
+			if (!this->has(key)) {
+				return ;
+			}
+			this->headers.erase(key);
+		}
+
+		void	HttpHeaders::clear(void) {
+			this->headers.clear();
+		}
+
 		const std::string				HttpHeaders::toString(void) const {
 			header_type::const_iterator it = this->headers.begin();
 			header_type::const_iterator end = this->headers.end();
@@ -88,6 +100,7 @@ namespace Webserv {
 			return formatedHeaders;
 		}
 
+		// TODO: Remove because of deprecated
 		void	HttpHeaders::fromString(const std::string& stringHeaders) {
 			std::string			line;
 			std::stringstream	ss(stringHeaders);

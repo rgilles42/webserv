@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:40 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 02:49:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/04 14:25:58 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int main(int argc, char *argv[], char *envp[]) {
 // 	std::cout << "1header: " << builder.checkBuffer() << std::endl;
 // 	builder.addMessage("Connection: keep-alive\r\n");
 // 	std::cout << "2header: " << builder.checkBuffer() << std::endl;
-// 	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+// 	builder.addMessage("Content-Length: "+ SSTR(message.length()) +"\r\n");
 // 	std::cout << "3header: " << builder.checkBuffer() << std::endl;
 // 	builder.addMessage("\r\n");
 // 	std::cout << "start body: " << builder.checkBuffer() << std::endl;
@@ -137,7 +137,7 @@ int main(int argc, char *argv[], char *envp[]) {
 // 	std::cout << "1header: " << builder.checkBuffer() << std::endl;
 // 	builder.addMessage("Connection: kip-alive\r\n");
 // 	std::cout << "2header: " << builder.checkBuffer() << std::endl;
-// 	builder.addMessage("Content-Lenght: "+ SSTR(message.length()) +"\r\n");
+// 	builder.addMessage("Content-Length: "+ SSTR(message.length()) +"\r\n");
 // 	std::cout << "3header: " << builder.checkBuffer() << std::endl;
 // 	builder.addMessage("\r\n");
 // 	std::cout << "start body: " << builder.checkBuffer() << std::endl;

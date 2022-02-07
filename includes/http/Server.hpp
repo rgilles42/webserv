@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 21:18:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 18:16:02 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ namespace Webserv {
 				typedef directive_type::dir_root_type			root_type;
 				typedef directive_type::dir_index_type			index_type;
 
+				typedef directive_type::dir_cgi_pass_type		cgi_pass_type;
+				typedef directive_type::dir_cgi_ext_type		cgi_ext_type;
+
 				typedef Webserv::Http::Route				route_type;
 				typedef std::map<std::string, route_type>	routes_map;
 
@@ -71,6 +74,9 @@ namespace Webserv {
 				autoindex_type		autoindex;
 				root_type			root;
 				index_type			index;
+
+				cgi_pass_type		cgi_pass;
+				cgi_ext_type		cgi_ext;
 
 				route_type			defaultRoute;
 				routes_map			routes;

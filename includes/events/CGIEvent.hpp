@@ -6,14 +6,14 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/01/30 03:13:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 20:48:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGIEVENT_HPP
 # define CGIEVENT_HPP
 
-# include <poll.h>
+//# include <poll.h>
 # include <iostream>
 # include <unistd.h>
 # include <fcntl.h>
@@ -24,6 +24,7 @@
 # include "../utils/Env.hpp"
 # include "../http/HttpRequest.hpp"
 # include "../http/Server.hpp"
+# include "./Poll.hpp"
 
 namespace Webserv
 {
@@ -42,14 +43,14 @@ namespace Webserv
 			bool				CGIEnd;
 			int					status;
 
-			int					wr_size;
+			unsigned long		wr_size;
 
 			void	close_pipefd(void);
 			void	init_env();
 			void	init_args();
 
 		public:
-			CGIEvent(Webserv::Http::HttpRequest &request);
+			CGIEvent(const Webserv::Http::HttpRequest &request, const Webserv::Http::Server &server, Webserv::Utils::Env&	environnement);
 			~CGIEvent();
 
 			int		exec(void);

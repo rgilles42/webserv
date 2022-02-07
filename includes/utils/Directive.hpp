@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:13:45 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:21:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 19:41:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define DEFAULT_CLIENT_MAX_BODY_SIZE Webserv::Utils::Directive::dir_client_max_body_size_type(1, Webserv::Utils::Directive::dir_client_max_body_size_type::U_MB)
 # define DEFAULT_RETURN Webserv::Utils::Directive::dir_return_type(Webserv::Utils::Directive::http_status_code_type::unknown, "")
 # define DEFAULT_AUTOINDEX Webserv::Utils::Directive::dir_autoindex_type(false)
-# define DEFAULT_ROOT Webserv::Utils::Directive::dir_root_type("")
+# define DEFAULT_ROOT Webserv::Utils::Directive::dir_root_type("html")
 # define DEFAULT_UPLOAD_STORE Webserv::Utils::Directive::dir_upload_store_type("")
 
 namespace Webserv {
@@ -52,15 +52,17 @@ namespace Webserv {
 
 				typedef std::string												dir_server_name_type;
 				typedef Webserv::Utils::Address									dir_listen_type;
-				typedef std::pair<http_status_code_type::StatusCode, std::string>	dir_error_page_type;
+				typedef std::pair<http_status_code_type, std::string>			dir_error_page_type;
+				typedef std::map<dir_error_page_type::first_type, dir_error_page_type::second_type>	error_pages_type;
 				typedef Webserv::Utils::Byte									dir_client_max_body_size_type;
 				typedef std::vector<std::string>								dir_limit_except_type;
-				typedef std::pair<http_status_code_type::StatusCode, std::string>	dir_return_type;
+				typedef std::pair<http_status_code_type, std::string>			dir_return_type;
 				typedef bool													dir_autoindex_type;
 				typedef std::string												dir_root_type;
 				typedef std::vector<std::string>								dir_index_type;
 				typedef std::string												dir_upload_store_type;
 				typedef std::string												dir_cgi_pass_type;
+				typedef std::vector<std::string>								dir_cgi_ext_type;
 
 
 				class DirectiveException : public std::exception {
@@ -126,6 +128,8 @@ namespace Webserv {
 
 				bool					isSrcValueIsValid(const src_value_type& src) const;
 
+				static const error_pages_type	getDefaultErrorPages(void);
+
 				// Parsing with static methods
 
 				static bool				parseListen(const src_value_type& src, dir_listen_type& value, const dir_listen_type& defaultValue = dir_listen_type());
@@ -150,6 +154,7 @@ namespace Webserv {
 
 				static bool				parseCgiPass(const src_value_type& src, dir_cgi_pass_type& value, const dir_cgi_pass_type& defaultValue = dir_cgi_pass_type());
 
+				static bool				parseCgiExt(const src_value_type& src, dir_cgi_ext_type& value, const dir_cgi_ext_type& defaultValue = dir_cgi_ext_type());
 		};
 
 	} // namespace Utils

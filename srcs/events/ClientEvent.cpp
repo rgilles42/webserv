@@ -2,7 +2,7 @@
 
 namespace Webserv
 {
-	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config): sock(client_sock), srv_sock(server_sock), config(_config)
+	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config, env_type& environnement): sock(client_sock), srv_sock(server_sock), config(_config), env(environnement)
 	{
 		this->cgi = NULL;
 		this->events_flags = POLLIN;
@@ -19,7 +19,6 @@ namespace Webserv
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
 		std::cout << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
-		std::string path;
 		char buffer[2048];
 		size_t	size;
 
@@ -39,32 +38,53 @@ namespace Webserv
 				http_request_list&	requests = this->create_req.getAllRequests();
 				http_request_list::const_iterator request = requests.begin();
 
-				while (request != requests.end()) {
-					// https_response_type response;
-					// if (!request->has("Host")) {
-					// 	response.status("400 Bad Request");
-					// 	this->responses.push_back(response);
-					// 	request++;
-					// 	continue ;
-					// }
-					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->get("Host"));
-					std::cout << "Server was choice:"<< srv.getServerName() << std::endl;
-					http_route_type	route = getRoute(request->getBaseUrl(), srv.getRoutes(), srv.getDefaultRoute());
-					std::cout << "Route was choice:"<< route.getRoot() << std::endl;
-					path = route.getRoot() + request->getBaseUrl();
-					std::cout << "path: " << path << std::endl;
-					// exit(0);
-					try {
-						this->rcs = new resource_type(path, false);
-						if (this->rcs->isCGI())
-						{
-							this->cgi = new CGIEvent(this->create_req.getAllRequests()[0]);
-							this->rcs->setFd(this->cgi->getReadFD());
-						}
-					} catch (const std::exception& e) {
-						std::cout << e.what() << std::endl;
+				while (request != requests.end())
+				{
+					http_response_type response;
+					if (!request->hasHeader("Host"))
+					{
+					 	response.setStatusCode(http_response_type::status_code_type::client_error_bad_request);
+					 	this->responses.push_back(response);
+					 	request++;
+					 	continue ;
 					}
-		//			Webserv::Methods::Methods::getInstance().exec_method(this->req, this->rcs/*, srv**/);
+					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
+					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
+					resource_type		*rcs = NULL;
+					try
+					{
+						rcs = new resource_type(route.getFilePath(request->getBasePath()), false);
+						if (rcs->isCGI())
+						{
+							CGIEvent *cgi = new CGIEvent(*request, srv, this->env);
+							cgi->exec();
+							rcs->setFd(this->cgi->getReadFD());
+						}
+					}
+					catch (const std::exception& e)
+					{
+					 	response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
+					 	this->responses.push_back(response);
+						std::cout << this->responses.size() << "first:" << e.what() << std::endl;
+					 	request++;
+					 	continue ;
+					}
+					try
+					{
+						while (!rcs->isFullyRead()) {
+							rcs->loadResource();
+						}
+						response.setResource(*rcs);
+						this->responses.push_back(response);
+					}
+					catch(const std::exception& e)
+					{
+					 	response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
+					 	this->responses.push_back(response);
+						std::cout << this->responses.size() << "second:" << e.what() << std::endl;
+					 	request++;
+					 	continue ;
+					}
 					request++;
 				}
 				requests.clear();
@@ -77,53 +97,53 @@ namespace Webserv
 	{
 		std::cout<<"Client write event"<<std::endl;
 
-		// response_vector::const_iterator response = this->responses.begin();
+		response_vector::const_iterator response = this->responses.begin();
+		while (response != responses.end()) {
+			this->sock.write(response->toString().c_str(), response->toString().length());
+			response++;
+		}
+		responses.clear();
+		this->events_flags = POLLIN;
 
-		// while (response != responses.end()) {
-		// 	this->sock.write(response->toString().c_str(), response->toString().length());
-		// 	response++;
+		// int status = 0;
+		// if (!this->rcs) {
+		// 	this->events_flags = POLLIN | POLLHUP;
+		// 	Webserv::Http::HttpResponse response;
+		// 	response.setStatusCode(Webserv::Http::HttpResponse::status_code_type::client_error_not_found);
+		// 	this->sock.write(response.toString().c_str(), response.toString().length());
+		// 	return ;
 		// }
-		// responses.clear();
-		// this->events_flags = POLLIN;
-
-		int status = 0;
-		if (!this->rcs) {
-			this->events_flags = POLLIN | POLLHUP;
-			Webserv::Http::HttpResponse response;
-			response.status("404 Not Found");
-			this->sock.write(response.toString().c_str(), response.toString().length());
-			return ;
-		}
-		if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
-		{
-			if (this->cgi->writeIsEnd())
-			{
-				status = this->cgi->exec();	//peut etre recup le ret
-				perror(strerror(status));
-				std::cout<<"status: "<<status<<std::endl;
-			}
-			else
-				this->cgi->write_event();
-			return;
-		}
-		if (this->rcs->loadResource())
-		{
-			Webserv::Http::HttpResponse response(*this->rcs);
-			this->sock.write(response.toString().c_str(), response.toString().length());
-			std::cout<<"delete rcs"<<std::endl;
-			if (this->rcs)
-				delete this->rcs;
-			this->rcs = NULL;
-			std::cout<<"delete cgi"<<std::endl;
-			if (this->cgi)
-				delete this->cgi;
-			this->cgi = NULL;
-			this->events_flags = POLLIN | POLLHUP;
-		}
-		else
-		{
-			std::cout<<"hmm"<<std::endl;
-		}
+		// if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
+		// {
+		// 	if (this->cgi->writeIsEnd())
+		// 	{
+		// 		status = this->cgi->exec();	//peut etre recup le ret
+		// 		perror(strerror(status));
+		// 		std::cout<<"status: "<<status<<std::endl;
+		// 	}
+		// 	else
+		// 		this->cgi->write_event();
+		// 	return;
+		// }
+		// if (this->rcs->loadResource())
+		// {
+		// 	Webserv::Http::HttpResponse response;
+		// 	response.setResource(*this->rcs);
+		// 	this->sock.write(response.toString().c_str(), response.toString().length());
+		// 	std::cout<<"delete rcs"<<std::endl;
+		// 	if (this->rcs)
+		// 		delete this->rcs;
+		// 	this->rcs = NULL;
+		// 	std::cout<<"delete cgi"<<std::endl;
+		// 	if (this->cgi)
+		// 		delete this->cgi;
+		// 	this->cgi = NULL;
+		// 	this->events_flags = POLLIN | POLLHUP;
+		// }
+		// else
+		// {
+		// 	std::cout<<"hmm"<<std::endl;
+		// }
 	}
 
 	short	ClientEvent::getEventsFlags(void)
@@ -160,7 +180,7 @@ namespace Webserv
 			itRoutes++;
 		}
 
-		if (max < paths.size() && !route.getRoutes().empty()) {
+		if (max != 0 && max < paths.size() && !route.getRoutes().empty()) {
 			std::vector<std::string>::const_iterator it = paths.begin() + max;
 			std::string newUrl;
 			while (it != paths.end()) {
