@@ -89,7 +89,7 @@ namespace Webserv
 		/*--------*/
 
 		this->env.set("SERVER_SOFTWARE", "Webserv/HTTP/1.1");
-//        this->env.set("SERVER_NAME", this->server.name());
+//        this->env.set("SERVER_NAME", this->server.name());	// server name
 		this->env.set("GATEWAY_INTERFACE", "CGI/1.1");
 
 		/*---------*/
@@ -97,16 +97,16 @@ namespace Webserv
 		/*---------*/
 
 		this->env.set("SERVER_PROTOCOL", "HTTP/1.1");
-//        this->env.set("SERVER_PORT", srv.port());
+  //      this->env.set("SERVER_PORT", this->srv,getPort());			// Port server
         this->env.set("REQUEST_METHODS",this->req.getMethod().toString());
-//        this->env.set("PATH_INFO", this->request.path_info());
+//        this->env.set("PATH_INFO", this->request.path_info());	// http://server.org/cgi-bin/script.cgi/path_info -> need only path_info
 		this->env.set("PATH_TRANSLATED", ""); //? Need more infos
-//		this->env.set("SCRIPT_NAME", this->req.getQuery().c_str());
+//		this->env.set("SCRIPT_NAME", this->req.getQuery().c_str());	//virtual path to cgi script
 //        this->env.set("QUERY_STRING", this->request.getQuery().c_str());
-//        this->env.set("REMOTE_HOTE", this->request.hote_client());
-//        this->env.set("REMOTE_ADDR", this->request.client_add());
-		this->env.set("AUTH_SCRIPT", ""); //? Need more infos
-//		this->env.set("REMOTE_USER", this->request.client_user()); //if script protect and srv allow identification
+//        this->env.set("REMOTE_HOST", this->request.hote_client());	// Nom hote client
+//        this->env.set("REMOTE_ADDR", this->request.client_add());		// IP Client
+		this->env.set("AUTH_SCRIPT", "");
+		this->env.set("REMOTE_USER", "");
 //        this->env.set("CONTENT_TYPE", this->request.content_type());
 //		this->env.set("CONTENT_LENGHT", this->request.content_lenght());
 

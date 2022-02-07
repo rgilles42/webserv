@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/30 04:01:48 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 14:18:50 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESOURCE_HPP
 # define RESOURCE_HPP
 
-# include <poll.h>			// For poll, pollfd, etc..
 # include <sys/types.h>		// For ??
 # include <sys/stat.h>		// For stat
 # include <fcntl.h>			// For fcntl
@@ -23,6 +22,7 @@
 # include <cerrno>			// For errno
 # include <ctime>			// For times methods
 
+# include "../events/Poll.hpp"
 # include "MimeTypes.hpp"	// For Mimetypes not used for the moment aparently
 
 namespace Webserv {
@@ -79,6 +79,7 @@ namespace Webserv {
 				void		generateAutoIndex(void);
 
 				path_type		_path;
+				path_type		_cgi_path;
 				bool			_isDir;
 				bool			_isCGI;
 				fd_type			_fd;

@@ -53,8 +53,6 @@ namespace Webserv
 			short						events_flags;
 			response_vector				responses;
 
-
-			resource_type				*rcs;
 			cgi_event_type				*cgi;
 
 			http_request_type			req;

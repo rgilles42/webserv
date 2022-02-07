@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/30 04:02:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 14:18:56 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,16 +140,18 @@ namespace Webserv {
 
 		bool	Resource::readFileChunk()
 		{
-			struct		pollfd to_poll;
-			char		buf[501];
-			int			rdsize = 0;
-			long long	totalReadBytes = 0;
+			Webserv::Poll			res_poll;
+			Webserv::Poll::iterator	poll_it;
+			char					buf[501];
+			int						rdsize = 0;
+			long long				totalReadBytes = 0;
 
-			to_poll.fd = this->_fd;
-			to_poll.events = POLLIN;
-			if (poll(&to_poll, 1, 100) == 1)
+			res_poll.add_fd(this->_fd, POLLIN);
+			while (true)
 			{
-				if ((to_poll.revents & POLLIN) && (rdsize = read(this->_fd, buf, 500)) > 0)
+				res_poll.exec();
+				poll_it = res_poll.begin();
+				if ((poll_it->revents & POLLIN) == POLLIN && (rdsize = read(this->_fd, buf, 500)) > 0)
 				{
 					buf[rdsize] = 0;
 					this->_content += buf;
@@ -159,6 +161,7 @@ namespace Webserv {
 				{
 					this->_size = totalReadBytes;
 					this->_isFullyRead = true;
+					break ;
 				}
 				else if (rdsize < 0)
 					throw UnableToReadResourceException();

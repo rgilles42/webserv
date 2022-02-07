@@ -12,8 +12,6 @@ namespace Webserv
 	{
 		if (this->sock.getFd())
 			this->sock.close();
-		if (this->rcs)
-			delete this->rcs;
 	}
 
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
@@ -38,6 +36,7 @@ namespace Webserv
 			if (this->create_req.parseRequests() == true)
 			{
 				std::cout<<"Request create"<<std::endl;
+				std::cout<<"Request: "<<request_string<<std::endl;
 				http_request_list&	requests = this->create_req.getAllRequests();
 				http_request_list::const_iterator request = requests.begin();
 
@@ -68,15 +67,15 @@ namespace Webserv
 					 	continue ;
 					}
 					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
-					resource_type		*rcs = NULL;
+					resource_type		rcs;
 					try
 					{
-						rcs = new resource_type(route.getFilePath(request->getBasePath()), false);
-						if (rcs->isCGI())
+						rcs = resource_type(route.getFilePath(request->getBasePath()), false);
+						if (rcs.isCGI())
 						{
-							CGIEvent *cgi = new CGIEvent(*request, srv, this->env);
-							cgi->exec();
-							rcs->setFd(this->cgi->getReadFD());
+							CGIEvent cgi(*request, srv, this->env);
+							cgi.exec();
+							rcs.setFd(this->cgi->getReadFD());
 						}
 					}
 					catch (const std::exception& e)
@@ -89,10 +88,10 @@ namespace Webserv
 					}
 					try
 					{
-						while (!rcs->isFullyRead()) {
-							rcs->loadResource();
+						while (!rcs.isFullyRead()) {
+							rcs.loadResource();
 						}
-						response.setResource(*rcs);
+						response.setResource(rcs);
 						this->responses.push_back(response);
 					}
 					catch(const std::exception& e)
