@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/31 15:38:31 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/07 14:18:56 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ namespace Webserv {
 
 		Resource::Resource(void) {}
 
-		Resource::Resource(const path_type& path, const bool& isCGI/*, const MimeTypes mime, const path_type& cgi_path*/) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
+		Resource::Resource(const path_type& path, const bool& isCGI/*, const MimeTypes mime*/) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
 		{
 			struct stat	s;
 			if (stat(this->_path.c_str(), &s) < 0)
@@ -140,16 +140,18 @@ namespace Webserv {
 
 		bool	Resource::readFileChunk()
 		{
-			struct		pollfd to_poll;
-			char		buf[501];
-			int			rdsize = 0;
-			long long	totalReadBytes = 0;
+			Webserv::Poll			res_poll;
+			Webserv::Poll::iterator	poll_it;
+			char					buf[501];
+			int						rdsize = 0;
+			long long				totalReadBytes = 0;
 
-			to_poll.fd = this->_fd;
-			to_poll.events = POLLIN;
-			if (poll(&to_poll, 1, 100) == 1)
+			res_poll.add_fd(this->_fd, POLLIN);
+			while (true)
 			{
-				if ((to_poll.revents & POLLIN) && (rdsize = read(this->_fd, buf, 500)) > 0)
+				res_poll.exec();
+				poll_it = res_poll.begin();
+				if ((poll_it->revents & POLLIN) == POLLIN && (rdsize = read(this->_fd, buf, 500)) > 0)
 				{
 					buf[rdsize] = 0;
 					this->_content += buf;
@@ -159,6 +161,7 @@ namespace Webserv {
 				{
 					this->_size = totalReadBytes;
 					this->_isFullyRead = true;
+					break ;
 				}
 				else if (rdsize < 0)
 					throw UnableToReadResourceException();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Poll.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2022/01/30 03:13:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 14:18:53 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ namespace Webserv
 {
 	class Poll {
 		public:
-			typedef Webserv::Utils::Socket	socket_type;
+			typedef Webserv::Utils::Socket					socket_type;
+			typedef std::vector<struct pollfd>::iterator	iterator;
 
 		private:
 			std::vector<struct pollfd>		vect_pollfd;
