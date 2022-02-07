@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:16:02 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace Webserv {
 				typedef	Webserv::Utils::Block					block_type;
 				typedef std::vector<block_type>					block_vector;
 
-				typedef Webserv::Utils::MimeTypes				mimes_types_type;
+				typedef Webserv::Utils::MimeTypes				mime_types_type;
 
 				typedef Webserv::Utils::Directive				directive_type;
 				typedef directive_type::http_status_code_type	http_status_code_type;
@@ -59,7 +59,7 @@ namespace Webserv {
 				typedef std::map<std::string, route_type>	routes_map;
 
 			protected:
-				mimes_types_type	mimesTypes;
+				mime_types_type	mimeTypes;
 
 				name_type			serverName;
 				listen_type			listen;
@@ -92,7 +92,7 @@ namespace Webserv {
 
 				bool	fromBlocks(const block_vector& blocks);
 
-				void	setMimesTypes(const mimes_types_type& mimestypes);
+				void	setMimeTypes(const mime_types_type& mimetypes);
 
 				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:17:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ namespace Webserv {
 				typedef	Webserv::Utils::Block		block_type;
 				typedef std::vector<block_type>		block_vector;
 
-				typedef Webserv::Utils::MimeTypes	mimes_types_type;
+				typedef Webserv::Utils::MimeTypes	mime_types_type;
 
 				typedef Webserv::Utils::Directive				directive_type;
 				typedef directive_type::http_status_code_type	http_status_code_type;
@@ -62,7 +62,7 @@ namespace Webserv {
 				path_type			currentPath;
 				Route*				parent;
 
-				mimes_types_type	mimesTypes;
+				mime_types_type	mimeTypes;
 
 				error_pages_type	error_pages;
 				client_max_body_size_type	client_max_body_size;
@@ -94,7 +94,7 @@ namespace Webserv {
 				void	setParent(Route* parent = NULL);
 				void	setCurrentPath(const path_type& currentPath);
 
-				void	setMimesTypes(const mimes_types_type& mimesTypes);
+				void	setMimeTypes(const mime_types_type& mimeTypes);
 
 				void	setErrorPages(const error_pages_type& errorPages);
 				void	setClientMaxBodySize(const client_max_body_size_type& clientMaxBodySize);
@@ -113,7 +113,7 @@ namespace Webserv {
 
 				const path_type&					getCurrentPath(void) const;
 				const Route*						getParent(void) const;
-				const mimes_types_type&				getMimesTypes(void) const;
+				const mime_types_type&				getMimeTypes(void) const;
 				const error_pages_type&				getErrorPages(void) const;
 				const client_max_body_size_type&	getClientMaxBodySize(void) const;
 				const upload_store_type&			getUploadStore(void) const;

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 11:48:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:36:44 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace Webserv {
 			this->parserMap = other.parserMap;
 			this->blocks = other.blocks;
 			this->servers = other.servers;
-			this->globalMimesTypes = other.globalMimesTypes;
+			this->globalMimeTypes = other.globalMimeTypes;
 		}
 		return *this;
 	}
@@ -42,7 +42,7 @@ namespace Webserv {
 		this->parserMap.clear();
 		this->blocks.clear();
 		this->servers.clear();
-		this->globalMimesTypes.clear();
+		this->globalMimeTypes.clear();
 	}
 
 	bool	Config::addConfigFile(const file_type& file) {
@@ -251,7 +251,7 @@ namespace Webserv {
 				block_type::values_type::value_type::token_value directive(values.at(0).getValue());
 				if (directive == "server") {
 					server_type newServer;
-					newServer.setMimesTypes(this->globalMimesTypes);
+					newServer.setMimeTypes(this->globalMimeTypes);
 					try {
 						if (!newServer.fromBlocks(it->getChilds())) {
 							return false;
@@ -263,8 +263,8 @@ namespace Webserv {
 					}
 					this->servers.push_back(newServer);
 				} else if (directive == "types") {
-					this->globalMimesTypes.clear();
-					if (!this->globalMimesTypes.fromBlocks(it->getChilds())) {
+					this->globalMimeTypes.clear();
+					if (!this->globalMimeTypes.fromBlocks(it->getChilds())) {
 						return false;
 					}
 				} else {

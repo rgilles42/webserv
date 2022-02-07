@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 14:18:50 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/07 15:31:45 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <ctime>			// For times methods
 
 # include "../events/Poll.hpp"
-# include "MimeTypes.hpp"	// For Mimetypes not used for the moment aparently
+# include "MimeTypes.hpp"	// For Mimetypes
 
 namespace Webserv {
 
@@ -37,6 +37,7 @@ namespace Webserv {
 				typedef std::string	content_type;
 				typedef std::string	content_type_type;
 				typedef int			fd_type;
+				typedef Webserv::Utils::MimeTypes	mime_types_type;
 
 				class ResourceException : public std::exception {
 					protected:
