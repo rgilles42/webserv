@@ -75,7 +75,7 @@ namespace Webserv
 						rcs.init(route.getFilePath(request->getBasePath()), isCGI, route);
 						if (rcs.isCGI())
 						{
-							cgi.exec();
+							cgi.exec(); // TODO : check return
 							rcs.setFd(cgi.getReadFD());
 						}
 					}

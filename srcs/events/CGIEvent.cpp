@@ -155,9 +155,7 @@ namespace Webserv
 			close(fd_out[1]);
 			/* Execve CGI */
 			ret = execve(this->args[0], this->args, envp);
-			if(ret < 0)
-				exit(ret);
-			exit(0);
+			exit(ret);
 		}
 		else
 		{
@@ -172,8 +170,8 @@ namespace Webserv
 				this->status = WEXITSTATUS(ret);
 			}
 			this->CGIEnd = true;
- 		}
-		 return (this->status);
+		}
+		return (this->status);
 	}
 
 	void    CGIEvent::close_pipefd(void)
