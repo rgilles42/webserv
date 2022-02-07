@@ -16,11 +16,32 @@ namespace Webserv {
 
 	namespace Utils {
 
-		Resource::Resource(void) {}
+		Resource::Resource(void)	: _size(-1), _readBytes(0),_isFullyRead(false)	{}
+		Resource::~Resource() {}
 
-		Resource::Resource(const path_type& path, const bool& isCGI, const http_route_type& route) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
+		Resource&	Resource::operator=(const Resource& rhs)
+		{
+			if (this != &rhs)
+			{
+				this->_path = rhs._path;
+				this->_isDir = rhs._isDir;
+				this->_isCGI = rhs._isCGI;
+				this->_fd = rhs._fd;
+				this->_size = rhs._size;
+				this->_readBytes = rhs._readBytes;
+				this->_content = rhs._content;
+				this->_contentType = rhs._contentType;
+				this->_isFullyRead = rhs._isFullyRead;
+			}
+			return (*this);
+		}
+
+		void	Resource::init(const path_type& path, const bool& isCGI, const http_route_type& route)
 		{
 			struct stat	s;
+
+			this->_path = path;
+			this->_isCGI = isCGI;
 			if (stat(this->_path.c_str(), &s) < 0)
 			{
 				if (errno == ENOENT)
@@ -68,25 +89,6 @@ namespace Webserv {
 			}
 			else
 				throw NotFileOrDirException();
-		}
-
-		Resource::~Resource() {}
-
-		Resource&	Resource::operator=(const Resource& rhs)
-		{
-			if (this != &rhs)
-			{
-				this->_path = rhs._path;
-				this->_isDir = rhs._isDir;
-				this->_isCGI = rhs._isCGI;
-				this->_fd = rhs._fd;
-				this->_size = rhs._size;
-				this->_readBytes = rhs._readBytes;
-				this->_content = rhs._content;
-				this->_contentType = rhs._contentType;
-				this->_isFullyRead = rhs._isFullyRead;
-			}
-			return (*this);
 		}
 
 		bool		Resource::loadResource(void)

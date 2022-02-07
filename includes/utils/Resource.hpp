@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 16:50:28 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/07 17:30:14 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,11 @@ namespace Webserv {
 
 			public:
 				Resource(void);
-				Resource(const path_type& path, const bool& isCGI, const http_route_type& route);
 				~Resource();
 
 				Resource&		operator=(const Resource& lhs);
+
+				void			init(const path_type& path, const bool& isCGI, const http_route_type& route);
 
 				bool			loadResource(void);
 
