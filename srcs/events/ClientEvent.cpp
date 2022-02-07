@@ -51,7 +51,7 @@ namespace Webserv
 					resource_type		rcs;
 					try
 					{
-						rcs = resource_type(route.getFilePath(request->getBasePath()), false, route.getMimeTypes());
+						rcs = resource_type(route.getFilePath(request->getBasePath()), false, route);
 						if (rcs.isCGI())
 						{
 							CGIEvent *cgi = new CGIEvent(*request, srv, this->env);

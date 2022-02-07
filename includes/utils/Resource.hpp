@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 16:03:29 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/07 16:50:28 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <ctime>			// For times methods
 
 # include "../events/Poll.hpp"
-# include "MimeTypes.hpp"	// For Mimetypes
+# include "../http/Route.hpp"	// For Mimetypes
 
 namespace Webserv {
 
@@ -38,6 +38,7 @@ namespace Webserv {
 				typedef std::string	content_type_type;
 				typedef int			fd_type;
 				typedef Webserv::Utils::MimeTypes	mime_types_type;
+				typedef Webserv::Http::Route		http_route_type;
 
 				class ResourceException : public std::exception {
 					protected:
@@ -95,7 +96,7 @@ namespace Webserv {
 
 			public:
 				Resource(void);
-				Resource(const path_type& path, const bool& isCGI, const MimeTypes& mime);
+				Resource(const path_type& path, const bool& isCGI, const http_route_type& route);
 				~Resource();
 
 				Resource&		operator=(const Resource& lhs);

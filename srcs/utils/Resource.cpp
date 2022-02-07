@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 15:35:52 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/07 16:53:31 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ namespace Webserv {
 
 		Resource::Resource(void) {}
 
-		Resource::Resource(const path_type& path, const bool& isCGI, const MimeTypes& mime) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
+		Resource::Resource(const path_type& path, const bool& isCGI, const http_route_type& route) : _path(path), _isCGI(isCGI), _size(-1), _readBytes(0),_isFullyRead(false)
 		{
 			struct stat	s;
 			if (stat(this->_path.c_str(), &s) < 0)
@@ -46,16 +46,25 @@ namespace Webserv {
 					if (read(this->_fd, NULL, 0))
 						throw UnableToReadResourceException();
 					this->_size = s.st_size;
-					this->_contentType = mime.getType(this->_path, "text/plain");
+					this->_contentType = route.getMimeTypes().getType(this->_path, "text/plain");
 				}
 				else
 					this->_contentType = "text/html";
 			}
 			else if (S_ISDIR(s.st_mode))
 			{
-				this->_isDir = true;
-				this->_contentType = "text/html";
-				this->generateAutoIndex();
+				// while (std::vector<string>::iterator it = route.getIndex().begin(); it != route.getIndex().end(); it++)
+				// {
+				// 	try
+				// }
+				if (route.getAutoindex())
+				{
+					this->_isDir = true;
+					this->_contentType = "text/html";
+					this->generateAutoIndex();
+				}
+				else
+					throw AccessForbiddenException();
 			}
 			else
 				throw NotFileOrDirException();
