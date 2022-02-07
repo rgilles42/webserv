@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 14:18:50 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/07 15:35:34 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ namespace Webserv {
 
 			public:
 				Resource(void);
-				Resource(const path_type& path, const bool& isCGI = false);
+				Resource(const path_type& path, const bool& isCGI, const MimeTypes& mime);
 				~Resource();
 
 				Resource&		operator=(const Resource& lhs);

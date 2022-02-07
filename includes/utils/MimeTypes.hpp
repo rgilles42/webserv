@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   MimeTypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 03:05:19 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:45:37 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MIMETYPES_HPP
 # define MIMETYPES_HPP
-
+#include <iostream>
 # include <string>			// For string
 # include <map>				// For map
 # include <vector>			// For vector

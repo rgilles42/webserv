@@ -12,8 +12,6 @@ namespace Webserv
 	{
 		if (this->sock.getFd())
 			this->sock.close();
-		if (this->rcs)
-			delete this->rcs;
 	}
 
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
@@ -50,15 +48,15 @@ namespace Webserv
 					}
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
 					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
-					resource_type		*rcs = NULL;
+					resource_type		rcs;
 					try
 					{
-						rcs = new resource_type(route.getFilePath(request->getBasePath()), false);
-						if (rcs->isCGI())
+						rcs = resource_type(route.getFilePath(request->getBasePath()), false, route.getMimesTypes());
+						if (rcs.isCGI())
 						{
 							CGIEvent *cgi = new CGIEvent(*request, srv, this->env);
 							cgi->exec();
-							rcs->setFd(this->cgi->getReadFD());
+							rcs.setFd(this->cgi->getReadFD());
 						}
 					}
 					catch (const std::exception& e)
@@ -71,10 +69,10 @@ namespace Webserv
 					}
 					try
 					{
-						while (!rcs->isFullyRead()) {
-							rcs->loadResource();
+						while (!rcs.isFullyRead()) {
+							rcs.loadResource();
 						}
-						response.setResource(*rcs);
+						response.setResource(rcs);
 						this->responses.push_back(response);
 					}
 					catch(const std::exception& e)
@@ -113,7 +111,7 @@ namespace Webserv
 		// 	this->sock.write(response.toString().c_str(), response.toString().length());
 		// 	return ;
 		// }
-		// if (this->rcs->isCGI() && !this->cgi->CGIIsEnd())
+		// if (this->rcs.isCGI() && !this->cgi->CGIIsEnd())
 		// {
 		// 	if (this->cgi->writeIsEnd())
 		// 	{
@@ -125,7 +123,7 @@ namespace Webserv
 		// 		this->cgi->write_event();
 		// 	return;
 		// }
-		// if (this->rcs->loadResource())
+		// if (this->rcs.loadResource())
 		// {
 		// 	Webserv::Http::HttpResponse response;
 		// 	response.setResource(*this->rcs);
