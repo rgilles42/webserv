@@ -68,12 +68,12 @@ namespace Webserv
 					}
 					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
 					resource_type		rcs;
+					CGIEvent cgi(*request, srv, this->env);
 					try
 					{
 						rcs = resource_type(route.getFilePath(request->getBasePath()), false);
 						if (rcs.isCGI())
 						{
-							CGIEvent cgi(*request, srv, this->env);
 							cgi.exec();
 							rcs.setFd(this->cgi->getReadFD());
 						}
