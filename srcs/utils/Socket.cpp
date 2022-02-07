@@ -29,7 +29,7 @@ namespace Webserv {
 			this->setAddress(addr);
 			this->setPort(port);
 
-			this->setsockopt(SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT);
+//			this->setsockopt(SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT);
 
 			if (!blocking) {
 				this->fcntl(F_SETFL, O_NONBLOCK);

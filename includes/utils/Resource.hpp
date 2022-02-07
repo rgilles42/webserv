@@ -24,6 +24,7 @@
 
 # include "../events/Poll.hpp"
 # include "../http/Route.hpp"	// For Mimetypes
+# include "MimeTypes.hpp"	// For Mimetypes not used for the moment aparently
 
 namespace Webserv {
 

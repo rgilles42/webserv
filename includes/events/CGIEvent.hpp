@@ -25,6 +25,8 @@
 # include "../http/HttpRequest.hpp"
 # include "../http/Server.hpp"
 # include "./Poll.hpp"
+# include "../http/Route.hpp"
+# include "../utils/common.hpp"
 
 namespace Webserv
 {
@@ -37,6 +39,7 @@ namespace Webserv
 			Http::Server		srv;
 			int					fd_out[2];  //use to redirect cgi output
 			Webserv::Utils::Env	env;
+			Webserv::Http::Route route;
 			pid_t				pid;
 			bool				writeEnd;
 			char				**args;
@@ -50,7 +53,7 @@ namespace Webserv
 			void	init_args();
 
 		public:
-			CGIEvent(const Webserv::Http::HttpRequest &request, const Webserv::Http::Server &server, Webserv::Utils::Env&	environnement);
+			CGIEvent(const Webserv::Http::HttpRequest &request, const Webserv::Http::Server &server, const Webserv::Utils::Env&	environnement, const Webserv::Http::Route& route);
 			~CGIEvent();
 
 			int		exec(void);

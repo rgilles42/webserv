@@ -195,6 +195,9 @@ namespace Webserv {
 		const Server::routes_map	&Server::getRoutes(void) const {
 			return this->routes;
 		}
+		const Server::upload_store_type	&Server::getUploadStore(void) const {
+			return this->upload_store;
+		}
 
 	} // namespace Http
 
