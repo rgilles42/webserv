@@ -3,6 +3,7 @@
 
 # include <fcntl.h>
 # include <unistd.h>
+# include <cstdio>
 
 # include "../utils/Singleton.hpp"
 # include "../http/HttpRequest.hpp"
@@ -27,7 +28,7 @@ namespace Methods {
 		private:
 			static int	getMethod(const http_request_type &req, http_route_type& route);
 			static int	postMethod(const http_request_type &req, http_response_type &response, const http_server_type &srv, http_route_type& route);
-			static int	deleteMethod(const http_request_type& req, http_response_type &response, const http_server_type &srv, http_route_type& route);
+			static int	deleteMethod(const http_request_type& req, http_response_type &response, http_route_type& route);
 
 			static int	isCGI(const http_request_type &req, http_route_type& route);
 

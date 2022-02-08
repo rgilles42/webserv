@@ -13,7 +13,7 @@ namespace Methods {
 		else if (req.getMethod().getMethod() == http_request_type::method_type::POST)
 			return postMethod(req, response, srv, route);
 		else if (req.getMethod().getMethod() == http_request_type::method_type::DELETE)
-			return deleteMethod(req, response, srv, route);
+			return deleteMethod(req, response, route);
 		return -1;
 	}
 /*--------------------------------------------------------------------------------------------------------------*/
@@ -74,17 +74,20 @@ namespace Methods {
 		return 0;
 	}
 
-	int	Methods::deleteMethod(const http_request_type &req, http_response_type &response, const http_server_type &srv, http_route_type& route)
+	int	Methods::deleteMethod(const http_request_type &req, http_response_type &response, http_route_type& route)
 	{
-//		int ret;
-		(void)req;
-		(void)response;
-		(void)srv;
-
 		if (isCGI(req, route) == 2)
 			return 2;
-//		ret = remove(path)
-		return 0;
+		if (remove(route.getFilePath(req.getBasePath()).c_str()) != 0)
+		{
+			if (errno == ENOENT)
+				response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
+			else if (errno == EACCES)
+				response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+		}
+		else
+			response.setStatusCode(http_response_type::status_code_type::success_ok);
+		return (1);
 	}
 
 	int	Methods::isCGI(const http_request_type &req, http_route_type& route)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2022/01/30 02:45:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/08 19:01:42 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	Poll::exec(void)
 	ret = poll(poll_fds, this->vect_pollfd.size(), -1);
 	if (ret < 0)
 		throw pollFailed();
-	std::cout<<"poll ret: "<<ret<<std::endl;
+	std::cerr<<"poll ret: "<<ret<<std::endl;
 }
 
 std::vector<struct pollfd>::iterator	Poll::begin()

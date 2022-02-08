@@ -49,7 +49,7 @@ namespace Webserv
 					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size], this->req.getBody().size()) - this->wr_size;
 					if (ret < 0)
 					{
-						std::cout<<"Error cgi write"<<std::endl;
+						std::cerr<<"Error cgi write"<<std::endl;
 						exit(-1);
 					}
 					this->wr_size += ret - 1;
@@ -91,16 +91,20 @@ namespace Webserv
 		/*---------*/
 
 		this->env.set("SERVER_PROTOCOL", "HTTP/1.1");
-        this->env.set("REQUEST_METHODS",this->req.getMethod().toString());
+        this->env.set("REQUEST_METHOD",this->req.getMethod().toString());
         this->env.set("QUERY_STRING", this->req.getQuery());
 
-		this->env.set("SCRIPT_NAME", this->route.getCgiPass());
+		this->env.set("SCRIPT_NAME", 		route.getFilePath(this->req.getBasePath()));
+		this->env.set("SCRIPT_FILENAME",	route.getFilePath(this->req.getBasePath()));
+		this->env.set("PATH_INFO", route.getFilePath(this->req.getBasePath()));
+		this->env.set("REQUEST_URI", route.getFilePath(this->req.getBasePath()));
+		this->env.set("REDIRECT_STATUS", "");
 
         this->env.set("REMOTE_HOST", this->req.getHostname());	// Nom hote client
         this->env.set("REMOTE_ADDR", this->req.getIp());		// IP Client
 		this->env.set("AUTH_SCRIPT", "");
 		this->env.set("REMOTE_USER", "");
-   //     this->env.set("CONTENT_TYPE", "");
+        this->env.set("CONTENT_TYPE", this->req.getHeader("Content-Type"));
 		this->env.set("CONTENT_LENGHT", SSTR(this->req.getBody().length()));
 
 		/*--------*/
@@ -158,12 +162,13 @@ namespace Webserv
 		}
 		else
 		{
+			this->write_event();
+			waitpid(this->pid, &ret, 0);
 			close(fd_in[0]);
 			fd_in[0] = -1;
 			close(fd_out[1]);
 			fd_out[1] = -1;
 			this->env.freeEnvp(envp);
-			waitpid(this->pid, &ret, 0);
 			if (WIFEXITED(ret))
 			{
 				this->status = WEXITSTATUS(ret);

@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 17:30:14 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/08 18:54:41 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,17 @@ namespace Webserv {
 				bool		readFileChunk(void);
 				void		generateAutoIndex(void);
 
-				path_type		_path;
-				path_type		_cgi_path;
-				bool			_isDir;
-				bool			_isCGI;
-				fd_type			_fd;
-				size_type		_size;
-				read_bytes_type	_readBytes;
-				content_type	_content;
+				path_type			_path;
+				path_type			_cgi_path;
+				bool				_isDir;
+				bool				_isCGI;
+				fd_type				_fd;
+				size_type			_size;
+				read_bytes_type		_readBytes;
+				content_type		_more_headers;
+				content_type		_content;
 				content_type_type	_contentType;
-				bool			_isFullyRead;
+				bool				_isFullyRead;
 
 			private:
 				Resource(const Resource& src);

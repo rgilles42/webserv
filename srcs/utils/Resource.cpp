@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/08 13:43:48 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/08 18:54:31 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ namespace Webserv {
 
 	namespace Utils {
 
-		Resource::Resource(void)	: _size(-1), _readBytes(0),_isFullyRead(false)	{}
+		Resource::Resource(void)	: _size(-1), _readBytes(0), _isFullyRead(false)	{}
 		Resource::~Resource() {}
 
 		Resource&	Resource::operator=(const Resource& rhs)
@@ -145,6 +145,8 @@ namespace Webserv {
 				throw UnableToReadResourceException();
 			this->_fd = newfd;
 		}
+
+		//void	Resource::setContentType
 
 
 	/******************************************/
