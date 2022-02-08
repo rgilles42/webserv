@@ -14,7 +14,6 @@ namespace Webserv
 			throw CGINonBlockingFailed();
 		if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
 			throw CGINonBlockingFailed();
-		this->wr_size = 0;
 		this->status = 0;
 	}
 
@@ -37,24 +36,18 @@ namespace Webserv
 		std::vector<struct pollfd>::iterator it;
 		ssize_t	ret = 0;
 
-		write_poll.add_fd(fd_in[0], POLLOUT);
+		write_poll.add_fd(this->fd_in[1], POLLOUT);
 		if (this-> req.getMethod().toString() == "POST" && this->req.getBody().size() != 0)
 		{
 			while (1)
 			{
 				write_poll.exec();
 				it = write_poll.begin();
-				if (it->revents & POLLOUT)
+				if ((it->revents & POLLOUT) == POLLOUT)
 				{
-					ret = write(fd_in[0], &this->req.getBody().c_str()[this->wr_size], this->req.getBody().size()) - this->wr_size;
-					if (ret < 0)
-					{
-						std::cerr<<"Error cgi write"<<std::endl;
-						exit(-1);
-					}
-					this->wr_size += ret - 1;
-					if (ret == 0 || this->wr_size == this->req.getBody().length() - 1)
-						break;
+					ret = write(this->fd_in[1], this->req.getBody().c_str(), this->req.getBody().length());
+					(void)ret;
+					break ;
 				}
 			}
 		}
@@ -68,11 +61,11 @@ namespace Webserv
 		std::string		file_path = route.getFilePath(this->req.getBasePath());
 		if (open(file_path.c_str(), O_RDONLY) < 0 && errno == EACCES)
 			throw CGIOpenFailed();
-		args[0] = new char[path_cgi.size() + 1];
-		std::strcpy(args[0], path_cgi.c_str());	//cgi-path
-		args[1] = new char[file_path.size() + 1];
-		std::strcpy(args[1] ,file_path.c_str());	// file path
-		args[2] = 0;
+		this->args[0] = new char[path_cgi.size() + 1];
+		std::strcpy(this->args[0], path_cgi.c_str());	//cgi-path
+		this->args[1] = new char[file_path.size() + 1];
+		std::strcpy(this->args[1] ,file_path.c_str());	// file path
+		this->args[2] = 0;
 	}
 
 	void    CGIEvent::init_env()
@@ -118,57 +111,63 @@ namespace Webserv
 		this->env.set("HTTP_REFERER", "");
 	}
 
-
 	int	CGIEvent::exec()
 	{
 		int ret;
-		char	**envp;
 
 		this->init_env();
 		this->init_args();
-		envp = this->env.toEnvp();
 
-		this->pid = fork();
-		if (this->pid < 0)
+		this->write_event();
+
+		pid_t	pid = fork();
+		if (pid < 0)
 		{
-			std::cout<<"Error fork"<<std::endl;	//need change
+			std::cerr << "Error fork" << std::endl;	//need change
 			return(1);
 		}
-		else if (this->pid == 0)
+		else if (pid == 0)
 		{
-			/* Redirect stdin */
+			// Init pipe for child
 			close(this->fd_in[1]);
-			if (dup2(this->fd_in[0], 0) < 0)
-			{
-				close(this->fd_in[0]);
-				close(this->fd_out[0]);
-				close(this->fd_out[0]);
-				this->env.freeEnvp(envp);
-//				throw dupCGIFailed();
-			}
-			close(this->fd_in[0]);
-			/* Redirect stdout */
 			close(this->fd_out[0]);
-			if (dup2(this->fd_out[1], 1) < 0)
-			{
+
+			/* Redirect stdin */
+			if (dup2(this->fd_in[0], STDIN_FILENO) == -1) {
 				close(this->fd_in[0]);
 				close(this->fd_out[1]);
-				this->env.freeEnvp(envp);
+				exit(EXIT_FAILURE);
 			}
-			close(fd_out[1]);
+			
+			/* Redirect stdout */
+			if (dup2(this->fd_out[1], STDOUT_FILENO) == -1) {
+				close(this->fd_in[0]);
+				close(this->fd_out[1]);
+				exit(EXIT_FAILURE);
+			}
+			close(this->fd_in[0]);
+			close(this->fd_out[1]);
+			
+			char**	envp = this->env.toEnvp();
+
 			/* Execve CGI */
 			ret = execve(this->args[0], this->args, envp);
+			this->env.freeEnvp(envp);
 			exit(ret);
 		}
 		else
 		{
-			this->write_event();
-			waitpid(this->pid, &ret, 0);
-			close(fd_in[0]);
-			fd_in[0] = -1;
-			close(fd_out[1]);
-			fd_out[1] = -1;
-			this->env.freeEnvp(envp);
+			// Init pipe for parent
+			close(this->fd_in[0]);
+			close(this->fd_out[1]);
+
+			waitpid(pid, &ret, 0);
+
+			close(this->fd_in[1]);
+
+			this->fd_in[0] = -1;
+			this->fd_in[1] = -1;
+
 			if (WIFEXITED(ret))
 			{
 				this->status = WEXITSTATUS(ret);
@@ -181,14 +180,22 @@ namespace Webserv
 
 	void    CGIEvent::close_pipefd(void)
 	{
-		if (this->fd_in[0] > 0)
+		if (this->fd_in[0] > 0) {
 			close(this->fd_in[0]);
-		if (this->fd_in[1] > 0)
+			this->fd_in[0] = -1;
+		}
+		if (this->fd_in[1] > 0) {
 			close(this->fd_in[1]);
-		if (this->fd_out[0] > 0)
+			this->fd_in[1] = -1;
+		}
+		if (this->fd_out[0] > 0) {
 			close(this->fd_out[0]);
-		if (this->fd_out[1] > 0)
-			close(fd_out[1]);
+			this->fd_out[0] = -1;
+		}
+		if (this->fd_out[1] > 0) {
+			close(this->fd_out[1]);
+			this->fd_out[1] = -1;
+		}
 	}
 
 	int		CGIEvent::getReadFD()

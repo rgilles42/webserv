@@ -35,18 +35,15 @@ namespace Webserv
 	{
 		private:
 			int					fd_in[2];   //use to write request body
+			int					fd_out[2];  //use to redirect cgi output
 			Http::HttpRequest	req;
 			Http::Server		srv;
-			int					fd_out[2];  //use to redirect cgi output
 			Webserv::Utils::Env	env;
 			Webserv::Http::Route route;
-			pid_t				pid;
 			bool				writeEnd;
 			char				**args;
 			bool				CGIEnd;
 			int					status;
-
-			unsigned long		wr_size;
 
 			void	close_pipefd(void);
 			void	init_env();
