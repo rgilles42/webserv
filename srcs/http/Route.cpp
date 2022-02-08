@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Route.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/08 13:50:14 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,23 @@ namespace Webserv {
 		}
 
 		const std::string							Route::getFilePath(const std::string& url) {
-			return Webserv::Utils::getConcatURL(this->root, url);
+			struct stat	s;
+			std::string	newpath;
+			std::string	req_path = Webserv::Utils::getConcatURL(this->root, url);
+			if (stat(req_path.c_str(), &s) == 0 && S_ISDIR(s.st_mode))
+			{
+				for (std::vector<std::string>::const_iterator it = this->getIndex().begin(); it != this->getIndex().end(); it++)
+				{
+					if (stat((newpath = Webserv::Utils::getConcatURL(req_path, *it)).c_str(), &s) == 0)
+					{
+						std::cout << "FOUND INDEX: " << req_path << " has been replaced with " << newpath << std::endl;
+						req_path = newpath;
+						break ;
+					}
+
+				}
+			}
+			return (req_path);
 		}
 
 

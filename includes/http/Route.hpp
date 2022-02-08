@@ -18,6 +18,9 @@
 # include <string>						// For string
 # include <vector>						// For vector
 # include <map>							// For map
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 # include "../utils/Directive.hpp"		// For Directive
 # include "../utils/Block.hpp"			// For Block
