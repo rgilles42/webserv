@@ -15,7 +15,7 @@ namespace Webserv
 
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
-		std::cout << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
+		std::cout << "-------------------------------" << std::endl << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
 		char buffer[2048];
 		ssize_t	size;
 		int	ret;
@@ -24,8 +24,7 @@ namespace Webserv
 		if (size < 0)
 			throw ClientEventReadFailed();
 		if (size == 0) {
-			this->events_flags = POLLOUT | POLLHUP;
-			return ;
+			throw ClientClosedConnectionEvent();
 		}
 		buffer[size] = '\0';
 		this->create_req.addMessage(buffer);
@@ -66,6 +65,7 @@ namespace Webserv
 					}
 					else if (ret == 2)
 					{
+						std::cout << "IT'S CGI TIME" << std::endl;
 						isCGI = true;
 					}
 					resource_type		rcs;
@@ -122,8 +122,7 @@ namespace Webserv
 			this->responses.erase(response);
 			return;
 		}
-		responses.clear();
-		this->events_flags = POLLIN | POLLHUP;
+		this->events_flags = POLLIN;
 	}
 
 	short	ClientEvent::getEventsFlags(void)

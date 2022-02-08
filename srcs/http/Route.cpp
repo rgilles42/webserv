@@ -303,7 +303,6 @@ namespace Webserv {
 				{
 					if (stat((newpath = Webserv::Utils::getConcatURL(req_path, *it)).c_str(), &s) == 0)
 					{
-						std::cout << "FOUND INDEX: " << req_path << " has been replaced with " << newpath << std::endl;
 						req_path = newpath;
 						break ;
 					}

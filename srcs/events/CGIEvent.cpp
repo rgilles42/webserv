@@ -73,7 +73,6 @@ namespace Webserv
 		args[1] = new char[file_path.size() + 1];
 		std::strcpy(args[1] ,file_path.c_str());	// file path
 		args[2] = 0;
-
 	}
 
 	void    CGIEvent::init_env()
@@ -168,6 +167,7 @@ namespace Webserv
 			if (WIFEXITED(ret))
 			{
 				this->status = WEXITSTATUS(ret);
+				std::cout << "BUT WHAT IS THE STATUS CODE, YOU MAY ASK? WELL, IT IS " << this->status << std::endl;
 			}
 			this->CGIEnd = true;
 		}

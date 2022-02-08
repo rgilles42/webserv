@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/07 15:35:01 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/08 15:17:41 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,13 @@ namespace Webserv
 				virtual const char* what() const throw()
 				{
 					return ("Client: read failed");
+				}
+			};
+			struct	ClientClosedConnectionEvent : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Client: connection closed");
 				}
 			};
 	};

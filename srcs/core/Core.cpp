@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:26:31 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/08 15:18:28 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,14 @@ namespace Webserv {
 					if ((it->revents & POLLIN) == POLLIN)
 					{
 						this->logger << std::make_pair(logger_type::DEBUG, "POLLIN Event on fd: ") << it->fd<<std::endl;
-						this->events_manager.get_event(it->fd)->read_event();
+						try {
+							this->events_manager.get_event(it->fd)->read_event();
+						}
+						catch (const std::exception& e)
+						{
+							this->logger << std::make_pair(logger_type::DEBUG, std::string(e.what()) + " on fd: ") << it->fd<<std::endl;
+							this->events_manager.remove_event(it->fd);
+						}
 					}
 					else if ((it->revents & (POLLHUP | POLLERR)) > 0)
 					{
