@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/30 03:04:01 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 22:58:54 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <sstream>						// For ostringstream
 # include <vector>						// For vector
+# include <csignal>
 
 # include "Config.hpp"					// For Config
 # include "Logger.hpp"					// For Logger
@@ -30,6 +31,8 @@
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"
 
 namespace Webserv {
+
+	extern void	sigint_handler(int signal);
 
 	class Core : public Webserv::Utils::Singleton<Core> {
 
@@ -111,6 +114,7 @@ namespace Webserv {
 			logger_type	logger;
 			server_vector	servers;
 			socket_vector	serversSockets;
+			bool			stop;
 
 		public:
 			Core(void);

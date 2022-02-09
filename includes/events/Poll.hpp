@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2022/02/07 14:18:53 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 22:56:43 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <poll.h>
 #include <unistd.h>
 #include <vector>
+#include <errno.h>
 
 #include "../utils/Socket.hpp"
 

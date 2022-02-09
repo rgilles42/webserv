@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/08 13:50:14 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 20:28:49 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,10 +306,9 @@ namespace Webserv {
 						req_path = newpath;
 						break ;
 					}
-
 				}
 			}
-			return (req_path);
+			return (Webserv::Utils::url_decode(req_path));
 		}
 
 

@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/08 15:18:28 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 22:58:57 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace Webserv {
 
-	Core::Core(void) : Singleton<Core>() {
+	Core::Core(void) : Singleton<Core>(), stop(false) {
 		this->isInit = false;
 		this->logger.setPrefix("\x1b[33m[Webserv]\x1b[0m");
 		// TODO: if we want to disable DEBUG logs, just uncomment or make a flag use this code
@@ -214,15 +214,21 @@ namespace Webserv {
 		}
 		this->logger << std::make_pair(logger_type::DEBUG, "Starting servers: done!") << std::endl;
 		/* END RM */
+		struct sigaction sigIntHandler;
+		sigIntHandler.sa_handler = sigint_handler;
+		sigemptyset(&sigIntHandler.sa_mask);
+		sigIntHandler.sa_flags = SA_RESTART;
+		sigaction(SIGINT, &sigIntHandler, NULL);
 		// try
 		// {
-			while (true)
+			extern volatile std::sig_atomic_t	stop;
+			while (!stop)
 			{
 				setup_events();
 				try {
 					this->poll_events.exec();
 				}
-				catch (const std::exception &e)
+				catch (const std::exception& e)
 				{
 					this->logger << std::make_pair(logger_type::ERROR, ExecException("poll_events exec error").what()) << std::endl;
 					continue ;
@@ -252,7 +258,7 @@ namespace Webserv {
 						this->logger << std::make_pair(logger_type::DEBUG, "POLLOUT Event on fd: ") << it->fd<<std::endl;
 						this->events_manager.get_event(it->fd)->write_event();
 					}
-					else if (it->revents == 0)
+					else if (it->revents == 0 && errno != EINTR)
 					{
 						this->logger << std::make_pair(logger_type::DEBUG, "Other Event on fd: ") << it->fd<<std::endl;
 					}

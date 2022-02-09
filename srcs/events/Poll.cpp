@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2022/02/08 19:01:42 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 22:58:18 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	Poll::remove_fd(int fd)
 	std::vector<struct pollfd>::iterator ite = this->vect_pollfd.end();
 	while (it != ite && it->fd != fd)
 		it++;
-	if (it == ite)
+	if (it == ite && errno != EINTR)
 		throw pollFailed();
 	this->vect_pollfd.erase(it);
 	this->nb_fds--;
@@ -82,7 +82,7 @@ void	Poll::exec(void)
 
 	poll_fds = this->vect_pollfd.data();
 	ret = poll(poll_fds, this->vect_pollfd.size(), -1);
-	if (ret < 0)
+	if (ret < 0 && errno != EINTR)
 		throw pollFailed();
 	std::cerr<<"poll ret: "<<ret<<std::endl;
 }

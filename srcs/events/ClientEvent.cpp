@@ -38,6 +38,7 @@ namespace Webserv
 
 				while (request != requests.end())
 				{
+					errno = 0;
 					http_response_type response;
 					if (!request->hasHeader("Host"))
 					{

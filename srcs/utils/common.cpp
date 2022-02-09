@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:12:44 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 17:07:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 21:54:00 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,26 @@ namespace Webserv {
 			return newUrl;
 		}
 
+		const std::string url_decode(const std::string& value)
+		{
+			std::ostringstream unescaped;
+			for (std::string::const_iterator i = value.begin(), n = value.end(); i != n; ++i)
+			{
+				std::string::value_type c = (*i);
+				if (c == '%')
+				{
+					std::string::value_type a = *(++i) - (a >= 'A' ? a >= 'a' ? 'a' : 'A' : '0');
+					a *= 16;
+					++i;
+					a += (*i - (*i >= 'A' ? a >= 'a' ? 'a' : 'A' : '0'));
+					unescaped << a;
+				}
+				else
+					unescaped << c;
+			}
+			return unescaped.str();
+		}
+
 	} // namespace Utils
 
 } // namespace Webserv
-

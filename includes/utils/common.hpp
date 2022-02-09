@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:13:22 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 17:07:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 21:53:49 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ namespace Webserv {
 		std::string		getFileExtension(const std::string& filename);
 
 		const std::string	getConcatURL(const std::string& url1, const std::string url2);
+		const std::string	url_decode(const std::string& value);
 
 	} // namespace Utils
 
