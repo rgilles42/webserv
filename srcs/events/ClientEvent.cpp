@@ -27,7 +27,7 @@ namespace Webserv
 			throw ClientClosedConnectionEvent();
 		}
 		buffer[size] = '\0';
-		this->create_req.addMessage(buffer);
+		this->create_req.addMessage(std::string(buffer, size));
 		if (this->create_req.checkBuffer() >= 1)
 		{
 			if (this->create_req.parseRequests() == true)

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/09 17:03:53 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 19:55:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ namespace Webserv {
 					if (read(this->_fd, NULL, 0))
 						throw UnableToReadResourceException();
 					this->_size = s.st_size;
-					std::cout << "original:" << this->_size << "|" << s.st_size << "|" << std::endl;
 					this->_contentType = route.getMimeTypes().getType(this->_path, "text/plain");
 				}
 				else
