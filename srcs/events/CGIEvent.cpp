@@ -3,7 +3,7 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest& request, const Http::Server& server, const Webserv::Utils::Env& environnement, const Webserv::Http::Route& r) : req(request), srv(server), env(environnement), route(r), writeEnd(false), args(NULL), CGIEnd(false)
+	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest& request, const Http::Server& server, const Webserv::Utils::Env& environnement, const Webserv::Http::Route& r) : req(request), route(r), srv(server), env(environnement), writeEnd(false), CGIEnd(false)
 	{
 		if (pipe(this->fd_in) < 0)
 			throw CGIPipeFailed();
@@ -20,14 +20,6 @@ namespace Webserv
 	CGIEvent::~CGIEvent()
 	{
 		this->close_pipefd();
-		if (this->args)
-		{
-			if (this->args[1])
-				delete this->args[1];
-			if (this->args[0])
-				delete this->args[0];
-			delete[] this->args;
-		}
 	}
 
 	void    CGIEvent::write_event()
@@ -54,20 +46,6 @@ namespace Webserv
 		this->writeEnd = true;
 	}
 
-	void	CGIEvent::init_args()
-	{
-		this->args = new char*[3];
-		std::string		path_cgi = this->route.getCgiPass();
-		std::string		file_path = route.getFilePath(this->req.getBasePath());
-		if (open(file_path.c_str(), O_RDONLY) < 0 && errno == EACCES)
-			throw CGIOpenFailed();
-		this->args[0] = new char[path_cgi.size() + 1];
-		std::strcpy(this->args[0], path_cgi.c_str());	//cgi-path
-		this->args[1] = new char[file_path.size() + 1];
-		std::strcpy(this->args[1] ,file_path.c_str());	// file path
-		this->args[2] = 0;
-	}
-
 	void    CGIEvent::init_env()
 	{
 		/*--------*/
@@ -75,7 +53,7 @@ namespace Webserv
 		/*--------*/
 
 		this->env.set("SERVER_SOFTWARE", "Webserv/HTTP/1.1");
-        this->env.set("SERVER_NAME", this->srv.getServerName());
+		this->env.set("SERVER_NAME", this->srv.getServerName());
 		this->env.set("GATEWAY_INTERFACE", "CGI/1.1");
 		this->env.set("SERVER_PORT", SSTR(this->srv.getListen().getIntPort()));
 
@@ -84,8 +62,8 @@ namespace Webserv
 		/*---------*/
 
 		this->env.set("SERVER_PROTOCOL", "HTTP/1.1");
-        this->env.set("REQUEST_METHOD",this->req.getMethod().toString());
-        this->env.set("QUERY_STRING", this->req.getQuery());
+		this->env.set("REQUEST_METHOD",this->req.getMethod().toString());
+		this->env.set("QUERY_STRING", this->req.getQuery());
 
 		this->env.set("SCRIPT_NAME", 		route.getFilePath(this->req.getBasePath()));
 		this->env.set("SCRIPT_FILENAME",	route.getFilePath(this->req.getBasePath()));
@@ -93,20 +71,20 @@ namespace Webserv
 		this->env.set("REQUEST_URI", route.getFilePath(this->req.getBasePath()));
 		this->env.set("REDIRECT_STATUS", "");
 
-        this->env.set("REMOTE_HOST", this->req.getHostname());	// Nom hote client
-        this->env.set("REMOTE_ADDR", this->req.getIp());		// IP Client
+		this->env.set("REMOTE_HOST", this->req.getHostname());	// Nom hote client
+		this->env.set("REMOTE_ADDR", this->req.getIp());		// IP Client
 		this->env.set("AUTH_SCRIPT", "");
 		this->env.set("REMOTE_USER", "");
-        this->env.set("CONTENT_TYPE", this->req.getHeader("Content-Type"));
-		this->env.set("CONTENT_LENGHT", SSTR(this->req.getBody().length()));
+		this->env.set("CONTENT_TYPE", this->req.getHeader("Content-Type"));
+		this->env.set("CONTENT_LENGTH", SSTR(this->req.getBody().length()));
 
 		/*--------*/
 		/* Client */
 		/*--------*/
 
-        this->env.set("HTTP_ACCEPT", this->req.getHeader("Accept"));
-        this->env.set("HTTP_ACCEPT_LANGUAGE", this->req.getHeader("Accept-Language"));
-        this->env.set("HTTP_USER_AGENT", this->req.getHeader("User-Agent"));
+		this->env.set("HTTP_ACCEPT", this->req.getHeader("Accept"));
+		this->env.set("HTTP_ACCEPT_LANGUAGE", this->req.getHeader("Accept-Language"));
+		this->env.set("HTTP_USER_AGENT", this->req.getHeader("User-Agent"));
 		this->env.set("HTTP_COOKIE", "");
 		this->env.set("HTTP_REFERER", "");
 	}
@@ -116,7 +94,6 @@ namespace Webserv
 		int ret;
 
 		this->init_env();
-		this->init_args();
 
 		this->write_event();
 
@@ -138,7 +115,7 @@ namespace Webserv
 				close(this->fd_out[1]);
 				exit(EXIT_FAILURE);
 			}
-			
+
 			/* Redirect stdout */
 			if (dup2(this->fd_out[1], STDOUT_FILENO) == -1) {
 				close(this->fd_in[0]);
@@ -147,11 +124,61 @@ namespace Webserv
 			}
 			close(this->fd_in[0]);
 			close(this->fd_out[1]);
-			
+
+			// Init args
+			std::vector<std::string>	argsVec;
+
+			argsVec.push_back(this->route.getCgiPass());
+			argsVec.push_back(this->route.getFilePath(this->req.getBasePath()));
+
+			char** args = new char*[argsVec.size() + 1];
+			if (!args) {
+				exit(EXIT_FAILURE);
+			}
+			size_t i = 0;
+			std::vector<std::string>::const_iterator it = argsVec.begin();
+			while (it != argsVec.end()) {
+				args[i] = new char[it->length() + 1];
+				if (!args[i]) {
+					for (size_t j = 0; j < i; j++)
+					{
+						if (args[j]) {
+							delete args[j];
+						}
+					}
+					delete[] args;
+					exit(EXIT_FAILURE);
+				}
+				std::strcpy(args[i], it->c_str());
+				it++;
+				i++;
+			}
+			args[i] = NULL;
+
+			// Init envp
 			char**	envp = this->env.toEnvp();
+			if (!envp) {
+				for (size_t j = 0; j < i; j++)
+				{
+					if (args[j]) {
+						delete args[j];
+					}
+				}
+				delete[] args;
+				exit(EXIT_FAILURE);
+			}
 
 			/* Execve CGI */
-			ret = execve(this->args[0], this->args, envp);
+			ret = execve(args[0], args, envp);
+			if (args) {
+				for (size_t j = 0; j < i; j++)
+				{
+					if (args[j]) {
+						delete args[j];
+					}
+				}
+				delete[] args;
+			}
 			this->env.freeEnvp(envp);
 			exit(ret);
 		}

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/02 20:48:11 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 15:04:07 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,21 @@
 namespace Webserv
 {
 
-	class CGIEvent
-	{
+	class CGIEvent {
+		public:
+			typedef Webserv::Http::HttpRequest	http_request_type;
+			typedef Webserv::Http::Route		http_route_type;
+			typedef Webserv::Http::Server		http_server_type;
+			typedef Webserv::Utils::Env			env_type;
+
 		private:
 			int					fd_in[2];   //use to write request body
 			int					fd_out[2];  //use to redirect cgi output
-			Http::HttpRequest	req;
-			Http::Server		srv;
-			Webserv::Utils::Env	env;
-			Webserv::Http::Route route;
+			http_request_type	req;
+			http_route_type		route;
+			http_server_type	srv;
+			env_type			env;
 			bool				writeEnd;
-			char				**args;
 			bool				CGIEnd;
 			int					status;
 
@@ -50,7 +54,7 @@ namespace Webserv
 			void	init_args();
 
 		public:
-			CGIEvent(const Webserv::Http::HttpRequest &request, const Webserv::Http::Server &server, const Webserv::Utils::Env&	environnement, const Webserv::Http::Route& route);
+			CGIEvent(const http_request_type& request, const http_server_type& server, const env_type&	environnement, const http_route_type& route);
 			~CGIEvent();
 
 			int		exec(void);
