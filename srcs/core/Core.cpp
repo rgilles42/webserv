@@ -273,7 +273,7 @@ namespace Webserv {
 
 	void		Core::add_server_event(const socket_type &sock)	// Add Server Event in EventsManager
 	{
-		ServerEvent	*srv = new ServerEvent(sock, this->config, this->env);
+		ServerEvent	*srv = new ServerEvent(sock, this->config, this->env, this->logger);
 
 		this->events_manager.add_event(srv->getFD(), *srv);
 	}

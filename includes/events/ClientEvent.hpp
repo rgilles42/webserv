@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientEvent.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/09 17:06:06 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 23:46:35 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "CGIEvent.hpp"
 # include "IEvents.hpp"
 # include "../core/Config.hpp"
+# include "../core/Logger.hpp"
 # include "../utils/common.hpp"
 # include "../utils/Socket.hpp"
 # include "../utils/Resource.hpp"
@@ -49,6 +50,7 @@ namespace Webserv
 			typedef Webserv::Http::HttpResponse			http_response_type;
 			typedef std::vector<http_response_type>		response_vector;
 			typedef Webserv::Utils::Env					env_type;
+			typedef Webserv::Logger						logger_type;
 
 		private:
 			http_request_builder_type	create_req;
@@ -59,12 +61,13 @@ namespace Webserv
 			response_vector				responses;
 
 			env_type					env;
+			logger_type					logger;
 
 			ClientEvent(void);
 
 		public:
 
-			ClientEvent(socket_type &client_sock, socket_type &server_sock , config_type& _config, Utils::Env& environnement);
+			ClientEvent(socket_type &client_sock, socket_type &server_sock , config_type& _config, Utils::Env& environnement, logger_type& log);
 			virtual ~ClientEvent();
 
 			void	write_event(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/09 19:55:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 23:30:10 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ namespace Webserv {
 					}
 				}
 				content << "</tbody> </table></body></html>";
-				closedir (dir);
+				closedir(dir);
 			}
 			else
 				if (errno == EACCES)

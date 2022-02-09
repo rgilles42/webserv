@@ -2,7 +2,7 @@
 
 namespace Webserv
 {
-	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config, env_type& environnement): sock(client_sock), srv_sock(server_sock), config(_config), env(environnement)
+	ClientEvent::ClientEvent(socket_type &client_sock, socket_type &server_sock, config_type& _config, env_type& environnement, logger_type& log): sock(client_sock), srv_sock(server_sock), config(_config), env(environnement), logger(log)
 	{
 		this->events_flags = POLLIN;
 	}
@@ -15,7 +15,6 @@ namespace Webserv
 
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
-		std::cout << "-------------------------------" << std::endl << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
 		char buffer[BUFFER_SIZE + 1];
 		ssize_t	size;
 		int	ret;
@@ -82,7 +81,6 @@ namespace Webserv
 					{
 					 	response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
 					 	this->responses.push_back(response);
-						std::cout << this->responses.size() << "first:" << e.what() << std::endl;
 					 	request++;
 					 	continue ;
 					}
@@ -90,17 +88,16 @@ namespace Webserv
 					{
 					 	response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
 					 	this->responses.push_back(response);
-						std::cout << this->responses.size() << "first:" << e.what() << std::endl;
 					 	request++;
 					 	continue ;
 					}
 					catch (const resource_type::Resource500Exception& e)
 					{
-					 	response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
-					 	this->responses.push_back(response);
-						std::cout << this->responses.size() << "first:" << e.what() << std::endl;
-					 	request++;
-					 	continue ;
+						response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
+						this->responses.push_back(response);
+						this->logger << std::make_pair(this->logger.ERROR, e.what())  << std::endl;
+						request++;
+						continue ;
 					}
 					try
 					{
@@ -114,7 +111,7 @@ namespace Webserv
 					{
 					 	response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
 					 	this->responses.push_back(response);
-						std::cout << this->responses.size() << "second:" << e.what() << std::endl;
+						this->logger << std::make_pair(this->logger.ERROR, e.what())  << std::endl;
 					 	request++;
 					 	continue ;
 					}
