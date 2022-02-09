@@ -3,26 +3,17 @@
 namespace Webserv
 {
 
-	CGIEvent::CGIEvent(const Webserv::Http::HttpRequest& request, const Http::Server& server, const Webserv::Utils::Env& environnement, const Webserv::Http::Route& r) : req(request), route(r), srv(server), env(environnement), writeEnd(false), CGIEnd(false)
+	CGIEvent::CGIEvent(void) : writeEnd(false), CGIEnd(false), status(0)
 	{
-		if (pipe(this->fd_in) < 0)
-			throw CGIPipeFailed();
-		if (pipe(this->fd_out) < 0)
-			throw CGIPipeFailed();
-
-		if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
-			throw CGINonBlockingFailed();
-		if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
-			throw CGINonBlockingFailed();
-		this->status = 0;
+		
 	}
 
-	CGIEvent::~CGIEvent()
+	CGIEvent::~CGIEvent(void)
 	{
 		this->close_pipefd();
 	}
 
-	void    CGIEvent::write_event()
+	void    CGIEvent::write_event(void)
 	{
 		Poll	write_poll;
 		std::vector<struct pollfd>::iterator it;
@@ -44,6 +35,27 @@ namespace Webserv
 			}
 		}
 		this->writeEnd = true;
+	}
+
+	void	CGIEvent::init(const http_request_type& request, const http_server_type& server, const env_type& environnement, const http_route_type& r)
+	{
+
+		this->req = request;
+		this->route = r;
+		this->srv = server;
+		this->env = environnement;
+		if (pipe(this->fd_in) < 0)
+			throw CGIPipeFailed();
+		if (pipe(this->fd_out) < 0)
+			throw CGIPipeFailed();
+
+		if (fcntl(fd_in[0], F_SETFL, O_NONBLOCK) < 0)
+			throw CGINonBlockingFailed();
+		if (fcntl(fd_out[0], F_SETFL, O_NONBLOCK) < 0)
+			throw CGINonBlockingFailed();
+		this->writeEnd = false;
+		this->CGIEnd = false;
+		this->status = 0;
 	}
 
 	void    CGIEvent::init_env()

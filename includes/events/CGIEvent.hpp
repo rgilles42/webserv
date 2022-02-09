@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGIEvent.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/09 15:04:07 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 15:43:23 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ namespace Webserv
 			void	init_args();
 
 		public:
-			CGIEvent(const http_request_type& request, const http_server_type& server, const env_type&	environnement, const http_route_type& route);
+			CGIEvent();
 			~CGIEvent();
 
+			void	init(const http_request_type& request, const http_server_type& server, const env_type&	environnement, const http_route_type& route);
 			int		exec(void);
 
 			void	write_event(void);
@@ -66,33 +67,36 @@ namespace Webserv
 			bool	writeIsEnd();
 			bool	CGIIsEnd();
 
-			struct CGIPipeFailed : public std::exception
+			struct CGIException : public std::exception
 			{
-				virtual const char* what() const throw()
-				{
-					return("CGI: pipe failed");
-				}
+				protected:
+					std::string	msg;
+
+				public:
+					CGIException(const std::string& msg = "") : std::exception() {
+						this->msg = msg;
+					}
+					virtual ~CGIException() throw() {}
+					virtual const char	*what() const throw() {
+						return this->msg.c_str();
+					}
 			};
-			struct CGINonBlockingFailed: public std::exception
+
+			struct CGIPipeFailed : public CGIException
 			{
-				virtual const char* what() const throw()
-				{
-					return("CGI: Fcntl failed");
-				}
+				CGIPipeFailed(void)	: CGIException("CGI: pipe failed")	{}
 			};
-			struct CGIOpenFailed : public std::exception
+			struct CGINonBlockingFailed: public CGIException
 			{
-				virtual const char* what() const throw()
-				{
-					return("CGI: Can't acces to file");
-				}
+				CGINonBlockingFailed(void)	: CGIException("CGI: Fcntl failed")	{}
 			};
-			struct CGIDupFailed : public std::exception
+			struct CGIOpenFailed : public CGIException
 			{
-				virtual const char* what() const throw()
-				{
-					return("CGI: Dup failed");
-				}
+				CGIOpenFailed(void)	: CGIException("CGI: Can't acces to file")	{}
+			};
+			struct CGIDupFailed : public CGIException
+			{
+				CGIDupFailed(void)	: CGIException("CGI: Dup failed")	{}
 			};
 	};
 

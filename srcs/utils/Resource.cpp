@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/08 18:54:31 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 15:28:01 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,6 @@ namespace Webserv {
 			}
 			else if (S_ISDIR(s.st_mode))
 			{
-				// while (std::vector<string>::iterator it = route.getIndex().begin(); it != route.getIndex().end(); it++)
-				// {
-				// 	try
-				// }
 				if (route.getAutoindex())
 				{
 					this->_isDir = true;
@@ -141,8 +137,6 @@ namespace Webserv {
 
 		void	Resource::setFd(const fd_type& newfd)
 		{
-			if (read(newfd, NULL, 0))
-				throw UnableToReadResourceException();
 			this->_fd = newfd;
 		}
 

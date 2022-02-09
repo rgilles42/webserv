@@ -64,24 +64,38 @@ namespace Webserv
 					 	continue ;
 					}
 					else if (ret == 2)
-					{
-						std::cout << "IT'S CGI TIME" << std::endl;
 						isCGI = true;
-					}
 					resource_type		rcs;
-					CGIEvent cgi(*request, srv, this->env, route);
+					CGIEvent cgi;
 					try
 					{
 						rcs.init(route.getFilePath(request->getBasePath()), isCGI, route);
 						if (rcs.isCGI())
 						{
+							cgi.init(*request, srv, this->env, route);
 							cgi.exec(); // TODO : check return
 							rcs.setFd(cgi.getReadFD());
 						}
 					}
-					catch (const std::exception& e)
+					catch (const resource_type::Resource404Exception& e)
 					{
 					 	response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
+					 	this->responses.push_back(response);
+						std::cout << this->responses.size() << "first:" << e.what() << std::endl;
+					 	request++;
+					 	continue ;
+					}
+					catch (const resource_type::Resource403Exception& e)
+					{
+					 	response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+					 	this->responses.push_back(response);
+						std::cout << this->responses.size() << "first:" << e.what() << std::endl;
+					 	request++;
+					 	continue ;
+					}
+					catch (const resource_type::Resource500Exception& e)
+					{
+					 	response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
 					 	this->responses.push_back(response);
 						std::cout << this->responses.size() << "first:" << e.what() << std::endl;
 					 	request++;
@@ -95,7 +109,7 @@ namespace Webserv
 						response.setResource(rcs);
 						this->responses.push_back(response);
 					}
-					catch(const std::exception& e)
+					catch(const resource_type::Resource500Exception& e)
 					{
 					 	response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
 					 	this->responses.push_back(response);

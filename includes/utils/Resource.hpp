@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/08 18:54:41 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 15:34:50 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,41 @@ namespace Webserv {
 						}
 				};
 
-				struct PathDoesNotExistException : public ResourceException {
-					PathDoesNotExistException(void) : ResourceException("No such file or directory") {}
+				struct Resource404Exception : public ResourceException {
+					Resource404Exception(std::string msg) : ResourceException(msg) {}
 				};
-				struct AccessForbiddenException : public ResourceException {
-					AccessForbiddenException(void) : ResourceException("Access Forbidden") {}
+				struct PathDoesNotExistException : public Resource404Exception {
+					PathDoesNotExistException(void) : Resource404Exception("No such file or directory") {}
 				};
-				struct UnableToStatPathException : public ResourceException {
-					UnableToStatPathException(void) : ResourceException("Unable to stat path") {}
+				struct NotFileOrDirException : public Resource404Exception {
+					NotFileOrDirException(void) : Resource404Exception("Specified resource is neither a regular file nor a directory.") {}
 				};
-				struct ResourceNotOpenException : public ResourceException {
-					ResourceNotOpenException(void) : ResourceException("Unable to open resource") {}
+
+				//////////////////////////
+
+				struct Resource403Exception : public ResourceException {
+					Resource403Exception(std::string msg) : ResourceException(msg) {}
 				};
-				struct SetNonBlockFailedException : public ResourceException {
-					SetNonBlockFailedException(void) : ResourceException("Unable to set resource to non-blocking") {}
+				struct AccessForbiddenException : public Resource403Exception {
+					AccessForbiddenException(void) : Resource403Exception("Access Forbidden") {}
 				};
-				struct UnableToReadResourceException : public ResourceException {
-					UnableToReadResourceException(void) : ResourceException("Unable to read resource") {}
+
+				//////////////////////////
+				
+				struct Resource500Exception : public ResourceException {
+					Resource500Exception(std::string msg) : ResourceException(msg) {}
 				};
-				struct NotFileOrDirException : public ResourceException {
-					NotFileOrDirException(void) : ResourceException("Specified resource is neither a regular file nor a directory.") {}
+				struct UnableToStatPathException : public Resource500Exception {
+					UnableToStatPathException(void) : Resource500Exception("Unable to stat path") {}
+				};
+				struct ResourceNotOpenException : public Resource500Exception {
+					ResourceNotOpenException(void) : Resource500Exception("Unable to open resource") {}
+				};
+				struct SetNonBlockFailedException : public Resource500Exception {
+					SetNonBlockFailedException(void) : Resource500Exception("Unable to set resource to non-blocking") {}
+				};
+				struct UnableToReadResourceException : public Resource500Exception {
+					UnableToReadResourceException(void) : Resource500Exception("Unable to read resource") {}
 				};
 
 			protected:
