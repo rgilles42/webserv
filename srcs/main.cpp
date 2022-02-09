@@ -42,7 +42,5 @@ int	main(int argc, char *argv[], char *envp[]) {
 	{
 		std::cout << e.what() << std::endl;
 	}
-
-	std::cout << "Success" << std::endl;
 	return EXIT_SUCCESS;
 }

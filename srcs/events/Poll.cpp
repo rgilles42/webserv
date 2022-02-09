@@ -84,7 +84,6 @@ void	Poll::exec(void)
 	ret = poll(poll_fds, this->vect_pollfd.size(), -1);
 	if (ret < 0 && errno != EINTR)
 		throw pollFailed();
-	std::cerr<<"poll ret: "<<ret<<std::endl;
 }
 
 std::vector<struct pollfd>::iterator	Poll::begin()
