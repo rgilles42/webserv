@@ -4,7 +4,12 @@ namespace Webserv
 {
 	EventsManager::EventsManager(void) {}
 
-	EventsManager::~EventsManager(void) {}
+	EventsManager::~EventsManager(void) {
+		for (std::map<int, IEvents *>::iterator it = events_map.begin(); it != events_map.end(); ++it)
+		{
+			delete it->second;
+		}
+	}
 
 	void	EventsManager::add_event(int fd, IEvents &event_object)
 	{

@@ -76,16 +76,17 @@ namespace Webserv {
 
 		const std::string url_decode(const std::string& value)
 		{
-			std::ostringstream unescaped;
+			std::ostringstream unescaped("");
 			for (std::string::const_iterator i = value.begin(), n = value.end(); i != n; ++i)
 			{
 				std::string::value_type c = (*i);
 				if (c == '%')
 				{
-					std::string::value_type a = *(++i) - (a >= 'A' ? a >= 'a' ? 'a' : 'A' : '0');
+					++i;
+					std::string::value_type a = *i - (*i >= 'A' ? *i >= 'a' ? 'a' : 'A' : '0');
 					a *= 16;
 					++i;
-					a += (*i - (*i >= 'A' ? a >= 'a' ? 'a' : 'A' : '0'));
+					a += (*i - (*i >= 'A' ? *i >= 'a' ? 'a' : 'A' : '0'));
 					unescaped << a;
 				}
 				else
