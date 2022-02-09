@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:13:22 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/01 17:57:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 17:07:40 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 # include <stdexcept>	// For runtime_error
 
 # define SSTR( x ) static_cast< std::ostringstream&>( ( std::ostringstream() << std::dec << x ) ).str()
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
+# endif
 
 namespace Webserv {
 

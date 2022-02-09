@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/09 15:28:01 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 17:03:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ namespace Webserv {
 					if (read(this->_fd, NULL, 0))
 						throw UnableToReadResourceException();
 					this->_size = s.st_size;
+					std::cout << "original:" << this->_size << "|" << s.st_size << "|" << std::endl;
 					this->_contentType = route.getMimeTypes().getType(this->_path, "text/plain");
 				}
 				else
@@ -149,7 +150,7 @@ namespace Webserv {
 		{
 			Webserv::Poll			res_poll;
 			Webserv::Poll::iterator	poll_it;
-			char					buf[501];
+			char					buf[BUFFER_SIZE + 1];
 			int						rdsize = 0;
 			long long				totalReadBytes = 0;
 
@@ -158,11 +159,12 @@ namespace Webserv {
 			{
 				res_poll.exec();
 				poll_it = res_poll.begin();
-				if ((poll_it->revents & POLLIN) == POLLIN && (rdsize = read(this->_fd, buf, 500)) > 0)
+				if ((poll_it->revents & POLLIN) == POLLIN && (rdsize = read(this->_fd, buf, BUFFER_SIZE)) > 0)
 				{
 					buf[rdsize] = 0;
-					this->_content += buf;
+					this->_content.append(buf, rdsize);
 					this->_readBytes += rdsize;
+					totalReadBytes += rdsize;
 				}
 				else if (rdsize < 0)
 					throw UnableToReadResourceException();

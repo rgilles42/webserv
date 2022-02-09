@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/09 15:34:50 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 17:05:03 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@
 # include "../events/Poll.hpp"
 # include "../http/Route.hpp"	// For Mimetypes
 # include "MimeTypes.hpp"	// For Mimetypes not used for the moment aparently
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
+# endif
 
 namespace Webserv {
 
@@ -75,7 +79,7 @@ namespace Webserv {
 				};
 
 				//////////////////////////
-				
+
 				struct Resource500Exception : public ResourceException {
 					Resource500Exception(std::string msg) : ResourceException(msg) {}
 				};

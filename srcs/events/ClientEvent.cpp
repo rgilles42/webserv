@@ -16,11 +16,11 @@ namespace Webserv
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
 		std::cout << "-------------------------------" << std::endl << "Client read event: " << this->srv_sock.getAddress().getStrAddress() << ":" << this->srv_sock.getAddress().getIntPort() <<std::endl;
-		char buffer[2048];
+		char buffer[BUFFER_SIZE + 1];
 		ssize_t	size;
 		int	ret;
 
-		size = this->sock.read(buffer, 2048);
+		size = this->sock.read(buffer, BUFFER_SIZE);
 		if (size < 0)
 			throw ClientEventReadFailed();
 		if (size == 0) {

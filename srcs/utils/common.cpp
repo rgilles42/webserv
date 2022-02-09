@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:12:44 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/08 13:43:08 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 17:07:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ namespace Webserv {
 
 		std::string		getFormatedDate(const time_t& rawtime) {
 			struct tm *timeinfo;
-			char buffer[80];
+			char buffer[BUFFER_SIZE + 1];
 
 			timeinfo = gmtime(&rawtime);
 			strftime(buffer, sizeof(buffer), "%a, %m %b %Y %H:%M:%S %Z", timeinfo);

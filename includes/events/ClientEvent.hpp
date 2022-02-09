@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientEvent.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/08 15:17:41 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/09 17:06:06 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@
 # include "../http/HttpRequest.hpp"
 # include "../methods/Methods.hpp"
 # include "../http/Route.hpp"
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
+# endif
 
 namespace Webserv
 {
