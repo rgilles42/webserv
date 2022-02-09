@@ -59,37 +59,37 @@ namespace Webserv {
 		Parser::parse_type	Parser::parseBlock(const token_vector& tokens, size_t& pos) {
 			bool		valid = false;
 			block_type	newBlock;
-			if (tokens[pos].isNewLine()) {
-				while (tokens[pos].isNewLine() && pos < tokens.size()) {
+			if (pos < tokens.size() && tokens[pos].isNewLine()) {
+				while (pos < tokens.size() && tokens[pos].isNewLine()) {
 					pos++;
 				}
 			}
-			if (tokens[pos].isComplexEnd()) {
+			if (pos < tokens.size() && tokens[pos].isComplexEnd()) {
 				pos--;
 				return std::make_pair(newBlock, valid);
 			}
-			if (tokens[pos].isComment()) {
+			if (pos < tokens.size() && tokens[pos].isComment()) {
 				newBlock.setType(block_type::T_COMMENT);
 				pos++;
-				while (!tokens[pos].isNewLine() && pos < tokens.size()) {
+				while (pos < tokens.size() && !tokens[pos].isNewLine()) {
 					newBlock.addValue(tokens[pos]);
 					pos++;
 				}
 				valid = true;
 				return std::make_pair(newBlock, valid);
 			}
-			while (!tokens[pos].isSimpleEnd() && !tokens[pos].isComplexStart() && pos < tokens.size()) {
+			while (pos < tokens.size() && !tokens[pos].isSimpleEnd() && !tokens[pos].isComplexStart()) {
 				valid = true;
-				if (!tokens[pos].isNewLine()) {
+				if (pos < tokens.size() && !tokens[pos].isNewLine()) {
 					newBlock.addValue(tokens[pos]);
 				}
 				pos++;
 			}
-			bool isComplex = tokens[pos].isComplexStart();
+			bool isComplex = pos < tokens.size() && tokens[pos].isComplexStart();
 			pos++;
 			if (isComplex) {
 				newBlock.setType(block_type::T_COMPLEX);
-				while (!tokens[pos].isComplexEnd() && pos < tokens.size()) {
+				while (pos < tokens.size() && !tokens[pos].isComplexEnd()) {
 					parse_type child = this->parseBlock(tokens, pos);
 					if (child.second) {
 						valid = true;
