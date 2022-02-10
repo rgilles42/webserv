@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 18:02:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 22:26:04 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ namespace Webserv {
 								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
-							this->error_pages.insert(errorPage);
+							this->error_pages[errorPage.first] = errorPage.second;
 						} else if (directive == "limit_except") {
 							if (!directive_type::parseLimitExcept(values, this->limit_except)) {
 								throw directive_type::InvalidValueDirectiveException(directive);

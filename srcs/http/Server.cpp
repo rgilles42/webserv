@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/07 16:01:32 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 22:26:15 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ namespace Webserv {
 								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
-							this->error_pages.insert(errorPage);
+							this->error_pages[errorPage.first] = errorPage.second;
 							this->defaultRoute.setErrorPages(this->error_pages);
 						} else if (directive == "client_max_body_size") {
 							if (!directive_type::parseClientMaxBodySize(values, this->client_max_body_size, DEFAULT_CLIENT_MAX_BODY_SIZE)) {
