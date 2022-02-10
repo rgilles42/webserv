@@ -115,7 +115,15 @@ namespace Webserv
 					}
 					catch (const resource_type::Resource404Exception& e)
 					{
-						response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
+						http_route_type::error_pages_pair pairError = route.getErrorPage(http_response_type::status_code_type::client_error_not_found);
+						rcs.init(pairError.second, false, route);
+						// CARE TODO: oui
+						while (!rcs.isFullyRead()) {
+							rcs.loadResource();
+						}
+						response.setResource(rcs, http_response_type::status_code_type::client_error_not_found);
+						// response.setBody("");
+						// response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
 						this->responses.push_back(response);
 						request++;
 						continue ;
