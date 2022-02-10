@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpResponse.cpp                                    :+:      :+:    :+:   */
+/*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/10/28 18:07:49 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 13:03:22 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/http/HttpResponse.hpp"
 
@@ -16,7 +17,7 @@ namespace Webserv {
 
 	namespace Http {
 
-		HttpResponse::HttpResponse(void) {
+		HttpResponse::HttpResponse(void) : raw_headers("")	{
 			this->initDefaultHeaders();
 		}
 
@@ -31,6 +32,7 @@ namespace Webserv {
 				this->protocol = other.protocol;
 				this->statusCode = other.statusCode;
 				this->headers = other.headers;
+				this->raw_headers = other.raw_headers;
 				this->body = other.body;
 			}
 			return *this;
@@ -116,7 +118,10 @@ namespace Webserv {
 		void		HttpResponse::setResource(const resource_type& resource, const status_code_type& statusCode) {
 			this->initDefaultHeaders();
 			this->setBody(resource.getContent());
-			this->setHeader("Content-Type", resource.getContentType());
+			if (!resource.isCGI())
+				this->setHeader("Content-Type", resource.getContentType());
+			else
+				this->raw_headers = resource.getMoreHeaders();
 			this->setStatusCode(statusCode);
 		}
 
@@ -126,7 +131,7 @@ namespace Webserv {
 			std::string	formatedResponse = "";
 
 			formatedResponse += this->protocol.toString() + " " + this->statusCode.toString() + CRLF;
-			formatedResponse += this->headers.toString() + CRLF;
+			formatedResponse += this->raw_headers + this->headers.toString() + CRLF;
 			formatedResponse += this->body;
 			return formatedResponse;
 		}

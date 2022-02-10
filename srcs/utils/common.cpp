@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:12:44 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 21:54:00 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 12:33:37 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,13 @@ namespace Webserv {
 					unescaped << c;
 			}
 			return unescaped.str();
+		}
+
+		void	separate_header(std::string& content, std::string& add_headers)
+		{
+			std::string isolated_content_type("");
+			add_headers = content.substr(0, content.find("\r\n\r\n")) + "\r\n";
+			content.erase(0, content.find("\r\n\r\n") + 4);
 		}
 
 	} // namespace Utils

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/09 17:05:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 12:50:00 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ namespace Webserv {
 				void		generateAutoIndex(void);
 
 				path_type			_path;
-				path_type			_cgi_path;
 				bool				_isDir;
 				bool				_isCGI;
 				fd_type				_fd;
@@ -128,6 +127,7 @@ namespace Webserv {
 				void			closeResource(void);
 
 				const content_type&			getContent(void) const;
+				const content_type&			getMoreHeaders(void) const;
 				const content_type_type&	getContentType(void) const;
 
 				const fd_type&	getFd(void) const;

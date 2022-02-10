@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/09 23:30:10 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 12:50:25 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ namespace Webserv {
 
 	namespace Utils {
 
-		Resource::Resource(void)	: _size(-1), _readBytes(0), _isFullyRead(false)	{}
+		Resource::Resource(void)	: _size(-1), _readBytes(0), _more_headers(""), _isFullyRead(false) {}
 		Resource::~Resource() {}
 
 		Resource&	Resource::operator=(const Resource& rhs)
@@ -29,6 +29,7 @@ namespace Webserv {
 				this->_fd = rhs._fd;
 				this->_size = rhs._size;
 				this->_readBytes = rhs._readBytes;
+				this->_more_headers = rhs._more_headers;
 				this->_content = rhs._content;
 				this->_contentType = rhs._contentType;
 				this->_isFullyRead = rhs._isFullyRead;
@@ -70,7 +71,7 @@ namespace Webserv {
 					this->_contentType = route.getMimeTypes().getType(this->_path, "text/plain");
 				}
 				else
-					this->_contentType = "text/html";
+					this->_contentType = "";
 			}
 			else if (S_ISDIR(s.st_mode))
 			{
@@ -90,7 +91,12 @@ namespace Webserv {
 		bool		Resource::loadResource(void)
 		{
 			if (!this->_isDir)
-				return (readFileChunk());
+			{
+				bool	ret = readFileChunk();
+				if (this->isCGI())
+					Webserv::Utils::separate_header(this->_content, this->_more_headers);
+				return (ret);
+			}
 			return (this->_isFullyRead);
 		}
 
@@ -98,6 +104,11 @@ namespace Webserv {
 		{
 			if (!this->_isDir && !this->_isCGI)
 				close(this->_fd);
+		}
+
+		const Resource::content_type&	Resource::getMoreHeaders(void) const
+		{
+			return (this->_more_headers);
 		}
 
 		const Resource::content_type&	Resource::getContent(void) const

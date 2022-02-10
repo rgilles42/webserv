@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:13:22 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 21:53:49 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 12:33:45 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <ctime>		// For gmtime, strftime
 # include <algorithm>	// For find_if, not1, ptr_fun
 # include <stdexcept>	// For runtime_error
+
+#include <iostream>
 
 # define SSTR( x ) static_cast< std::ostringstream&>( ( std::ostringstream() << std::dec << x ) ).str()
 
@@ -41,6 +43,7 @@ namespace Webserv {
 
 		const std::string	getConcatURL(const std::string& url1, const std::string url2);
 		const std::string	url_decode(const std::string& value);
+		void	separate_header(std::string& content, std::string& add_headers);
 
 	} // namespace Utils
 
