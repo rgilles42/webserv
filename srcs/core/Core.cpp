@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 22:58:57 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 15:31:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,8 @@ namespace Webserv {
 						this->logger << std::make_pair(logger_type::DEBUG, "Other Event on fd: ") << it->fd<<std::endl;
 					}
 				}
-				this->logger << std::make_pair(logger_type::INFO, "Shutting down...") << std::endl;
+				if (stop)
+					this->logger << std::make_pair(logger_type::INFO, "Shutting down...") << std::endl;
 			}
 		// }
 		// catch (std::exception &e)
@@ -297,7 +298,7 @@ namespace Webserv {
 		for (std::map<int, IEvents *>::iterator	it = this->events_manager.begin(); it != ite; it++)
 			this->poll_events.add_fd(it->first, it->second->getEventsFlags());
 	}
-	
+
 	Core::env_type	Core::getEnv()
 	{
 		return this->env;
