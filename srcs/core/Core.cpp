@@ -212,7 +212,7 @@ namespace Webserv {
 			}
 			it++;
 		}
-		this->logger << std::make_pair(logger_type::DEBUG, "Starting servers: done!") << std::endl;
+		this->logger << std::make_pair(logger_type::INFO, "Server has succesfully started. Have fun!") << std::endl;
 		/* END RM */
 		struct sigaction sigIntHandler;
 		sigIntHandler.sa_handler = sigint_handler;
@@ -263,6 +263,7 @@ namespace Webserv {
 						this->logger << std::make_pair(logger_type::DEBUG, "Other Event on fd: ") << it->fd<<std::endl;
 					}
 				}
+				this->logger << std::make_pair(logger_type::INFO, "Shutting down...") << std::endl;
 			}
 		// }
 		// catch (std::exception &e)

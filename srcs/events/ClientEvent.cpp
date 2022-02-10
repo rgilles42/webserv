@@ -31,7 +31,7 @@ namespace Webserv
 		{
 			if (this->create_req.parseRequests() == true)
 			{
-				std::cout<<"Request create"<<std::endl;
+				this->logger << std::make_pair(this->logger.DEBUG, "Request created")  << std::endl;
 				http_request_list&	requests = this->create_req.getAllRequests();
 				http_request_list::const_iterator request = requests.begin();
 
@@ -125,8 +125,7 @@ namespace Webserv
 
 	void	ClientEvent::write_event(void)
 	{
-		std::cout<<"Client write event"<<std::endl;
-
+		this->logger << std::make_pair(this->logger.DEBUG, "Client write event")  << std::endl;
 		response_vector::iterator response = this->responses.begin();
 		if (response != responses.end())
 		{

@@ -105,7 +105,7 @@ namespace Methods {
 					index = path.find('.', index + 1);
 				}
 			std::string ext = &path[save_index + 1];
-			std::cout<<"ext: "<<ext<<std::endl;
+			//std::cout<<"ext: "<<ext<<std::endl;
 		if (route.getCgiPass().length() > 0)
 		{
 			if (route.getCgiExt().size() > 0)
@@ -120,7 +120,7 @@ namespace Methods {
 					index = path.find('.', index + 1);
 				}
 				std::string ext = &path[save_index + 1];
-				std::cout<<"ext: "<<ext<<std::endl;
+				//std::cout<<"ext: "<<ext<<std::endl;
 				std::vector<std::string> vect_ext = route.getCgiExt();
 				for (std::vector<std::string>::iterator it = vect_ext.begin(); it != vect_ext.end(); it++)
 				{
