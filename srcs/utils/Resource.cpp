@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/10 17:33:46 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 18:38:37 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ namespace Webserv {
 
 			this->_path = path;
 			this->_isCGI = isCGI;
+			errno = 0;
 			if (stat(this->_path.c_str(), &s) < 0)
 			{
 				if (errno == ENOENT)
@@ -184,6 +185,7 @@ namespace Webserv {
 			DIR					*dir;
 			struct dirent		*ent;
 
+			errno = 0;
 			if ((dir = opendir (this->_path.c_str())) != NULL)
 			{
 				content << "<!doctype html><html><meta charset=\"utf-8\"/> <style>span.folder-icon::before{content: url(\'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAFo9M/3AAAACXBIWXMAAA3XAAAN1wFCKJt4AAABR0lEQVQ4y2P4//8/AwgzrK63/n9pQ+V/htl5uv/BIiAeWGRvn+v/O/v74JhhZoHh/xMLUuAYrAeIt8JNQ1YO1gIzDG4osn6wGcenek18fmntf2z46i6gEVvaHf5f396CEzMsKjf7f3ZFPk7MMDFD5+ThGVH/seGt3b5gf6yG+uX/qgZtNph/4P4COQSXI0EewPA4MgaFIwM+H4B8iBFSyBgUSQz4vAgKAoygRcagqGMA+RVXOIDCCOhXBkZQGBycGvb/0LQIMD44Nfz/imrr/3Py9X4B8Q90PDdf7/uSMqPNIL0MhyZ5fHp4bNb/+4enkIRBekB6GXZ2O/+/tbuTLAzSy7Ch2e7/1c11ZGGQXoZl1Rb/L6wpIQuD9DLMLTb+f3pJJlkYpJdhSo7e/2Nz4snCIL0MPWnaNj0pmie7UzT/k4JBekB6AVZNyOQlBCjdAAAAAElFTkSuQmCC\');}span.file-icon::before{content: url(\'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAFo9M/3AAAACXBIWXMAAA3XAAAN1wFCKJt4AAABSUlEQVQ4y52SP2uDUBTF75fr2g/mlsHBQTFDBgdBDQYEp4AEFInt1o4iGM0/E3EQh1vPA1PbpqVx+PHuu3ge95wrRVH0FAQB02Kx4OVyyYSb6MRxzIBc1+XVaiVIkoRJlmW2bVtQFMWnBmw2mxe6XC63z1HT8XgUzwPUBF0YhkIv3vB9n+u6vkvTNEymafL5fGZd1xkjbbdbAWr0SVVV3u/37DiOQNM0cfYeRR9zv6Vpynme/wDTEmYfexmDpAiD/DYkDAjj8/n8Zn7IDX0MSt8d4BwcwOGXpABWMKSGJdFfFhGBiBYF1oOIxzFjdYSB7mWAbJARrdfrV1zatuWu6/4FvoUGWvI8j6/X6ySgJcuyuKqqSUBLhmHw6XSaBLSELR4Oh0lAS4qicFmWk4CWZrMZZ1nGu93uIaCBlvr/7Lkv3iVJ4keABtoPjIF1YvwFbwgAAAAASUVORK5CYII=\');}</style> <head> <title>Index of ";

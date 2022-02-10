@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Poll.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:35:23 by pkevin            #+#    #+#             */
-/*   Updated: 2022/02/09 22:56:43 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 18:32:36 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace Webserv
 			void	modif_event(int fd, short new_event);
 
 			void	init(std::vector<socket_type> sockets_servers);
-			void	exec(void);
+			int		exec(void);
 
 			void	clear(void);
 

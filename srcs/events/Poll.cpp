@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Poll.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2022/02/09 22:58:18 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 19:03:55 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,17 @@ void Poll::init(std::vector<socket_type> sockets_servers)
 		add_fd(sockets_servers[i].getFd(), POLLIN);
 }
 
-void	Poll::exec(void)
+int	Poll::exec(void)
 {
 	struct pollfd *poll_fds;
 	int ret = 0;
 
+	errno = 0;
 	poll_fds = this->vect_pollfd.data();
 	ret = poll(poll_fds, this->vect_pollfd.size(), -1);
 	if (ret < 0 && errno != EINTR)
 		throw pollFailed();
+	return (ret);
 }
 
 std::vector<struct pollfd>::iterator	Poll::begin()

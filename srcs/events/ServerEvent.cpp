@@ -17,7 +17,7 @@ namespace Webserv
 	void	ServerEvent::read_event(void)
 	{
 		socket_type	client_sock = this->sock.accept();
-		this->logger << std::make_pair(this->logger.DEBUG, "New Client detected: ") << this->sock.getAddress().getStrAddress() << ":" << this->sock.getAddress().getIntPort() << std::endl;
+		this->logger << std::make_pair(this->logger.DEBUG, "") << "fd: " << this->getFD() << " New Client detected: " << this->sock.getAddress().getStrAddress() << ":" << this->sock.getAddress().getIntPort() << std::endl;
 		ClientEvent *new_clientEvent = new ClientEvent(client_sock, this->sock, this->config, this->env, this->logger);
 
 		Webserv::Core::getInstance().add_client_event(new_clientEvent->getFD(), *new_clientEvent);

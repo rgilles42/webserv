@@ -78,6 +78,7 @@ namespace Methods {
 	{
 		if (isCGI(req, route) == 2)
 			return 2;
+		errno = 0;
 		if (remove(route.getFilePath(req.getBasePath()).c_str()) != 0)
 		{
 			if (errno == ENOENT)

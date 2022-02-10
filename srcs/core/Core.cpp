@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 15:31:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 19:04:18 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ namespace Webserv {
 		std::vector<struct pollfd>::iterator ite;
 		socket_vector::iterator it;
 
+		errno = 0;
 		it = this->serversSockets.begin();
 		while (it != this->serversSockets.end()) {
 			try
@@ -248,7 +249,7 @@ namespace Webserv {
 							this->events_manager.remove_event(it->fd);
 						}
 					}
-					else if ((it->revents & (POLLHUP | POLLERR)) > 0)
+					else if ((it->revents & POLLHUP) == POLLHUP || (it->revents & POLLERR) == POLLERR)
 					{
 						this->logger << std::make_pair(logger_type::DEBUG, "POLLHUP | POLLER Event on fd: ") << it->fd<<std::endl;
 						this->events_manager.remove_event(it->fd);
@@ -258,7 +259,11 @@ namespace Webserv {
 						this->logger << std::make_pair(logger_type::DEBUG, "POLLOUT Event on fd: ") << it->fd<<std::endl;
 						this->events_manager.get_event(it->fd)->write_event();
 					}
-					else if (it->revents == 0 && errno != EINTR)
+					else if ((it->revents & POLLNVAL) == POLLNVAL)
+					{
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLNVAL Event on fd: ") << it->fd<<std::endl;
+					}
+					else if (it->revents != 0 && errno != EINTR)
 					{
 						this->logger << std::make_pair(logger_type::DEBUG, "Other Event on fd: ") << it->fd<<std::endl;
 					}
