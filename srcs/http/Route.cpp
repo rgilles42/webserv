@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 20:28:49 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 16:56:24 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ namespace Webserv {
 				this->autoindex = other.autoindex;
 				this->root = other.root;
 				this->index = other.index;
+				this->enable_limit_except = other.enable_limit_except;
 				this->limit_except = other.limit_except;
 				this->cgi_pass = other.cgi_pass;
 				this->cgi_ext = other.cgi_ext;
@@ -66,6 +67,7 @@ namespace Webserv {
 			this->cgi_pass.clear();
 			this->cgi_ext.clear();
 
+			this->enable_limit_except = false;
 			this->limit_except.clear();
 
 			this->routes.clear();
@@ -82,6 +84,7 @@ namespace Webserv {
 				this->autoindex = this->parent->autoindex;
 				this->root = this->parent->root;
 				this->index = this->parent->index;
+				this->enable_limit_except = this->parent->enable_limit_except;
 				this->limit_except = this->parent->limit_except;
 				this->cgi_pass = this->parent->cgi_pass;
 				this->cgi_ext = this->parent->cgi_ext;
@@ -124,6 +127,7 @@ namespace Webserv {
 								throw directive_type::InvalidValueDirectiveException(directive);
 								return false;
 							}
+							this->enable_limit_except = true;
 						} else if (directive == "client_max_body_size") {
 							if (!directive_type::parseClientMaxBodySize(values, this->client_max_body_size, DEFAULT_CLIENT_MAX_BODY_SIZE)) {
 								throw directive_type::InvalidValueDirectiveException(directive);
@@ -208,6 +212,9 @@ namespace Webserv {
 		void	Route::setLimitExcept(const limit_except_type& limitExcept) {
 			this->limit_except = limitExcept;
 		}
+		void	Route::setEnableLimitExcept(const bool& val) {
+			this->enable_limit_except = val;
+		}
 		void	Route::setCgiPass(const cgi_pass_type& cgiPass) {
 			this->cgi_pass = cgiPass;
 		}
@@ -262,6 +269,10 @@ namespace Webserv {
 
 		const Route::index_type&				Route::getIndex(void) const {
 			return this->index;
+		}
+
+		const bool&								Route::getEnableLimitExcept(void) const {
+			return this->enable_limit_except;
 		}
 
 		const Route::limit_except_type&			Route::getLimitExcept(void) const {

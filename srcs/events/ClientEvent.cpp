@@ -16,6 +16,7 @@ namespace Webserv
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
 		char buffer[BUFFER_SIZE + 1];
+		
 		ssize_t	size;
 		int	ret;
 
@@ -26,6 +27,7 @@ namespace Webserv
 			throw ClientClosedConnectionEvent();
 		}
 		buffer[size] = '\0';
+		this->logger << std::make_pair(this->logger.DEBUG, "Read ") << size << " bytes."  << std::endl;
 		this->create_req.addMessage(std::string(buffer, size));
 		if (this->create_req.checkBuffer() >= 1)
 		{
@@ -49,10 +51,27 @@ namespace Webserv
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
 					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
 					bool				isCGI = false;
-					ret = Webserv::Methods::Methods::exec_method(*request, response, srv, route);
+					try
+					{
+						ret = Webserv::Methods::Methods::exec_method(*request, response, srv, route);
+					}
+					catch (const Webserv::Methods::Methods::ForbiddenMethodException& e)
+					{
+						response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+						this->responses.push_back(response);
+						request++;
+						continue ;
+					}
+					catch (const Webserv::Methods::Methods::MethodsFcntlError& e)
+					{
+						response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+						this->responses.push_back(response);
+						request++;
+						continue ;
+					}
 					if (ret < 0)
 					{
-						response.setStatusCode(http_response_type::status_code_type::client_error_bad_request);
+						response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
 					 	request++;
 					 	continue ;
@@ -79,17 +98,17 @@ namespace Webserv
 					}
 					catch (const resource_type::Resource404Exception& e)
 					{
-					 	response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
-					 	this->responses.push_back(response);
-					 	request++;
-					 	continue ;
+						response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
+						this->responses.push_back(response);
+						request++;
+						continue ;
 					}
 					catch (const resource_type::Resource403Exception& e)
 					{
-					 	response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
-					 	this->responses.push_back(response);
-					 	request++;
-					 	continue ;
+						response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+						this->responses.push_back(response);
+						request++;
+						continue ;
 					}
 					catch (const resource_type::Resource500Exception& e)
 					{
