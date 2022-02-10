@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/09 23:46:35 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 22:51:50 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ namespace Webserv
 			logger_type					logger;
 
 			ClientEvent(void);
+			void	setToError(http_response_type& response, http_route_type& route, resource_type& rcs, http_response_type::status_code_type code);
 
 		public:
 

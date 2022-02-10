@@ -13,7 +13,7 @@ namespace Webserv
 			this->sock.close();
 	}
 
-	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
+	void	ClientEvent::read_event(void)
 	{
 		char buffer[BUFFER_SIZE + 1];
 
@@ -27,7 +27,6 @@ namespace Webserv
 			throw ClientClosedConnectionEvent();
 		}
 		buffer[size] = '\0';
-		this->logger << std::make_pair(this->logger.DEBUG, "Read ") << size << " bytes."  << std::endl;
 		this->create_req.addMessage(std::string(buffer, size));
 		if (this->create_req.checkBuffer() >= 1)
 		{
@@ -39,6 +38,7 @@ namespace Webserv
 
 				while (request != requests.end())
 				{
+					resource_type		rcs;
 					errno = 0;
 					http_response_type response;
 					if (!request->hasHeader("Host"))
@@ -63,7 +63,7 @@ namespace Webserv
 						continue ;
 					}
 					if (route.getClientMaxBodySize().toUnit(http_route_type::client_max_body_size_type::Byte::U_B) < request->getBody().length()) {
-						response.setStatusCode(http_response_type::status_code_type::client_error_payload_too_large);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_payload_too_large);
 						this->responses.push_back(response);
 						request++;
 						continue ;
@@ -74,21 +74,21 @@ namespace Webserv
 					}
 					catch (const Webserv::Methods::Methods::ForbiddenMethodException& e)
 					{
-						response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
 						this->responses.push_back(response);
 						request++;
 						continue ;
 					}
 					catch (const Webserv::Methods::Methods::MethodsFcntlError& e)
 					{
-						response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
 						this->responses.push_back(response);
 						request++;
 						continue ;
 					}
 					if (ret < 0)
 					{
-						response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
 					 	request++;
 					 	continue ;
@@ -101,7 +101,6 @@ namespace Webserv
 					}
 					else if (ret == 2)
 						isCGI = true;
-					resource_type		rcs;
 					CGIEvent cgi;
 					try
 					{
@@ -115,29 +114,21 @@ namespace Webserv
 					}
 					catch (const resource_type::Resource404Exception& e)
 					{
-						http_route_type::error_pages_pair pairError = route.getErrorPage(http_response_type::status_code_type::client_error_not_found);
-						rcs.init(pairError.second, false, route);
-						// CARE TODO: oui
-						while (!rcs.isFullyRead()) {
-							rcs.loadResource();
-						}
-						response.setResource(rcs, http_response_type::status_code_type::client_error_not_found);
-						// response.setBody("");
-						// response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_not_found);
 						this->responses.push_back(response);
 						request++;
 						continue ;
 					}
 					catch (const resource_type::Resource403Exception& e)
 					{
-						response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
 						this->responses.push_back(response);
 						request++;
 						continue ;
 					}
 					catch (const resource_type::Resource500Exception& e)
 					{
-						response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
 						this->logger << std::make_pair(this->logger.ERROR, e.what())  << std::endl;
 						request++;
@@ -153,7 +144,7 @@ namespace Webserv
 					}
 					catch(const resource_type::Resource500Exception& e)
 					{
-					 	response.setStatusCode(http_response_type::status_code_type::server_error_internal_server_error);
+					 	this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 					 	this->responses.push_back(response);
 						this->logger << std::make_pair(this->logger.ERROR, e.what())  << std::endl;
 					 	request++;
@@ -192,7 +183,8 @@ namespace Webserv
 
 	////////////////////////
 
-		Webserv::Config::server_type::route_type	ClientEvent::getRoute(const std::string& url, const Webserv::Config::server_type::routes_map& routes, const Webserv::Config::server_type::route_type& defaultRoute) {
+	Webserv::Config::server_type::route_type	ClientEvent::getRoute(const std::string& url, const Webserv::Config::server_type::routes_map& routes, const Webserv::Config::server_type::route_type& defaultRoute)
+	{
 		std::vector<std::string> paths = split(url, '/');
 		Webserv::Config::server_type::route_type route = defaultRoute;
 
@@ -227,7 +219,8 @@ namespace Webserv
 		return route;
 	}
 
-		std::vector<std::string>	ClientEvent::split(const std::string& str, char delim) {
+	std::vector<std::string>	ClientEvent::split(const std::string& str, char delim)
+	{
 		std::vector<std::string> strings;
 		size_t start;
 		size_t end = 0;
@@ -238,4 +231,24 @@ namespace Webserv
 		return strings;
 	}
 
+	void	ClientEvent::setToError(http_response_type& response, http_route_type& route, resource_type& rcs, http_response_type::status_code_type code)
+	{
+		http_route_type::error_pages_pair pairError = route.getErrorPage(code);
+		if (pairError.second != "")
+		{
+			try
+			{
+				rcs.init(pairError.second, false, route);
+				while (!rcs.isFullyRead())
+					rcs.loadResource();
+				response.setResource(rcs, code);
+			}
+			catch (const std::exception& e)
+			{
+				response.setStatusCode(code);
+			}
+		}
+		else
+			response.setStatusCode(code);
+	}
 }	// namespace Webserv

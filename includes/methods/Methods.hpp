@@ -26,12 +26,13 @@ namespace Methods {
 			typedef Webserv::Http::Route		http_route_type;
 
 		private:
-			static int	getMethod(const http_request_type &req, http_route_type& route);
-			static int	postMethod(const http_request_type &req, http_response_type &response, const http_server_type &srv, http_route_type& route);
-			static int	deleteMethod(const http_request_type& req, http_response_type &response, http_route_type& route);
+			static int			getMethod(const http_request_type &req, http_route_type& route);
+			static int			postMethod(const http_request_type &req, http_response_type &response, const http_server_type &srv, http_route_type& route);
+			static int			deleteMethod(const http_request_type& req, http_response_type &response, http_route_type& route);
 
-			static int	isCGI(const http_request_type &req, http_route_type& route);
-			static bool	isMethodAllowed(const std::vector<std::string>& methods, const std::string& methodname);
+			static int			isCGI(const http_request_type &req, http_route_type& route);
+			static bool			isMethodAllowed(const std::vector<std::string>& methods, const std::string& methodname);
+			static std::string	parseMultiform(const std::string& body, std::string& content);
 
 		public:
 			Methods(void);
@@ -51,6 +52,13 @@ namespace Methods {
 				virtual const char* what() const throw()
 				{
 					return ("Forbidden Method on route");
+				}
+			};
+			struct	NoUploadPathException : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("No upload path");
 				}
 			};
 	};

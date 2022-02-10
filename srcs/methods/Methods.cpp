@@ -19,7 +19,6 @@ namespace Methods {
 /*--------------------------------------------------------------------------------------------------------------*/
 	int   Methods::getMethod(const http_request_type &req, http_route_type& route)
 	{
-		std::cout << "Is It enabled?? " << route.getEnableLimitExcept() << std::endl;
 		if (route.getEnableLimitExcept() && !Methods::isMethodAllowed(route.getLimitExcept(), "GET"))
 			throw ForbiddenMethodException();
 		return isCGI(req, route);
@@ -31,19 +30,22 @@ namespace Methods {
 			throw ForbiddenMethodException();
 		Poll	write_poll;
 		int	fd_upload = -1;;
-		size_t	bytes_write = 0;
+		size_t	bytes_written = 0;
 		std::string	path_upload;
 		std::vector<struct pollfd>::iterator it;
 		ssize_t ret;
 
 		if (isCGI(req, route) == 2)
 			return 2;
-		std::cout<<"reqBody: "<<req.getBody()<<std::endl;
 		if (req.getBody().size() != 0)
 		{
 			path_upload = srv.getUploadStore();
 			std::cout<<"Path upload: "<<path_upload<<std::endl;
-			fd_upload = open("./uwu.txt", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			if (path_upload == "")
+				throw	NoUploadPathException();
+			std::string	content;
+			std::string path = path_upload + "/" + Methods::parseMultiform(req.getBody(), content);
+			fd_upload = open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if (fd_upload < 0)
 				throw MethodsFcntlError();
 			if (fcntl(fd_upload, F_SETFL, O_NONBLOCK) < 0)
@@ -58,14 +60,14 @@ namespace Methods {
 				it = write_poll.begin();
 				if ((it->revents & POLLOUT) == POLLOUT)
 				{
-					ret = write(fd_upload, &req.getBody()[bytes_write], req.getBody().size() - bytes_write);
+					ret = write(fd_upload, &content.c_str()[bytes_written], content.size() - bytes_written);
 					if (ret < 0)
 					{
 						close(fd_upload);
 						throw MethodsFcntlError();
 					}
-					bytes_write += ret - 1;
-					if (ret == 0 || bytes_write == req.getBody().length() - 1)
+					bytes_written += ret - 1;
+					if (ret == 0 || bytes_written == content.length() - 1)
 						break;
 				}
 			}
@@ -78,9 +80,31 @@ namespace Methods {
 		return 0;
 	}
 
+	std::string	Methods::parseMultiform(const std::string& body, std::string& content)
+	{
+		std::cout << body;
+		std::string	filename;
+	
+		std::string	delim = body.substr(0, body.find("\r\n"));
+		std::string file_part;
+		int pos = delim.length() + 2;
+		while (body.find(delim, pos) != std::string::nval)
+		{
+			if ((file_part = body.substr(pos, body.find(delim, pos) - pos)).find("filename"))
+			{
+				std::cout << "Found file part \n\"" << file_part << "\"\n";
+				break ;
+			}
+			pos += file_part.length() + delim.length() + 2;
+		} 
+		
+		content = body;
+		return ((filename = "uwu.txt"));
+	}
+
 	int	Methods::deleteMethod(const http_request_type &req, http_response_type &response, http_route_type& route)
 	{
-		if (route.getEnableLimitExcept() && !Methods::isMethodAllowed(route.getLimitExcept(), "DELETE"))
+		if (!route.getEnableLimitExcept() || (route.getEnableLimitExcept() && !Methods::isMethodAllowed(route.getLimitExcept(), "DELETE")))
 			throw ForbiddenMethodException();
 		if (isCGI(req, route) == 2)
 			return 2;
