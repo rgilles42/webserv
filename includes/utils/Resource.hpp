@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   Resource.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/10 12:50:00 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 17:36:21 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESOURCE_HPP
 # define RESOURCE_HPP
 
-# include <sys/types.h>		// For ??
-# include <sys/stat.h>		// For stat
-# include <fcntl.h>			// For fcntl
-# include <string>			// For std::string
-# include <unistd.h>		// For read, write, close
-# include <dirent.h>		// For Dir
-# include <cerrno>			// For errno
-# include <ctime>			// For times methods
+# include <sys/types.h>			// For ??
+# include <sys/stat.h>			// For stat
+# include <fcntl.h>				// For fcntl
+# include <string>				// For std::string
+# include <unistd.h>			// For read, write, close
+# include <dirent.h>			// For Dir
+# include <cerrno>				// For errno
+# include <ctime>				// For times methods
 
 # include "../events/Poll.hpp"
-# include "../http/Route.hpp"	// For Mimetypes
-# include "MimeTypes.hpp"	// For Mimetypes not used for the moment aparently
+# include "../http/Route.hpp"	// For Route
+# include "./MimeTypes.hpp"		// For Mimetypes
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
@@ -127,7 +127,6 @@ namespace Webserv {
 				void			closeResource(void);
 
 				const content_type&			getContent(void) const;
-				const content_type&			getMoreHeaders(void) const;
 				const content_type_type&	getContentType(void) const;
 
 				const fd_type&	getFd(void) const;

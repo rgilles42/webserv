@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 17:34:54 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 15:55:57 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 18:02:34 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,14 +298,14 @@ namespace Webserv {
 		}
 
 		const std::string							Route::getFilePath(const std::string& url) {
-			struct stat	s;
-			std::string	newpath;
 			std::string	req_path = this->getRealPath(url);
+			struct stat	s;
 			if (stat(req_path.c_str(), &s) == 0 && S_ISDIR(s.st_mode))
 			{
 				for (std::vector<std::string>::const_iterator it = this->getIndex().begin(); it != this->getIndex().end(); it++)
 				{
-					if (stat((newpath = Webserv::Utils::getConcatURL(req_path, *it)).c_str(), &s) == 0)
+					std::string	newpath = Webserv::Utils::getConcatURL(req_path, *it);
+					if (stat(newpath.c_str(), &s) == 0)
 					{
 						req_path = newpath;
 						break ;

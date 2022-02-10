@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 13:03:22 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 17:48:30 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ namespace Webserv {
 
 	namespace Http {
 
-		HttpResponse::HttpResponse(void) : raw_headers("")	{
+		HttpResponse::HttpResponse(void) {
 			this->initDefaultHeaders();
 		}
 
@@ -32,7 +32,6 @@ namespace Webserv {
 				this->protocol = other.protocol;
 				this->statusCode = other.statusCode;
 				this->headers = other.headers;
-				this->raw_headers = other.raw_headers;
 				this->body = other.body;
 			}
 			return *this;
@@ -118,10 +117,19 @@ namespace Webserv {
 		void		HttpResponse::setResource(const resource_type& resource, const status_code_type& statusCode) {
 			this->initDefaultHeaders();
 			this->setBody(resource.getContent());
-			if (!resource.isCGI())
-				this->setHeader("Content-Type", resource.getContentType());
-			else
-				this->raw_headers = resource.getMoreHeaders();
+			this->setHeader("Content-Type", resource.getContentType());
+			if (resource.isCGI()) {
+				file_parser_type fileParser;
+				fileParser.parseFile(resource.getContent());
+				file_parser_type::headers_type::const_iterator it = fileParser.getHeaders().begin();
+				while (it != fileParser.getHeaders().end()) {
+					if (this->headers.isKeyValid(it->first)) {
+						this->setHeader(it->first, it->second);
+					}
+					it++;
+				}
+				this->setBody(fileParser.getBody());
+			}
 			this->setStatusCode(statusCode);
 		}
 
@@ -131,7 +139,7 @@ namespace Webserv {
 			std::string	formatedResponse = "";
 
 			formatedResponse += this->protocol.toString() + " " + this->statusCode.toString() + CRLF;
-			formatedResponse += this->raw_headers + this->headers.toString() + CRLF;
+			formatedResponse += this->headers.toString() + CRLF;
 			formatedResponse += this->body;
 			return formatedResponse;
 		}

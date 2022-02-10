@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2022/02/02 18:20:12 by ppaglier         ###   ########.fr        #
+#    Updated: 2022/02/10 16:14:16 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Env.hpp \
 				$(HEADER_DIR)/utils/Args.hpp \
 				$(HEADER_DIR)/utils/Singleton.hpp \
+				$(HEADER_DIR)/utils/FileParser.hpp \
 				$(HEADER_DIR)/http/Server.hpp \
 				$(HEADER_DIR)/http/Route.hpp \
 				$(HEADER_DIR)/http/HttpVersion.hpp \
@@ -74,6 +75,7 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Directive.cpp \
 				$(SRC_DIR)/utils/Env.cpp \
 				$(SRC_DIR)/utils/Args.cpp \
+				$(SRC_DIR)/utils/FileParser.cpp \
 				$(SRC_DIR)/http/Server.cpp \
 				$(SRC_DIR)/http/Route.cpp \
 				$(SRC_DIR)/http/HttpVersion.cpp \

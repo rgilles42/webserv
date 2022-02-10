@@ -31,8 +31,8 @@ namespace Webserv
 		{
 			if (this->create_req.parseRequests() == true)
 			{
-				this->logger << std::make_pair(this->logger.DEBUG, "Request created")  << std::endl;
 				http_request_list&	requests = this->create_req.getAllRequests();
+				this->logger << std::make_pair(this->logger.DEBUG, "New Request received: ") << requests.size() << std::endl;
 				http_request_list::const_iterator request = requests.begin();
 
 				while (request != requests.end())

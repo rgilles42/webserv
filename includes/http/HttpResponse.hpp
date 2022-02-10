@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 12:36:23 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 17:37:18 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "HttpHeaders.hpp"				// For HttpHeaders
 # include "../utils/Resource.hpp"		// For Resource
 # include "../utils/common.hpp"			// For trim
+# include "../utils/FileParser.hpp"		// For FileParser
 
 # define HTTP_PROTOCOL			std::string("HTTP/1.1")
 
@@ -38,15 +39,15 @@ namespace Webserv {
 				typedef Webserv::Http::HttpVersion	protocol_type;
 				typedef Webserv::Http::HttpStatusCode	status_code_type;
 				typedef Webserv::Http::HttpHeaders	headers_type;
-				typedef Webserv::Utils::Resource	resource_type;
 				typedef std::string					body_type;
+				typedef Webserv::Utils::Resource	resource_type;
+				typedef Webserv::Utils::FileParser	file_parser_type;
 
 			protected:
 				protocol_type		protocol;
 				status_code_type	statusCode;
 				headers_type		headers;
 				body_type			body;
-				body_type			raw_headers;
 
 				void	initDefaultHeaders(void);
 

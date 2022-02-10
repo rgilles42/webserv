@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 15:47:11 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 22:17:59 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/10 16:14:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@
 # include "./utils/Address.hpp"
 # include "./utils/OutStream.hpp"
 # include "./utils/Singleton.hpp"
+# include "./utils/FileParser.hpp"
 
 # include "./core/Logger.hpp"
 # include "./core/Config.hpp"
