@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 15:56:01 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ namespace Webserv {
 				const cgi_ext_type&					getCgiExt(void) const;
 
 				const error_pages_pair				getErrorPage(const error_pages_type::key_type& statusCode);
+				const std::string					getRealPath(const std::string& url);
 				const std::string					getFilePath(const std::string& url);
 		};
 
