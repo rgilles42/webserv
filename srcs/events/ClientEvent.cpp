@@ -16,7 +16,7 @@ namespace Webserv
 	void	ClientEvent::read_event(void)	//TO DO replace by ConstructRequest and add Methods
 	{
 		char buffer[BUFFER_SIZE + 1];
-		
+
 		ssize_t	size;
 		int	ret;
 
@@ -51,6 +51,23 @@ namespace Webserv
 					http_server_type	srv = this->config.getServer(this->srv_sock.getAddress().getStrAddress(), this->srv_sock.getAddress().getIntPort(), request->getHeader("Host"));
 					http_route_type		route = getRoute(request->getBasePath(), srv.getRoutes(), srv.getDefaultRoute());
 					bool				isCGI = false;
+
+					if (route.getReturn().first != http_route_type::http_status_code_type::unknown || !route.getReturn().second.empty()) {
+						if (!route.getReturn().second.empty() && route.getReturn().first == http_route_type::http_status_code_type::unknown) {
+							response.setRedirect(route.getReturn().second, http_route_type::http_status_code_type::redirection_found);
+						} else {
+							response.setRedirect(route.getReturn().second, route.getReturn().first);
+						}
+						this->responses.push_back(response);
+						request++;
+						continue ;
+					}
+					if (route.getClientMaxBodySize().toUnit(http_route_type::client_max_body_size_type::Byte::U_B) < request->getBody().length()) {
+						response.setStatusCode(http_response_type::status_code_type::client_error_payload_too_large);
+						this->responses.push_back(response);
+						request++;
+						continue ;
+					}
 					try
 					{
 						ret = Webserv::Methods::Methods::exec_method(*request, response, srv, route);
