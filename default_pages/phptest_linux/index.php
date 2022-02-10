@@ -57,5 +57,25 @@ var_dump($_ENV);
      <input type="text" name="montext">
      <input type="submit">
  </form>
+
+ <form method="post" action="/upload_file" enctype="multipart/form-data">
+    <h1>Form 1 to upload</h1>
+     <input type="file" name="monficher">
+     <input type="text" name="montext">
+     <input type="submit">
+ </form>
+ <form method="post" action="/upload_file" enctype="application/x-www-form-urlencoded">
+    <h1>Form 2 to upload</h1>
+     <input type="file" name="monficher">
+     <input type="text" name="montext">
+     <input type="submit">
+ </form>
+ <form method="post" action="/upload_file" enctype="plain/text">
+    <h1>Form 3 to upload</h1>
+     <input type="file" name="monficher">
+     <input type="text" name="montext">
+     <input type="submit">
+ </form>
+
  </body>
 </html>
