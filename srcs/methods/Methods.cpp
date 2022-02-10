@@ -19,11 +19,16 @@ namespace Methods {
 /*--------------------------------------------------------------------------------------------------------------*/
 	int   Methods::getMethod(const http_request_type &req, http_route_type& route)
 	{
+		std::cout << "Is It enabled?? " << route.getEnableLimitExcept() << std::endl;
+		if (route.getEnableLimitExcept() && !Methods::isMethodAllowed(route.getLimitExcept(), "GET"))
+			throw ForbiddenMethodException();
 		return isCGI(req, route);
 	}
 
 	int    Methods::postMethod(const http_request_type &req, http_response_type &response, const http_server_type& srv, http_route_type& route)	// TO DO Modif for check if need CGI
 	{
+		if (route.getEnableLimitExcept() && !Methods::isMethodAllowed(route.getLimitExcept(), "POST"))
+			throw ForbiddenMethodException();
 		Poll	write_poll;
 		int	fd_upload = -1;;
 		size_t	bytes_write = 0;
@@ -33,32 +38,31 @@ namespace Methods {
 
 		if (isCGI(req, route) == 2)
 			return 2;
-		std::cout<<"POST Method call"<<std::endl;
 		std::cout<<"reqBody: "<<req.getBody()<<std::endl;
 		if (req.getBody().size() != 0)
 		{
-			std::cout<<"Create file"<<std::endl;
 			path_upload = srv.getUploadStore();
 			std::cout<<"Path upload: "<<path_upload<<std::endl;
-			fd_upload = open("./test.txt", O_WRONLY | O_CREAT | O_APPEND, 066);
+			fd_upload = open("./uwu.txt", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if (fd_upload < 0)
 				throw MethodsFcntlError();
 			if (fcntl(fd_upload, F_SETFL, O_NONBLOCK) < 0)
+			{
+				close(fd_upload);
 				throw MethodsFcntlError();
+			}
 			write_poll.add_fd(fd_upload, POLLOUT);
 			while (1)
 			{
-				std::cout<<"AH"<<std::endl;
 				write_poll.exec();
-				std::cout<<"Mince"<<std::endl;
 				it = write_poll.begin();
 				if ((it->revents & POLLOUT) == POLLOUT)
 				{
 					ret = write(fd_upload, &req.getBody()[bytes_write], req.getBody().size() - bytes_write);
 					if (ret < 0)
 					{
-						std::cout<<"Error cgi write"<<std::endl;
-						exit(-1);
+						close(fd_upload);
+						throw MethodsFcntlError();
 					}
 					bytes_write += ret - 1;
 					if (ret == 0 || bytes_write == req.getBody().length() - 1)
@@ -76,6 +80,8 @@ namespace Methods {
 
 	int	Methods::deleteMethod(const http_request_type &req, http_response_type &response, http_route_type& route)
 	{
+		if (route.getEnableLimitExcept() && !Methods::isMethodAllowed(route.getLimitExcept(), "DELETE"))
+			throw ForbiddenMethodException();
 		if (isCGI(req, route) == 2)
 			return 2;
 		errno = 0;
@@ -106,7 +112,6 @@ namespace Methods {
 					index = path.find('.', index + 1);
 				}
 			std::string ext = &path[save_index + 1];
-			//std::cout<<"ext: "<<ext<<std::endl;
 		if (route.getCgiPass().length() > 0)
 		{
 			if (route.getCgiExt().size() > 0)
@@ -131,6 +136,16 @@ namespace Methods {
 			}
 		}
 		return 0;
+	}
+
+	bool	Methods::isMethodAllowed(const std::vector<std::string>& methods, const std::string& methodname)
+	{
+		for (std::vector<std::string>::const_iterator it = methods.begin(); it != methods.end(); it++)
+		{
+			if (*it == methodname)
+				return (true);
+		}
+		return (false);
 	}
 }	// namespace Methods
 }   // namespace Webserv

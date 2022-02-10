@@ -31,6 +31,7 @@ namespace Methods {
 			static int	deleteMethod(const http_request_type& req, http_response_type &response, http_route_type& route);
 
 			static int	isCGI(const http_request_type &req, http_route_type& route);
+			static bool	isMethodAllowed(const std::vector<std::string>& methods, const std::string& methodname);
 
 		public:
 			Methods(void);
@@ -38,11 +39,18 @@ namespace Methods {
 
 			static int	exec_method(const http_request_type &req, http_response_type &response, const http_server_type &srv, http_route_type& route);
 
-			struct	MethodsFcntlError: public std::exception
+			struct	MethodsFcntlError : public std::exception
 			{
 				virtual const char* what() const throw()
 				{
 					return ("Methods: Fnctl failed");
+				}
+			};
+			struct	ForbiddenMethodException : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Forbidden Method on route");
 				}
 			};
 	};

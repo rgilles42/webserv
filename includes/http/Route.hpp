@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Route.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
 /*   Updated: 2022/02/10 15:56:01 by ppaglier         ###   ########.fr       */
@@ -76,6 +76,7 @@ namespace Webserv {
 				root_type			root;
 				index_type			index;
 
+				bool				enable_limit_except;
 				limit_except_type	limit_except;
 
 				cgi_pass_type		cgi_pass;
@@ -106,6 +107,7 @@ namespace Webserv {
 				void	setAutoindex(const autoindex_type& autoindex);
 				void	setRoot(const root_type& root);
 				void	setIndex(const index_type& index);
+				void	setEnableLimitExcept(const bool& val);
 				void	setLimitExcept(const limit_except_type& limitExcept);
 				void	setCgiPass(const cgi_pass_type& cgiPass);
 				void	setCgiExt(const cgi_ext_type& cgiExt);
@@ -124,6 +126,7 @@ namespace Webserv {
 				const autoindex_type&				getAutoindex(void) const;
 				const root_type&					getRoot(void) const;
 				const index_type&					getIndex(void) const;
+				const bool&							getEnableLimitExcept(void) const;
 				const limit_except_type&			getLimitExcept(void) const;
 				const cgi_pass_type&				getCgiPass(void) const;
 				const cgi_ext_type&					getCgiExt(void) const;
