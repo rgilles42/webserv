@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/11 16:00:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:36:59 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include <limits.h>
 
 # include "../utils/Env.hpp"
 # include "../http/HttpRequest.hpp"
@@ -38,10 +39,14 @@ namespace Webserv
 			typedef Webserv::Http::Server		http_server_type;
 			typedef Webserv::Utils::Env			env_type;
 			typedef Webserv::Poll				poll_type;
+			typedef FILE						file_type;
 
 		private:
-			int					fd_in[2];   //use to write request body
-			int					fd_out[2];  //use to redirect cgi output
+			// TODO: remove
+			file_type*			tmp_in;		//use to write request body
+			file_type*			tmp_out;	//use to redirect cgi output
+			int					fd_in;
+			int					fd_out;
 			http_request_type	req;
 			http_route_type		route;
 			http_server_type	srv;
