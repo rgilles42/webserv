@@ -6,7 +6,7 @@
 /*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/10 22:51:50 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/11 16:19:38 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ namespace Webserv
 			typedef std::vector<http_response_type>		response_vector;
 			typedef Webserv::Utils::Env					env_type;
 			typedef Webserv::Logger						logger_type;
+			typedef std::vector<size_t>					written_response_sizes;
 
 		private:
 			http_request_builder_type	create_req;
@@ -59,9 +60,11 @@ namespace Webserv
 			config_type					&config;
 			short						events_flags;
 			response_vector				responses;
+			written_response_sizes		written_sizes;
 
 			env_type					env;
 			logger_type					logger;
+
 
 			ClientEvent(void);
 			void	setToError(http_response_type& response, http_route_type& route, resource_type& rcs, http_response_type::status_code_type code);

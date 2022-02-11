@@ -72,8 +72,8 @@ namespace Methods {
 						close(fd_upload);
 						throw MethodsFcntlError();
 					}
-					bytes_written += ret - 1;
-					if (ret == 0 || bytes_written == content.length() - 1)
+					bytes_written += ret;
+					if (ret == 0 || bytes_written == content.length())
 						break;
 				}
 			}
