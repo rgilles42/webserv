@@ -262,6 +262,7 @@ namespace Webserv {
 					else if ((it->revents & POLLNVAL) == POLLNVAL)
 					{
 						this->logger << std::make_pair(logger_type::DEBUG, "POLLNVAL Event on fd: ") << it->fd<<std::endl;
+						this->events_manager.remove_event(it->fd);
 					}
 					else if (it->revents != 0 && errno != EINTR)
 					{

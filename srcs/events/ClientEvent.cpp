@@ -112,6 +112,13 @@ namespace Webserv
 							rcs.setFd(cgi.getReadFD());
 						}
 					}
+					catch (const CGIEvent::Cgi500Exception& e)
+					{
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_not_found);
+						this->responses.push_back(response);
+						request++;
+						continue;
+					}
 					catch (const resource_type::Resource404Exception& e)
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_not_found);

@@ -111,10 +111,7 @@ namespace Webserv
 
 		pid_t	pid = fork();
 		if (pid < 0)
-		{
-			std::cerr << "Error fork" << std::endl;	//need change
-			return(1);
-		}
+			throw CGIForkFailed();
 		else if (pid == 0)
 		{
 			// Init pipe for child

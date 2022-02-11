@@ -82,23 +82,45 @@ namespace Webserv
 					}
 			};
 
-			struct CGIPipeFailed : public CGIException
-			{
-				CGIPipeFailed(void)	: CGIException("CGI: pipe failed")	{}
+			class CgiException : public std::exception {
+				protected:
+					std::string	msg;
+
+				public:
+					CgiException(const std::string& msg = "") : std::exception() {
+						this->msg = msg;
+					}
+					virtual ~CgiException() throw() {}
+					virtual const char	*what() const throw() {
+						return this->msg.c_str();
+					}
 			};
-			struct CGINonBlockingFailed: public CGIException
-			{
-				CGINonBlockingFailed(void)	: CGIException("CGI: Fcntl failed")	{}
+
+			struct Cgi500Exception : public CgiException {
+					Cgi500Exception(std::string msg) : CgiException(msg) {}
 			};
-			struct CGIOpenFailed : public CGIException
+	
+			struct CGIPipeFailed : public Cgi500Exception
 			{
-				CGIOpenFailed(void)	: CGIException("CGI: Can't acces to file")	{}
+				CGIPipeFailed(void) : Cgi500Exception("CGI: pipe failed")	{}
 			};
-			struct CGIDupFailed : public CGIException
+			struct CGINonBlockingFailed: public Cgi500Exception
 			{
-				CGIDupFailed(void)	: CGIException("CGI: Dup failed")	{}
+				CGINonBlockingFailed(void) : Cgi500Exception("CGI: Fcntl failed")	{}
 			};
-	};
+			struct CGIOpenFailed : public Cgi500Exception
+			{
+				CGIOpenFailed(void) : Cgi500Exception("CGI: Can't acces to file")	{}
+			};
+			struct CGIDupFailed : public Cgi500Exception
+			{
+				CGIDupFailed(void) : Cgi500Exception("CGI: Dup failed")	{}
+			};
+			struct CGIForkFailed : public Cgi500Exception
+			{
+				CGIForkFailed(void) : Cgi500Exception("CGI: Fork failed")	{}
+			};
+	}; 
 
 }
 
