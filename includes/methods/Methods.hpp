@@ -4,6 +4,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <cstdio>
+# include <sys/stat.h>
 
 # include "../utils/Singleton.hpp"
 # include "../http/HttpRequest.hpp"
@@ -37,6 +38,7 @@ namespace Methods {
 			static int			isCGI(const http_request_type &req, http_route_type& route);
 			static bool			isMethodAllowed(const std::vector<std::string>& methods, const std::string& methodname);
 			static std::string	parseMultiform(const std::string& body, std::string& content);
+			static int			makePath(std::string path, mode_t mode);
 
 		public:
 			Methods(void);

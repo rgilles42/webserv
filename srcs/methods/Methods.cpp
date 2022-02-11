@@ -40,21 +40,22 @@ namespace Methods {
 		if (req.getBody().size() != 0)
 		{
 			path_upload = srv.getUploadStore();
-			std::cout<<"Path upload: "<<path_upload<<std::endl;
 			if (path_upload == "")
 				throw	NoUploadPathException();
 			std::string	content;
+			struct stat sb;
+			if (!(stat(path_upload.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)))
+				if (Methods::makePath(path_upload, 0755))
+					throw MethodsFcntlError();
 			std::string path = path_upload + "/" + Methods::parseMultiform(req.getBody(), content);
+
 			fd_upload = open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if (fd_upload < 0)
 			{
-				std::cout << "oops" << std::endl;
-				perror(path.c_str());
 				throw MethodsFcntlError();
 			}
 			if (fcntl(fd_upload, F_SETFL, O_NONBLOCK) < 0)
 			{
-				std::cout << "hips" << std::endl;
 				close(fd_upload);
 				throw MethodsFcntlError();
 			}
@@ -68,7 +69,6 @@ namespace Methods {
 					ret = write(fd_upload, &content.c_str()[bytes_written], content.size() - bytes_written);
 					if (ret < 0)
 					{
-						std::cout << "hebs" << std::endl;
 						close(fd_upload);
 						throw MethodsFcntlError();
 					}
@@ -77,7 +77,6 @@ namespace Methods {
 						break;
 				}
 			}
-			std::cout<<"End upload"<<std::endl;
 			if (fd_upload > 0)
 				close(fd_upload);
 			response.setStatusCode(http_response_type::status_code_type::success_created);
@@ -96,8 +95,7 @@ namespace Methods {
 			if ((file_part = body.substr(pos, body.find(delim, pos) - pos)).find("filename"))
 				break ;
 			pos += file_part.length() + delim.length();
-		} 
-		std::cout << "\"" << file_part << "\"\n";
+		}
 		file_parser_type	fileParser;
 		fileParser.parseFile(file_part);
 		content = fileParser.getBody();
@@ -184,5 +182,24 @@ namespace Methods {
 		}
 		return (false);
 	}
+
+	int	Methods::makePath(std::string s, mode_t mode)
+	{
+		size_t pos = 0;
+		std::string	dir;
+		int	mdret;
+
+		if (s[s.size()-1] != '/')
+			s+='/';
+		while ((pos = s.find_first_of('/',pos)) != std::string::npos)
+		{
+			dir = s.substr(0,pos++);
+			if (dir.size() == 0)
+				continue ;
+			if ((mdret = mkdir(dir.c_str(),mode)) && errno != EEXIST)
+				return mdret;
+		}
+		return mdret;
+	}
 }	// namespace Methods
-}   // namespace Webserv
+}	// namespace Webserv
