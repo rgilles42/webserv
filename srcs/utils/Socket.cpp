@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:51:02 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/07 17:52:34 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:48:51 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ namespace Webserv {
 			return (bindret);
 		}
 
-		int	Socket::listen() {
-			int listenret = ::listen(this->_fd, 50);
+		int	Socket::listen(int maxClient) {
+			int listenret = ::listen(this->_fd, maxClient);
 			if (listenret)
 				throw Socket::ListenFailedException();
 			return (listenret);

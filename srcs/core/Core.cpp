@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/11 21:58:49 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:49:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ namespace Webserv {
 		while (it != this->serversSockets.end()) {
 			try
 			{
-				if (it->listen() < 0) {
+				if (it->listen(MAX_CONNECTION) < 0) {
 					this->logger << std::make_pair(logger_type::ERROR, ExecException(strerror(errno)).what()) << std::endl;
 					return ;
 				}

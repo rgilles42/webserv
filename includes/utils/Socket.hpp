@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:50:57 by rgilles           #+#    #+#             */
-/*   Updated: 2022/01/30 02:38:28 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:49:12 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ namespace Webserv {
 				int			connect(void);
 
 				int			bind(void);
-				int			listen(void);
+				int			listen(int maxClient = 50);
 				Socket		accept(int blocking = 0);
 
 				ssize_t		read(void *buf, size_t count);
