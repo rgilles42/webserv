@@ -1,16 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   EventsManager.hpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
+/*   Updated: 2022/02/11 20:02:30 by ppaglier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EVENTSMANAGER_HPP
 # define EVENTSMANAGER_HPP
 
-#include "IEvents.hpp"
 #include <map>
+
+#include "IEvents.hpp"
 
 namespace Webserv
 {
 	/* Manager events - create new events object - call functions and more */
 	class EventsManager
 	{
+		public:
+			typedef std::map<int, IEvents*>	event_map_type;
+
 		private:
-			std::map<int, IEvents *> events_map;
+			event_map_type events_map;
 
 		public:
 			EventsManager();
@@ -21,8 +37,10 @@ namespace Webserv
 
 			IEvents	*get_event(int fd);
 
-			std::map<int, IEvents *>::iterator	begin();
-			std::map<int, IEvents *>::iterator	end();
+			const event_map_type&		getEvents(void) const;
+
+			event_map_type::iterator	begin();
+			event_map_type::iterator	end();
 	};
 }
 

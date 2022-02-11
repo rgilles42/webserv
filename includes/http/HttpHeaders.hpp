@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/22 08:30:14 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:05:27 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ namespace Webserv {
 				header_type	headers;
 
 			public:
+				HttpHeaders(void);
+				HttpHeaders(const HttpHeaders& other);
+				~HttpHeaders();
+
+				HttpHeaders&		operator=(const HttpHeaders& other);
+
 				const header_type&	getHeaders(void) const;
 
 				// Headers Methods
@@ -55,9 +61,13 @@ namespace Webserv {
 				void				append(const key_type& key, const value_type& value);
 				const value_type&	get(const key_type& key) const;
 				bool				has(const key_type& key) const;
+				void				unset(const key_type& key);
+				void				clear(void);
 
 				// Utils Methods
 				const std::string	toString(void) const;
+
+				// TODO: Remove because of deprecated
 				void				fromString(const std::string& request);
 		};
 
@@ -75,7 +85,10 @@ namespace Webserv {
 
 			public:
 				HttpHeadersBuilder(void);
-				HttpHeadersBuilder(const HttpHeadersBuilder& x);
+				HttpHeadersBuilder(const HttpHeadersBuilder& other);
+				~HttpHeadersBuilder();
+
+				HttpHeadersBuilder&		operator=(const HttpHeadersBuilder& other);
 
 				const buffer_type&	getBuffer(void) const;
 				const headers_type&	getHeaders(void) const;

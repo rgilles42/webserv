@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+*.DS_Store
 
 # Compiled Object files
 *.slo
@@ -33,4 +34,9 @@
 
 webserv
 
+www_other/newroot/*
+www/rest/uploads
+
 .vscode/
+
+debug.txt

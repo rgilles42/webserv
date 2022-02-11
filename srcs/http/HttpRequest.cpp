@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/11 19:14:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 20:03:13 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,26 @@ namespace Webserv {
 
 		HttpRequest::HttpRequest(void) {}
 
-		HttpRequest::HttpRequest(const HttpRequest& x) {
-			this->method = x.method;
-			this->fullPath = x.fullPath;
-			this->protocol = x.protocol;
-			this->headers = x.headers;
-			this->body = x.body;
+		HttpRequest::HttpRequest(const HttpRequest& other) {
+			*this = other;
 		}
 
 		HttpRequest::HttpRequest(const std::string& response) {
 			this->fromString(response);
 		}
 
+		HttpRequest::~HttpRequest() {}
 
+		HttpRequest&		HttpRequest::operator=(const HttpRequest& other) {
+			if (this != &other) {
+				this->method = other.method;
+				this->fullPath = other.fullPath;
+				this->protocol = other.protocol;
+				this->headers = other.headers;
+				this->body = other.body;
+			}
+			return *this;
+		}
 
 		void				HttpRequest::setMethod(const method_type& method) {
 			this->method = method;
@@ -53,33 +60,59 @@ namespace Webserv {
 		}
 
 
+		// Headers Methods
+		bool				HttpRequest::hasHeader(const std::string& key) const {
+			return this->headers.has(key);
+		}
+
+		const std::string	HttpRequest::getHeader(const std::string& key) const {
+				std::string value = "";
+			if (this->headers.has(key)) {
+				value = this->headers.get(key);
+			}
+			return value;
+		}
+
+		const HttpRequest::headers_type&	HttpRequest::getHeaders(void) const {
+			return this->headers;
+		}
+
 		// Request Properties
-		const std::string	HttpRequest::getBaseUrl(void) const {
-			// Return the origin from with router is provide the req
+		const HttpRequest::method_type&	HttpRequest::getMethod(void) const {
+			return this->method;
+		}
+
+		const HttpRequest::path_type	HttpRequest::getBasePath(void) const {
 			size_t find = this->fullPath.find('?');
 			if (find != this->fullPath.npos) {
-				return fullPath.substr(0, find);
+				return this->fullPath.substr(0, find);
 			}
 			return this->fullPath;
 		}
 
-		const HttpRequest::MappedValuesValid	HttpRequest::getBody(void) const {
-			// Return undefined by defaut, need middleware to parse body and get values
-			MappedValues values;
-			return std::make_pair(!values.empty(), values);
+		const HttpRequest::path_type	HttpRequest::getQuery(void) const {
+			size_t find = this->fullPath.find('?');
+			if (find != this->fullPath.npos) {
+				return this->fullPath.substr(find + 1);
+			}
+			return "";
 		}
 
-		const HttpRequest::MappedValues	HttpRequest::getCookies(void) const {
-			// Return undefined by defaut, need middleware to parse body and get values
-			MappedValues cookies;
-			return cookies;
+		const HttpRequest::path_type&	HttpRequest::getFullPath(void) const {
+			// Return the full url ('http://www.example.com/admin/new?sort=desc' => '/admin/new?sort=desc')
+			return this->fullPath;
 		}
 
-		bool				HttpRequest::isFresh(void) const {
-			// Return true if the req is cached in the client false otherwise
-			return false;
+		const HttpRequest::protocol_type&	HttpRequest::getProtocol(void) const {
+			return this->protocol;
 		}
 
+		const HttpRequest::body_type&	HttpRequest::getBody(void) const {
+			return this->body;
+		}
+
+
+		// WIP: this is not usefull but i let it here
 		const std::string	HttpRequest::getHostname(void) const {
 			// Return the Host or if trust proxy is enable return X-Forwarded-Host
 			std::string hostname = "";
@@ -120,30 +153,7 @@ namespace Webserv {
 			return ips;
 		}
 
-		const std::string	HttpRequest::getMethod(void) const {
-			return this->method;
-		}
-
-		const std::string	HttpRequest::getOriginalUrl(void) const {
-			// Return the full url ('http://www.example.com/admin/new?sort=desc' => '/admin/new?sort=desc')
-			return this->fullPath;
-		}
-
-		const HttpRequest::MappedValues	HttpRequest::getParams(void) const {
-			// Return all parameters in mapped value (std::map)
-			MappedValues params;
-			return params;
-		}
-
-		const std::string	HttpRequest::getPath(void) const {
-			size_t find = this->fullPath.find('?');
-			if (find != this->fullPath.npos) {
-				return fullPath.substr(0, find);
-			}
-			return this->fullPath;
-		}
-
-		const std::string	HttpRequest::getProtocol(void) const {
+		const std::string	HttpRequest::getBaseProtocol(void) const {
 			// Return Http or Https (for TLS requests) if trust proxy is enable will return the value of X-Forwarded-Proto
 			std::string protocol = "";
 			if (TRUST_PROXY) {
@@ -156,44 +166,8 @@ namespace Webserv {
 			return protocol;
 		}
 
-		const HttpRequest::MappedValues	HttpRequest::getQuery(void) const {
-			// Return empty object if no query parser
-			MappedValues values;
-			values.insert(std::make_pair("TODO", "TODO"));
-			return values;
-		}
-
-		const std::string	HttpRequest::getRoute(void) const {
-			// Return route that contains information on current route (path, method, stack)
-			return std::string("TODO");
-		}
-
 		bool				HttpRequest::isSecure(void) const {
-			return this->getProtocol() == "https";
-		}
-
-		const HttpRequest::MappedValues	HttpRequest::getSignedCookies(void) const {
-			// Return undefined by defaut, need cookie parser middleware
-			MappedValues cookies;
-			return cookies;
-		}
-
-		bool				HttpRequest::isStale(void) const {
-			// Indicates whether the request is “stale,” and is the opposite of req.fresh.
-			// TODO
-			return false && !this->isFresh();
-		}
-
-		const HttpRequest::ListedValues	HttpRequest::getSubdomains(void) const {
-			// Return An array of subdomains in the domain name of the request.
-			ListedValues subdomains;
-			// if (!isIpAddress(this->getHostname())) {
-			// 	ListedValues splitHost = split(this->getHostname(), ".");
-			// 	if (splitHost.size() > 2) {
-			// 		subdomains.insert(subdomains.begin(), splitHost.begin(), splitHost.end() - 2);
-			// 	}
-			// }
-			return subdomains;
+			return this->getBaseProtocol() == "https";
 		}
 
 		bool				HttpRequest::isXhr(void) const {
@@ -237,15 +211,6 @@ namespace Webserv {
 			return true;
 		}
 
-
-		const std::string	HttpRequest::get(const std::string& key) const {
-				std::string value = "";
-			if (this->headers.has(key)) {
-				value = this->headers.get(key);
-			}
-			return value;
-		}
-
 		bool				HttpRequest::is(const std::string) {
 			std::string contentType = "";
 			if (this->headers.has("Content-Type")) {
@@ -254,18 +219,17 @@ namespace Webserv {
 			return false;
 		}
 
-		const std::string	HttpRequest::param(const std::string& key, const std::string& defaultValue) const {
-			MappedValues params = this->getParams();
-			if (params.count(key) > 0) {
-				MappedValues::const_iterator it = params.find(key);
-				if (it != params.end()) {
-					return it->second;
-				}
-			}
-			return defaultValue;
+		// Utils Methods
+		const std::string	HttpRequest::toString(void) const {
+			std::string	formatedRequest = "";
+
+			formatedRequest += this->method.toString() + " " + this->fullPath + " " + this->protocol.toString() + CRLF;
+			formatedRequest += this->headers.toString() + CRLF;
+			formatedRequest += this->body;
+			return formatedRequest;
 		}
 
-		// Utils Methods
+		// TODO: Remove because of deprecated
 		void	HttpRequest::fromString(const std::string& request) {
 
 			std::string			str(request);
@@ -294,21 +258,23 @@ namespace Webserv {
 			this->body = str;
 		}
 
-		const std::string	HttpRequest::toString(void) const {
-			std::string	formatedRequest = "";
-
-			formatedRequest += this->method + " " + this->fullPath + " " + this->protocol + CRLF;
-			formatedRequest += this->headers.toString() + CRLF;
-			formatedRequest += this->body;
-			return formatedRequest;
-		}
-
 
 		HttpRequestBuilder::HttpRequestBuilder(void) {}
-		HttpRequestBuilder::HttpRequestBuilder(const HttpRequestBuilder& x) {
-			this->buffer = x.buffer;
-			this->requests = x.requests;
+
+		HttpRequestBuilder::HttpRequestBuilder(const HttpRequestBuilder& other) {
+			*this = other;
 		}
+
+		HttpRequestBuilder::~HttpRequestBuilder() {}
+
+		HttpRequestBuilder&					HttpRequestBuilder::operator=(const HttpRequestBuilder& other) {
+			if (this != &other) {
+				this->buffer = other.buffer;
+				this->requests = other.requests;
+			}
+			return *this;
+		}
+
 
 		HttpRequestBuilder::buffer_type&	HttpRequestBuilder::getBuffer(void) {
 			return this->buffer;
@@ -440,13 +406,13 @@ namespace Webserv {
 							requests.push_back(request);
 							pos += chunkLen;
 							lastPos = pos;
-							break ;
+							continue ;
 						}
 					}
-				} else if (headers.has("Content-Lenght")) {
+				} else if (headers.has("Content-Length")) {
 					std::stringstream	ss;
 					size_t contentLen = 0;
-					ss << headers.get("Content-Lenght");
+					ss << headers.get("Content-Length");
 					ss >> contentLen;
 					if (tmpBuff.substr(pos).length() < contentLen) {
 						return lastPos;
@@ -455,11 +421,11 @@ namespace Webserv {
 					requests.push_back(request);
 					pos += contentLen;
 					lastPos = pos;
-					break ;
+					continue ;
 				} else {
 					requests.push_back(request);
 					lastPos = pos;
-					break ;
+					continue ;
 				}
 			}
 			return lastPos;

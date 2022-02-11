@@ -44,6 +44,10 @@ namespace Webserv {
 
 			public:
 				Byte(const value_type& value = value_type(), const unit_type& unit = Byte::U_B);
+				Byte(const Byte& other);
+				~Byte();
+
+				Byte&				operator=(const Byte& other);
 
 				void				setValue(const value_type& value);
 				void				setUnit(const unit_type& unit = Byte::U_B);

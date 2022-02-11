@@ -6,18 +6,21 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/09 15:37:41 by yun              ###   ########.fr       */
+/*   Updated: 2022/02/10 17:37:18 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPRESPONSE_HPP
 # define HTTPRESPONSE_HPP
 
-#include <string>				// For string
+# include <string>						// For string
 
-#include "../Resource.hpp"		// For Ressource
-#include "HttpHeaders.hpp"		// For HttpHeaders
-#include "../utils/common.hpp"	// For trim
+# include "HttpVersion.hpp"				// For HttpVersion
+# include "HttpStatusCode.hpp"			// For HttpStatusCode
+# include "HttpHeaders.hpp"				// For HttpHeaders
+# include "../utils/Resource.hpp"		// For Resource
+# include "../utils/common.hpp"			// For trim
+# include "../utils/FileParser.hpp"		// For FileParser
 
 # define HTTP_PROTOCOL			std::string("HTTP/1.1")
 
@@ -33,10 +36,12 @@ namespace Webserv {
 
 		class HttpResponse {
 			public:
-				typedef std::string					protocol_type;
-				typedef std::string					status_code_type;
+				typedef Webserv::Http::HttpVersion	protocol_type;
+				typedef Webserv::Http::HttpStatusCode	status_code_type;
 				typedef Webserv::Http::HttpHeaders	headers_type;
 				typedef std::string					body_type;
+				typedef Webserv::Utils::Resource	resource_type;
+				typedef Webserv::Utils::FileParser	file_parser_type;
 
 			protected:
 				protocol_type		protocol;
@@ -48,32 +53,35 @@ namespace Webserv {
 
 			public:
 				HttpResponse(void);
-				HttpResponse(const Resource& ressource);
-				HttpResponse(const HttpResponse& x);
-				HttpResponse(const std::string& response);
+				HttpResponse(const HttpResponse& other);
+				~HttpResponse();
 
-				// response Methods
-				void				append(const std::string& key, const std::string& value);
-				void				attachment(const std::string& filename = "");
-				void				cookie(const std::string& name, const std::string& value, const std::string& options = "");
-				void				clearCookie(const std::string& name, const std::string& options = "");
-				void				download(const std::string& path, const std::string& filename = "", const std::string& options = "");
-				const std::string	get(const std::string& key) const;
-				void				links(const std::string& next = "", const std::string& last = "");
-				void				location(const std::string& path);
-				void				redirect(const std::string& path, const std::string& statusCode = "320 Found");
-				void				send(const std::string& body = "");
-				void				sendFile(const std::string& path, const std::string& options = "");
-				void				sendStatus(const std::string& statusCode);
-				void				set(const std::string& key, const std::string& value);
-				void				status(const std::string& statusCode);
-				void				type(const std::string& contentType);
+				HttpResponse&	operator=(const HttpResponse& other);
 
+				// Headers Methods
+				void			appendHeader(const headers_type::key_type& key, const headers_type::value_type& value);
+				void			setHeader(const headers_type::key_type& key, const headers_type::value_type& value);
+				const headers_type::value_type	getHeader(const headers_type::key_type& key) const;
+				const headers_type&	getHeaders(void) const;
+
+				// Response Methods
+
+				void			setStatusCode(const status_code_type& statusCode);
+				void			setProtocol(const protocol_type& protocol);
+				void			setBody(const body_type& body);
+
+				const status_code_type&	getStatusCode(void) const;
+				const protocol_type&	getProtocol(void) const;
+				const body_type&		getBody(void) const;
+
+				void			setRedirect(const std::string& path, const status_code_type& statusCode = status_code_type::redirection_found);
+				void			setResource(const resource_type& resource, const status_code_type& statusCode = status_code_type::success_ok);
 
 				// Utils Methods
-				void		fromString(const std::string& response);
 				std::string	toString(void) const;
 
+				// TODO: Remove because of deprecated
+				void		fromString(const std::string& response);
 		};
 
 	} // namespace Utils

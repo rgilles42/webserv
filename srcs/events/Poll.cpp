@@ -6,95 +6,102 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2021/12/03 14:09:12 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:00:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/events/Poll.hpp"
 
-namespace Webserv
-{
+namespace Webserv {
 
-Poll::Poll(void)
-{
-	this->nb_fds = 0;
-}
+	Poll::Poll(void) {}
 
-Poll::~Poll(void) {}
+	Poll::Poll(const Poll& other) {
+		*this = other;
+	}
 
-Poll	&Poll::operator = (Poll const &old)
-{
-	this->vect_pollfd = old.vect_pollfd;
-	this->nb_fds = old.nb_fds;
+	Poll::~Poll(void) {}
 
-	return *this;
-}
+	Poll	&Poll::operator=(Poll const &other)
+	{
+		if (this != &other) {
+			this->allPollFD = other.allPollFD;
+			this->usedPollFD = other.usedPollFD;
+		}
+		return *this;
+	}
 
-void    Poll::add_fd(int fd, short events)
-{
-	struct pollfd new_elem;
+	void	Poll::add_fd(int fd, short events)
+	{
+		pollfd_type new_elem;
 
-	new_elem.fd = fd;
-	new_elem.events = events;
-	new_elem.revents = 0;
-	this->vect_pollfd.push_back(new_elem);
-	this->nb_fds++;
-}
+		new_elem.fd = fd;
+		new_elem.events = events;
+		new_elem.revents = 0;
+		this->allPollFD.push_back(new_elem);
+	}
 
-void	Poll::remove_fd(int fd)
-{
-	std::vector<struct pollfd>::iterator it = this->vect_pollfd.begin();
-	std::vector<struct pollfd>::iterator ite = this->vect_pollfd.end();
-	while (it != ite && it->fd != fd)
-		it++;
-	if (it == ite)
-		throw pollFailed();
-	this->vect_pollfd.erase(it);
-	this->nb_fds--;
-}
-void	Poll::modif_event(int fd, short new_event)
-{
-	struct pollfd new_elem;
+	void	Poll::remove_fd(int fd)
+	{
+		poll_fd_vector::iterator it = this->allPollFD.begin();
 
-	new_elem.fd = fd;
-	new_elem.events = new_event;
-	remove_fd(fd);
-	this->vect_pollfd.push_back(new_elem);
-}
+		while (it != this->allPollFD.end() && it->fd != fd)
+			it++;
+		if (it == this->allPollFD.end() && errno != EINTR)
+			throw pollFailed();
+		this->allPollFD.erase(it);
+	}
+	void	Poll::modif_event(int fd, short new_event)
+	{
+		pollfd_type new_elem;
 
-void Poll::init(std::vector<Socket> sockets_servers)
-{
-	size_t	size = sockets_servers.size();
+		new_elem.fd = fd;
+		new_elem.events = new_event;
+		remove_fd(fd);
+		this->allPollFD.push_back(new_elem);
+	}
 
-	for (size_t i = 0; i < size; i++)
-		add_fd(sockets_servers[i].fd(), POLLIN);
-}
+	void	Poll::init(std::vector<socket_type> sockets_servers)
+	{
+		size_t	size = sockets_servers.size();
 
-void	Poll::exec(void)
-{
-	struct pollfd *poll_fds;
-	int ret = 0;
+		for (size_t i = 0; i < size; i++)
+			this->add_fd(sockets_servers[i].getFd(), POLLIN);
+	}
 
-	poll_fds = this->vect_pollfd.data();
-	ret = poll(poll_fds, this->vect_pollfd.size(), 10000);
-	if (ret < 0)
-		throw pollFailed();
-	std::cout<<"ret: "<<ret<<std::endl;
-}
+	int		Poll::exec(void)
+	{
+		pollfd_type *poll_fds;
+		int ret = 0;
 
-std::vector<struct pollfd>::iterator	Poll::begin()
-{
-	return this->vect_pollfd.begin();
-}
+		errno = 0;
+		this->usedPollFD.clear();
+		poll_fds = this->allPollFD.data();
+		ret = poll(poll_fds, this->allPollFD.size(), -1);
+		if (ret < 0 && errno != EINTR)
+			throw pollFailed();
+		poll_fd_vector::const_iterator it = this->allPollFD.begin();
+		while (it != this->allPollFD.end()) {
+			if (it->revents != 0) {
+				this->usedPollFD.push_back(*it);
+			}
+			it++;
+		}
+		return (ret);
+	}
 
-std::vector<struct pollfd>::iterator	Poll::end()
-{
-	return this->vect_pollfd.end();
-}
+	const Poll::poll_fd_vector&		Poll::getPollAllFD(void) const {
+		return this->allPollFD;
+	}
 
-void	Poll::clear(void)
-{
-	this->vect_pollfd.clear();
-}
+	const Poll::poll_fd_vector&		Poll::getPollUsedFD(void) const {
+		return this->usedPollFD;
+	}
 
-}
+	void	Poll::clear(void)
+	{
+		this->allPollFD.clear();
+		this->usedPollFD.clear();
+	}
+
+}	// namespace Webserv

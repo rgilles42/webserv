@@ -1,36 +1,137 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CGIEvent.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
+/*   Updated: 2022/02/11 17:36:59 by ppaglier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CGIEVENT_HPP
 # define CGIEVENT_HPP
 
-#include "IEvents.hpp"
-#include "../Resource.hpp"
-#include "../http/HttpRequest.hpp"
-#include "../http/Server.hpp"
+//# include <poll.h>
+# include <iostream>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <errno.h>
+# include <limits.h>
+
+# include "../utils/Env.hpp"
+# include "../http/HttpRequest.hpp"
+# include "../http/Server.hpp"
+# include "./Poll.hpp"
+# include "../http/Route.hpp"
+# include "../utils/common.hpp"
 
 namespace Webserv
 {
 
-    class CGIEvent : public IEvents
-    {
-        private:
-            Resource		&rcs;
-            int				fd_in[2];   //use to write request body
-            Http::HttpRequest   m_req;
-            Http::Server	srv;
-            int				fd_out[2];  //use to redirect cgi output
-            short			flags_events;
-			int				wr_size;
+	class CGIEvent {
+		public:
+			typedef Webserv::Http::HttpRequest	http_request_type;
+			typedef Webserv::Http::Route		http_route_type;
+			typedef Webserv::Http::Server		http_server_type;
+			typedef Webserv::Utils::Env			env_type;
+			typedef Webserv::Poll				poll_type;
+			typedef FILE						file_type;
 
-            void        close_pipefd(void);
-            void        exec(void);
+		private:
+			// TODO: remove
+			file_type*			tmp_in;		//use to write request body
+			file_type*			tmp_out;	//use to redirect cgi output
+			int					fd_in;
+			int					fd_out;
+			http_request_type	req;
+			http_route_type		route;
+			http_server_type	srv;
+			env_type			env;
+			bool				writeEnd;
+			bool				CGIEnd;
+			int					status;
 
-        public:
-            CGIEvent(Resource &ressource, std::string req_method,int fd_pipe[2]);
-            virtual ~CGIEvent();
+			void	close_pipefd(void);
+			void	init_env();
+			void	init_args();
 
-            void    write_event(void);
-            void    read_event();
-            short   getEventsFlags(void);
-    };
+		public:
+			CGIEvent();
+			~CGIEvent();
+
+			void	init(const http_request_type& request, const http_server_type& server, const env_type&	environnement, const http_route_type& route);
+			int		exec(void);
+
+			void	write_event(void);
+
+			int		getReadFD(void);
+
+			bool	writeIsEnd();
+			bool	CGIIsEnd();
+
+			struct CGIException : public std::exception
+			{
+				protected:
+					std::string	msg;
+
+				public:
+					CGIException(const std::string& msg = "") : std::exception() {
+						this->msg = msg;
+					}
+					virtual ~CGIException() throw() {}
+					virtual const char	*what() const throw() {
+						return this->msg.c_str();
+					}
+			};
+
+			class CgiException : public std::exception {
+				protected:
+					std::string	msg;
+
+				public:
+					CgiException(const std::string& msg = "") : std::exception() {
+						this->msg = msg;
+					}
+					virtual ~CgiException() throw() {}
+					virtual const char	*what() const throw() {
+						return this->msg.c_str();
+					}
+			};
+
+			struct Cgi500Exception : public CgiException {
+					Cgi500Exception(std::string msg) : CgiException(msg) {}
+			};
+
+			struct CGIPipeFailed : public Cgi500Exception
+			{
+				CGIPipeFailed(void) : Cgi500Exception("CGI: pipe failed")	{}
+			};
+			struct CGINonBlockingFailed: public Cgi500Exception
+			{
+				CGINonBlockingFailed(void) : Cgi500Exception("CGI: Fcntl failed")	{}
+			};
+			struct CGIOpenFailed : public Cgi500Exception
+			{
+				CGIOpenFailed(void) : Cgi500Exception("CGI: Can't acces to file")	{}
+			};
+			struct CGIDupFailed : public Cgi500Exception
+			{
+				CGIDupFailed(void) : Cgi500Exception("CGI: Dup failed")	{}
+			};
+			struct CGIForkFailed : public Cgi500Exception
+			{
+				CGIForkFailed(void) : Cgi500Exception("CGI: Fork failed")	{}
+			};
+			struct CGIGlobalFailed : public Cgi500Exception
+			{
+				CGIGlobalFailed(void) : Cgi500Exception("")	{}
+			};
+
+	};
 
 }
 

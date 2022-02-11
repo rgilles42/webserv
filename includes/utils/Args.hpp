@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Args.hpp                                            :+:      :+:    :+:   */
+/*   Args.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 16:19:25 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 17:33:03 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:46:10 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef ARGS_HPP
 # define ARGS_HPP
@@ -76,7 +77,10 @@ namespace Webserv {
 
 			public:
 				Args(void);
+				Args(const Args& other);
 				virtual ~Args();
+
+				Args&				operator=(const Args& other);
 
 				bool				set(const key_type& key, const value_type& value = "");
 				bool				append(const key_type& key, const value_type& value);

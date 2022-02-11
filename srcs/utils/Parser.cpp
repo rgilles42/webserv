@@ -18,8 +18,21 @@ namespace Webserv {
 
 		Parser::Parser(void) {}
 
+		Parser::Parser(const Parser& other) {
+			*this = other;
+		}
+
 		Parser::Parser(const token_vector& tokens) {
 			this->blockenize(tokens);
+		}
+
+		Parser::~Parser(void) {}
+
+		Parser&						Parser::operator=(const Parser& other) {
+			if (this != &other) {
+				this->blocks = other.blocks;
+			}
+			return *this;
 		}
 
 		const Parser::block_vector&	Parser::getBlocks(void) const {
@@ -46,37 +59,37 @@ namespace Webserv {
 		Parser::parse_type	Parser::parseBlock(const token_vector& tokens, size_t& pos) {
 			bool		valid = false;
 			block_type	newBlock;
-			if (tokens[pos].isNewLine()) {
-				while (tokens[pos].isNewLine() && pos < tokens.size()) {
+			if (pos < tokens.size() && tokens[pos].isNewLine()) {
+				while (pos < tokens.size() && tokens[pos].isNewLine()) {
 					pos++;
 				}
 			}
-			if (tokens[pos].isComplexEnd()) {
+			if (pos < tokens.size() && tokens[pos].isComplexEnd()) {
 				pos--;
 				return std::make_pair(newBlock, valid);
 			}
-			if (tokens[pos].isComment()) {
+			if (pos < tokens.size() && tokens[pos].isComment()) {
 				newBlock.setType(block_type::T_COMMENT);
 				pos++;
-				while (!tokens[pos].isNewLine() && pos < tokens.size()) {
+				while (pos < tokens.size() && !tokens[pos].isNewLine()) {
 					newBlock.addValue(tokens[pos]);
 					pos++;
 				}
 				valid = true;
 				return std::make_pair(newBlock, valid);
 			}
-			while (!tokens[pos].isSimpleEnd() && !tokens[pos].isComplexStart() && pos < tokens.size()) {
+			while (pos < tokens.size() && !tokens[pos].isSimpleEnd() && !tokens[pos].isComplexStart()) {
 				valid = true;
-				if (!tokens[pos].isNewLine()) {
+				if (pos < tokens.size() && !tokens[pos].isNewLine()) {
 					newBlock.addValue(tokens[pos]);
 				}
 				pos++;
 			}
-			bool isComplex = tokens[pos].isComplexStart();
+			bool isComplex = pos < tokens.size() && tokens[pos].isComplexStart();
 			pos++;
 			if (isComplex) {
 				newBlock.setType(block_type::T_COMPLEX);
-				while (!tokens[pos].isComplexEnd() && pos < tokens.size()) {
+				while (pos < tokens.size() && !tokens[pos].isComplexEnd()) {
 					parse_type child = this->parseBlock(tokens, pos);
 					if (child.second) {
 						valid = true;
@@ -86,10 +99,6 @@ namespace Webserv {
 				}
 			}
 			return std::make_pair(newBlock, valid);
-		}
-
-		void			Parser::drawBlocks(void) const {
-			Parser::drawBlocks(this->blocks);
 		}
 
 		bool			Parser::checkBlocks(const directive_map& directives) const {
@@ -142,29 +151,33 @@ namespace Webserv {
 			return true;
 		}
 
-		// Static methods
+		// TODO: Remove
 
-		void			Parser::drawBlocks(const block_vector& blocks) {
-			block_vector::const_iterator it = blocks.begin();
-			while (it != blocks.end()) {
-				block_type block = (*it);
-				block_type::values_type values = block.getValues();
-				block_type::values_type::const_iterator it2 = values.begin();
-				while (it2 != values.end()) {
-					block_type::token_type token = (*it2);
-					std::cout << "|" << token.getValue() << "|" << std::endl;
-					it2++;
-				}
-				if (block.isSimple()) {
-					std::cout << ";" << std::endl;
-				} else if (!block.isComment()) {
-					std::cout << "{" << std::endl;
-					Parser::drawBlocks(block.getChilds());
-					std::cout << "}" << std::endl;
-				}
-				it++;
-			}
-		}
+		// void			Parser::drawBlocks(void) const {
+		// 	Parser::drawBlocks(this->blocks);
+		// }
+
+		// void			Parser::drawBlocks(const block_vector& blocks) {
+		// 	block_vector::const_iterator it = blocks.begin();
+		// 	while (it != blocks.end()) {
+		// 		block_type block = (*it);
+		// 		block_type::values_type values = block.getValues();
+		// 		block_type::values_type::const_iterator it2 = values.begin();
+		// 		while (it2 != values.end()) {
+		// 			block_type::token_type token = (*it2);
+		// 			std::cout << "|" << token.getValue() << "|" << std::endl;
+		// 			it2++;
+		// 		}
+		// 		if (block.isSimple()) {
+		// 			std::cout << ";" << std::endl;
+		// 		} else if (!block.isComment()) {
+		// 			std::cout << "{" << std::endl;
+		// 			Parser::drawBlocks(block.getChilds());
+		// 			std::cout << "}" << std::endl;
+		// 		}
+		// 		it++;
+		// 	}
+		// }
 
 	} // namespace Utils
 

@@ -6,24 +6,23 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 14:03:05 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 15:55:04 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 15:27:16 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include <cstddef>
-# include <string>
-# include <vector>
-# include <map>
-# include <algorithm>
+# include <iostream>
 
-# include "Route.hpp"
+# include <string>						// For string
+# include <vector>						// For vector
+# include <map>							// For map
 
-# include "../utils/Directive.hpp"
-# include "../utils/Block.hpp"
-# include "../utils/MimeTypes.hpp"
+# include "Route.hpp"					// For Route
+# include "../utils/Directive.hpp"		// For Directive
+# include "../utils/Block.hpp"			// For Block
+# include "../utils/MimeTypes.hpp"		// For MimeTypes
 
 namespace Webserv {
 
@@ -34,7 +33,7 @@ namespace Webserv {
 				typedef	Webserv::Utils::Block					block_type;
 				typedef std::vector<block_type>					block_vector;
 
-				typedef Webserv::Utils::MimeTypes				mimes_types_type;
+				typedef Webserv::Utils::MimeTypes				mime_types_type;
 
 				typedef Webserv::Utils::Directive				directive_type;
 				typedef directive_type::http_status_code_type	http_status_code_type;
@@ -53,11 +52,14 @@ namespace Webserv {
 				typedef directive_type::dir_root_type			root_type;
 				typedef directive_type::dir_index_type			index_type;
 
+				typedef directive_type::dir_cgi_pass_type		cgi_pass_type;
+				typedef directive_type::dir_cgi_ext_type		cgi_ext_type;
+
 				typedef Webserv::Http::Route				route_type;
 				typedef std::map<std::string, route_type>	routes_map;
 
 			protected:
-				mimes_types_type	mimesTypes;
+				mime_types_type	mimeTypes;
 
 				name_type			serverName;
 				listen_type			listen;
@@ -73,22 +75,32 @@ namespace Webserv {
 				root_type			root;
 				index_type			index;
 
+				cgi_pass_type		cgi_pass;
+				cgi_ext_type		cgi_ext;
+
+				route_type			defaultRoute;
 				routes_map			routes;
 
 			public:
 				Server(void);
+				Server(const Server& other);
 				~Server();
+
+				Server&	operator=(const Server &other);
 
 				void	init(void);
 
 				bool	fromBlocks(const block_vector& blocks);
 
-				void	setMimesTypes(const mimes_types_type& mimestypes);
+				void	setMimeTypes(const mime_types_type& mimetypes);
 
 				void	addRoute(const routes_map::key_type& path, const routes_map::mapped_type& route);
 
 				const name_type	&getServerName(void) const;
 				const listen_type	&getListen(void) const;
+				const route_type	&getDefaultRoute(void) const;
+				const routes_map	&getRoutes(void) const;
+				const upload_store_type &getUploadStore(void) const;
 		};
 
 	} // namespace Http

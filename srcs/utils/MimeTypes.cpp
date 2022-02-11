@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MimeTypes.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:38:50 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 16:03:40 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ namespace Webserv {
 
 		MimeTypes::MimeTypes(void) {}
 
-		MimeTypes::MimeTypes(const MimeTypes& x) {
-			this->mappedTypes = x.mappedTypes;
+		MimeTypes::MimeTypes(const MimeTypes& other) {
+			*this = other;
 		}
 
 		MimeTypes::MimeTypes(const std::string& fileContent) {
@@ -28,6 +28,15 @@ namespace Webserv {
 
 		MimeTypes::MimeTypes(const block_vector& blocks) {
 			this->fromBlocks(blocks);
+		}
+
+		MimeTypes::~MimeTypes(void) {}
+
+		MimeTypes&					MimeTypes::operator=(const MimeTypes& other) {
+			if (this != &other) {
+				this->mappedTypes = other.mappedTypes;
+			}
+			return *this;
 		}
 
 		void						MimeTypes::merge(const MimeTypes& x) {

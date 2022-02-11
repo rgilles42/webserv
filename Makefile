@@ -6,7 +6,7 @@
 #    By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/18 15:48:36 by ppaglier          #+#    #+#              #
-#    Updated: 2022/01/10 15:03:12 by ppaglier         ###   ########.fr        #
+#    Updated: 2022/02/10 16:14:16 by ppaglier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,11 @@ CXXFLAGS	+=	-Wall -Wextra -Werror -std=c++98 -g3
 
 HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/core/Core.hpp \
-				$(HEADER_DIR)/Resource.hpp \
-				$(HEADER_DIR)/Socket.hpp \
-				$(HEADER_DIR)/Logger.hpp \
+				$(HEADER_DIR)/core/Config.hpp \
+				$(HEADER_DIR)/core/Logger.hpp \
 				$(HEADER_DIR)/utils/common.hpp \
+				$(HEADER_DIR)/utils/Socket.hpp \
+				$(HEADER_DIR)/utils/Resource.hpp \
 				$(HEADER_DIR)/utils/ci_less.hpp \
 				$(HEADER_DIR)/utils/OutStream.hpp \
 				$(HEADER_DIR)/utils/Byte.hpp \
@@ -39,27 +40,30 @@ HEADER_FILE	=	$(HEADER_DIR)/webserv.hpp \
 				$(HEADER_DIR)/utils/Env.hpp \
 				$(HEADER_DIR)/utils/Args.hpp \
 				$(HEADER_DIR)/utils/Singleton.hpp \
-				$(HEADER_DIR)/Config.hpp \
+				$(HEADER_DIR)/utils/FileParser.hpp \
 				$(HEADER_DIR)/http/Server.hpp \
 				$(HEADER_DIR)/http/Route.hpp \
 				$(HEADER_DIR)/http/HttpVersion.hpp \
+				$(HEADER_DIR)/http/HttpMethod.hpp \
 				$(HEADER_DIR)/http/HttpStatusCode.hpp \
 				$(HEADER_DIR)/http/HttpHeaders.hpp \
 				$(HEADER_DIR)/http/HttpRequest.hpp \
 				$(HEADER_DIR)/http/HttpResponse.hpp \
-				$(HEADER_DIR)/events/events.hpp \
 				$(HEADER_DIR)/events/IEvents.hpp \
 				$(HEADER_DIR)/events/ClientEvent.hpp \
 				$(HEADER_DIR)/events/ServerEvent.hpp \
 				$(HEADER_DIR)/events/Poll.hpp \
-				$(HEADER_DIR)/events/EventsManager.hpp
+				$(HEADER_DIR)/events/CGIEvent.hpp \
+				$(HEADER_DIR)/events/EventsManager.hpp \
+				$(HEADER_DIR)/methods/Methods.hpp
 
 SRC_FILE	=	${SRC_DIR}/main.cpp \
 				${SRC_DIR}/core/Core.cpp \
-				${SRC_DIR}/Resource.cpp \
-				$(SRC_DIR)/Socket.cpp \
-				$(SRC_DIR)/Logger.cpp \
+				$(SRC_DIR)/core/Config.cpp \
+				$(SRC_DIR)/core/Logger.cpp \
 				$(SRC_DIR)/utils/common.cpp \
+				$(SRC_DIR)/utils/Socket.cpp \
+				${SRC_DIR}/utils/Resource.cpp \
 				$(SRC_DIR)/utils/OutStream.cpp \
 				$(SRC_DIR)/utils/Byte.cpp \
 				$(SRC_DIR)/utils/Token.cpp \
@@ -71,10 +75,11 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/utils/Directive.cpp \
 				$(SRC_DIR)/utils/Env.cpp \
 				$(SRC_DIR)/utils/Args.cpp \
-				$(SRC_DIR)/Config.cpp \
+				$(SRC_DIR)/utils/FileParser.cpp \
 				$(SRC_DIR)/http/Server.cpp \
 				$(SRC_DIR)/http/Route.cpp \
 				$(SRC_DIR)/http/HttpVersion.cpp \
+				$(SRC_DIR)/http/HttpMethod.cpp \
 				$(SRC_DIR)/http/HttpStatusCode.cpp \
 				$(SRC_DIR)/http/HttpHeaders.cpp \
 				$(SRC_DIR)/http/HttpRequest.cpp \
@@ -82,7 +87,9 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 				$(SRC_DIR)/events/ClientEvent.cpp \
 				$(SRC_DIR)/events/ServerEvent.cpp \
 				$(SRC_DIR)/events/Poll.cpp \
-				$(SRC_DIR)/events/EventsManager.cpp
+				$(SRC_DIR)/events/CGIEvent.cpp \
+				$(SRC_DIR)/events/EventsManager.cpp \
+				$(SRC_DIR)/methods/Methods.cpp
 
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)

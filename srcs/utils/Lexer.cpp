@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:35:08 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/09 15:23:47 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,21 @@ namespace Webserv {
 
 		Lexer::Lexer(void) {}
 
+		Lexer::Lexer(const Lexer& other) {
+			*this = other;
+		}
+
 		Lexer::Lexer(const std::string &str) {
 			this->tokenize(str);
+		}
+
+		Lexer::~Lexer() {}
+
+		Lexer&						Lexer::operator=(const Lexer& other) {
+			if (this != &other) {
+				this->tokens = other.tokens;
+			}
+			return *this;
 		}
 
 		void						Lexer::resetLexer(void) {
@@ -71,10 +84,6 @@ namespace Webserv {
 				i = j;
 			}
 			return this->tokens;
-		}
-
-		void			Lexer::drawTokens(void) const {
-			Lexer::drawTokens(this->tokens);
 		}
 
 		bool			Lexer::checkTokens(void) const {
@@ -159,29 +168,36 @@ namespace Webserv {
 		}
 
 		size_t				Lexer::checkTokenComment(size_t pos) const {
-			while (!this->tokens[pos].isNewLine() && pos < this->tokens.size()) {
+			while (pos < this->tokens.size() && !this->tokens[pos].isNewLine()) {
 				pos++;
 			}
 			return pos;
 		}
 
 		size_t				Lexer::checkTokenNewLine(size_t pos) const {
-			while (this->tokens[pos + 1].isNewLine() && pos + 1 < this->tokens.size()) {
+			if (this->tokens.size() < pos) {
+				return pos;
+			}
+			while (pos + 1 < this->tokens.size() && this->tokens[pos + 1].isNewLine()) {
 				pos++;
 			}
 			return pos;
 		}
 
 
-		// Static methods
+		// TODO: Remove
 
-		void			Lexer::drawTokens(const token_vector &tokens) {
-			token_vector::const_iterator it = tokens.begin();
-			while (it != tokens.end()) {
-				std::cout << "|" << (*it).getValue() << ":" << (*it).getType() << "|" << std::endl;
-				it++;
-			}
-		}
+		// void			Lexer::drawTokens(void) const {
+		// 	Lexer::drawTokens(this->tokens);
+		// }
+
+		// void			Lexer::drawTokens(const token_vector &tokens) {
+		// 	token_vector::const_iterator it = tokens.begin();
+		// 	while (it != tokens.end()) {
+		// 		std::cout << "|" << (*it).getValue() << ":" << (*it).getType() << "|" << std::endl;
+		// 		it++;
+		// 	}
+		// }
 
 	} // namespace Utils
 

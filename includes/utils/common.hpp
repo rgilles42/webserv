@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:13:22 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:33:19 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 12:33:45 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,15 @@
 # include <fstream>		// For ifstream
 # include <ctime>		// For gmtime, strftime
 # include <algorithm>	// For find_if, not1, ptr_fun
-
 # include <stdexcept>	// For runtime_error
 
+#include <iostream>
+
 # define SSTR( x ) static_cast< std::ostringstream&>( ( std::ostringstream() << std::dec << x ) ).str()
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
+# endif
 
 namespace Webserv {
 
@@ -35,6 +40,10 @@ namespace Webserv {
 
 		std::string		getFileContents(const std::string& filename);
 		std::string		getFileExtension(const std::string& filename);
+
+		const std::string	getConcatURL(const std::string& url1, const std::string url2);
+		const std::string	url_decode(const std::string& value);
+		void	separate_header(std::string& content, std::string& add_headers);
 
 	} // namespace Utils
 

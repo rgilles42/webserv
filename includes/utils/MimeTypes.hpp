@@ -3,27 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   MimeTypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:42:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/07 16:03:35 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MIMETYPES_HPP
 # define MIMETYPES_HPP
+# include <string>			// For string
+# include <map>				// For map
+# include <vector>			// For vector
+# include <algorithm>		// For find_if, ptr_fun
+# include <cctype>			// For isspace
+# include <iterator>		// For distance
+# include <sstream>			// For stringstream
 
-# include <string>					// For string
-# include <map>						// For map
-# include <vector>					// For vector
-# include <algorithm>				// For find_if, ptr_fun
-# include <cctype>					// For isspace
-# include <iterator>				// For distance
-# include <sstream>					// For stringstream
-
-# include "../utils/common.hpp"		// For trim
-# include "Block.hpp"				// For Block
-# include "ci_less.hpp"				// For ci_less
+# include "common.hpp"		// For trim
+# include "Block.hpp"		// For Block
+# include "ci_less.hpp"		// For ci_less
 
 # define DEFAULT_MIME_TYPE std::string("application/octet-stream")
 
@@ -51,11 +50,13 @@ namespace Webserv {
 
 			public:
 				MimeTypes(void);
-				MimeTypes(const MimeTypes& x);
+				MimeTypes(const MimeTypes& other);
 				MimeTypes(const std::string& fileContent);
 				MimeTypes(const block_vector& blocks);
 
-				// MimeTypes				operator=(const MimeTypes& x);
+				MimeTypes&					operator=(const MimeTypes& x);
+
+				~MimeTypes();
 
 				void						merge(const MimeTypes& x);
 

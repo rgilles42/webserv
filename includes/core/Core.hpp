@@ -6,47 +6,99 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/17 17:32:00 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 20:03:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CORE_HPP
 # define CORE_HPP
 
-# include <sstream>					// For ostringstream
-# include <vector>					// For vector
+# include <sstream>						// For ostringstream
+# include <vector>						// For vector
+# include <csignal>
 
-# include "../utils/Env.hpp"		// For Env
-# include "../utils/Args.hpp"		// For Args
-# include "../Config.hpp"			// For Config
-# include "../Logger.hpp"			// For Logger
-# include "../events/events.hpp"	// For All Events class
-# include "../utils/Singleton.hpp"	// For Singleton
-# include "../Socket.hpp"			// For Socket
+# include "Config.hpp"					// For Config
+# include "Logger.hpp"					// For Logger
+# include "../utils/Singleton.hpp"		// For Singleton
+# include "../utils/Env.hpp"			// For Env
+# include "../utils/Args.hpp"			// For Args
+# include "../events/ClientEvent.hpp"	// For All Events class
+# include "../events/ServerEvent.hpp"	// For ??
+# include "../events/Poll.hpp"			// For ??
+# include "../events/EventsManager.hpp"	// For ??
 
 # define DEFAULT_CONFIG_LOCATION "./conf/webserv.conf"
 # define DEFAULT_MIME_TYPES_LOCATION "./conf/mime.types"
 
 namespace Webserv {
 
+	extern void	sigint_handler(int signal);
+
 	class Core : public Webserv::Utils::Singleton<Core> {
-
-		private:
-			Poll			poll_events;
-			EventsManager	events_manager;
-
-			void			setup_events(void);
-
 		public:
 			typedef Webserv::Config				config_type;
 			typedef Webserv::Logger				logger_type;
 			typedef Webserv::Utils::Env			env_type;
 			typedef Webserv::Utils::Args		args_type;
+			typedef Webserv::Utils::Socket		socket_type;
 
 			typedef config_type::server_type	server_type;
 			typedef std::vector<server_type>	server_vector;
-			typedef Socket						socket_type;
 			typedef std::vector<socket_type>	socket_vector;
+
+			typedef Webserv::Poll				poll_type;
+			typedef Webserv::EventsManager		event_manager_type;
+
+			class CoreException : public std::exception {
+				protected:
+					std::string	msg;
+
+				public:
+					CoreException(const std::string& msg = "") : std::exception() {
+						this->msg = msg;
+					}
+					virtual ~CoreException() throw() {}
+					virtual const char	*what() const throw() {
+						return this->msg.c_str();
+					}
+			};
+
+			class InitException : public CoreException {
+				public:
+					InitException() : CoreException() {
+						std::ostringstream ss;
+
+						ss << "Init core failed";
+
+						this->msg = ss.str();
+					}
+			};
+
+			class ExecException : public CoreException {
+				public:
+					ExecException(const std::string& reason = std::string()) : CoreException() {
+						std::ostringstream ss;
+
+						ss << "Exec core failed";
+
+						if (!reason.empty()) {
+							ss << ": " << reason;
+						}
+
+						this->msg = ss.str();
+					}
+			};
+
+			class UnknownException : public CoreException {
+				public:
+					UnknownException() : CoreException() {
+						std::ostringstream ss;
+
+						ss << "Unknown core error";
+
+						this->msg = ss.str();
+					}
+			};
 
 		protected:
 			std::string	customConfigFile;
@@ -58,6 +110,12 @@ namespace Webserv {
 			logger_type	logger;
 			server_vector	servers;
 			socket_vector	serversSockets;
+			bool			stop;
+
+			poll_type	poll_events;
+			event_manager_type	events_manager;
+
+			void			setup_events(void);
 
 		public:
 			Core(void);
@@ -72,31 +130,16 @@ namespace Webserv {
 			bool		init(void);
 			void		exec(void);
 
-			void		add_server_event(const Socket &sock);
-			void		add_client_event(int fd, ClientEvent &client_e);
-			void		add_cgi_event(CGIEvent const &new_cgi);
+			void		add_server_event(const socket_type &sock);
+			void		add_client_event(int fd, Webserv::ClientEvent &client_e);
+
+			env_type	getEnv(void);
 
 			void		remove_event(int fd);
 
 			const bool&	isReady(void) const;
 
 			std::string	getHelp(void) const;
-
-			struct coreInitFailed : public std::exception
-			{
-				virtual const char* what() const throw()
-				{
-					return ("Core: initialisation failed");
-				}
-			};
-
-			struct coreExecFailed : public std::exception
-			{
-				virtual const char* what() const throw()
-				{
-					return ("Core: initialisation failed");
-				}
-			};
 	};
 
 } // namespace Webserv

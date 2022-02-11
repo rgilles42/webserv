@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:17:02 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:22:40 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/03 19:51:03 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,20 @@ namespace Webserv {
 
 				Directive::Directive(const name_type& name, const argc_type& argc, const context_vector& contexts) : name(name), argc(argc), contexts(contexts) {};
 
+				Directive::Directive(const Directive& other) {
+					*this = other;
+				}
+
 				Directive::~Directive() {};
+
+				Directive&							Directive::operator=(const Directive& other) {
+					if (this != &other) {
+						this->name = other.name;
+						this->argc = other.argc;
+						this->contexts = other.contexts;
+					}
+					return *this;
+				}
 
 				const Directive::name_type&			Directive::getName(void) const {
 					return this->name;
@@ -52,6 +65,21 @@ namespace Webserv {
 						return false;
 					}
 					return true;
+				}
+
+				const Directive::error_pages_type	Directive::getDefaultErrorPages(void) {
+					error_pages_type	errorPages;
+
+					errorPages[http_status_code_type::client_error_bad_request] = "./default_pages/400.html";
+					errorPages[http_status_code_type::client_error_unauthorized] = "./default_pages/401.html";
+					errorPages[http_status_code_type::client_error_forbidden] = "./default_pages/403.html";
+					errorPages[http_status_code_type::client_error_not_found] = "./default_pages/404.html";
+					errorPages[http_status_code_type::server_error_internal_server_error] = "./default_pages/500.html";
+					errorPages[http_status_code_type::server_error_not_implemented] = "./default_pages/501.html";
+					errorPages[http_status_code_type::server_error_bad_gateway] = "./default_pages/502.html";
+					errorPages[http_status_code_type::server_error_service_unavailable] = "./default_pages/503.html";
+
+					return errorPages;
 				}
 
 				// Parsing with static methods
@@ -97,8 +125,8 @@ namespace Webserv {
 					if (tokValue1.find_first_not_of("0123456789") != tokValue1.npos) {
 						return false;
 					}
-					value.first = http_status_code_type::getStatusCode(std::atoi(tokValue1.c_str()));
-					if (value.first <= 0 || !http_status_code_type::isError(value.first)) {
+					value.first = std::atoi(tokValue1.c_str());
+					if (value.first <= 0 || !value.first.isError()) {
 						return false;
 					}
 					value.second = src[2].getValue();
@@ -215,6 +243,19 @@ namespace Webserv {
 						return false;
 					}
 					value = src[1].getValue();
+					return true;
+				}
+
+				bool	Directive::parseCgiExt(const src_value_type& src, dir_cgi_ext_type& value, const dir_cgi_ext_type& defaultValue) {
+					value = defaultValue;
+					if (src.size() < 2) {
+						return false;
+					}
+					src_value_type::const_iterator it = src.begin() + 1;
+					while (it != src.end()) {
+						value.push_back(it->getValue());
+						it++;
+					}
 					return true;
 				}
 

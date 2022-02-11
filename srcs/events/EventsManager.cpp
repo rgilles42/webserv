@@ -4,34 +4,32 @@ namespace Webserv
 {
 	EventsManager::EventsManager(void) {}
 
-	EventsManager::~EventsManager(void) {}
+	EventsManager::~EventsManager(void) {
+		for (event_map_type::iterator it = this->events_map.begin(); it != this->events_map.end(); ++it)
+		{
+			delete it->second;
+		}
+	}
 
-	void	EventsManager::add_event(int fd, IEvents &event_object)
-	{
+	void	EventsManager::add_event(int fd, IEvents &event_object) {
 		this->events_map.insert(std::pair<int, IEvents*>(fd, &event_object));
 	}
 
-	void	EventsManager::remove_event(int fd)
-	{
-		std::map<int, IEvents*>::iterator it = this->events_map.find(fd);
-		std::map<int, IEvents*>::iterator ite = this->events_map.end();
+	void	EventsManager::remove_event(int fd) {
+		event_map_type::iterator it = this->events_map.find(fd);
 
-		if (it != ite)
+		if (it != this->events_map.end()) {
+			delete it->second;
 			this->events_map.erase(it);
+		}
 	}
 
-	IEvents	*EventsManager::get_event(int fd)
-	{
-		return events_map[fd];
+	IEvents	*EventsManager::get_event(int fd) {
+		return this->events_map[fd];
 	}
 
-	std::map<int, IEvents *>::iterator EventsManager::begin()
-	{
-		return this->events_map.begin();
+	const EventsManager::event_map_type&	EventsManager::getEvents(void) const {
+		return this->events_map;
 	}
 
-	std::map<int, IEvents *>::iterator EventsManager::end()
-	{
-		return this->events_map.end();
-	}
 }	//namespace Webserv

@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Args.cpp                                            :+:      :+:    :+:   */
+/*   Args.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:12:59 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/08 17:44:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:46:16 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/utils/Args.hpp"
 
@@ -17,8 +18,18 @@ namespace Webserv {
 	namespace Utils {
 
 		Args::Args(void) {}
+		Args::Args(const Args& other) {
+			*this = other;
+		}
 
 		Args::~Args() {}
+
+		Args&					Args::operator=(const Args& other) {
+			if (this != &other) {
+				this->argsArray = other.argsArray;
+			}
+			return *this;
+		}
 
 		bool					Args::set(const key_type& key, const value_type& value) {
 			this->argsArray[key] = value;

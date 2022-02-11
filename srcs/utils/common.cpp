@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 13:12:44 by ppaglier          #+#    #+#             */
-/*   Updated: 2021/12/10 14:32:42 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/10 12:33:37 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ namespace Webserv {
 
 		std::string		getFormatedDate(const time_t& rawtime) {
 			struct tm *timeinfo;
-			char buffer[80];
+			char buffer[BUFFER_SIZE + 1];
 
 			timeinfo = gmtime(&rawtime);
 			strftime(buffer, sizeof(buffer), "%a, %m %b %Y %H:%M:%S %Z", timeinfo);
@@ -52,7 +52,56 @@ namespace Webserv {
 			return filename.substr(filename.find_last_of(".") + 1);
 		}
 
+		const std::string	getConcatURL(const std::string& url1, const std::string url2) {
+			size_t start;
+			size_t end = 0;
+			std::string newUrl;
+
+			while ((start = url1.find_first_not_of('/', end)) != std::string::npos) {
+				end = url1.find('/', start);
+				if (!newUrl.empty()) {
+					newUrl += "/";
+				}
+				newUrl += url1.substr(start, end - start);
+			}
+
+			end = 0;
+			while ((start = url2.find_first_not_of('/', end)) != std::string::npos) {
+				end = url2.find('/', start);
+				newUrl += "/" + url2.substr(start, end - start);
+			}
+
+			return newUrl;
+		}
+
+		const std::string url_decode(const std::string& value)
+		{
+			std::ostringstream unescaped("");
+			for (std::string::const_iterator i = value.begin(), n = value.end(); i != n; ++i)
+			{
+				std::string::value_type c = (*i);
+				if (c == '%')
+				{
+					++i;
+					std::string::value_type a = *i - (*i >= 'A' ? *i >= 'a' ? 'a' : 'A' : '0');
+					a *= 16;
+					++i;
+					a += (*i - (*i >= 'A' ? *i >= 'a' ? 'a' : 'A' : '0'));
+					unescaped << a;
+				}
+				else
+					unescaped << c;
+			}
+			return unescaped.str();
+		}
+
+		void	separate_header(std::string& content, std::string& add_headers)
+		{
+			std::string isolated_content_type("");
+			add_headers = content.substr(0, content.find("\r\n\r\n")) + "\r\n";
+			content.erase(0, content.find("\r\n\r\n") + 4);
+		}
+
 	} // namespace Utils
 
 } // namespace Webserv
-

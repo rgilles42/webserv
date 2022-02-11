@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/11 19:14:10 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/02 17:08:39 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,20 @@
 namespace Webserv {
 
 	namespace Http {
-		// can have multiple identique key but not same value
+		HttpHeaders::HttpHeaders(void) {}
+
+		HttpHeaders::HttpHeaders(const HttpHeaders& other) {
+			*this = other;
+		}
+
+		HttpHeaders::~HttpHeaders() {}
+
+		HttpHeaders&					HttpHeaders::operator=(const HttpHeaders& other) {
+			if (this != &other) {
+				this->headers = other.headers;
+			}
+			return *this;
+		}
 
 		const HttpHeaders::header_type&	HttpHeaders::getHeaders(void) const {
 			return this->headers;
@@ -35,7 +48,7 @@ namespace Webserv {
 			if (!this->isKeyValid(key)) {
 				throw std::runtime_error("HttpHeaders::set(" + key + ", " + value + ")");
 			}
-			this->headers.erase(key);
+			this->unset(key);
 			this->headers.insert(std::make_pair(key, value));
 			// this->headers[key] = value;
 		}
@@ -63,6 +76,18 @@ namespace Webserv {
 			return this->headers.count(key) > 0;
 		}
 
+
+		void	HttpHeaders::unset(const key_type& key) {
+			if (!this->has(key)) {
+				return ;
+			}
+			this->headers.erase(key);
+		}
+
+		void	HttpHeaders::clear(void) {
+			this->headers.clear();
+		}
+
 		const std::string				HttpHeaders::toString(void) const {
 			header_type::const_iterator it = this->headers.begin();
 			header_type::const_iterator end = this->headers.end();
@@ -75,6 +100,7 @@ namespace Webserv {
 			return formatedHeaders;
 		}
 
+		// TODO: Remove because of deprecated
 		void	HttpHeaders::fromString(const std::string& stringHeaders) {
 			std::string			line;
 			std::stringstream	ss(stringHeaders);
@@ -88,11 +114,20 @@ namespace Webserv {
 			}
 		}
 
-
 		HttpHeadersBuilder::HttpHeadersBuilder(void) {}
-		HttpHeadersBuilder::HttpHeadersBuilder(const HttpHeadersBuilder& x) {
-			this->buffer = x.buffer;
-			this->headers = x.headers;
+
+		HttpHeadersBuilder::HttpHeadersBuilder(const HttpHeadersBuilder& other) {
+			*this = other;
+		}
+
+		HttpHeadersBuilder::~HttpHeadersBuilder() {}
+
+		HttpHeadersBuilder&						HttpHeadersBuilder::operator=(const HttpHeadersBuilder& other) {
+			if (this != &other) {
+				this->buffer = other.buffer;
+				this->headers = other.headers;
+			}
+			return *this;
 		}
 
 		const HttpHeadersBuilder::buffer_type&	HttpHeadersBuilder::getBuffer(void) const {
@@ -132,7 +167,7 @@ namespace Webserv {
 
 			while (pos <= tmpBuff.length() && pos < endOfHeaders) {
 				headers_type::key_type key;
-				headers_type::key_type value;
+				headers_type::value_type value;
 
 				// skip whitespace (i'm not sure)
 				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
@@ -142,17 +177,26 @@ namespace Webserv {
 				}
 
 				// Position of key (between pos & find)
-				// it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(this->isKey));
-				// find = it_find - tmpBuff.begin();
-				// if (tmpBuff.length() <= find || pos == find) {
-				// 	return tmpBuff.npos;
-				// }
-				// pos = find;
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::ptr_fun<int, int>(this->isKey));
+				find = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= find || pos == find) {
+					return tmpBuff.npos;
+				}
+				key = tmpBuff.substr(pos, find - pos);
+				pos = find + 1;
+
+				// skip whitespace (i'm not sure)
+				it_find = find_if(tmpBuff.begin() + pos, tmpBuff.end(), std::not1(std::ptr_fun<int, int>(std::isspace)));
+				pos = it_find - tmpBuff.begin();
+				if (tmpBuff.length() <= pos) {
+					return tmpBuff.npos;
+				}
+
 				find = tmpBuff.find(CRLF, pos);
 				if (find == tmpBuff.npos) {
 					return tmpBuff.npos;
 				}
-				key = tmpBuff.substr(pos, find - pos);
+				value = tmpBuff.substr(pos, find - pos);
 				pos = find + CRLF.length();
 				headers.set(key, value);
 			}
