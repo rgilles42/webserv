@@ -47,9 +47,14 @@ namespace Methods {
 			std::string path = path_upload + "/" + Methods::parseMultiform(req.getBody(), content);
 			fd_upload = open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if (fd_upload < 0)
+			{
+				std::cout << "oops" << std::endl;
+				perror(path.c_str());
 				throw MethodsFcntlError();
+			}
 			if (fcntl(fd_upload, F_SETFL, O_NONBLOCK) < 0)
 			{
+				std::cout << "hips" << std::endl;
 				close(fd_upload);
 				throw MethodsFcntlError();
 			}
@@ -63,6 +68,7 @@ namespace Methods {
 					ret = write(fd_upload, &content.c_str()[bytes_written], content.size() - bytes_written);
 					if (ret < 0)
 					{
+						std::cout << "hebs" << std::endl;
 						close(fd_upload);
 						throw MethodsFcntlError();
 					}
@@ -82,24 +88,31 @@ namespace Methods {
 
 	std::string	Methods::parseMultiform(const std::string& body, std::string& content)
 	{
-		std::cout << body;
-		std::string	filename;
-	
-		std::string	delim = body.substr(0, body.find("\r\n"));
+		std::string	delim = "\r\n" + body.substr(0, body.find("\r\n")) + "\r\n";
 		std::string file_part;
-		int pos = delim.length() + 2;
-		while (body.find(delim, pos) != std::string::nval)
+		int pos = delim.length() - 2;
+		while (body.find(delim, pos) != std::string::npos)
 		{
 			if ((file_part = body.substr(pos, body.find(delim, pos) - pos)).find("filename"))
-			{
-				std::cout << "Found file part \n\"" << file_part << "\"\n";
 				break ;
-			}
-			pos += file_part.length() + delim.length() + 2;
+			pos += file_part.length() + delim.length();
 		} 
-		
-		content = body;
-		return ((filename = "uwu.txt"));
+		std::cout << "\"" << file_part << "\"\n";
+		file_parser_type	fileParser;
+		fileParser.parseFile(file_part);
+		content = fileParser.getBody();
+		file_parser_type::headers_type::const_iterator it = fileParser.getHeaders().begin();
+		std::string filename = "unnamed";
+		while (it != fileParser.getHeaders().end())
+		{
+			if (it->first == "Content-Disposition")
+			{
+				size_t pos = it->second.find("filename=\"") + 10;
+				filename = it->second.substr(pos, it->second.length() - 1 - pos);
+			}
+			it++;
+		}
+		return (filename);
 	}
 
 	int	Methods::deleteMethod(const http_request_type &req, http_response_type &response, http_route_type& route)

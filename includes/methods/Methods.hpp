@@ -13,6 +13,8 @@
 # include "../events/Poll.hpp"
 # include "../http/Server.hpp"
 # include "../http/Route.hpp"
+# include "../utils/FileParser.hpp"		// For FileParser
+
 
 namespace Webserv
 {
@@ -24,6 +26,8 @@ namespace Methods {
 			typedef Webserv::Http::HttpResponse	http_response_type;
 			typedef Webserv::Http::Server		http_server_type;
 			typedef Webserv::Http::Route		http_route_type;
+			typedef Webserv::Utils::FileParser	file_parser_type;
+
 
 		private:
 			static int			getMethod(const http_request_type &req, http_route_type& route);

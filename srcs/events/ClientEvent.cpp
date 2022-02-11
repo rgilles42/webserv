@@ -74,14 +74,14 @@ namespace Webserv
 					}
 					catch (const Webserv::Methods::Methods::ForbiddenMethodException& e)
 					{
-						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_method_not_allowed);
 						this->responses.push_back(response);
 						request++;
 						continue ;
 					}
 					catch (const Webserv::Methods::Methods::MethodsFcntlError& e)
 					{
-						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
 						request++;
 						continue ;
