@@ -208,10 +208,7 @@ namespace Webserv
 				}
 
 				if (WIFEXITED(ret))
-				{
 					this->status = WEXITSTATUS(ret);
-					std::cout << "BUT WHAT IS THE STATUS CODE, YOU MAY ASK? WELL, IT IS " << this->status << std::endl;
-				}
 				this->CGIEnd = true;
 			}
 		return (this->status);

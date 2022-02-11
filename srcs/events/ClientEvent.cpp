@@ -46,6 +46,7 @@ namespace Webserv
 					{
 					 	response.setStatusCode(http_response_type::status_code_type::client_error_bad_request);
 					 	this->responses.push_back(response);
+					 	this->written_sizes.push_back(0);
 					 	request++;
 					 	continue ;
 					}
@@ -60,12 +61,14 @@ namespace Webserv
 							response.setRedirect(route.getReturn().second, route.getReturn().first);
 						}
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						request++;
 						continue ;
 					}
 					if (route.getClientMaxBodySize().toUnit(http_route_type::client_max_body_size_type::Byte::U_B) < request->getBody().length()) {
 						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_payload_too_large);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						request++;
 						continue ;
 					}
@@ -77,6 +80,7 @@ namespace Webserv
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_method_not_allowed);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						request++;
 						continue ;
 					}
@@ -84,6 +88,7 @@ namespace Webserv
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						request++;
 						continue ;
 					}
@@ -91,12 +96,14 @@ namespace Webserv
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 					 	request++;
 					 	continue ;
 					}
 					else if (ret == 1)
 					{
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 					 	request++;
 					 	continue ;
 					}
@@ -112,6 +119,7 @@ namespace Webserv
 							if (cgi.exec() != 0) {
 								this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 								this->responses.push_back(response);
+								this->written_sizes.push_back(0);
 								request++;
 								continue;
 							}
@@ -122,6 +130,7 @@ namespace Webserv
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						request++;
 						continue;
 					}
@@ -129,6 +138,7 @@ namespace Webserv
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_not_found);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						request++;
 						continue ;
 					}
@@ -136,6 +146,7 @@ namespace Webserv
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						request++;
 						continue ;
 					}
@@ -143,6 +154,7 @@ namespace Webserv
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 						this->logger << std::make_pair(this->logger.ERROR, e.what())  << std::endl;
 						request++;
 						continue ;
@@ -154,11 +166,13 @@ namespace Webserv
 						}
 						response.setResource(rcs);
 						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
 					}
 					catch(const resource_type::Resource500Exception& e)
 					{
 					 	this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 					 	this->responses.push_back(response);
+					 	this->written_sizes.push_back(0);
 						this->logger << std::make_pair(this->logger.ERROR, e.what())  << std::endl;
 					 	request++;
 					 	continue ;
@@ -175,10 +189,19 @@ namespace Webserv
 	{
 		this->logger << std::make_pair(this->logger.DEBUG, "Client write event")  << std::endl;
 		response_vector::iterator response = this->responses.begin();
+		written_response_sizes::iterator written_size = this->written_sizes.begin();
 		if (response != responses.end())
 		{
-			this->sock.write(response->toString().c_str(), response->toString().length());
-			this->responses.erase(response);
+			if (*written_size < response->toString().length())
+			{
+				size_t	ret = this->sock.write(&response->toString().c_str()[*written_size], response->toString().length() - *written_size);
+				*written_size += ret;
+			}
+			if (*written_size >= response->toString().length())
+			{
+				this->responses.erase(response);
+				this->written_sizes.erase(written_size);
+			}
 			return;
 		}
 		this->events_flags = POLLIN;

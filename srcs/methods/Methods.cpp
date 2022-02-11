@@ -77,6 +77,9 @@ namespace Methods {
 						if (ret == 0 || bytes_written == content.length() - 1)
 							break;
 					}
+					bytes_written += ret;
+					if (ret == 0 || bytes_written == content.length())
+						break;
 				}
 			}
 			if (fd_upload > 0)
