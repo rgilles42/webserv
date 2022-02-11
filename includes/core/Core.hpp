@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/11 16:01:52 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 20:03:53 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,6 @@ namespace Webserv {
 	extern void	sigint_handler(int signal);
 
 	class Core : public Webserv::Utils::Singleton<Core> {
-
-		private:
-			Poll			poll_events;
-			EventsManager	events_manager;
-
-			void			setup_events(void);
-
 		public:
 			typedef Webserv::Config				config_type;
 			typedef Webserv::Logger				logger_type;
@@ -54,6 +47,7 @@ namespace Webserv {
 			typedef std::vector<socket_type>	socket_vector;
 
 			typedef Webserv::Poll				poll_type;
+			typedef Webserv::EventsManager		event_manager_type;
 
 			class CoreException : public std::exception {
 				protected:
@@ -117,6 +111,11 @@ namespace Webserv {
 			server_vector	servers;
 			socket_vector	serversSockets;
 			bool			stop;
+
+			poll_type	poll_events;
+			event_manager_type	events_manager;
+
+			void			setup_events(void);
 
 		public:
 			Core(void);

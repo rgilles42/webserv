@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/11 17:46:17 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/11 20:06:35 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,9 +308,9 @@ namespace Webserv {
 	void		Core::setup_events()	// Add all events fd in Poll
 	{
 		this->poll_events.clear();		// Clear old events fd
-		std::map<int, IEvents *>::iterator	ite = this->events_manager.end();
+		event_manager_type::event_map_type::const_iterator	it;
 
-		for (std::map<int, IEvents *>::iterator	it = this->events_manager.begin(); it != ite; it++)
+		for (it = this->events_manager.getEvents().begin(); it != this->events_manager.getEvents().end(); it++)
 			this->poll_events.add_fd(it->first, it->second->getEventsFlags());
 	}
 
