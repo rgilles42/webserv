@@ -16,10 +16,10 @@ namespace Webserv
 		this->close_pipefd();
 	}
 
-	void    CGIEvent::write_event(void)
+	void	CGIEvent::write_event(void)
 	{
-		Poll	write_poll;
-		std::vector<struct pollfd>::iterator it;
+		poll_type	write_poll;
+		poll_type::poll_fd_vector::const_iterator poll_it;
 		ssize_t	ret = 0;
 
 		write_poll.add_fd(this->fd_in[1], POLLOUT);
@@ -28,12 +28,14 @@ namespace Webserv
 			while (1)
 			{
 				write_poll.exec();
-				it = write_poll.begin();
-				if ((it->revents & POLLOUT) == POLLOUT)
-				{
-					ret = write(this->fd_in[1], this->req.getBody().c_str(), this->req.getBody().length());
-					(void)ret;
-					break ;
+				poll_it = write_poll.getPollUsedFD().begin();
+				if (poll_it != write_poll.getPollUsedFD().end()) {
+					if ((poll_it->revents & POLLOUT) == POLLOUT)
+					{
+						ret = write(this->fd_in[1], this->req.getBody().c_str(), this->req.getBody().length());
+						(void)ret;
+						break ;
+					}
 				}
 			}
 		}
@@ -217,7 +219,7 @@ namespace Webserv
 		return (this->status);
 	}
 
-	void    CGIEvent::close_pipefd(void)
+	void	CGIEvent::close_pipefd(void)
 	{
 		if (this->fd_in[0] > 0) {
 			close(this->fd_in[0]);

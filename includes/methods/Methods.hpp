@@ -29,6 +29,7 @@ namespace Methods {
 			typedef Webserv::Http::Route		http_route_type;
 			typedef Webserv::Utils::FileParser	file_parser_type;
 
+			typedef Webserv::Poll				poll_type;
 
 		private:
 			static int			getMethod(const http_request_type &req, http_route_type& route);

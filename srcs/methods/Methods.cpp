@@ -28,11 +28,11 @@ namespace Methods {
 	{
 		if (route.getEnableLimitExcept() && !Methods::isMethodAllowed(route.getLimitExcept(), "POST"))
 			throw ForbiddenMethodException();
-		Poll	write_poll;
+		poll_type	write_poll;
+		poll_type::poll_fd_vector::const_iterator poll_it;
 		int	fd_upload = -1;;
 		size_t	bytes_written = 0;
 		std::string	path_upload;
-		std::vector<struct pollfd>::iterator it;
 		ssize_t ret;
 
 		if (isCGI(req, route) == 2)
@@ -63,18 +63,20 @@ namespace Methods {
 			while (1)
 			{
 				write_poll.exec();
-				it = write_poll.begin();
-				if ((it->revents & POLLOUT) == POLLOUT)
-				{
-					ret = write(fd_upload, &content.c_str()[bytes_written], content.size() - bytes_written);
-					if (ret < 0)
+				poll_it = write_poll.getPollUsedFD().begin();
+				if (poll_it != write_poll.getPollUsedFD().end()) {
+					if ((poll_it->revents & POLLOUT) == POLLOUT)
 					{
-						close(fd_upload);
-						throw MethodsFcntlError();
+						ret = write(fd_upload, &content.c_str()[bytes_written], content.size() - bytes_written);
+						if (ret < 0)
+						{
+							close(fd_upload);
+							throw MethodsFcntlError();
+						}
+						bytes_written += ret - 1;
+						if (ret == 0 || bytes_written == content.length() - 1)
+							break;
 					}
-					bytes_written += ret - 1;
-					if (ret == 0 || bytes_written == content.length() - 1)
-						break;
 				}
 			}
 			if (fd_upload > 0)

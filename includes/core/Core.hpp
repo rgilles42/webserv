@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:06:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 22:58:54 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/11 16:01:52 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ namespace Webserv {
 			typedef config_type::server_type	server_type;
 			typedef std::vector<server_type>	server_vector;
 			typedef std::vector<socket_type>	socket_vector;
+
+			typedef Webserv::Poll				poll_type;
 
 			class CoreException : public std::exception {
 				protected:

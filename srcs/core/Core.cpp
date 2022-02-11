@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 19:04:18 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 16:05:44 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,6 @@ namespace Webserv {
 			return ;
 
 		this->logger << std::make_pair(logger_type::DEBUG, "Starting servers: starting..") << std::endl;
-		std::vector<struct pollfd>::iterator ite;
 		socket_vector::iterator it;
 
 		errno = 0;
@@ -220,6 +219,8 @@ namespace Webserv {
 		sigemptyset(&sigIntHandler.sa_mask);
 		sigIntHandler.sa_flags = SA_RESTART;
 		sigaction(SIGINT, &sigIntHandler, NULL);
+
+		poll_type::poll_fd_vector::const_iterator poll_it;
 		// try
 		// {
 			extern volatile std::sig_atomic_t	stop;
@@ -234,39 +235,39 @@ namespace Webserv {
 					this->logger << std::make_pair(logger_type::ERROR, ExecException("poll_events exec error").what()) << std::endl;
 					continue ;
 				}
-				ite = poll_events.end();
-				for (std::vector<struct pollfd>::iterator it = this->poll_events.begin(); it != ite; it++)
+
+				for (poll_it = this->poll_events.getPollUsedFD().begin(); poll_it != this->poll_events.getPollUsedFD().end(); poll_it++)
 				{
-					if ((it->revents & POLLIN) == POLLIN)
+					if ((poll_it->revents & POLLIN) == POLLIN)
 					{
-						this->logger << std::make_pair(logger_type::DEBUG, "POLLIN Event on fd: ") << it->fd<<std::endl;
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLIN Event on fd: ") << poll_it->fd<<std::endl;
 						try {
-							this->events_manager.get_event(it->fd)->read_event();
+							this->events_manager.get_event(poll_it->fd)->read_event();
 						}
 						catch (const std::exception& e)
 						{
-							this->logger << std::make_pair(logger_type::DEBUG, std::string(e.what()) + " on fd: ") << it->fd<<std::endl;
-							this->events_manager.remove_event(it->fd);
+							this->logger << std::make_pair(logger_type::DEBUG, std::string(e.what()) + " on fd: ") << poll_it->fd<<std::endl;
+							this->events_manager.remove_event(poll_it->fd);
 						}
 					}
-					else if ((it->revents & POLLHUP) == POLLHUP || (it->revents & POLLERR) == POLLERR)
+					else if ((poll_it->revents & POLLHUP) == POLLHUP || (poll_it->revents & POLLERR) == POLLERR)
 					{
-						this->logger << std::make_pair(logger_type::DEBUG, "POLLHUP | POLLER Event on fd: ") << it->fd<<std::endl;
-						this->events_manager.remove_event(it->fd);
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLHUP | POLLER Event on fd: ") << poll_it->fd<<std::endl;
+						this->events_manager.remove_event(poll_it->fd);
 					}
-					else if ((it->revents & POLLOUT) == POLLOUT)
+					else if ((poll_it->revents & POLLOUT) == POLLOUT)
 					{
-						this->logger << std::make_pair(logger_type::DEBUG, "POLLOUT Event on fd: ") << it->fd<<std::endl;
-						this->events_manager.get_event(it->fd)->write_event();
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLOUT Event on fd: ") << poll_it->fd<<std::endl;
+						this->events_manager.get_event(poll_it->fd)->write_event();
 					}
-					else if ((it->revents & POLLNVAL) == POLLNVAL)
+					else if ((poll_it->revents & POLLNVAL) == POLLNVAL)
 					{
-						this->logger << std::make_pair(logger_type::DEBUG, "POLLNVAL Event on fd: ") << it->fd<<std::endl;
-						this->events_manager.remove_event(it->fd);
+						this->logger << std::make_pair(logger_type::DEBUG, "POLLNVAL Event on fd: ") << poll_it->fd<<std::endl;
+						this->events_manager.remove_event(poll_it->fd);
 					}
-					else if (it->revents != 0 && errno != EINTR)
+					else if (poll_it->revents != 0 && errno != EINTR)
 					{
-						this->logger << std::make_pair(logger_type::DEBUG, "Other Event on fd: ") << it->fd<<std::endl;
+						this->logger << std::make_pair(logger_type::DEBUG, "Other Event on fd: ") << poll_it->fd<<std::endl;
 					}
 				}
 				if (stop)

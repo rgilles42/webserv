@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:30 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/10 17:36:21 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 16:02:11 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ namespace Webserv {
 				typedef int			fd_type;
 				typedef Webserv::Utils::MimeTypes	mime_types_type;
 				typedef Webserv::Http::Route		http_route_type;
+
+				typedef Webserv::Poll				poll_type;
 
 				class ResourceException : public std::exception {
 					protected:

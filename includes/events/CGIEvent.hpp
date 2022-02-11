@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGIEvent.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/09 15:43:23 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/11 16:00:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ namespace Webserv
 			typedef Webserv::Http::Route		http_route_type;
 			typedef Webserv::Http::Server		http_server_type;
 			typedef Webserv::Utils::Env			env_type;
+			typedef Webserv::Poll				poll_type;
 
 		private:
 			int					fd_in[2];   //use to write request body
@@ -99,7 +100,7 @@ namespace Webserv
 			struct Cgi500Exception : public CgiException {
 					Cgi500Exception(std::string msg) : CgiException(msg) {}
 			};
-	
+
 			struct CGIPipeFailed : public Cgi500Exception
 			{
 				CGIPipeFailed(void) : Cgi500Exception("CGI: pipe failed")	{}
@@ -125,7 +126,7 @@ namespace Webserv
 				CGIGlobalFailed(void) : Cgi500Exception("")	{}
 			};
 
-	}; 
+	};
 
 }
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/10 18:38:37 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 16:02:29 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,31 +149,33 @@ namespace Webserv {
 
 		bool	Resource::readFileChunk()
 		{
-			Webserv::Poll			res_poll;
-			Webserv::Poll::iterator	poll_it;
-			char					buf[BUFFER_SIZE + 1];
-			int						rdsize = 0;
-			long long				totalReadBytes = 0;
+			poll_type	res_poll;
+			poll_type::poll_fd_vector::const_iterator	poll_it;
+			char		buf[BUFFER_SIZE + 1];
+			int			rdsize = 0;
+			long long	totalReadBytes = 0;
 
 			res_poll.add_fd(this->_fd, POLLIN);
 			while (true)
 			{
 				res_poll.exec();
-				poll_it = res_poll.begin();
-				if ((poll_it->revents & POLLIN) == POLLIN && (rdsize = read(this->_fd, buf, BUFFER_SIZE)) > 0)
-				{
-					buf[rdsize] = 0;
-					this->_content.append(buf, rdsize);
-					this->_readBytes += rdsize;
-					totalReadBytes += rdsize;
-				}
-				else if (rdsize < 0)
-					throw UnableToReadResourceException();
-				else
-				{
-					this->_size = totalReadBytes;
-					this->_isFullyRead = true;
-					break ;
+				poll_it = res_poll.getPollUsedFD().begin();
+				if (poll_it != res_poll.getPollUsedFD().end()) {
+					if ((poll_it->revents & POLLIN) == POLLIN && (rdsize = read(this->_fd, buf, BUFFER_SIZE)) > 0)
+					{
+						buf[rdsize] = 0;
+						this->_content.append(buf, rdsize);
+						this->_readBytes += rdsize;
+						totalReadBytes += rdsize;
+					}
+					else if (rdsize < 0)
+						throw UnableToReadResourceException();
+					else
+					{
+						this->_size = totalReadBytes;
+						this->_isFullyRead = true;
+						break ;
+					}
 				}
 			}
 			return (this->_isFullyRead);
