@@ -125,7 +125,7 @@ namespace Webserv
 				exit(EXIT_FAILURE);
 			}
 
-			/* Redirect stdout */
+				/* Redirect stdout */
 			if (dup2(this->fd_out[1], STDOUT_FILENO) == -1) {
 				close(this->fd_in[0]);
 				close(this->fd_out[1]);
@@ -134,7 +134,7 @@ namespace Webserv
 			close(this->fd_in[0]);
 			close(this->fd_out[1]);
 
-			// Init args
+				// Init args
 			std::vector<std::string>	argsVec;
 
 			argsVec.push_back(this->route.getCgiPass());
@@ -149,6 +149,24 @@ namespace Webserv
 			while (it != argsVec.end()) {
 				args[i] = new char[it->length() + 1];
 				if (!args[i]) {
+						for (size_t j = 0; j < i; j++)
+						{
+							if (args[j]) {
+								delete args[j];
+							}
+						}
+						delete[] args;
+						exit(EXIT_FAILURE);
+					}
+					std::strcpy(args[i], it->c_str());
+					it++;
+					i++;
+				}
+				args[i] = NULL;
+
+				// Init envp
+				char**	envp = this->env.toEnvp();
+				if (!envp) {
 					for (size_t j = 0; j < i; j++)
 					{
 						if (args[j]) {
@@ -158,59 +176,41 @@ namespace Webserv
 					delete[] args;
 					exit(EXIT_FAILURE);
 				}
-				std::strcpy(args[i], it->c_str());
-				it++;
-				i++;
-			}
-			args[i] = NULL;
 
-			// Init envp
-			char**	envp = this->env.toEnvp();
-			if (!envp) {
-				for (size_t j = 0; j < i; j++)
-				{
-					if (args[j]) {
-						delete args[j];
+				/* Execve CGI */
+				ret = execve(args[0], args, envp);
+				if (args) {
+					for (size_t j = 0; j < i; j++)
+					{
+						if (args[j]) {
+							delete args[j];
+						}
 					}
+					delete[] args;
 				}
-				delete[] args;
-				exit(EXIT_FAILURE);
+				this->env.freeEnvp(envp);
+				exit(ret);
 			}
-
-			/* Execve CGI */
-			ret = execve(args[0], args, envp);
-			if (args) {
-				for (size_t j = 0; j < i; j++)
-				{
-					if (args[j]) {
-						delete args[j];
-					}
-				}
-				delete[] args;
-			}
-			this->env.freeEnvp(envp);
-			exit(ret);
-		}
-		else
-		{
-			// Init pipe for parent
-			close(this->fd_in[0]);
-			close(this->fd_out[1]);
-
-			waitpid(pid, &ret, 0);
-
-			close(this->fd_in[1]);
-
-			this->fd_in[0] = -1;
-			this->fd_in[1] = -1;
-
-			if (WIFEXITED(ret))
+			else
 			{
-				this->status = WEXITSTATUS(ret);
-				std::cout << "BUT WHAT IS THE STATUS CODE, YOU MAY ASK? WELL, IT IS " << this->status << std::endl;
+				// Init pipe for parent
+				close(this->fd_in[0]);
+				close(this->fd_out[1]);
+
+				waitpid(pid, &ret, 0);
+
+				close(this->fd_in[1]);
+
+				this->fd_in[0] = -1;
+				this->fd_in[1] = -1;
+
+				if (WIFEXITED(ret))
+				{
+					this->status = WEXITSTATUS(ret);
+					std::cout << "BUT WHAT IS THE STATUS CODE, YOU MAY ASK? WELL, IT IS " << this->status << std::endl;
+				}
+				this->CGIEnd = true;
 			}
-			this->CGIEnd = true;
-		}
 		return (this->status);
 	}
 

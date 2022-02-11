@@ -120,6 +120,11 @@ namespace Webserv
 			{
 				CGIForkFailed(void) : Cgi500Exception("CGI: Fork failed")	{}
 			};
+			struct CGIGlobalFailed : public Cgi500Exception
+			{
+				CGIGlobalFailed(void) : Cgi500Exception("")	{}
+			};
+
 	}; 
 
 }

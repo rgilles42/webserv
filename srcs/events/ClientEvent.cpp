@@ -108,13 +108,18 @@ namespace Webserv
 						if (rcs.isCGI())
 						{
 							cgi.init(*request, srv, this->env, route);
-							cgi.exec(); // TODO : check return
+							if (cgi.exec() != 0) {
+								this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
+								this->responses.push_back(response);
+								request++;
+								continue;
+							}
 							rcs.setFd(cgi.getReadFD());
 						}
 					}
 					catch (const CGIEvent::Cgi500Exception& e)
 					{
-						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_not_found);
+						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 						this->responses.push_back(response);
 						request++;
 						continue;
