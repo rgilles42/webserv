@@ -24,7 +24,6 @@ namespace Webserv
 		if (this-> req.getMethod().toString() == "POST" && this->req.getBody().size() != 0)
 		{
 			http_request_type::body_type body = this->req.getBody();
-			std::cerr << body.length() << std::endl;
 			while (1)
 			{
 				write_poll.exec();
