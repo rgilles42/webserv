@@ -34,7 +34,7 @@
 
 webserv
 
-.www_other/newroot/*
+www_other/newroot/*
 www/uploads
 
 .vscode/

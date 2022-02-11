@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 19:04:18 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 17:46:17 by rgilles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,15 @@ namespace Webserv {
 
 	bool		Core::preInit(int argc, char *argv[], char *envp[]) {
 		this->logger << std::make_pair(logger_type::DEBUG, "PreInit: starting..") << std::endl;
-		this->args.fromArg(argc, argv);
+		try
+		{
+			this->args.fromArg(argc, argv);
+		}
+		catch (const args_type::ArgException& e)
+		{
+			this->logger << std::make_pair(this->logger.ERROR, e.what()) << std::endl;
+			exit(EXIT_FAILURE);
+		}
 
 		args_type::map_type::const_iterator it = this->args.getArgs().begin();
 		while (it != this->args.getArgs().end()) {
