@@ -9,8 +9,9 @@ namespace Webserv
 
 	ClientEvent::~ClientEvent(void)
 	{
-		if (this->sock.getFd())
+		if (this->sock.getFd()) {
 			this->sock.close();
+		}
 	}
 
 	void	ClientEvent::read_event(void)

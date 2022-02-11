@@ -5,7 +5,10 @@ namespace Webserv
 
 	CGIEvent::CGIEvent(void) : writeEnd(false), CGIEnd(false), status(0)
 	{
-		
+		this->fd_in[0] = -1;
+		this->fd_in[1] = -1;
+		this->fd_out[0] = -1;
+		this->fd_out[1] = -1;
 	}
 
 	CGIEvent::~CGIEvent(void)
