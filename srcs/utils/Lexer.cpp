@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 16:06:41 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 15:23:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:54:36 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,21 +183,6 @@ namespace Webserv {
 			}
 			return pos;
 		}
-
-
-		// TODO: Remove
-
-		// void			Lexer::drawTokens(void) const {
-		// 	Lexer::drawTokens(this->tokens);
-		// }
-
-		// void			Lexer::drawTokens(const token_vector &tokens) {
-		// 	token_vector::const_iterator it = tokens.begin();
-		// 	while (it != tokens.end()) {
-		// 		std::cout << "|" << (*it).getValue() << ":" << (*it).getType() << "|" << std::endl;
-		// 		it++;
-		// 	}
-		// }
 
 	} // namespace Utils
 

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 17:37:18 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:53:51 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,6 @@ namespace Webserv {
 
 				// Utils Methods
 				std::string	toString(void) const;
-
-				// TODO: Remove because of deprecated
-				void		fromString(const std::string& response);
 		};
 
 	} // namespace Utils

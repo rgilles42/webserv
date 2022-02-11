@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 17:08:39 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:55:03 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,19 +100,6 @@ namespace Webserv {
 			return formatedHeaders;
 		}
 
-		// TODO: Remove because of deprecated
-		void	HttpHeaders::fromString(const std::string& stringHeaders) {
-			std::string			line;
-			std::stringstream	ss(stringHeaders);
-
-			while (std::getline(ss, line)) {
-				line = Webserv::Utils::trim(line);
-				std::string key = line.substr(0, line.find(':'));
-				line = line.erase(0, line.find(':') + 1);
-				std::string value = line;
-				this->set(Webserv::Utils::trim(key), Webserv::Utils::trim(value));
-			}
-		}
 
 		HttpHeadersBuilder::HttpHeadersBuilder(void) {}
 

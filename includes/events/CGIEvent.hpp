@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 15:33:08 by yun               #+#    #+#             */
-/*   Updated: 2022/02/11 17:36:59 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:53:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ namespace Webserv
 			typedef FILE						file_type;
 
 		private:
-			// TODO: remove
 			file_type*			tmp_in;		//use to write request body
 			file_type*			tmp_out;	//use to redirect cgi output
 			int					fd_in;

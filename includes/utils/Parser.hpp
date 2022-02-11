@@ -19,8 +19,6 @@
 # include <exception>		// For exception
 # include <sstream>			// For ostringstream
 
-// # include <iostream>		// For cout, endl TODO: remove
-
 # include "Token.hpp"		// For Token
 # include "Block.hpp"		// For Block
 # include "Directive.hpp"	// For Directive
@@ -134,10 +132,6 @@ namespace Webserv {
 
 
 				bool				checkBlocks(const directive_map& directives = directive_map()) const;
-
-				// TODO: Remove
-				// void				drawBlocks(void) const;
-				// static void			drawBlocks(const block_vector& blocks);
 
 		};
 

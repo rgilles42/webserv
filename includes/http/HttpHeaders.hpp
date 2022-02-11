@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 17:48:01 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/02 17:05:27 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:53:43 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,6 @@ namespace Webserv {
 
 				// Utils Methods
 				const std::string	toString(void) const;
-
-				// TODO: Remove because of deprecated
-				void				fromString(const std::string& request);
 		};
 
 		class HttpHeadersBuilder {

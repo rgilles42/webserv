@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 14:56:33 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/01/29 22:09:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:54:01 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # include <exception>		// For exception
 # include <sstream>			// For stringstream
 # include <sys/types.h>		// For ssize_t
-
-// # include <iostream>		// For cout, endl TODO: Remove
 
 # include "Token.hpp"		// For Token
 
@@ -126,11 +124,6 @@ namespace Webserv {
 
 
 				bool				checkTokens(void) const;
-
-				// TODO: Remove
-				// void				drawTokens(void) const;
-				// static void			drawTokens(const token_vector& tokens);
-
 		};
 
 	} // namespace Utils

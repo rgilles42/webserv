@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MimeTypes.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 19:40:21 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/07 16:03:40 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/11 22:57:28 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,6 @@ namespace Webserv {
 
 		MimeTypes::MimeTypes(const MimeTypes& other) {
 			*this = other;
-		}
-
-		MimeTypes::MimeTypes(const std::string& fileContent) {
-			this->fromString(fileContent);
 		}
 
 		MimeTypes::MimeTypes(const block_vector& blocks) {
@@ -83,43 +79,6 @@ namespace Webserv {
 			return extensions;
 		}
 
-		/**
-		 * A MIME type can be formated in many ways:
-		 * - type (whitespaces) extensions ;
-		 * - type (no extensions) ;
-		 * If there's no ';' this is will throw an error in console and block the starting of the webserv
-		 * TODO: delete this and everything liked to this method
-		*/
-		void									MimeTypes::fromString(const std::string& mimeTypesContent) {
-			std::string				line;
-			std::stringstream		ss(mimeTypesContent);
-			std::string::iterator	it;
-			size_t					i;
-			std::string				key;
-			std::string				value;
-
-			while (std::getline(ss, line, ';')) {
-				line = Webserv::Utils::trim(line);
-
-				it = line.begin();
-				i = 0;
-				key = "";
-				value = "";
-				while (!line.empty()) {
-					it = std::find_if(line.begin(), line.end(), std::ptr_fun<int, int>(std::isspace));
-					if (i <= 0) {
-						value = line.substr(0, std::distance(line.begin(), it));
-					} else {
-						key = line.substr(0, std::distance(line.begin(), it));
-						this->set(key, value);
-					}
-					line.erase(line.begin(), it);
-					line = Webserv::Utils::trim(line);
-					i++;
-				}
-			}
-		}
-
 		bool									MimeTypes::fromBlocks(const block_vector& blocks) {
 			size_t							i;
 			std::string						key;
@@ -144,25 +103,6 @@ namespace Webserv {
 				blockIt++;
 			}
 			return true;
-		}
-
-		std::string getContentTypeByFile(const std::string& filename, const std::string& fallback) {
-			std::string test;
-			std::string fileContent(Webserv::Utils::getFileContents("./conf/mime.types"));
-
-			test = "types";
-			fileContent = fileContent.substr(fileContent.find(test) + test.length());
-			test = "{";
-			fileContent = fileContent.substr(fileContent.find(test) + test.length());
-			test = "\r\n";
-			fileContent = fileContent.substr(fileContent.find(test) + test.length());
-			test = "}";
-			fileContent = fileContent.substr(0, fileContent.find(test));
-			test = "\r\n";
-			fileContent = fileContent.substr(0, fileContent.find_last_of(test));
-
-			Webserv::Utils::MimeTypes types(fileContent);
-			return types.getType(filename, fallback);
 		}
 
 	} // namespace Utils

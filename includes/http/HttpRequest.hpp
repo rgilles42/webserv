@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:04 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/03 18:43:47 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:56:08 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ namespace Webserv {
 			public:
 				HttpRequest(void);
 				HttpRequest(const HttpRequest& other);
-				HttpRequest(const std::string& request);
 				~HttpRequest();
 
 				HttpRequest&		operator=(const HttpRequest& other);
@@ -100,10 +99,6 @@ namespace Webserv {
 
 				// Utils Methods
 				const std::string	toString(void) const;
-
-				// TODO: Remove because of deprecated
-				void				fromString(const std::string& request);
-
 		};
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MimeTypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rgilles <rgilles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:49:32 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/07 16:03:35 by rgilles          ###   ########.fr       */
+/*   Updated: 2022/02/11 22:56:57 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ namespace Webserv {
 			public:
 				MimeTypes(void);
 				MimeTypes(const MimeTypes& other);
-				MimeTypes(const std::string& fileContent);
 				MimeTypes(const block_vector& blocks);
 
 				MimeTypes&					operator=(const MimeTypes& x);
@@ -69,9 +68,6 @@ namespace Webserv {
 				void						fromString(const std::string& fileContent);
 				bool						fromBlocks(const block_vector& blocks);
 		};
-
-		// TODO: remove this
-		std::string getContentTypeByFile(const std::string& filename, const std::string& fallback);
 
 	}
 

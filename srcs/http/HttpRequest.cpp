@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/09 20:03:13 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:56:04 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,6 @@ namespace Webserv {
 
 		HttpRequest::HttpRequest(const HttpRequest& other) {
 			*this = other;
-		}
-
-		HttpRequest::HttpRequest(const std::string& response) {
-			this->fromString(response);
 		}
 
 		HttpRequest::~HttpRequest() {}
@@ -227,35 +223,6 @@ namespace Webserv {
 			formatedRequest += this->headers.toString() + CRLF;
 			formatedRequest += this->body;
 			return formatedRequest;
-		}
-
-		// TODO: Remove because of deprecated
-		void	HttpRequest::fromString(const std::string& request) {
-
-			std::string			str(request);
-			std::string			find = "";
-
-			// Parse request method
-			find = " ";
-			this->method = str.substr(0, str.find(find));
-			str = str.erase(0, str.find(find) + find.length());
-
-			// Parse request path
-			find = " ";
-			this->fullPath = str.substr(0, str.find(find));
-			str = str.erase(0, str.find(find) + find.length());
-
-			// Parse request protocol
-			find = CRLF;
-			this->protocol = str.substr(0, str.find(find));
-			str = str.erase(0, str.find(find) + find.length());
-
-			// Parse request headers
-			find = CRLF + CRLF;
-			this->headers.fromString(str.substr(0, str.find(find)));
-			str = str.erase(0, str.find(find) + find.length());
-
-			this->body = str;
 		}
 
 

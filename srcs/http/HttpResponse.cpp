@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 16:45:31 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/10 17:48:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:54:42 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,31 +142,6 @@ namespace Webserv {
 			formatedResponse += this->headers.toString() + CRLF;
 			formatedResponse += this->body;
 			return formatedResponse;
-		}
-
-		// TODO: Remove because of deprecated
-		void		HttpResponse::fromString(const std::string& response) {
-
-			std::string			str(response);
-			std::string			find = "";
-
-			// Parse response protocol
-			find = " ";
-			this->protocol = str.substr(0, str.find(find));
-			str = str.erase(0, str.find(find) + find.length());
-
-			// Parse response status
-			find = CRLF;
-			this->statusCode = str.substr(0, str.find(find));
-			str = str.erase(0, str.find(find) + find.length());
-
-			// Parse response headers
-			find = CRLF + CRLF;
-			this->headers.fromString(str.substr(0, str.find(find)));
-			str = str.erase(0, str.find(find) + find.length());
-
-			// Parse response body
-			this->body = str;
 		}
 
 	} // namespace Http
