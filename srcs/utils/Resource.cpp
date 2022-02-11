@@ -201,7 +201,7 @@ namespace Webserv {
 					struct stat	s;
 					std::string	subpath = this->_path + "/" + ent->d_name;
 					stat(subpath.c_str(), &s);
-					if ((S_ISREG(s.st_mode) || S_ISDIR(s.st_mode)) && ent->d_name[0] != '.')
+					if ((S_ISREG(s.st_mode) || S_ISDIR(s.st_mode)))
 					{
 						content << "<tr> <td><a href=\"./" << ent->d_name;
 						if (S_ISDIR(s.st_mode))
