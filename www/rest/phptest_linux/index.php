@@ -50,6 +50,12 @@
          <input type="submit" value="submit" name="submit">
    </form>
 
+   <form action="../debug_cgi/test.debug" method="POST" enctype="multipart/form-data">
+         Select text file to upload to DEBUG CGI:
+         <input type="file" name="fileToUpload" id="fileToUpload">
+         <input type="submit" value="submit" name="submit">
+   </form>
+
    <?php if(isset($_FILES['fileToUpload'])) {var_dump($_FILES["fileToUpload"]);}?>
 
    curl -v -X DELETE 127.0.0.1:8080/uploads/rush03.c
