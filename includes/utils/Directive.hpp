@@ -30,7 +30,7 @@
 # define DEFAULT_CLIENT_MAX_BODY_SIZE Webserv::Utils::Directive::dir_client_max_body_size_type(1, Webserv::Utils::Directive::dir_client_max_body_size_type::U_MB)
 # define DEFAULT_RETURN Webserv::Utils::Directive::dir_return_type(Webserv::Utils::Directive::http_status_code_type::unknown, "")
 # define DEFAULT_AUTOINDEX Webserv::Utils::Directive::dir_autoindex_type(false)
-# define DEFAULT_ROOT Webserv::Utils::Directive::dir_root_type("html")
+# define DEFAULT_ROOT Webserv::Utils::Directive::dir_root_type("./www")
 # define DEFAULT_UPLOAD_STORE Webserv::Utils::Directive::dir_upload_store_type("")
 
 namespace Webserv {

@@ -123,9 +123,11 @@ namespace Methods {
 		if (remove(route.getFilePath(req.getBasePath()).c_str()) != 0)
 		{
 			if (errno == ENOENT)
-				response.setStatusCode(http_response_type::status_code_type::client_error_not_found);
+			{
+				throw NoSuchFileOrDirException();
+			}
 			else if (errno == EACCES)
-				response.setStatusCode(http_response_type::status_code_type::client_error_forbidden);
+				throw ForbiddenException();
 		}
 		else
 			response.setStatusCode(http_response_type::status_code_type::success_ok);

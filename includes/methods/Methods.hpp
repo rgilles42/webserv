@@ -67,6 +67,20 @@ namespace Methods {
 					return ("No upload path");
 				}
 			};
+			struct	NoSuchFileOrDirException : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("No such file or directory");
+				}
+			};
+			struct	ForbiddenException : public std::exception
+			{
+				virtual const char* what() const throw()
+				{
+					return ("Access Forbidden");
+				}
+			};
 	};
 }	// namespace Methods
 }	// namespace Webserv
