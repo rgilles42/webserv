@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:58:38 by rgilles           #+#    #+#             */
-/*   Updated: 2022/02/11 16:02:29 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:01:38 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,11 @@ namespace Webserv {
 
 		void		Resource::closeResource(void)
 		{
-			if (!this->_isDir && !this->_isCGI)
+			std::cerr << "close?" << this->_fd << std::endl;
+			if (!this->_isDir && !this->_isCGI) {
+				std::cerr << "close!" << this->_fd << std::endl;
 				close(this->_fd);
+			}
 		}
 
 		const Resource::content_type&	Resource::getContent(void) const

@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 14:05:38 by ppaglier          #+#    #+#             */
-/*   Updated: 2022/02/11 20:06:35 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 21:58:49 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ namespace Webserv {
 			extern volatile std::sig_atomic_t	stop;
 			while (!stop)
 			{
-				setup_events();
+				this->setup_events();
 				try {
 					this->poll_events.exec();
 				}

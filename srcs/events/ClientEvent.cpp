@@ -175,11 +175,13 @@ namespace Webserv
 							rcs.loadResource();
 						}
 						response.setResource(rcs);
+						rcs.closeResource();
 						this->responses.push_back(response);
 						this->written_sizes.push_back(0);
 					}
 					catch(const resource_type::Resource500Exception& e)
 					{
+						rcs.closeResource();
 					 	this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
 					 	this->responses.push_back(response);
 					 	this->written_sizes.push_back(0);

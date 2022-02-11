@@ -6,7 +6,7 @@
 /*   By: ppaglier <ppaglier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:46:20 by pkevin            #+#    #+#             */
-/*   Updated: 2022/02/11 16:11:30 by ppaglier         ###   ########.fr       */
+/*   Updated: 2022/02/11 22:00:05 by ppaglier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ namespace Webserv {
 		size_t	size = sockets_servers.size();
 
 		for (size_t i = 0; i < size; i++)
-			add_fd(sockets_servers[i].getFd(), POLLIN);
+			this->add_fd(sockets_servers[i].getFd(), POLLIN);
 	}
 
 	int		Poll::exec(void)
