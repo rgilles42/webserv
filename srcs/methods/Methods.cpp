@@ -127,14 +127,14 @@ namespace Methods {
 		if (remove(route.getFilePath(req.getBasePath()).c_str()) != 0)
 		{
 			if (errno == ENOENT)
-			{
 				throw NoSuchFileOrDirException();
-			}
-			else if (errno == EACCES)
+			else if (errno == EACCES || errno == ENOTEMPTY)
 				throw ForbiddenException();
+			else
+				throw MethodsFcntlError();
 		}
 		else
-			response.setStatusCode(http_response_type::status_code_type::success_ok);
+			response.setStatusCode(http_response_type::status_code_type::success_no_content);
 		return (1);
 	}
 

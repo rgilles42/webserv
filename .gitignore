@@ -33,8 +33,6 @@
 *.app
 
 webserv
-
-www_other/newroot/*
 www/dir/uploads
 
 .vscode/
