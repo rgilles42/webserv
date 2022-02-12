@@ -43,7 +43,7 @@
          Uploaded file info: <?php if(isset($_FILES['fileToUpload'])) {var_dump($_FILES["fileToUpload"]);}?>
       </div>
       <div>
-         Select text file to upload to PHP:
+         <p>Select text file to upload to PHP:</p>
          <input type="file" name="fileToUpload" id="fileToUpload">
          <input type="submit" value="submit" name="submit">
       </div>
@@ -52,7 +52,7 @@
    <form action="../debug_cgi/test.debug" method="POST" enctype="multipart/form-data">
       <h1>DEBUG_CGI UPLOAD TEST</h1>
       <div>
-         Select text file to upload to Debug_CGI:
+         <p>Select text file to upload to Debug_CGI:</p>
          <input type="file" name="fileToUpload" id="fileToUpload">
          <input type="submit" value="submit" name="submit">
       </div>
