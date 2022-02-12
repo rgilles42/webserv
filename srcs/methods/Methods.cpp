@@ -85,9 +85,8 @@ namespace Methods {
 			if (fd_upload > 0)
 				close(fd_upload);
 			response.setStatusCode(http_response_type::status_code_type::success_created);
-			return (1);
 		}
-		return 0;
+		return (0);
 	}
 
 	std::string	Methods::parseMultiform(const std::string& body, std::string& content)
