@@ -91,14 +91,14 @@ namespace Methods {
 
 	std::string	Methods::parseMultiform(const std::string& body, std::string& content)
 	{
-		std::string	delim = "\r\n" + body.substr(0, body.find("\r\n")) + "\r\n";
+		std::string	delim = "\r\n" + body.substr(0, body.find("\r\n"));
 		std::string file_part;
-		int pos = delim.length() - 2;
+		int pos = delim.length();
 		while (body.find(delim, pos) != std::string::npos)
 		{
 			if ((file_part = body.substr(pos, body.find(delim, pos) - pos)).find("filename"))
 				break ;
-			pos += file_part.length() + delim.length();
+			pos += file_part.length() + delim.length() + 2;
 		}
 		file_parser_type	fileParser;
 		fileParser.parseFile(file_part);
