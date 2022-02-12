@@ -1,6 +1,6 @@
 <html>
 <head>
-   <title>Test PHP</title>
+   <title>PHP Test</title>
 </head>
 <body>
    <?php echo '<p>Hello everyone, this page was processed by PHP on ' . date('l jS \of F Y h:i:s A') . '</p>'; ?>
@@ -13,7 +13,7 @@
    </form>
 
    <form class="" method="POST">
-      <h1>FORMULAIRE HTML</h1>
+      <h1>POST FORM TEST</h1>
       <div>
          The current user is:
          <br>
@@ -37,27 +37,25 @@
       </div>
    </form>
 
-
-   <form action="succesful.html" method="POST" enctype="multipart/form-data">
-         Select text file to upload:
-         <input type="file" name="fileToUpload" id="fileToUpload">
-         <input type="submit" value="submit" name="submit">
-   </form>
-
    <form action="" method="POST" enctype="multipart/form-data">
-         Select text file to upload to CGI:
+      <h1>PHP UPLOAD TEST</h1>
+      <div>
+         Uploaded file info: <?php if(isset($_FILES['fileToUpload'])) {var_dump($_FILES["fileToUpload"]);}?>
+      </div>
+      <div>
+         Select text file to upload to PHP:
          <input type="file" name="fileToUpload" id="fileToUpload">
          <input type="submit" value="submit" name="submit">
+      </div>
    </form>
 
    <form action="../debug_cgi/test.debug" method="POST" enctype="multipart/form-data">
-         Select text file to upload to DEBUG CGI:
+      <h1>DEBUG_CGI UPLOAD TEST</h1>
+      <div>
+         Select text file to upload to Debug_CGI:
          <input type="file" name="fileToUpload" id="fileToUpload">
          <input type="submit" value="submit" name="submit">
+      </div>
    </form>
-
-   <?php if(isset($_FILES['fileToUpload'])) {var_dump($_FILES["fileToUpload"]);}?>
-
-   curl -v -X DELETE 127.0.0.1:8080/uploads/rush03.c
 </body>
 </html>

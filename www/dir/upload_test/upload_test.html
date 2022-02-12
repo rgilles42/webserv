@@ -1,0 +1,19 @@
+<html>
+<head>
+   <title>Upload Test</title>
+</head>
+<body>
+   <form action="succesful.html" method="POST" enctype="multipart/form-data">
+      <h1>UPLOAD TEST</h1>
+      <div>
+         Select text file to upload:
+         <input type="file" name="fileToUpload" id="fileToUpload">
+         <input type="submit" value="submit" name="submit">
+      </div>
+   </form>
+   <div>
+         You can delete the uploaded files with the DELETE http method.
+         <br>
+         You can use the command: <b>curl -v -X DELETE 127.0.0.1:8080/uploads/<i>your_file</i></b>
+   </div>
+</body>

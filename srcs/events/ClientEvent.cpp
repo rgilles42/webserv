@@ -102,6 +102,30 @@ namespace Webserv
 						request++;
 						continue ;
 					}
+					catch (const Webserv::Methods::Methods::ForbiddenException& e)
+					{
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
+						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
+						request++;
+						continue ;
+					}
+					catch (const Webserv::Methods::Methods::NoUploadPathException& e)
+					{
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_forbidden);
+						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
+						request++;
+						continue ;
+					}
+					catch (const Webserv::Methods::Methods::NoSuchFileOrDirException& e)
+					{
+						this->setToError(response, route, rcs, http_response_type::status_code_type::client_error_not_found);
+						this->responses.push_back(response);
+						this->written_sizes.push_back(0);
+						request++;
+						continue ;
+					}
 					if (ret < 0)
 					{
 						this->setToError(response, route, rcs, http_response_type::status_code_type::server_error_internal_server_error);
