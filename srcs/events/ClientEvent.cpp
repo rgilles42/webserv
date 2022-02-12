@@ -73,9 +73,8 @@ namespace Webserv
 						continue ;
 					}
 					struct stat s;
-					int err = stat(route.getFilePath(request->getBasePath()).c_str(), &s);
+					int err = stat(route.getRealPath(request->getBasePath()).c_str(), &s);
 					if (err == 0 && S_ISDIR(s.st_mode) && *(request->getBasePath().rbegin()) != '/'){
-						std::cout << request->getBasePath() << std::endl;
 						response.setRedirect(request->getBasePath() + "/" + (!request->getQuery().empty() ? "?" + request->getQuery() : "" ), http_route_type::http_status_code_type::redirection_moved_permanently);
 						this->responses.push_back(response);
 						this->written_sizes.push_back(0);
