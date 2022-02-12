@@ -12,7 +12,6 @@
 
 NAME		=	webserv
 
-SRC_DIR		=	.
 HEADER_DIR	=	includes
 OBJ_DIR		=	objs
 SRC_DIR		=	srcs
@@ -93,19 +92,14 @@ SRC_FILE	=	${SRC_DIR}/main.cpp \
 
 
 OBJ_SRC		=	$(SRC_FILE:%.cpp=$(OBJ_DIR)/%.o)
-OBJ_HEAD	=	$(HEADER_FILE:%.hpp=$(OBJ_DIR)/%.o)
 
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(@D)
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(OBJ_DIR)/%.o: %.hpp
-	@mkdir -p $(@D)
-	@$(CXX) $(CXXFLAGS) -c -o $@ $<
-
 all: $(NAME)
 
-$(NAME): $(OBJ_SRC) $(OBJ_HEAD)
+$(NAME): $(OBJ_SRC)
 	@echo "\e[34m[Objs Compiled..]"
 	@$(CXX) $(CXXFLAGS) $(OBJ_SRC) $(LIBS) -o $(NAME)
 	@echo "\e[34m[$(NAME) Compiled..]\033[0m"
