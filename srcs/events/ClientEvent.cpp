@@ -268,7 +268,7 @@ namespace Webserv
 				if (routePaths[i] != paths[i]) {
 					break ;
 				}
-				if (max <= i) {
+				if (max <= i && (i + 1) == routePaths.size()) {
 					route = itRoutes->second;
 					max = i + 1;
 				}
