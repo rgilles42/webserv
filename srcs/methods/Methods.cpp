@@ -47,8 +47,10 @@ namespace Methods {
 			if (!(stat(path_upload.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)))
 				if (Methods::makePath(path_upload, 0755))
 					throw MethodsFcntlError();
-			std::string path = path_upload + "/" + Methods::parseMultiform(req.getBody(), content);
-
+			std::string	filename = Methods::parseMultiform(req.getBody(), content);
+			if (filename == "")
+				return (0);
+			std::string path = path_upload + "/" + filename;
 			fd_upload = open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if (fd_upload < 0)
 			{
@@ -96,10 +98,12 @@ namespace Methods {
 		int pos = delim.length();
 		while (body.find(delim, pos) != std::string::npos)
 		{
-			if ((file_part = body.substr(pos, body.find(delim, pos) - pos)).find("filename"))
+			if ((file_part = body.substr(pos, body.find(delim, pos) - pos)).find("filename") != std::string::npos)
 				break ;
 			pos += file_part.length() + delim.length() + 2;
 		}
+		if (body.find(delim, pos) == std::string::npos)
+			return ("");
 		file_parser_type	fileParser;
 		fileParser.parseFile(file_part);
 		content = fileParser.getBody();
